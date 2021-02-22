@@ -1,1 +1,1 @@
-/usr/bin/c++     CMakeFiles/NeuralNetLibrary.dir/main.cpp.o  -o NeuralNetLibrary  neuralNetwork/libNet.a 
+/usr/bin/c++     CMakeFiles/NeuralNetLibrary.dir/main.cpp.o  -o NeuralNetLibrary  -lFFlayer neuralNetwork/libNet.a 
