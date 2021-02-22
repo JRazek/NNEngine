@@ -1,2 +1,0 @@
-/usr/bin/ar qc libFFLayer.a  CMakeFiles/FFLayer.dir/FFLayer.cpp.o
-/usr/bin/ranlib libFFLayer.a
