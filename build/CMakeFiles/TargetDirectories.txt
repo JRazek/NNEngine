@@ -1,0 +1,3 @@
+/home/user/cppProjects/ChessAI/build/CMakeFiles/rebuild_cache.dir
+/home/user/cppProjects/ChessAI/build/CMakeFiles/edit_cache.dir
+/home/user/cppProjects/ChessAI/build/CMakeFiles/Main.dir
