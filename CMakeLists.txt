@@ -1,3 +1,9 @@
 cmake_minimum_required(VERSION 3.12)
-project(ChessAI)
-add_executable(Main main.cpp)
+project(NeuralNetLibrary CXX)
+
+
+add_subdirectory(neuralNetwork)
+
+add_executable(${PROJECT_NAME} main.cpp)
+
+target_link_libraries(${PROJECT_NAME} PUBLIC Net)

@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/user/cppProjects/ChessAI
+CMAKE_SOURCE_DIR = /home/user/cppProjects/ConvoNetLib
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/user/cppProjects/ChessAI/build
+CMAKE_BINARY_DIR = /home/user/cppProjects/ConvoNetLib/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/cppProjects/ChessAI/build/CMakeFiles /home/user/cppProjects/ChessAI/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/cppProjects/ConvoNetLib/build/CMakeFiles /home/user/cppProjects/ConvoNetLib/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/cppProjects/ChessAI/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/cppProjects/ConvoNetLib/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,17 +111,43 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named Main
+# Target rules for targets named NeuralNetLibrary
 
 # Build rule for target.
-Main: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 Main
-.PHONY : Main
+NeuralNetLibrary: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 NeuralNetLibrary
+.PHONY : NeuralNetLibrary
 
 # fast build rule for target.
-Main/fast:
-	$(MAKE) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/build
-.PHONY : Main/fast
+NeuralNetLibrary/fast:
+	$(MAKE) -f CMakeFiles/NeuralNetLibrary.dir/build.make CMakeFiles/NeuralNetLibrary.dir/build
+.PHONY : NeuralNetLibrary/fast
+
+#=============================================================================
+# Target rules for targets named Net
+
+# Build rule for target.
+Net: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 Net
+.PHONY : Net
+
+# fast build rule for target.
+Net/fast:
+	$(MAKE) -f neuralNetwork/CMakeFiles/Net.dir/build.make neuralNetwork/CMakeFiles/Net.dir/build
+.PHONY : Net/fast
+
+#=============================================================================
+# Target rules for targets named FFLayer
+
+# Build rule for target.
+FFLayer: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 FFLayer
+.PHONY : FFLayer
+
+# fast build rule for target.
+FFLayer/fast:
+	$(MAKE) -f neuralNetwork/netStructure/FFLayer/CMakeFiles/FFLayer.dir/build.make neuralNetwork/netStructure/FFLayer/CMakeFiles/FFLayer.dir/build
+.PHONY : FFLayer/fast
 
 main.o: main.cpp.o
 
@@ -129,7 +155,7 @@ main.o: main.cpp.o
 
 # target to build an object file
 main.cpp.o:
-	$(MAKE) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/main.cpp.o
+	$(MAKE) -f CMakeFiles/NeuralNetLibrary.dir/build.make CMakeFiles/NeuralNetLibrary.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -138,7 +164,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/main.cpp.i
+	$(MAKE) -f CMakeFiles/NeuralNetLibrary.dir/build.make CMakeFiles/NeuralNetLibrary.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -147,7 +173,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) -f CMakeFiles/Main.dir/build.make CMakeFiles/Main.dir/main.cpp.s
+	$(MAKE) -f CMakeFiles/NeuralNetLibrary.dir/build.make CMakeFiles/NeuralNetLibrary.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 # Help Target
@@ -158,7 +184,9 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... Main"
+	@echo "... NeuralNetLibrary"
+	@echo "... Net"
+	@echo "... FFLayer"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

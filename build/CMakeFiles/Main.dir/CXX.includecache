@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/user/cppProjects/ConvoNetLib/main.cpp
+iostream
+-
+neuralNetwork/Net.h
+/home/user/cppProjects/ConvoNetLib/neuralNetwork/Net.h
+
+/home/user/cppProjects/ConvoNetLib/neuralNetwork/Net.h
+vector
+-
+

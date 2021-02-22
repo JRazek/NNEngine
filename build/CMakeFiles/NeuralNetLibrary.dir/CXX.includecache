@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/user/cppProjects/ConvoNetLib/main.cpp
+iostream
+-
+neuralNetwork/Net.h
+/home/user/cppProjects/ConvoNetLib/neuralNetwork/Net.h
+neuralNetwork/netStructure/FFLayer/FFLayer.h
+/home/user/cppProjects/ConvoNetLib/neuralNetwork/netStructure/FFLayer/FFLayer.h
+
+/home/user/cppProjects/ConvoNetLib/neuralNetwork/Net.h
+vector
+-
+netStructure/FFLayer/FFLayer.h
+/home/user/cppProjects/ConvoNetLib/neuralNetwork/netStructure/FFLayer/FFLayer.h
+
+/home/user/cppProjects/ConvoNetLib/neuralNetwork/netStructure/FFLayer/FFLayer.h
+../Layer/Layer.h
+/home/user/cppProjects/ConvoNetLib/neuralNetwork/netStructure/Layer/Layer.h
+vector
+-
+
+/home/user/cppProjects/ConvoNetLib/neuralNetwork/netStructure/Layer/Layer.h
+

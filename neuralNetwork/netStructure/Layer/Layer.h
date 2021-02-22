@@ -1,0 +1,3 @@
+struct Layer{
+    virtual ~Layer();
+};
