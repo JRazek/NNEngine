@@ -3,7 +3,9 @@
 
 Net::Net(std::vector<std::pair<bool, int>> structure){
     for(int i = 0; i < structure.size(); i ++){
-        this->layers.push_back((Layer *) new FFLayer(i, structure[i].second));
+       // this->layers.push_back((Layer *) new FFLayer(i, structure[i].second));
+       std::cout<<FFLayer::test();
+       //FFLayer::F
     }
 }
 Net::~Net(){

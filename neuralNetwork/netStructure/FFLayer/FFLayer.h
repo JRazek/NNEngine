@@ -3,6 +3,7 @@
 #include <vector>
 
 struct FFLayer : Layer{
+    FFLayer(int id, int neuronsCount);
     struct Neuron{
         const int id;
         std::vector<float> inputEdges;
@@ -10,5 +11,5 @@ struct FFLayer : Layer{
         Neuron(int id);
     };
     std::vector<Neuron *> neurons;    
-    FFLayer(int id, int neuronsCount);
+    static int test();
 };

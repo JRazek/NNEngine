@@ -5,6 +5,4 @@ add_subdirectory(neuralNetwork)
 
 add_executable(${PROJECT_NAME} main.cpp)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC Layer)
-target_link_libraries(${PROJECT_NAME} PUBLIC FFLayer)
-target_link_libraries(${PROJECT_NAME} PUBLIC Net)
+target_link_libraries(${PROJECT_NAME} PUBLIC Layer FFLayer Net)
