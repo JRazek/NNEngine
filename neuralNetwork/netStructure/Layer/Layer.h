@@ -1,3 +1,3 @@
 struct Layer{
-    virtual ~Layer();
+    virtual ~Layer() = default;
 };

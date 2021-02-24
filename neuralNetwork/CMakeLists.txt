@@ -4,3 +4,4 @@ add_library(
     Net.h
     Net.cpp
 )
+target_link_libraries(Net PRIVATE FFLayer)
