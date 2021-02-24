@@ -2,5 +2,6 @@
 #include "neuralNetwork/Net.h"
 
 int main(){
-    Net n = Net({{0,1}, {0,2}});
+    Net n = Net({{0, 4}, {0, 4}, {0, 4}});
+    std::cout<<"";
 }
