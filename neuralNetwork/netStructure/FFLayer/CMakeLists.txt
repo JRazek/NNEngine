@@ -3,3 +3,4 @@ add_library(
     FFLayer.h
     FFLayer.cpp
 )
+link_libraries(FFLayer PUBLIC Net)
