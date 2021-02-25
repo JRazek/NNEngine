@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "netStructure/FFLayer/FFLayer.h"
+#include "netStructure/Layer/Layer.h"
 
 struct Net{
     //int for type, int for neuronsCount if applicable

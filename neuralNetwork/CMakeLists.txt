@@ -1,7 +1,13 @@
-add_subdirectory(netStructure)
+cmake_minimum_required(VERSION 3.12)
+project(NeuralNetLibrary CXX)
+
 add_library(
     Net
     Net.h
     Net.cpp
+    netStructure/ConvolutionLayer/CLayer.h
+    netStructure/ConvolutionLayer/CLayer.cpp
+    netStructure/FFLayer/FFLayer.h
+    netStructure/FFLayer/FFLayer.cpp
+    netStructure/Layer/Layer.h
 )
-target_link_libraries(Net PRIVATE FFLayer)

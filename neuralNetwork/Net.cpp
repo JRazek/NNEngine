@@ -1,4 +1,5 @@
 #include "Net.h"
+#include "netStructure/FFLayer/FFLayer.h"
 #include <iostream>
 #include <cstdlib>
 
