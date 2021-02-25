@@ -1,7 +1,5 @@
 #pragma once
 
-#include "../../Net.h"
-
 struct Layer{
     const int idInNet;
     //Net * net;
