@@ -1,4 +1,5 @@
 #include "FFLayer.h"
+#include <netStructure/ConvolutionLayer/CLayer.h>
 #include <Net.h>
 #include <cstdlib>
 
@@ -9,15 +10,20 @@ FFLayer::Neuron::Neuron(int idInLayer):idInLayer(idInLayer){}
 void FFLayer::initConnections(int seed = 0){
     srand (seed);
     Layer * prevLayer = Layer::net->layers[Layer::idInNet - 1];
-
-    if(dynamic_cast<FFLayer *>(prevLayer) != nullptr){
-        //it is a FFLayer
+    for(auto n : this->neurons){
+        float randBias = (rand() % 1000)/100.f;
+        int inputSize = -1;
+        if(dynamic_cast<FFLayer *>(prevLayer) != nullptr){
+            inputSize = ((FFLayer *) prevLayer)->neurons.size();
+        }
+        if(dynamic_cast<CLayer *>(prevLayer) != nullptr){
+            //it is a CLayer
+        }
+        for(int i = 0; i < inputSize; i ++){
+            float randWeight = (rand() % 100)/100.f;
+            n->inputEdges.push_back({i, randWeight});
+        }
     }
-    if(dynamic_cast<CLayer *>(prevLayer) != nullptr){
-        //it is a CLayer
-    }
-    float randWeight = (rand() % 100)/100.f;
-    float randBias = (rand() % 1000)/100.f;
 }
 FFLayer::~FFLayer(){
     for(auto n : this->neurons){
