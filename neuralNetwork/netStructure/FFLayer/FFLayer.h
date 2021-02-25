@@ -4,7 +4,7 @@
 #include <utility>
 
 struct FFLayer : Layer{
-    FFLayer(int id, int neuronsCount);
+    FFLayer(int id, Net * net, int neuronsCount);
     struct Neuron{
         const int idInLayer;
         std::vector< std::pair<int, float> > inputEdges; //id in prev layer, weights  //if empty - first layer
@@ -12,6 +12,7 @@ struct FFLayer : Layer{
         float bias;
         Neuron(int idInLayer);
     };
+    void initConnections(int seed);
     std::vector<Neuron *> neurons;
     ~FFLayer();
 };

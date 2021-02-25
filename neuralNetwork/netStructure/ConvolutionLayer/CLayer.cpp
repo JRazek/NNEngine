@@ -1,5 +1,5 @@
 #include "CLayer.h"
 #include "../../Net.h"
 
-CLayer::CLayer(int id, int kernelSizeX, int kernelSizeY):Layer(id){}
+CLayer::CLayer(int id, Net * net, int kernelSizeX, int kernelSizeY):Layer(id, net){}
 CLayer::~CLayer(){}
