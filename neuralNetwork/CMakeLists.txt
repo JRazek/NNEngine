@@ -11,3 +11,4 @@ add_library(
     netStructure/FFLayer/FFLayer.cpp
     netStructure/Layer/Layer.h
 )
+include_directories(./)
