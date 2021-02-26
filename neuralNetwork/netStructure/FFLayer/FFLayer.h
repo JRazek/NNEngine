@@ -11,9 +11,8 @@ struct FFLayer : Layer{
         float bias;
         Neuron(int idInLayer);
     };
-    //virtual void run() override;
     void initConnections(int seed);
-    void run();
+    void run(const std::vector<float> &input) override;
     std::vector<Neuron *> neurons;
     ~FFLayer();
 };

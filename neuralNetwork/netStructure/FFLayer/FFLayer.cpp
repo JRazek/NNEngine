@@ -11,7 +11,6 @@ FFLayer::Neuron::Neuron(int idInLayer):idInLayer(idInLayer){}
 void FFLayer::initConnections(int seed = 0){
     srand (seed);
     Layer * prevLayer = Layer::net->layers[Layer::idInNet - 1];
-    //prevLayer->run();
     for(auto n : this->neurons){
         float randBias = (rand() % 1000)/100.f;
         int inputSize = -1;
@@ -33,6 +32,6 @@ FFLayer::~FFLayer(){
         delete n;
     }
 }
-void FFLayer::run(){
+void FFLayer::run(const std::vector<float> &input){
     std::cout<<"Im a fucking FFLayer!\n";
 }
