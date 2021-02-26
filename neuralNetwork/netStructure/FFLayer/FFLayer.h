@@ -13,6 +13,7 @@ struct FFLayer : Layer{
     };
     //virtual void run() override;
     void initConnections(int seed);
+    void run();
     std::vector<Neuron *> neurons;
     ~FFLayer();
 };

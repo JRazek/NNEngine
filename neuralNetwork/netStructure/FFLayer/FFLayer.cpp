@@ -2,6 +2,7 @@
 #include <netStructure/ConvolutionLayer/CLayer.h>
 #include <Net.h>
 #include <cstdlib>
+#include <iostream>
 
 FFLayer::FFLayer(int id, Net * net, int neuronsCount):Layer(id, net){
     
@@ -25,12 +26,13 @@ void FFLayer::initConnections(int seed = 0){
             n->inputEdges.push_back({i, randWeight});
         }
     }
-}/*
-void FFLayer::run(){
+}
 
-}*/
 FFLayer::~FFLayer(){
     for(auto n : this->neurons){
         delete n;
     }
+}
+void FFLayer::run(){
+    std::cout<<"Im a fucking FFLayer!\n";
 }

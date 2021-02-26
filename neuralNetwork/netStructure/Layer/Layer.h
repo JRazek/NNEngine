@@ -8,6 +8,6 @@ struct Layer{
     const Net * net;
     std::vector<float> outputVector;
     Layer(int id, Net * net):idInNet(id), net(net){}
-   // virtual void run() = 0;
-    virtual ~Layer() = default;
+    virtual void run(){}
+    virtual ~Layer(){};
 };
