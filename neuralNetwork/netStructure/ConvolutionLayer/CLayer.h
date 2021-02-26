@@ -4,5 +4,6 @@
 
 struct CLayer : Layer{
     CLayer(int id, Net * net, int kernelSizeX, int kernelSizeY);
+    //virtual void run() {};
     ~CLayer();
 };

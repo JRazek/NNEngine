@@ -10,6 +10,7 @@ FFLayer::Neuron::Neuron(int idInLayer):idInLayer(idInLayer){}
 void FFLayer::initConnections(int seed = 0){
     srand (seed);
     Layer * prevLayer = Layer::net->layers[Layer::idInNet - 1];
+    //prevLayer->run();
     for(auto n : this->neurons){
         float randBias = (rand() % 1000)/100.f;
         int inputSize = -1;
@@ -24,7 +25,10 @@ void FFLayer::initConnections(int seed = 0){
             n->inputEdges.push_back({i, randWeight});
         }
     }
-}
+}/*
+void FFLayer::run(){
+
+}*/
 FFLayer::~FFLayer(){
     for(auto n : this->neurons){
         delete n;
