@@ -4,6 +4,6 @@
 
 struct CLayer : Layer{
     CLayer(int id, Net * net, int kernelSizeX, int kernelSizeY);
-    void run(const std::vector<float> &input) override;
+    void run(const std::vector<float> &input);
     ~CLayer();
 };

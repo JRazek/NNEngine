@@ -3,20 +3,22 @@
 #include <Net.h>
 #include <cstdlib>
 #include <iostream>
+#include <stdexcept>
 
-FFLayer::FFLayer(int id, Net * net, int neuronsCount, ActivationFunction * f):Layer(id, net, neuronsCount){
-    this->activationFunction = f;
-    for(int i = 0; i < neuronsCount; i ++){
-        this->neurons.push_back(new Neuron(i));
+FFLayer::FFLayer(int id, Net * net, int inputVectorSize, int neuronsCount):
+    inputVectorSize(inputVectorSize), 
+    Layer(id, net, neuronsCount){
+        for(int i = 0; i < neuronsCount; i ++){
+            this->neurons.push_back(new Neuron(i));
+        }
     }
-}
 FFLayer::Neuron::Neuron(int idInLayer):idInLayer(idInLayer){}
 void FFLayer::initConnections(int seed = 0){
     srand (seed);
     Layer * prevLayer = Layer::net->layers[Layer::idInNet - 1];
     for(auto n : this->neurons){
         float randBias = (rand() % 1000)/100.f;
-        int inputSize = prevLayer->outputVectorSize;
+        int inputSize = this->inputVectorSize;
         for(int i = 0; i < inputSize; i ++){
             float randWeight = (rand() % 100)/100.f;
             n->inputEdges.push_back({i, randWeight});
@@ -30,5 +32,24 @@ FFLayer::~FFLayer(){
     }
 }
 void FFLayer::run(const std::vector<float> &input){
-    std::cout<<"Im a fucking FFLayer!\n";
+    if(this->neurons.size() <= 0){
+        throw std::invalid_argument( "neurons not initiated in layer " + this->idInNet );
+        return;
+    }
+
+    if(input.size() != this->neurons[0]->inputEdges.size()){
+        throw std::invalid_argument( "wrong input size!" );
+        return;
+    }
+    this->outputVector.clear();
+
+    for(int i = 0; i < input.size(); i ++){
+        Neuron * n = neurons[i];
+        float sum = 0;
+        for(int j = 0; j < n->inputEdges.size(); j ++){
+            sum += input[j] * n->inputEdges[j].second;
+        }
+        //float activatedVal = this->activationFunction(sum);
+        this->outputVector.push_back(sum);
+    }
 }

@@ -12,10 +12,11 @@ struct FFLayer : Layer{
         Neuron(int idInLayer);
     };
 
-    FFLayer(int id, Net * net, int neuronsCount, ActivationFunction * f);
-    ActivationFunction * activationFunction;
+    FFLayer(int id, Net * net, int inputVectorSize, int neuronsCount);
+    const int inputVectorSize;
+    //ActivationFunction activationFunction;
     void initConnections(int seed);
-    void run(const std::vector<float> &input) override;
+    void run(const std::vector<float> &input);
     std::vector<Neuron *> neurons;
     ~FFLayer();
 };
