@@ -7,6 +7,7 @@
 #include <stdexcept>
 
 Net::Net(std::vector<std::vector<int>> structure, int seed){
+    srand(seed);
     for(int i = 0; i < structure.size(); i ++){
         if(structure[i].size() <= 0){
             throw std::invalid_argument( "wrong description in layer " + i );
@@ -19,7 +20,7 @@ Net::Net(std::vector<std::vector<int>> structure, int seed){
             }
             FFLayer * layer = new FFLayer(i, this, structure[i][settingsInputSizeInd], structure[i][settingsLayerSizeInd], new SigmoidFunction());
             this->layers.push_back(layer);
-            layer->initConnections(seed);
+            layer->initConnections();
         }
         if(structure[i][settingsLayerTypeInd] == 1){
             //covolution type

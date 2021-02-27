@@ -13,8 +13,7 @@ FFLayer::FFLayer(int id, Net * net, int inputVectorSize, int neuronsCount, Activ
         }
     }
 FFLayer::Neuron::Neuron(int idInLayer):idInLayer(idInLayer){}
-void FFLayer::initConnections(int seed = 0){
-    srand (seed);
+void FFLayer::initConnections(){
     Layer * prevLayer = Layer::net->layers[Layer::idInNet - 1];
     for(auto n : this->neurons){
         float randBias = (rand() % 1000)/100.f;
