@@ -1,4 +1,8 @@
 #pragma once
 struct ActivationFunction{
-    virtual float operator()(float x) const;
+    ActivationFunction(){};
+    virtual float operator()(float x) const = 0;
+    float getValue(float x){
+        return  (*this)(x);
+    }
 };

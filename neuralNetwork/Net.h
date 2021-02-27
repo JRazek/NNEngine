@@ -11,6 +11,10 @@ struct Net{
     const int settingsInputSizeInd = 2;
 
     void run(std::vector<float> input);
+    std::vector<float> getResult(){
+        Layer * last = layers[layers.size() - 1];
+        return last->outputVector;
+    }
     ~Net();
     std::vector<Layer *> layers;
 };

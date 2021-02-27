@@ -5,8 +5,8 @@
 #include <iostream>
 #include <stdexcept>
 
-FFLayer::FFLayer(int id, Net * net, int inputVectorSize, int neuronsCount):
-    inputVectorSize(inputVectorSize), 
+FFLayer::FFLayer(int id, Net * net, int inputVectorSize, int neuronsCount, ActivationFunction * f):
+    inputVectorSize(inputVectorSize), activationFunction(f), 
     Layer(id, net, neuronsCount){
         for(int i = 0; i < neuronsCount; i ++){
             this->neurons.push_back(new Neuron(i));
@@ -30,6 +30,7 @@ FFLayer::~FFLayer(){
     for(auto n : this->neurons){
         delete n;
     }
+    delete activationFunction;
 }
 void FFLayer::run(const std::vector<float> &input){
     if(this->neurons.size() <= 0){
@@ -49,7 +50,9 @@ void FFLayer::run(const std::vector<float> &input){
         for(int j = 0; j < n->inputEdges.size(); j ++){
             sum += input[j] * n->inputEdges[j].second;
         }
-        //float activatedVal = this->activationFunction(sum);
-        this->outputVector.push_back(sum);
+        sum += n->bias;
+        
+        float activatedVal = activationFunction->getValue(sum);
+        this->outputVector.push_back(activatedVal);
     }
 }

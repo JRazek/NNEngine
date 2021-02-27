@@ -6,5 +6,6 @@ int main(){
 
     std::vector<float> input = {1, 2, 3, 4};
     n.run(input);
+    
     std::cout<<"";
 }

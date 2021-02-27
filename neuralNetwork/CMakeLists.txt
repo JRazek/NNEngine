@@ -11,5 +11,6 @@ add_library(
     netStructure/FFLayer/FFLayer.cpp
     netStructure/Layer/Layer.h
     activations/ActivationFunction.h
+    activations/SigmoidFunction.h
 )
 include_directories(./)

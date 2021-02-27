@@ -1,6 +1,7 @@
 #include <Net.h>
 #include <netStructure/FFLayer/FFLayer.h>
 #include <activations/SigmoidFunction.h>
+#include <activations/ReLUFunction.h>
 #include <iostream>
 #include <cstdlib>
 #include <stdexcept>
@@ -16,7 +17,7 @@ Net::Net(std::vector<std::vector<int>> structure, int seed){
                 throw std::invalid_argument( "wrong description in layer " + i );
                 return;
             }
-            FFLayer * layer = new FFLayer(i, this, structure[i][settingsInputSizeInd], structure[i][settingsLayerSizeInd]);
+            FFLayer * layer = new FFLayer(i, this, structure[i][settingsInputSizeInd], structure[i][settingsLayerSizeInd], new SigmoidFunction());
             this->layers.push_back(layer);
             layer->initConnections(seed);
         }
