@@ -4,8 +4,11 @@
 #include <cstdlib>
 #include <iostream>
 
-FFLayer::FFLayer(int id, Net * net, int neuronsCount):Layer(id, net){
-    
+FFLayer::FFLayer(int id, Net * net, int neuronsCount, ActivationFunction * f):Layer(id, net, neuronsCount){
+    this->activationFunction = f;
+    for(int i = 0; i < neuronsCount; i ++){
+        this->neurons.push_back(new Neuron(i));
+    }
 }
 FFLayer::Neuron::Neuron(int idInLayer):idInLayer(idInLayer){}
 void FFLayer::initConnections(int seed = 0){
@@ -13,13 +16,7 @@ void FFLayer::initConnections(int seed = 0){
     Layer * prevLayer = Layer::net->layers[Layer::idInNet - 1];
     for(auto n : this->neurons){
         float randBias = (rand() % 1000)/100.f;
-        int inputSize = -1;
-        if(dynamic_cast<FFLayer *>(prevLayer) != nullptr){
-            inputSize = ((FFLayer *) prevLayer)->neurons.size();
-        }
-        if(dynamic_cast<CLayer *>(prevLayer) != nullptr){
-            //it is a CLayer
-        }
+        int inputSize = prevLayer->outputVectorSize;
         for(int i = 0; i < inputSize; i ++){
             float randWeight = (rand() % 100)/100.f;
             n->inputEdges.push_back({i, randWeight});
