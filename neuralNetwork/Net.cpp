@@ -25,7 +25,7 @@ Net::Net(std::vector<std::vector<int>> structure, int seed){
                 throw std::invalid_argument( "wrong description in layer " + i );
                 return;
             }
-            CLayer * clayer = new CLayer(i, this, structure[i][1], structure[i][2], structure[i][3], structure[i][4]);
+            CLayer * clayer = new CLayer(i, this, structure[i][1], structure[i][2], structure[i][3], structure[i][4], new SigmoidFunction());
             clayer->initWeights();
             layers.push_back(clayer);
         }

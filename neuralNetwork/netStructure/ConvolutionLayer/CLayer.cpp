@@ -3,9 +3,9 @@
 #include <Net.h>
 #include <iostream>
 //todo
-CLayer::CLayer(int id, Net * net, int tensorCount, int tensorDepth, int matrixSizeX, int matrixSizeY):
-    kernelSizeX(matrixSizeX), kernelSizeY(matrixSizeY), kernelSizeZ(tensorDepth), stride(1), padding(0), outputTensor(tensorCount),
-    Layer(id, net, 0){
+CLayer::CLayer(int id, Net * net, int tensorCount, int tensorDepth, int matrixSizeX, int matrixSizeY, ActivationFunction * activationFunction):
+    kernelSizeX(matrixSizeX), kernelSizeY(matrixSizeY), kernelSizeZ(tensorDepth), stride(1), padding(0), outputTensor(tensorCount), activationFunction(activationFunction),
+    Layer(id, net, tensorCount * matrixSizeX * matrixSizeY * tensorDepth){
         for(int i = 0; i < tensorCount; i ++){
             Tensor tensor = Tensor(tensorDepth, matrixSizeX, matrixSizeY);
             this->tensors.push_back({tensor, 0});
@@ -27,18 +27,33 @@ void CLayer::initWeights(){
     }
 }
 void CLayer::run(const Tensor &inputTensor){
-    if(inputTensor.matrices.size() != this->tensors[0].first.z){
-        throw std::invalid_argument( "tensor dimensions wont match!\n" );
-        return;
-    }
 
     
     for(auto k : this->tensors){
+        if(inputTensor.z != k.first.z){
+            throw std::invalid_argument( "tensor dimensions wont match!\n" );
+            return;
+        }
+
         Matrix result = Functions::convolve(inputTensor, k.first, this->padding, this->stride);//add bias
+        for(int y = 0; y < result.y; y ++){
+            for(int x = 0; x < result.x; x++){
+                result.weights[x][y] = this->activationFunction->getValue(result.weights[x][y] + k.second);
+            }
+        }
         outputTensor.matrices.push_back(result);
+        std::vector<float> flattened;
+        for(int y = 0; y < result.y; y++){
+            for(int x = 0; x < result.x; x ++){
+                flattened.push_back(result.weights[x][y]);
+            }
+        }
+        this->outputVector.insert(outputVector.end(), flattened.begin(), flattened.end());
     }
     
 
     
 }
-CLayer::~CLayer(){}
+CLayer::~CLayer(){
+    delete activationFunction;
+}
