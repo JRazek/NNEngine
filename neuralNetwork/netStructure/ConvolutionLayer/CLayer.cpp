@@ -4,7 +4,7 @@
 #include <iostream>
 //todo
 CLayer::CLayer(int id, Net * net, int tensorCount, int tensorDepth, int matrixSizeX, int matrixSizeY):
-    kernelSizeX(matrixSizeX), kernelSizeY(matrixSizeY), kernelSizeZ(tensorDepth), stride(1), padding(0),
+    kernelSizeX(matrixSizeX), kernelSizeY(matrixSizeY), kernelSizeZ(tensorDepth), stride(1), padding(0), outputTensor(tensorCount),
     Layer(id, net, 0){
         for(int i = 0; i < tensorCount; i ++){
             Tensor tensor = Tensor(tensorDepth, matrixSizeX, matrixSizeY);
@@ -27,15 +27,15 @@ void CLayer::initWeights(){
     }
 }
 void CLayer::run(const Tensor &inputTensor){
-    if(inputTensor.matrices.size() != this->tensors[0].first.matrices.size()){
+    if(inputTensor.matrices.size() != this->tensors[0].first.z){
         throw std::invalid_argument( "tensor dimensions wont match!\n" );
         return;
     }
 
     
     for(auto k : this->tensors){
-        Matrix result = Functions::convolve(inputTensor, k.first, this->stride, this->padding);//add bias
-        outputTensor->matrices.push_back(result);
+        Matrix result = Functions::convolve(inputTensor, k.first, this->padding, this->stride);//add bias
+        outputTensor.matrices.push_back(result);
     }
     
 

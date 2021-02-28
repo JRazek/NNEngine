@@ -9,7 +9,8 @@ struct Net{
     //{ layerNum:{type, tensorsCount, tensorDepth, matrixSizeX, matrixSizeY} }
     Net(std::vector<std::vector<int>> structure, int seed = 0);
     
-    void run(const Tensor &tensorInput);
+    void run(const std::vector<float> &inputVector);
+    void run(Tensor tensorInput);
     std::vector<float> getResult(){
         Layer * last = layers[layers.size() - 1];
         return last->outputVector;

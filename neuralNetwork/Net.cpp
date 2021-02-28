@@ -39,13 +39,25 @@ Net::~Net(){
 
 //void run(const CLayer::Tensor &tensorInput);
 
-void Net::run(const Tensor &tensorInput){
-    for(int i = 0; i < this->layers.size(); i ++){
+void Net::run(Tensor tensorInput){ 
+    if(dynamic_cast<CLayer*>(this->layers[0]) == nullptr)
+        throw std::invalid_argument( "In order to use Tensor feed first layer must be of convolution type! ");
+    CLayer * layer = (CLayer *) layers[0];
+    layer->run(tensorInput);
+    bool ffStarted = false;
+
+    for(int i = 1; i < this->layers.size(); i ++){
         Layer * l = layers[i];
         if (dynamic_cast<CLayer*>(l) != nullptr) {
+            if(ffStarted)
+                throw std::invalid_argument( "You cannot use CLayer after FFLayer!");
             CLayer * cl = (CLayer *) l;
             cl->run(tensorInput);
-           // input = cl->outputVector;
+            tensorInput = cl->outputTensor;
+        }else if(dynamic_cast<FFLayer*>(l) != nullptr){
+            FFLayer * ff = (FFLayer *) l;
+            ff->run(layers[i - 1]->outputVector);
+            ffStarted = true;
         }
     }
 }

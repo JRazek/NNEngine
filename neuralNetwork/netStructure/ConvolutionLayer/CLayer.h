@@ -11,7 +11,7 @@ struct CLayer : Layer{
     const int stride;
     const int padding;
 
-    Tensor * outputTensor;
+    Tensor outputTensor;
 
     ~CLayer();
 };
