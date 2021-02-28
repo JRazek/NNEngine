@@ -2,7 +2,7 @@
 
 #include <vector>
 #include "netStructure/Layer/Layer.h"
-#include "dataStructures/Tensor.h"
+#include "utils/dataStructures/Tensor.h"
 
 struct Net{
     //{ layerNum:{type, neuronsSize, inputSize} }

@@ -2,11 +2,13 @@
 #include <Net.h>
 #include <iostream>
 //todo
-CLayer::CLayer(int id, Net * net, int tensorCount, int tensorDepth, int matrixSizeX, int matrixSizeY):Layer(id, net, 0){
-    for(int i = 0; i < tensorCount; i ++){
-        Tensor tensor = Tensor(tensorDepth, matrixSizeX, matrixSizeY);
-        this->tensors.push_back({tensor, 0});
-    }
+CLayer::CLayer(int id, Net * net, int tensorCount, int tensorDepth, int matrixSizeX, int matrixSizeY):
+    kernelSizeX(matrixSizeX), kernelSizeY(matrixSizeY), kernelSizeZ(tensorDepth), stride(1), padding(0),
+    Layer(id, net, 0){
+        for(int i = 0; i < tensorCount; i ++){
+            Tensor tensor = Tensor(tensorDepth, matrixSizeX, matrixSizeY);
+            this->tensors.push_back({tensor, 0});
+        }
     std::cout<<"";
 }//blank 0
 void CLayer::initWeights(){
@@ -25,8 +27,16 @@ void CLayer::initWeights(){
 }
 void CLayer::run(const Tensor &inputTensor){
     if(inputTensor.matrices.size() != this->tensors[0].first.matrices.size()){
-        
+        throw std::invalid_argument( "tensor dimensions wont match!\n" );
+        return;
     }
+    int newSizeX = (inputTensor.matrices[0].weights[0].size() - this->kernelSizeX + 2*padding) / this->stride;
+    int newSizeY = (inputTensor.matrices[0].weights.size() - this->kernelSizeY + 2*padding) / this->stride;
+
+    Matrix result = Matrix(newSizeX, newSizeY);
+
+
+
+    outputTensor->matrices.push_back(result);
 }
 CLayer::~CLayer(){}
-
