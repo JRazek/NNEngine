@@ -12,5 +12,9 @@ add_library(
     netStructure/Layer/Layer.h
     activations/ActivationFunction.h
     activations/SigmoidFunction.h
+    dataStructures/Matrix.h
+    dataStructures/Matrix.cpp
+    dataStructures/Tensor.h
+    dataStructures/Tensor.cpp
 )
 include_directories(./)
