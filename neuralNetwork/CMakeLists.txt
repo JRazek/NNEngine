@@ -16,5 +16,7 @@ add_library(
     utils/dataStructures/Matrix.cpp
     utils/dataStructures/Tensor.h
     utils/dataStructures/Tensor.cpp
+    utils/Functions.h
+    utils/Functions.cpp
 )
 include_directories(./)

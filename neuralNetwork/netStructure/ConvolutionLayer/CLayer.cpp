@@ -1,4 +1,5 @@
 #include "CLayer.h"
+#include <utils/Functions.h>
 #include <Net.h>
 #include <iostream>
 //todo
@@ -30,13 +31,14 @@ void CLayer::run(const Tensor &inputTensor){
         throw std::invalid_argument( "tensor dimensions wont match!\n" );
         return;
     }
-    int newSizeX = (inputTensor.matrices[0].weights[0].size() - this->kernelSizeX + 2*padding) / this->stride;
-    int newSizeY = (inputTensor.matrices[0].weights.size() - this->kernelSizeY + 2*padding) / this->stride;
 
-    Matrix result = Matrix(newSizeX, newSizeY);
+    
+    for(auto k : this->tensors){
+        Matrix result = Functions::convolve(inputTensor, k.first, this->stride, this->padding);//add bias
+        outputTensor->matrices.push_back(result);
+    }
+    
 
-
-
-    outputTensor->matrices.push_back(result);
+    
 }
 CLayer::~CLayer(){}
