@@ -3,3 +3,5 @@ add_library(
     GeneticLearningUnit.h
     GeneticLearningUnit.cpp
 )
+include_directories(../)
+link_libraries(GeneticLearningUnit Net)
