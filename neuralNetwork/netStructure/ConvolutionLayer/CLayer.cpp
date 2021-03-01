@@ -4,7 +4,7 @@
 #include <iostream>
 //todo
 CLayer::CLayer(int id, Net * net, int tensorCount, int matrixSizeX, int matrixSizeY, int tensorDepth, ActivationFunction * activationFunction):
-    kernelSizeX(matrixSizeX), kernelSizeY(matrixSizeY), kernelSizeZ(tensorDepth), stride(1), padding(0), outputTensor(tensorCount), activationFunction(activationFunction),
+    kernelSizeX(matrixSizeX), kernelSizeY(matrixSizeY), kernelSizeZ(tensorDepth), stride(1), padding(0), outputTensor(), activationFunction(activationFunction),
     Layer(id, net, tensorCount * matrixSizeX * matrixSizeY * tensorDepth){
         for(int i = 0; i < tensorCount; i ++){
             Tensor tensor = Tensor(matrixSizeX, matrixSizeY, tensorDepth);
@@ -14,38 +14,37 @@ CLayer::CLayer(int id, Net * net, int tensorCount, int matrixSizeX, int matrixSi
 }//blank 0
 void CLayer::initWeights(){
     for(int i = 0; i < this->tensors.size(); i ++){
-        float randBias = (rand() % 1000)/100.f;
+        float randBias = (rand() % 1000)/100.f * (rand() % 2 == 1 ? 1 : -1);
         tensors[i].second = randBias;
-        for(int z = 0; z < tensors[i].first.matrices.size(); z ++){
-            for(int y = 0; y < tensors[i].first.matrices[z].weights.size(); y ++){
-                for(int x = 0; x < tensors[i].first.matrices[z].weights[y].size(); x ++){
-                    float randWeight = (rand() % 100)/100.f;
-                    tensors[i].first.matrices[z].weights[y][x] = randWeight;
+        for(int z = 0; z < tensors[i].first.getZ(); z ++){
+            for(int y = 0; y < tensors[i].first.getY(); y ++){
+                for(int x = 0; x < tensors[i].first.getX(); x ++){
+                    float randWeight = (rand() % 100)/100.f * (rand() % 2 == 1 ? 1 : -1);
+                    tensors[i].first.edit(x, y, z, randWeight);
                 }
             }
         }
     }
 }
 void CLayer::run(const Tensor &inputTensor){
-
-    
     for(auto k : this->tensors){
-        if(inputTensor.z != k.first.z){
+        if(inputTensor.getZ() != k.first.getZ()){
             throw std::invalid_argument( "tensor dimensions wont match!\n" );
             return;
         }
 
         Matrix result = Functions::convolve(inputTensor, k.first, this->padding, this->stride);//add bias
-        for(int y = 0; y < result.y; y ++){
-            for(int x = 0; x < result.x; x++){
-                result.weights[x][y] = this->activationFunction->getValue(result.weights[x][y] + k.second);
+        for(int y = 0; y < result.getY(); y ++){
+            for(int x = 0; x < result.getX(); x++){
+                float newVal = this->activationFunction->getValue(result.getValue(x, y) + k.second);
+                result.edit(x, y, newVal);
             }
         }
-        outputTensor.matrices.push_back(result);
+        outputTensor.pushMatrix(result);
         std::vector<float> flattened;
-        for(int y = 0; y < result.y; y++){
-            for(int x = 0; x < result.x; x ++){
-                flattened.push_back(result.weights[x][y]);
+        for(int y = 0; y < result.getY(); y++){
+            for(int x = 0; x < result.getX(); x ++){
+                flattened.push_back(result.getValue(x, y));
             }
         }
         this->outputVector.insert(outputVector.end(), flattened.begin(), flattened.end());

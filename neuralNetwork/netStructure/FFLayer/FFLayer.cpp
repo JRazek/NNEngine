@@ -16,10 +16,10 @@ FFLayer::Neuron::Neuron(int idInLayer):idInLayer(idInLayer){}
 void FFLayer::initConnections(){
     Layer * prevLayer = Layer::net->layers[Layer::idInNet - 1];
     for(auto n : this->neurons){
-        float randBias = (rand() % 1000)/100.f;
+        float randBias = (rand() % 1000)/100.f * (rand() % 2 == 1 ? 1 : -1);
         int inputSize = this->inputVectorSize;
         for(int i = 0; i < inputSize; i ++){
-            float randWeight = (rand() % 100)/100.f;
+            float randWeight = (rand() % 100)/100.f * (rand() % 2 == 1 ? 1 : -1);
             n->inputEdges.push_back({i, randWeight});
         }
     }

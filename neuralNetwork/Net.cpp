@@ -21,8 +21,6 @@ Net::Net(std::vector<std::vector<int>> structure, int seed){
             layer->initConnections();
         }
         if(structure[i][0] == 1){
-            //{ layerNum:{type, tensorsCount, matrixSizeX, matrixSizeY, tensorDepth,} }
-            //todo
             if(structure[i].size() < 5){
                 throw std::invalid_argument( "wrong description in layer " + i );
                 return;
@@ -46,6 +44,7 @@ void Net::run(Tensor tensorInput){
         throw std::invalid_argument( "In order to use Tensor feed first layer must be of convolution type! ");
     CLayer * layer = (CLayer *) layers[0];
     layer->run(tensorInput);
+    tensorInput = layer->outputTensor;
     bool ffStarted = false;
 
     for(int i = 1; i < this->layers.size(); i ++){

@@ -5,9 +5,9 @@ int main(){
     //{ layerNum:{type, neuronsSize, inputSize} }
     //{ layerNum:{type, tensorsCount, matrixSizeX, matrixSizeY, tensorDepth} }
     //todo fix the read
-    int seed;
-    std::cin >> seed;
-    Net n = Net({{1, 1, 3, 3, 1}, {0, 4, 49}, {0, 4, 4}}, seed);
+    int seed = 2;
+   // std::cin >> seed;
+    Net n = Net({{1, 2, 3, 3, 1}, {1, 1, 3, 3, 2}, {0, 4, 25}, {0, 4, 4}, {0, 4, 4}, {0, 4, 4}}, seed);
 
     std::vector<float> input = {1, 2, 3, 4};
    // n.run(input);
