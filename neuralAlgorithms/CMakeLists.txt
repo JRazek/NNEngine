@@ -1,0 +1,2 @@
+add_subdirectory(neuralNetwork)
+add_subdirectory(geneticLearning)

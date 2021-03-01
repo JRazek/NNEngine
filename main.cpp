@@ -1,5 +1,5 @@
 #include <iostream>
-#include "neuralNetwork/Net.h"
+#include "neuralAlgorithms/neuralNetwork/Net.h"
 
 int main(){
     //{ layerNum:{type, neuronsSize, inputSize} }
