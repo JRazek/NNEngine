@@ -3,13 +3,15 @@
 
 int main(){
     //{ layerNum:{type, neuronsSize, inputSize} }
-    //{ layerNum:{type, tensorsCount, tensorDepth, matrixSizeX, matrixSizeY} }
+    //{ layerNum:{type, tensorsCount, matrixSizeX, matrixSizeY, tensorDepth} }
     //todo fix the read
-    Net n = Net({{1, 3, 2, 3, 3}, {0, 4, 4}, {0, 4, 4}});
+    int seed;
+    std::cin >> seed;
+    Net n = Net({{1, 1, 3, 3, 1}, {0, 4, 49}, {0, 4, 4}}, seed);
 
     std::vector<float> input = {1, 2, 3, 4};
    // n.run(input);
-    Tensor t = Tensor(9, 9, 2);
+    Tensor t = Tensor(9, 9, 1);
     n.run(t);
     std::vector<float> result = n.getResult();
     for(auto r : result){

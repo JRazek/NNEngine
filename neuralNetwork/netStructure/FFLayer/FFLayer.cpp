@@ -43,7 +43,7 @@ void FFLayer::run(const std::vector<float> &input){
     }
     this->outputVector.clear();
 
-    for(int i = 0; i < input.size(); i ++){
+    for(int i = 0; i < neurons.size(); i ++){
         Neuron * n = neurons[i];
         float sum = 0;
         for(int j = 0; j < n->inputEdges.size(); j ++){

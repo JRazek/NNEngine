@@ -11,7 +11,7 @@ Matrix Functions::convolve(const Tensor &inputTensor, const Tensor &kernel, cons
         int newSizeX = (inputTensor.x - kernel.x + 2*padding) / stride + 1;
         int newSizeY = (inputTensor.y - kernel.y + 2*padding) / stride + 1;
         Matrix result = Matrix(newSizeX, newSizeY);
-        int resultX = 0, resultY = 0;
+        
         for(int z = 0; z < inputTensor.matrices.size(); z++){
             const Matrix * inputMatrix = &inputTensor.matrices[z];
             const Matrix * kernelMatrix = &kernel.matrices[z];

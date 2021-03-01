@@ -3,11 +3,11 @@
 #include <Net.h>
 #include <iostream>
 //todo
-CLayer::CLayer(int id, Net * net, int tensorCount, int tensorDepth, int matrixSizeX, int matrixSizeY, ActivationFunction * activationFunction):
+CLayer::CLayer(int id, Net * net, int tensorCount, int matrixSizeX, int matrixSizeY, int tensorDepth, ActivationFunction * activationFunction):
     kernelSizeX(matrixSizeX), kernelSizeY(matrixSizeY), kernelSizeZ(tensorDepth), stride(1), padding(0), outputTensor(tensorCount), activationFunction(activationFunction),
     Layer(id, net, tensorCount * matrixSizeX * matrixSizeY * tensorDepth){
         for(int i = 0; i < tensorCount; i ++){
-            Tensor tensor = Tensor(tensorDepth, matrixSizeX, matrixSizeY);
+            Tensor tensor = Tensor(matrixSizeX, matrixSizeY, tensorDepth);
             this->tensors.push_back({tensor, 0});
         }
     std::cout<<"";

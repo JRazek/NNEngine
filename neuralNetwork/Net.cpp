@@ -8,7 +8,8 @@
 #include <stdexcept>
 
 Net::Net(std::vector<std::vector<int>> structure, int seed){
-    srand(seed);
+    srand(seed);    
+
     for(int i = 0; i < structure.size(); i ++){
         if(structure[i].size() < 3){
             throw std::invalid_argument( "wrong description in layer " + i );
@@ -20,6 +21,7 @@ Net::Net(std::vector<std::vector<int>> structure, int seed){
             layer->initConnections();
         }
         if(structure[i][0] == 1){
+            //{ layerNum:{type, tensorsCount, matrixSizeX, matrixSizeY, tensorDepth,} }
             //todo
             if(structure[i].size() < 5){
                 throw std::invalid_argument( "wrong description in layer " + i );
