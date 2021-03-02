@@ -3,5 +3,6 @@ add_library(
     GeneticLearningUnit.h
     GeneticLearningUnit.cpp
 )
-include_directories(../)
-link_libraries(GeneticLearningUnit Net)
+target_link_libraries(GeneticLearningUnit PRIVATE Net)
+#include_directories(.)
+target_include_directories(GeneticLearningUnit PUBLIC "../neuralNetwork/")

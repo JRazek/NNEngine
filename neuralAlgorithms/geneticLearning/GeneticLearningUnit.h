@@ -1,14 +1,14 @@
 #pragma once
 #include <vector>
-#include <neuralNetwork/Net.h>
+#include "Net.h"
 class GeneticLearningUnit{
-    std::vector<Net> currIndividuals;
+    std::vector<Net *> currIndividuals;
 public:
-    const std::vector< std::vector < float> > structure ;
+    const std::vector< std::vector < int > > structure ;
     int generationNum = 0;
 
     int goalGenerations;
     int individualsPerGeneration;
-    GeneticLearningUnit(const std::vector< std::vector < float> > structure, int goalGenerations, int individualsPerGeneration);
-    void start();
+    GeneticLearningUnit(const std::vector< std::vector < int > > structure, int goalGenerations, int individualsPerGeneration);
+    void start(int seed);
 };
