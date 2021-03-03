@@ -6,6 +6,8 @@ add_library(
     Net.cpp
     netStructure/ConvolutionLayer/CLayer.h
     netStructure/ConvolutionLayer/CLayer.cpp
+    netStructure/PoolingLayer/PoolingLayer.h
+    netStructure/PoolingLayer/PoolingLayer.cpp
     netStructure/FFLayer/FFLayer.h
     netStructure/FFLayer/FFLayer.cpp
     netStructure/Layer/Layer.h
