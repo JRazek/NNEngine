@@ -4,5 +4,6 @@ add_library(
     GeneticLearningUnit.cpp
 )
 target_link_libraries(GeneticLearningUnit PRIVATE Net)
-#include_directories(.)
 target_include_directories(GeneticLearningUnit PUBLIC "../neuralNetwork/")
+target_include_directories(GeneticLearningUnit PUBLIC "../../snakeEngine/")
+target_link_libraries(GeneticLearningUnit PUBLIC csnake)

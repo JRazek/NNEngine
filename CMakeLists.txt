@@ -4,3 +4,4 @@ project(NeuralNetLibrary CXX)
 
 add_subdirectory(neuralAlgorithms)
 add_subdirectory(mainExecutable)
+add_subdirectory(snakeEngine)

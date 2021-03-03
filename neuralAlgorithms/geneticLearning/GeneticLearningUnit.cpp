@@ -4,6 +4,7 @@
 GeneticLearningUnit::GeneticLearningUnit(const std::vector< std::vector < int > > structure, int goalGenerations, int individualsPerGeneration):structure(structure){
     this->goalGenerations = goalGenerations;
     this->individualsPerGeneration = individualsPerGeneration;
+    csnake::run(&game);
 }
 void GeneticLearningUnit::start(int seed = 0){
     for(int i = 0; i < this->individualsPerGeneration; i ++){
