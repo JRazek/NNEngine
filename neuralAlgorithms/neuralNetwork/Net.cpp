@@ -1,6 +1,7 @@
 #include <Net.h>
 #include <netStructure/FFLayer/FFLayer.h>
 #include <netStructure/ConvolutionLayer/CLayer.h>
+#include <netStructure/PoolingLayer/PoolingLayer.h>
 #include <activations/SigmoidFunction.h>
 #include <activations/ReLUFunction.h>
 #include <iostream>
@@ -29,6 +30,14 @@ Net::Net(std::vector<std::vector<int>> structure, int seed){
             clayer->initWeights();
             layers.push_back(clayer);
         }
+        if(structure[i][0] == 2){
+            if(structure[i].size() < 3){
+                throw std::invalid_argument( "wrong description in layer " + i );
+                return;
+            }
+            PoolingLayer * pLayer = new PoolingLayer(i, this, structure[i][1], structure[i][2]);
+            layers.push_back(pLayer);
+        }
     }
 }
 Net::~Net(){
@@ -55,7 +64,14 @@ void Net::run(Tensor tensorInput){
             CLayer * cl = (CLayer *) l;
             cl->run(tensorInput);
             tensorInput = cl->outputTensor;
-        }else if(dynamic_cast<FFLayer*>(l) != nullptr){
+        }else if(dynamic_cast<PoolingLayer*>(l) != nullptr){
+            if(ffStarted)
+                throw std::invalid_argument( "You cannot use Pooling after FFLayer!");
+            PoolingLayer * pl = (PoolingLayer *) l;
+            pl->run(tensorInput);
+            tensorInput = pl->outputTensor;
+        }
+        else if(dynamic_cast<FFLayer*>(l) != nullptr){
             FFLayer * ff = (FFLayer *) l;
             ff->run(layers[i - 1]->outputVector);
             ffStarted = true;

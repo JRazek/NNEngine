@@ -1,10 +1,11 @@
 #pragma once
 #include <utils/dataStructures/Tensor.h>
-struct PoolingLayer{
+#include <netStructure/Layer/Layer.h>
+struct PoolingLayer : Layer{
     const int kernelSizeX;
     const int kernelSizeY;
-    PoolingLayer(int kernelSizeX, int kernelSizeY);
+    PoolingLayer(int id, Net * net, int kernelSizeX, int kernelSizeY);
     ~PoolingLayer();
     void run(const Tensor &tensor);
-    Tensor * outputTensor;
+    Tensor outputTensor;
 };

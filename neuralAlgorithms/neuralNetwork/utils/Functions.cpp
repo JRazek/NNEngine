@@ -1,7 +1,8 @@
 #include "Functions.h"
 #include <stdexcept>
 
-Matrix Functions::convolve(const Tensor &inputTensor, const Tensor &kernel, const int padding, const int stride){
+Matrix Functions::convolve(const Tensor &inputTensor, const Tensor &kernel, int padding, const int stride){
+        padding = 0; //change later
         if(inputTensor.getZ() != kernel.getZ()){
             throw std::invalid_argument( "depths of kernel and input does not match!\n" );
         }

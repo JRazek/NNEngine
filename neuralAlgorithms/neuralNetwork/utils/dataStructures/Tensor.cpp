@@ -25,7 +25,7 @@ Tensor::Tensor(){}
 void Tensor::edit(int x, int y, int z, float val){
     this->matrices[z].values[y][x] = val;
 }
-float Tensor::getValue(int x, int y, int z){
+float Tensor::getValue(int x, int y, int z) const{
     return this->matrices[z].values[y][x];
 }
 int Tensor::getX() const{

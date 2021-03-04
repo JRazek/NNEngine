@@ -1,15 +1,16 @@
 #include "PoolingLayer.h"
 #include <math.h>
-PoolingLayer::PoolingLayer(int kernelSizeX, int kernelSizeY):kernelSizeX(kernelSizeX), kernelSizeY(kernelSizeY){}
+PoolingLayer::PoolingLayer(int id, Net * net, int kernelSizeX, int kernelSizeY):
+    kernelSizeX(kernelSizeX), kernelSizeY(kernelSizeY), Layer(id, net), outputTensor(){}
 PoolingLayer::~PoolingLayer(){}
 void PoolingLayer::run(const Tensor &tensor){
-    int sizeX = ceil((float)tensor.getX() / (float)kernelSizeX);
-    int sizeY = ceil((float)tensor.getY() / (float)kernelSizeY);
+    int sizeX = tensor.getX() / kernelSizeX;
+    int sizeY = tensor.getY() / kernelSizeY;
     Tensor * output = new Tensor(sizeX, sizeY, tensor.getZ());
     for(int z = 0; z < tensor.getZ(); z++){
         for(int y = 0; y < tensor.getY() - kernelSizeY; y += kernelSizeY){
             for(int x = 0; x < tensor.getX() - kernelSizeX; x+= kernelSizeX){
-                int max = 0;
+                float max = 0;
                 for(int kY = 0; kY < kernelSizeY; kY++){
                     for(int kX = 0; kX < kernelSizeX; kX ++){
                         if(tensor.getValue(x + kX, y + kY, z) > max){
@@ -21,5 +22,12 @@ void PoolingLayer::run(const Tensor &tensor){
             }
         }
     }
-    this->outputTensor = outputTensor;
+    this->outputTensor = *output;    
+    for(int z = 0; z < outputTensor.getZ(); z++){
+        for(int y = 0; y < outputTensor.getY(); y ++){
+            for(int x = 0; x < outputTensor.getX(); x ++){
+                this->outputVector.push_back(outputTensor.getValue(x, y, z));
+            }
+        }
+    }
 }

@@ -7,7 +7,7 @@
 
 FFLayer::FFLayer(int id, Net * net, int inputVectorSize, int neuronsCount, ActivationFunction * f):
     inputVectorSize(inputVectorSize), activationFunction(f), 
-    Layer(id, net, neuronsCount){
+    Layer(id, net){
         for(int i = 0; i < neuronsCount; i ++){
             this->neurons.push_back(new Neuron(i));
         }
