@@ -11,7 +11,7 @@ public:
     const int goalGenerations;
     const int individualsPerGeneration;
 
-    /*
+    /**
         map config for each individual
     */
     const int mapSizeX = 10;

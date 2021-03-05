@@ -24,6 +24,5 @@ int main(){
         std::cout<<r<<" ";
     }
     delete n;
-    //std::cout<<"dupa\n";
     
 }
