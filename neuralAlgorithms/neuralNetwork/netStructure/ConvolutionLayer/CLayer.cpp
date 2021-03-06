@@ -6,6 +6,8 @@
 CLayer::CLayer(int id, Net * net, int tensorCount, int matrixSizeX, int matrixSizeY, int tensorDepth, ActivationFunction * activationFunction):
     kernelSizeX(matrixSizeX), kernelSizeY(matrixSizeY), kernelSizeZ(tensorDepth), stride(1), padding(0), outputTensor(), activationFunction(activationFunction),
     Layer(id, net){
+        if(tensorDepth == 4)
+            std::cout<<"";
         for(int i = 0; i < tensorCount; i ++){
             Tensor tensor = Tensor(matrixSizeX, matrixSizeY, tensorDepth);
             this->tensors.push_back({tensor, 0});
@@ -27,6 +29,8 @@ void CLayer::initWeights(){
     }
 }
 void CLayer::run(const Tensor &inputTensor){
+    this->outputTensor.clearMatrices();
+    this->outputVector.clear();
     for(auto k : this->tensors){
         if(inputTensor.getZ() != k.first.getZ()){
             throw std::invalid_argument( "tensor dimensions wont match!\n" );

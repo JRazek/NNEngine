@@ -26,7 +26,7 @@ Matrix Functions::convolve(const Tensor &inputTensor, const Tensor &kernel, int 
                             sum += inputMatrix->getValue(y + y2, x + x2) * kernelMatrix->getValue(y2, x2);
                         }
                     }
-                    result.edit(x / stride, y / stride, sum);
+                    result.edit(x / stride, y / stride, result.getValue(x / stride, y / stride) + sum);
                 }
             }
         }

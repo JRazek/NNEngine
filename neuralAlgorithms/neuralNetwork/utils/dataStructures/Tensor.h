@@ -11,6 +11,7 @@ public:
     int getX() const;
     int getY() const;
     int getZ() const;
+    void clearMatrices();
 private:
     int x,y,z;
     std::vector<Matrix> matrices;

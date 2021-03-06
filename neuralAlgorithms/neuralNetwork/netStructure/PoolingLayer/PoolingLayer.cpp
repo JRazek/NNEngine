@@ -22,7 +22,8 @@ void PoolingLayer::run(const Tensor &tensor){
             }
         }
     }
-    this->outputTensor = *output;    
+    this->outputTensor = *output;
+    this->outputVector.clear();
     for(int z = 0; z < outputTensor.getZ(); z++){
         for(int y = 0; y < outputTensor.getY(); y ++){
             for(int x = 0; x < outputTensor.getX(); x ++){

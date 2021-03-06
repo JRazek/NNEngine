@@ -6,7 +6,7 @@
 
 struct Net{
     //{ layerNum:{type, neuronsSize, inputSize} }
-    //{ layerNum:{type, tensorsCount, tensorDepth, matrixSizeX, matrixSizeY} }
+    //{ layerNum:{type, tensorsCount, matrixSizeX, matrixSizeY, tensorDepth} }
     Net(std::vector<std::vector<int>> structure, int seed = 0);
 
     Net(std::vector<Layer *> &layers);

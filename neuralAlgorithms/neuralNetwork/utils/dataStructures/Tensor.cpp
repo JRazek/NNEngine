@@ -21,6 +21,12 @@ void Tensor::pushMatrix(Matrix m){
     matrices.push_back(m);
     z++;
 }
+void Tensor::clearMatrices(){
+    this->matrices.clear();
+    this->x = 0;
+    this->y = 0;
+    this->z = 0;
+}
 Tensor::Tensor(){}
 void Tensor::edit(int x, int y, int z, float val){
     this->matrices[z].values[y][x] = val;
