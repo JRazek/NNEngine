@@ -7,7 +7,7 @@ int main(){
     
     std::vector< std::vector < int > > structure = {{1, 2, 3, 3, 1}, {1, 1, 3, 3, 2}, {2, 2, 2}, {0, 4, 25}, {0, 4, 4}, {0, 4, 4}};
     GeneticLearningUnit learningUnit = GeneticLearningUnit(structure, 1, 1);
-    Net * n = new Net(structure);
+   /* Net * n = new Net(structure);
     Tensor t = Tensor(15, 15, 1);
 
     srand(1);
@@ -23,6 +23,6 @@ int main(){
     for(auto r : result){
         std::cout<<r<<" ";
     }
-    delete n;
-    
+    delete n;*/
+    learningUnit.start(1);
 }
