@@ -24,5 +24,5 @@ int main(){
         std::cout<<r<<" ";
     }
     delete n;*/
-    learningUnit.start(1);
+    learningUnit.initPopulation(1);
 }

@@ -16,8 +16,13 @@ public:
     */
     const int mapSizeX = 10;
     const int mapSizeY = 20;
+
+    const float mutationRate = 0.08f;
+
     const bool impenetrableWalls = true;
     GeneticLearningUnit(const std::vector< std::vector < int > > structure, int goalGenerations, int individualsPerGeneration);
     ~GeneticLearningUnit();
-    void start(int seed);
+    void initPopulation(std::vector< std::pair<Net *, csnake::Renderer *> > &currIndividuals, int seed);
+    void initPopulation(int seed);
+    void run();
 };
