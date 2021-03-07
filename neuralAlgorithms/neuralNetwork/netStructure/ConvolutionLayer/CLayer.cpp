@@ -14,6 +14,12 @@ CLayer::CLayer(int id, Net * net, int tensorCount, int matrixSizeX, int matrixSi
         }
     std::cout<<"";
 }//blank 0
+CLayer::CLayer(int id, Net * net, const CLayer &p1, const CLayer &p2):
+    kernelSizeX(p1.tensors[0].first.getX()), kernelSizeY(p1.tensors[0].first.getY()), kernelSizeZ(p1.tensors[0].first.getZ()),
+    stride(1), padding(0), outputTensor(), activationFunction(activationFunction),
+    Layer(id, net){
+    std::cout<<"";
+}
 void CLayer::initWeights(){
     for(int i = 0; i < this->tensors.size(); i ++){
         float randBias = (rand() % 1000)/100.f * (rand() % 2 == 1 ? 1 : -1);

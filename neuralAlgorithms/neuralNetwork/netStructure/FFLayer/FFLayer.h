@@ -13,6 +13,7 @@ struct FFLayer : Layer{
     };
 
     FFLayer(int id, Net * net, int inputVectorSize, int neuronsCount, ActivationFunction * f);
+    FFLayer(int id, Net * net, const FFLayer &p1, const FFLayer &p2, int seed);
     const int inputVectorSize;
     ActivationFunction * activationFunction;
     void initConnections();
