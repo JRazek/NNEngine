@@ -50,6 +50,7 @@ void GeneticLearningUnit::initPopulation(std::vector< std::pair<Net *, csnake::R
             Layer * l1 = p1->layers[i];
             Layer * l2 = p2->layers[i];
             bool r = rand() % 2;
+            //todo
             layers.push_back(r ? new Layer(*l1) : new Layer(*l2));
         }
         newGeneration.push_back(new Net(layers));
@@ -106,6 +107,37 @@ void GeneticLearningUnit::runCurrentGeneration(){
             }
             gameManager->getGame()->update();
             k.first->run(input);
+
+            int strongest = 0;
+            float strongestVal = 0;
+            for(int i = 0; i < k.first->getResult().size(); i ++){
+                if(k.first->getResult()[i] > strongestVal){
+                    strongest = i;
+                    strongestVal = k.first->getResult()[i];
+                }
+            }
+            char dir;
+            switch (strongest)
+            {
+            case 1:
+                dir = 'w';
+                break;
+            case 2:
+                dir = 's';
+                break;
+            case 3:
+                dir = 'a';
+                break;
+            case 4:
+                dir = 'd';
+                break;
+            
+            default:
+                break;
+            }
+
+            k.second->getGame()->changeDirection(dir);
+            
             if(!gameManager->getGame()->getSnakeStatus() && deadTab[i] == false){
                 deadTab[i] == true;
                 deadCount ++;
