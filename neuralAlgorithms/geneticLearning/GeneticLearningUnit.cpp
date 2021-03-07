@@ -45,15 +45,18 @@ void GeneticLearningUnit::initPopulation(std::vector< std::pair<Net *, csnake::R
         Net * p1 = currIndividuals[(*it1).second].first;
         Net * p2 = currIndividuals[(*it2).second].first;
 
-        std::vector<Layer * > layers;
+        Net * child = new Net();
         for(int i = 0; i < p1->layers.size(); i ++){
             Layer * l1 = p1->layers[i];
             Layer * l2 = p2->layers[i];
-            bool r = rand() % 2;
-            //todo
-            layers.push_back(r ? new Layer(*l1) : new Layer(*l2));
+            if (dynamic_cast<CLayer*>(l1) != nullptr && dynamic_cast<CLayer*>(l2) != nullptr){
+                child->layers.push_back(new CLayer(i, child, (*(CLayer *) l1), (*(CLayer *) l2), rand() % 100 ) );
+            }else if(dynamic_cast<FFLayer*>(l1) != nullptr && dynamic_cast<FFLayer*>(l2) != nullptr){
+            //FFLayer(int id, Net * net, const FFLayer &p1, const FFLayer &p2, int seed);
+                child->layers.push_back(new FFLayer(i, child, (*(FFLayer *) l1), (*(FFLayer *) l2), rand() % 100 ) );
+            }
         }
-        newGeneration.push_back(new Net(layers));
+        newGeneration.push_back(child);
         //mutation here
     }
     for(auto n : this->currIndividuals){

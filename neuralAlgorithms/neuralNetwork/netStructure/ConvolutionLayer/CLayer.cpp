@@ -14,11 +14,21 @@ CLayer::CLayer(int id, Net * net, int tensorCount, int matrixSizeX, int matrixSi
         }
     std::cout<<"";
 }//blank 0
-CLayer::CLayer(int id, Net * net, const CLayer &p1, const CLayer &p2):
+CLayer::CLayer(int id, Net * net, const CLayer &p1, const CLayer &p2, int seed):
     kernelSizeX(p1.tensors[0].first.getX()), kernelSizeY(p1.tensors[0].first.getY()), kernelSizeZ(p1.tensors[0].first.getZ()),
     stride(1), padding(0), outputTensor(), activationFunction(activationFunction),
     Layer(id, net){
-    std::cout<<"";
+    for(int i = 0; i < p1.tensors.size(); i ++){
+        std::pair<const Tensor *, float> t1 = {&p1.tensors[i].first, p1.tensors[i].second};
+        std::pair<const Tensor *, float> t2 = {&p2.tensors[i].first, p2.tensors[i].second};
+        if(t1.first->getZ() != t2.first->getZ()){
+            throw std::invalid_argument( "tensor dimensions wont match! cannot cross!!\n" );
+            return; 
+        }
+        for(int j = 0; j < t1.first->getZ(); j ++){
+            //copy the tensor
+        }
+    }
 }
 void CLayer::initWeights(){
     for(int i = 0; i < this->tensors.size(); i ++){

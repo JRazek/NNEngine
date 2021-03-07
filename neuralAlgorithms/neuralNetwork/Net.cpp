@@ -41,9 +41,12 @@ Net::Net(std::vector<std::vector<int>> structure, int seed){
         }
     }
 }
+/*
 Net::Net(std::vector<Layer *> &layers){
     this->layers = layers;
 }
+*/
+Net::Net(){}
 Net::~Net(){
     for(auto l : layers){
         delete l;
