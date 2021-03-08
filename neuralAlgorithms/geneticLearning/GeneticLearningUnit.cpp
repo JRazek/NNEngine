@@ -9,7 +9,7 @@
 #include <map>
 GeneticLearningUnit::GeneticLearningUnit(const std::vector< std::vector < int > > structure, int goalGenerations, int individualsPerGeneration):
     structure(structure), goalGenerations(goalGenerations), individualsPerGeneration(individualsPerGeneration){
-        this->win = initscr();
+        //this->win = initscr();
     }
 
 void GeneticLearningUnit::initPopulation(std::vector< std::pair<Net *, csnake::Renderer *> > &currIndividuals, int seed = 0){
