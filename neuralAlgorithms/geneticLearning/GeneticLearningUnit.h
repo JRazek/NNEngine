@@ -4,7 +4,7 @@
 #include "csnake.hpp"
 class GeneticLearningUnit{
     std::vector< std::pair<Net *, csnake::Renderer *> > currIndividuals;
-    int generationNum = 0;
+    int generationNum = -1;
 
 public:
     const std::vector< std::vector < int > > structure ;
@@ -13,7 +13,7 @@ public:
     /**
         map config for each individual
     */
-    const int mapSizeX = 10;
+    const int mapSizeX = 20;
     const int mapSizeY = 20;
     const int goalGenerations;
     WINDOW * win;

@@ -13,11 +13,12 @@ struct FFLayer : Layer{
     };
 
     FFLayer(int id, Net * net, int inputVectorSize, int neuronsCount, ActivationFunction * f);
-    FFLayer(int id, Net * net, const FFLayer &p1, const FFLayer &p2, int seed);
+    FFLayer(int id, Net * net, const FFLayer &p1, const FFLayer &p2, float mutationRate, int seed);
     const int inputVectorSize;
     ActivationFunction * activationFunction;
     void initConnections();
     void run(const std::vector<float> &input);
     std::vector<Neuron *> neurons;
+    const ActivationFunction * getActivationFunction();
     ~FFLayer();
 };

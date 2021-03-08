@@ -5,7 +5,7 @@
 
 struct CLayer : Layer{
     CLayer(int id, Net * net, int tensorCount, int tensorDepth, int matrixSizeX, int matrixSizeY, ActivationFunction * activationFunction);
-    CLayer(int id, Net * net, const CLayer &p1, const CLayer &p2, int seed);
+    CLayer(int id, Net * net, const CLayer &p1, const CLayer &p2, float mutationRate, int seed);
     void run(const Tensor &input);
     void initWeights();
     const int kernelSizeX, kernelSizeY, kernelSizeZ;

@@ -18,7 +18,7 @@ void GeneticLearningUnit::initPopulation(std::vector< std::pair<Net *, csnake::R
     std::map<int, int> intervalMap;
     for(int i = 0; i < currIndividuals.size(); i ++){
         auto p = currIndividuals[i];
-        scoreSum += p.second->getGame()->getScore() + 1;
+        scoreSum += p.second->getGame()->getScore();
         intervalMap[scoreSum] = i;
     }
 
@@ -50,10 +50,14 @@ void GeneticLearningUnit::initPopulation(std::vector< std::pair<Net *, csnake::R
             Layer * l1 = p1->layers[i];
             Layer * l2 = p2->layers[i];
             if (dynamic_cast<CLayer*>(l1) != nullptr && dynamic_cast<CLayer*>(l2) != nullptr){
-                child->layers.push_back(new CLayer(i, child, (*(CLayer *) l1), (*(CLayer *) l2), rand() % 100 ) );
+                child->layers.push_back(new CLayer(i, child, (*(CLayer *) l1), (*(CLayer *) l2), this->mutationRate, rand() % 100 ) );
             }else if(dynamic_cast<FFLayer*>(l1) != nullptr && dynamic_cast<FFLayer*>(l2) != nullptr){
             //FFLayer(int id, Net * net, const FFLayer &p1, const FFLayer &p2, int seed);
-                child->layers.push_back(new FFLayer(i, child, (*(FFLayer *) l1), (*(FFLayer *) l2), rand() % 100 ) );
+                child->layers.push_back(new FFLayer(i, child, (*(FFLayer *) l1), (*(FFLayer *) l2), this->mutationRate, rand() % 100 ));
+            }else if(dynamic_cast<PoolingLayer*>(l1) != nullptr && dynamic_cast<PoolingLayer*>(l2) != nullptr){
+                child->layers.push_back(new PoolingLayer(*(PoolingLayer *) l1));
+            }else{
+                throw std::invalid_argument("networks wont match!!!");
             }
         }
         newGeneration.push_back(child);
@@ -70,7 +74,6 @@ void GeneticLearningUnit::initPopulation(std::vector< std::pair<Net *, csnake::R
         csnake::Renderer * renderer = new csnake::Renderer(game, win);
         this->currIndividuals.push_back({net, renderer});
     }
-    this->generationNum++;
 }
 void GeneticLearningUnit::initPopulation(bool cross = false, int seed = 0){
     if(cross){
@@ -104,7 +107,7 @@ void GeneticLearningUnit::runCurrentGeneration(){
             }
             auto gameManager = k.second;
             if(i == 0){
-                gameManager->run(true);
+                gameManager->run(false);
             }else{
                 gameManager->run(false);
             }
@@ -113,30 +116,30 @@ void GeneticLearningUnit::runCurrentGeneration(){
 
             int strongest = 0;
             float strongestVal = 0;
-            for(int i = 0; i < k.first->getResult().size(); i ++){
-                if(k.first->getResult()[i] > strongestVal){
+            const std::vector<float> result = k.first->getResult();
+            for(int i = 0; i < result.size(); i ++){
+                if(result[i] > strongestVal){
                     strongest = i;
-                    strongestVal = k.first->getResult()[i];
+                    strongestVal = result[i];
                 }
             }
             char dir;
-            switch (strongest)
-            {
-            case 1:
-                dir = 'w';
-                break;
-            case 2:
-                dir = 's';
-                break;
-            case 3:
-                dir = 'a';
-                break;
-            case 4:
-                dir = 'd';
-                break;
-            
-            default:
-                break;
+            switch (strongest){
+                case 0:
+                    dir = 'w';
+                    break;
+                case 1:
+                    dir = 's';
+                    break;
+                case 2:
+                    dir = 'a';
+                    break;
+                case 3:
+                    dir = 'd';
+                    break;
+                default:
+                    throw std::invalid_argument("error!");
+                    break;
             }
 
             k.second->getGame()->changeDirection(dir);

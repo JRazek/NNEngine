@@ -1,5 +1,6 @@
 #include "CLayer.h"
 #include <utils/Functions.h>
+#include <activations/SigmoidFunction.h>
 #include <Net.h>
 #include <iostream>
 //todo
@@ -14,10 +15,12 @@ CLayer::CLayer(int id, Net * net, int tensorCount, int matrixSizeX, int matrixSi
         }
     std::cout<<"";
 }//blank 0
-CLayer::CLayer(int id, Net * net, const CLayer &p1, const CLayer &p2, int seed):
+CLayer::CLayer(int id, Net * net, const CLayer &p1, const CLayer &p2, float mutationRate, int seed):
     kernelSizeX(p1.tensors[0].first.getX()), kernelSizeY(p1.tensors[0].first.getY()), kernelSizeZ(p1.tensors[0].first.getZ()),
     stride(1), padding(0), outputTensor(), activationFunction(activationFunction),
     Layer(id, net){
+
+    srand(seed);
     for(int i = 0; i < p1.tensors.size(); i ++){
         std::pair<const Tensor *, float> t1 = {&p1.tensors[i].first, p1.tensors[i].second};
         std::pair<const Tensor *, float> t2 = {&p2.tensors[i].first, p2.tensors[i].second};
@@ -25,9 +28,38 @@ CLayer::CLayer(int id, Net * net, const CLayer &p1, const CLayer &p2, int seed):
             throw std::invalid_argument( "tensor dimensions wont match! cannot cross!!\n" );
             return; 
         }
-        for(int j = 0; j < t1.first->getZ(); j ++){
-            //copy the tensor
+        Tensor childTensor = Tensor(t1.first->getX(), t1.first->getY(), t1.first->getZ());
+        float bias = (rand() % 2) ? t1.second : t2.second;
+        //this->activationFunction = new ActivationFunction();
+        //clone!!todotodo!!!!
+        this->activationFunction = new SigmoidFunction();
+        /////////////////////
+        for(int z = 0; z < t1.first->getZ(); z ++){
+            //mix the tensor
+            for(int y = 0; y < t1.first->getY(); y++){
+                for(int x = 0; x < t1.first->getX(); x++){
+                    float val = (rand() % 2) ? t1.first->getValue(x, y, z) : t2.first->getValue(x, y, z);
+                    childTensor.edit(x, y, z, val);
+                }
+            }
         }
+        tensors.push_back({childTensor, bias});
+    }
+    if(rand() % 1000 <= mutationRate * 1000){
+        int tensorID = rand() % this->tensors.size();/*
+        for(auto w : this->tensors[tensorID]->inputEdges){
+            w.second = ((float)(rand() % 10000))/10000;
+            edge.second *= ((rand() % 2) ? -1 : 1);
+        }*/
+        for(int z = 0; z < tensors[tensorID].first.getZ(); z++){
+            for(int y = 0; y < tensors[tensorID].first.getY(); y++){
+                for(int x = 0; x < tensors[tensorID].first.getX(); x++){
+                    tensors[tensorID].first.edit(x, y, z, ((float)(rand() % 10000))/10000 * ((rand() % 2) ? -1 : 1));
+                }
+            }
+        }
+        this->tensors[tensorID].second = ((float)(rand() % 10000))/10000;
+        this->tensors[tensorID].second *= ((rand() % 2) ? -1 : 1);
     }
 }
 void CLayer::initWeights(){

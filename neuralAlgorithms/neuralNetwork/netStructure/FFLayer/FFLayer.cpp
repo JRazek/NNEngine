@@ -1,5 +1,6 @@
 #include "FFLayer.h"
 #include <netStructure/ConvolutionLayer/CLayer.h>
+#include <activations/SigmoidFunction.h>
 #include <Net.h>
 #include <cstdlib>
 #include <iostream>
@@ -14,7 +15,7 @@ FFLayer::FFLayer(int id, Net * net, int inputVectorSize, int neuronsCount, Activ
 }
 
 
-FFLayer::FFLayer(int id, Net * net, const FFLayer &p1, const FFLayer &p2, int seed):
+FFLayer::FFLayer(int id, Net * net, const FFLayer &p1, const FFLayer &p2, float mutationRate, int seed):
     inputVectorSize(p1.inputVectorSize), activationFunction(p1.activationFunction), 
         Layer(id, net){
     if(p1.neurons.size() != p2.neurons.size()){
@@ -27,13 +28,25 @@ FFLayer::FFLayer(int id, Net * net, const FFLayer &p1, const FFLayer &p2, int se
         FFLayer::Neuron * n2 = p2.neurons[i];
 
         FFLayer::Neuron * child = new Neuron(i);
-
+        /////////////fix///////////////
+        this->activationFunction = new SigmoidFunction();
+        ///////////////////////////////
         for(int j = 0; j < n1->inputEdges.size(); j++){
             bool r = rand() % 2;
             std::pair<int, float> edge = r ? n1->inputEdges[j] : n2->inputEdges[j];
             child->inputEdges.push_back(edge);
         }
+
         this->neurons.push_back(child);
+    }
+    if(rand() % 1000 <= mutationRate * 1000){
+        int neuronID = rand() % this->neurons.size();
+        for(auto edge : this->neurons[neuronID]->inputEdges){
+            edge.second = ((float)(rand() % 10000))/10000;
+            edge.second *= ((rand() % 2) ? -1 : 1);
+        }
+        this->neurons[neuronID]->bias = ((float)(rand() % 10000))/10000;
+        this->neurons[neuronID]->bias *= ((rand() % 2) ? -1 : 1);
     }
 }
 
@@ -80,4 +93,7 @@ void FFLayer::run(const std::vector<float> &input){
         float activatedVal = activationFunction->getValue(sum);
         this->outputVector.push_back(activatedVal);
     }
+}
+const ActivationFunction * FFLayer::getActivationFunction(){
+    return this->activationFunction;
 }
