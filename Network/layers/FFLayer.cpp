@@ -3,3 +3,11 @@
 //
 
 #include "FFLayer.h"
+
+FFLayer::FFLayer(Network *network, int inputSize) : Layer(network) {
+
+}
+
+void FFLayer::run() {
+
+}

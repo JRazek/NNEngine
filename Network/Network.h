@@ -5,14 +5,22 @@
 #ifndef NEURALNETLIBRARY_NETWORK_H
 #define NEURALNETLIBRARY_NETWORK_H
 
-#include "layers/Layer.h"
+#include <vector>
 
+class Layer;
+class FFLayer;
+class ConvolutionLayer;
 
+typedef unsigned char byte;
 
 class Network {
 private:
     std::vector<Layer *> layers;
 public:
+
+    void appendLayer(FFLayer  * layer);
+    void appendLayer(ConvolutionLayer * layer);
+
     /**
      * if first layer is convolution - use this feed method
      * @param data - data to convolve

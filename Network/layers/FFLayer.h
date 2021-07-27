@@ -5,12 +5,13 @@
 #ifndef NEURALNETLIBRARY_FFLAYER_H
 #define NEURALNETLIBRARY_FFLAYER_H
 
-
 #include "Layer.h"
+
+class Layer;
 
 class FFLayer : public Layer{
 public:
-    FFLayer(int inputSize);
+    FFLayer(Network * network, int inputSize);
     virtual void run() override;
 };
 
