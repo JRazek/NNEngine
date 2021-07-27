@@ -10,16 +10,18 @@
 
 
 class Network {
+private:
     std::vector<Layer *> layers;
+public:
     /**
      * if first layer is convolution - use this feed method
      * @param data - data to convolve
-     * @param h - height of tensor
      * @param w - width of tensor
+     * @param h - height of tensor
      * @param d - depth of tensor
      */
 
-    void feed(std::vector<byte> data, int h, int w, int d);
+    void feed(std::vector<byte> data, int w, int h, int d);
 
     /**
      * use this if and only if first layer is feed forward layer

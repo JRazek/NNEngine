@@ -3,3 +3,5 @@
 //
 
 #include "Layer.h"
+
+Layer::Layer(Network *network): network(network){}

@@ -8,8 +8,10 @@
 
 #include "Layer.h"
 
-class FFLayer : Layer{
-
+class FFLayer : public Layer{
+public:
+    FFLayer(int inputSize);
+    virtual void run() override;
 };
 
 

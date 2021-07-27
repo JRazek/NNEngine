@@ -6,10 +6,14 @@
 #define NEURALNETLIBRARY_LAYER_H
 
 #include <vector>
-
+#include "../Network.h"
 typedef unsigned char byte;
 
 class Layer {
+private:
+    Network * network;
+public:
+    Layer(Network * network);
     virtual void run() = 0;
     virtual std::vector<float> getOutput() = 0;
 };

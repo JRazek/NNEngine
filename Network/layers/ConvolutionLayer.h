@@ -8,8 +8,10 @@
 
 #include "Layer.h"
 
-class ConvolutionLayer : Layer{
-
+class ConvolutionLayer : public Layer{
+public:
+    ConvolutionLayer(int w, int h, int d);
+    virtual void run() override;
 };
 
 
