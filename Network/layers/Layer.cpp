@@ -4,4 +4,4 @@
 
 #include "Layer.h"
 
-Layer::Layer(Network *network): network(network){}
+Layer::Layer(int id, Network *network): id(id), network(network){}

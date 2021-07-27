@@ -4,7 +4,7 @@
 
 #include "FFLayer.h"
 
-FFLayer::FFLayer(Network *network, int inputSize) : Layer(network) {
+FFLayer::FFLayer(int id, Network *network, int inputSize) : Layer(id, network) {
 
 }
 

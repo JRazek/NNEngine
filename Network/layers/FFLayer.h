@@ -11,7 +11,7 @@ class Layer;
 
 class FFLayer : public Layer{
 public:
-    FFLayer(Network * network, int inputSize);
+    FFLayer(int id, Network * network, int inputSize);
     virtual void run() override;
 };
 

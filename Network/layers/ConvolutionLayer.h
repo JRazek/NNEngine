@@ -9,7 +9,8 @@
 
 class ConvolutionLayer : public Layer{
 public:
-    ConvolutionLayer(Network * network, int w, int h, int d);
+    ConvolutionLayer(int id, Network *network, int w, int h, int d);
+
     virtual void run() override;
 };
 

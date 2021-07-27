@@ -10,10 +10,11 @@
 typedef unsigned char byte;
 
 class Layer {
-private:
+protected:
     Network * network;
 public:
-    Layer(Network * network);
+    const int id;
+    Layer(int id, Network * network);
     virtual void run() = 0;
     virtual std::vector<float> getOutput() = 0;
 };

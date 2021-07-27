@@ -14,8 +14,9 @@ class ConvolutionLayer;
 typedef unsigned char byte;
 
 class Network {
-private:
+protected:
     std::vector<Layer *> layers;
+    friend class Layer;
 public:
 
     void appendLayer(FFLayer  * layer);
@@ -36,6 +37,8 @@ public:
      * @param data
      */
     void feed(std::vector<byte> data);
+
+    const std::vector<Layer *> * getLayers();
 };
 
 
