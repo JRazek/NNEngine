@@ -8,7 +8,6 @@
 typedef unsigned char byte;
 class Bitmap {
 private:
-    //format is following --
     byte * data;
 public:
     const int w, h, d;
