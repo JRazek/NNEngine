@@ -3,9 +3,10 @@
 //
 
 #include "ConvolutionLayer.h"
+#include "../Bitmap.h"
 
 void ConvolutionLayer::run() {
-    std::vector
+    const Bitmap * inputBitmap;
     if(Layer::network->getLayers()->front()->id == ConvolutionLayer::id){
         //im the first layer in network
     }else if(auto * l = dynamic_cast<ConvolutionLayer *>(Layer::network->getLayers()->at(ConvolutionLayer::id - 1))) {

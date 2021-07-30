@@ -6,6 +6,7 @@
 #define NEURALNETLIBRARY_NETWORK_H
 
 #include <vector>
+#include "Bitmap.h"
 
 class Layer;
 class FFLayer;
@@ -36,7 +37,7 @@ public:
      * use this if and only if first layer is feed forward layer
      * @param data
      */
-    void feed(std::vector<byte> data);
+    void feed(const Bitmap * const bitmap);
 
     const std::vector<Layer *> * getLayers();
 };

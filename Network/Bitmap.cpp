@@ -25,3 +25,7 @@ void Bitmap::setBye(int col, int row, int depth, byte b) {
     }
     this->data[depth * w * h + row * w + col] = b;
 }
+
+byte *Bitmap::getData() {
+    return this->data;
+}
