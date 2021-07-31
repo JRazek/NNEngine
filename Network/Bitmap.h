@@ -16,6 +16,8 @@ public:
     byte getByte(int col, int row, int depth);
     void setBye(int col, int row, int depth, byte b);
     byte * getData();
+
+    ~Bitmap();
 };
 
 
