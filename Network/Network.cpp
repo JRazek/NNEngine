@@ -20,3 +20,13 @@ void Network::appendLayer(ConvolutionLayer * layer) {
         }
     }
 }
+
+void Network::feed(const std::vector<byte> &input, int w, int h, int d) {
+    this->dataWidth = w;
+    this->dataHeight = h;
+    this->dataDepth = d;
+    this->data = input.data();
+    Bitmap bitmap(w, h, d);
+
+    this->layers.front()->run();
+}
