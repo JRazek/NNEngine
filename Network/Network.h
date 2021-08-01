@@ -27,7 +27,10 @@ protected:
     int dataWidth;
     int dataHeight;
     int dataDepth;
+    friend ConvolutionLayer;
 public:
+
+    void appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount);
 
     void appendLayer(FFLayer  * layer);
     void appendLayer(ConvolutionLayer * layer);
@@ -50,6 +53,8 @@ public:
 
 
     const std::vector<Layer *> * getLayers();
+
+    ~Network();
 };
 
 

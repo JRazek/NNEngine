@@ -30,3 +30,17 @@ void Network::feed(const std::vector<byte> &input, int w, int h, int d) {
 
     this->layers.front()->run();
 }
+
+Network::~Network() {
+    for(auto l : this->layers){
+        delete l;
+    }
+}
+
+void Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount) {
+    this->layers.push_back(new ConvolutionLayer(this->layers.size(), this, kernelX, kernelY, kernelZ, kernelsCount));
+}
+
+const std::vector<Layer *> *Network::getLayers() {
+    return &this->layers;
+}
