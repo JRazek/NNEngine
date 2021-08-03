@@ -16,7 +16,7 @@ ConvolutionLayer::ConvolutionLayer(int id, Network *network, int w, int h, int d
 
 }
 
-Bitmap *ConvolutionLayer::convolve(const Bitmap *kernel, const Bitmap *input) {
+Bitmap *ConvolutionLayer::convolve(const Bitmap *kernel, const Bitmap *input, int padding) {
     //convolution here
     return nullptr;
 }
