@@ -49,6 +49,8 @@ public:
      * use this if and only if first layer is convolution
      * @param data
      */
+
+
     void feed(const Bitmap * const bitmap);
 
 
