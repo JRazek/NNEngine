@@ -19,14 +19,11 @@ protected:
     std::vector<Layer *> layers;
     friend class Layer;
 
-    /**
-     * if the first layer is image - set all the properties.
-     * In case of using only FFLayers - set height and depth to 1.
-     */
+
     const byte * data;
-    int dataWidth;
-    int dataHeight;
-    int dataDepth;
+    const int dataWidth;
+    const int dataHeight;
+    const int dataDepth;
     friend ConvolutionLayer;
 public:
 
@@ -43,7 +40,7 @@ public:
      * @param d - depth of tensor
      */
 
-    void feed(const byte *input, int w, int h, int d);
+    void feed(const byte *input);
 
     /**
      * use this if and only if first layer is convolution
@@ -54,6 +51,18 @@ public:
 
 
     const std::vector<Layer *> * getLayers();
+
+    /**
+     * input size for feed
+     * @param w width
+     * @param h height
+     * @param d depth
+     *
+     * if the first layer is image - set all the properties.
+     * In case of using only FFLayers - set height and depth to 1.
+     */
+
+    Network(int w, int h, int d);
 
     ~Network();
 };

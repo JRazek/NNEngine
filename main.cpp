@@ -6,7 +6,7 @@
 #include <opencv2/opencv.hpp>
 int main(){
     cv::Mat mat = cv::imread("resources/aPhoto.jpg");
-    Network network;
+    Network network(800,800,3);
 
     int size = mat.cols * mat.rows * mat.channels();
 

@@ -22,12 +22,9 @@ void Network::appendLayer(ConvolutionLayer * layer) {
     }
 }
 
-void Network::feed(const byte *input, int w, int h, int d) {
-    this->dataWidth = w;
-    this->dataHeight = h;
-    this->dataDepth = d;
+void Network::feed(const byte *input) {
     this->data = input;
-    Bitmap bitmap(w, h, d, input);
+    Bitmap bitmap(this->dataWidth, this->dataHeight, this->dataHeight, input);
     this->layers.front()->run(&bitmap);
 }
 
@@ -38,9 +35,11 @@ Network::~Network() {
 }
 
 void Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount) {
-    this->layers.push_back(new ConvolutionLayer(this->layers.size(), this, kernelX, kernelY, kernelZ, kernelsCount));
+    this->layers.push_back(new ConvolutionLayer(this->layers.size(), this, kernelsCount));
 }
 
 const std::vector<Layer *> *Network::getLayers() {
     return &this->layers;
 }
+
+Network::Network(int w, int h, int d):dataWidth(w), dataHeight(h), dataDepth(d) {}
