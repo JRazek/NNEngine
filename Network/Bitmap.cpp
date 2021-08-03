@@ -29,3 +29,7 @@ void Bitmap::setBye(int col, int row, int depth, byte b) {
 byte *Bitmap::getData() {
     return this->data;
 }
+
+Bitmap::~Bitmap() {
+delete [] this->data;
+}

@@ -13,6 +13,7 @@ public:
     const int w, h, d;
     Bitmap(int w, int h, int d);
     Bitmap(const Bitmap &bitmap);
+    ~Bitmap();
     byte getByte(int col, int row, int depth);
     void setBye(int col, int row, int depth, byte b);
     byte * getData();
