@@ -6,18 +6,17 @@
 #include "../Network.h"
 #include "../Bitmap.h"
 
-void ConvolutionLayer::run() {
-    Bitmap * inputBitmap;
-    if(Layer::network->getLayers()->front()->id == ConvolutionLayer::id){
-        const byte * data = this->network->data;
-        inputBitmap = new Bitmap(this->network->dataWidth, this->network->dataHeight, this->network->dataDepth, data);
-    }else if(auto * l = dynamic_cast<ConvolutionLayer *>(Layer::network->getLayers()->at(ConvolutionLayer::id - 1))) {
-        //get output of prev layer
-    }
+void ConvolutionLayer::run(Bitmap *bitmap) {
 
-    delete inputBitmap;
 }
+
+
 
 ConvolutionLayer::ConvolutionLayer(int id, Network *network, int w, int h, int d, int kernelsCount) : Layer(id, network) {
 
+}
+
+Bitmap *ConvolutionLayer::convolve(const Bitmap *kernel, const Bitmap *input) {
+    //convolution here
+    return nullptr;
 }

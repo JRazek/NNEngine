@@ -3,6 +3,7 @@
 //
 
 #include <stdexcept>
+#include <iostream>
 #include "Network.h"
 #include "layers/ConvolutionLayer.h"
 #include "layers/FFLayer.h"
@@ -21,14 +22,13 @@ void Network::appendLayer(ConvolutionLayer * layer) {
     }
 }
 
-void Network::feed(const std::vector<byte> &input, int w, int h, int d) {
+void Network::feed(const byte *input, int w, int h, int d) {
     this->dataWidth = w;
     this->dataHeight = h;
     this->dataDepth = d;
-    this->data = input.data();
-    Bitmap bitmap(w, h, d);
-
-    this->layers.front()->run();
+    this->data = input;
+    Bitmap bitmap(w, h, d, input);
+    this->layers.front()->run(&bitmap);
 }
 
 Network::~Network() {

@@ -6,6 +6,4 @@
 
 Layer::Layer(int id, Network *network): id(id), network(network){}
 
-Layer::~Layer() {
-
-}
+Layer::~Layer() = default;

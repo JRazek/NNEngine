@@ -43,7 +43,7 @@ public:
      * @param d - depth of tensor
      */
 
-    void feed(const std::vector<byte> &input, int w, int h, int d);
+    void feed(const byte *input, int w, int h, int d);
 
     /**
      * use this if and only if first layer is convolution

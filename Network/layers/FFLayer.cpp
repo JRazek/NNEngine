@@ -8,6 +8,6 @@ FFLayer::FFLayer(int id, Network *network, int inputSize) : Layer(id, network) {
 
 }
 
-void FFLayer::run() {
+void FFLayer::run(Bitmap *bitmap) {
 
 }

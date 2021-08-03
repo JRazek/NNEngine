@@ -9,8 +9,9 @@
 
 class ConvolutionLayer : public Layer{
 public:
+    static Bitmap * convolve(const Bitmap * kernel, const Bitmap * input);
     ConvolutionLayer(int id, Network *network, int w, int h, int d, int kernelsCount);
-    virtual void run() override;
+    virtual void run(Bitmap *bitmap) override;
 };
 
 
