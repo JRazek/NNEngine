@@ -31,5 +31,9 @@ byte *Bitmap::getData() {
 }
 
 Bitmap::~Bitmap() {
-delete [] this->data;
+    delete [] data;
+}
+
+Bitmap::Bitmap(int w, int h, int d, const byte *const data):Bitmap(w, h, d) {
+    std::copy(data, data + w * h * d, this->data);
 }

@@ -12,11 +12,14 @@ private:
 public:
     const int w, h, d;
     Bitmap(int w, int h, int d);
+    Bitmap(int w, int h, int d, const byte* const data);
     Bitmap(const Bitmap &bitmap);
     ~Bitmap();
     byte getByte(int col, int row, int depth);
     void setBye(int col, int row, int depth, byte b);
     byte * getData();
+
+    ~Bitmap();
 };
 
 

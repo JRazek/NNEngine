@@ -16,7 +16,8 @@ public:
     const int id;
     Layer(int id, Network * network);
     virtual void run() = 0;
-    virtual std::vector<float> getOutput() = 0;
+
+    virtual ~Layer();
 };
 
 
