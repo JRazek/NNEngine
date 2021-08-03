@@ -50,7 +50,6 @@ public:
      * @param data
      */
 
-
     void feed(const Bitmap * const bitmap);
 
 
