@@ -42,4 +42,6 @@ const std::vector<Layer *> *Network::getLayers() {
     return &this->layers;
 }
 
-Network::Network(int w, int h, int d):dataWidth(w), dataHeight(h), dataDepth(d) {}
+Network::Network(int w, int h, int d):dataWidth(w), dataHeight(h), dataDepth(d) {
+    this->data = new byte [w * h * d];
+}
