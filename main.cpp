@@ -22,7 +22,7 @@ int main(){
 
    // network.appendLayer()
 
-
+//
  //   std::cout<<b;
     return 0;
 }
