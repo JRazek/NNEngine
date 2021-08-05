@@ -4,6 +4,6 @@
 
 #include "Layer.h"
 
-Layer::Layer(int id, Network *network): id(id), network(network){}
+cn::Layer::Layer(int id, cn::Network *network): id(id), network(network){}
 
-Layer::~Layer() = default;
+cn::Layer::~Layer() = default;

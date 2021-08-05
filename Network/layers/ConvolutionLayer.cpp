@@ -5,12 +5,29 @@
 #include <stdexcept>
 #include "ConvolutionLayer.h"
 
-void ConvolutionLayer::run(Bitmap *bitmap) {}
+void cn::ConvolutionLayer::run(cn::Bitmap<float> *bitmap) {}
 
-ConvolutionLayer::ConvolutionLayer(int id, Network *network, int kernelsCount) : Layer(id, network) {}
+cn::ConvolutionLayer::ConvolutionLayer(int id, cn::Network *network, int kernelSizeX, int kernelSizeY, int kernelSizeZ, int kernelsCount, int paddingX, int paddingY,
+                                       int strideX,
+                                       int strideY) :
+                                       kernelSizeX(kernelSizeX),
+                                       kernelSizeY(kernelSizeY),
+                                       kernelSizeZ(kernelSizeZ),
+                                       kernelsCount(kernelsCount),
+                                       paddingX(paddingX),
+                                       paddingY(paddingY),
+                                       strideX(strideX),
+                                       strideY(strideY),
+                                       cn::Layer(id, network) {
+    kernels.reserve(kernelsCount);
+    for(int i = 0; i < kernelsCount; i ++){
+        kernels.push_back(new Bitmap<float>(0,0,0));
+        std::fill(kernels.back()->data(), kernels.back()->data() + kernelSizeX * kernelSizeY * kernelSizeZ, 0);
+    }
+}
 
-Bitmap *ConvolutionLayer::convolve(const Bitmap *kernel, const Bitmap *input, int paddingX = 0, int paddingY = 0, int stepX = 1,
-                                   int stepY = 1) {
+cn::Bitmap<float> *cn::ConvolutionLayer::convolve(const cn::Bitmap<float> *kernel, const cn::Bitmap<float> *input,
+        int paddingX, int paddingY, int stepX, int stepY) {
     if(!(kernel->w % 2 && kernel->h % 2 && kernel->d == input->d)){
         throw std::invalid_argument("wrong dimensions of kernel!");
     }
@@ -21,12 +38,12 @@ Bitmap *ConvolutionLayer::convolve(const Bitmap *kernel, const Bitmap *input, in
         throw std::invalid_argument("kernel bigger than input!");
     }
 
-    Bitmap *bitmap = new Bitmap(sizeX, sizeY, 1);
+    cn::Bitmap<float> *bitmap = new cn::Bitmap<float>(sizeX, sizeY, 1);
     //convolution here
     return bitmap;
 }
 
-int ConvolutionLayer::afterConvolutionSize(int kernelSize, int inputSize, int padding, int step) {
+int cn::ConvolutionLayer::afterConvolutionSize(int kernelSize, int inputSize, int padding, int step) {
     return (inputSize + 2*padding - kernelSize) / step + 1;
 }
 

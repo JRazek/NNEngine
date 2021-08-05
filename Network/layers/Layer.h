@@ -6,18 +6,22 @@
 #define NEURALNETLIBRARY_LAYER_H
 
 #include <vector>
-#include "../Network.h"
-typedef unsigned char byte;
+#include "../../Utils/Bitmap.h"
+namespace cn {
+    typedef unsigned char byte;
 
-class Layer {
-protected:
-    Network * network;
-public:
-    const int id;
-    Layer(int id, Network * network);
-    virtual void run(Bitmap *bitmap) = 0;
-    virtual ~Layer();
-};
+    class Network;
+
+    class Layer {
+    protected:
+        Network * network;
+    public:
+        const int id;
+        Layer(int id, Network * network);
+        virtual void run(Bitmap<float> *bitmap) = 0;
+        virtual ~Layer();
+    };
+}
 
 
 #endif //NEURALNETLIBRARY_LAYER_H
