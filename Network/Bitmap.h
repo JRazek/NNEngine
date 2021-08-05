@@ -28,7 +28,7 @@ public:
      */
     static Bitmap<float> * normalize(const Bitmap<byte> &input);
 };
-
-
 #include "Bitmap.cpp"
+
+
 #endif //NEURALNETLIBRARY_BITMAP_H

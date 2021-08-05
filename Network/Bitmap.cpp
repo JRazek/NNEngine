@@ -3,8 +3,6 @@
 //
 
 #include <algorithm>
-#include "Bitmap.h"
-
 
 template<typename T>
 Bitmap<T>::Bitmap(int w, int h, int d): w(w), h (h), d(d) {
