@@ -3,6 +3,8 @@
 //
 
 #include <algorithm>
+#include "Bitmap.h"
+
 
 template<typename T>
 Bitmap<T>::Bitmap(int w, int h, int d): w(w), h (h), d(d) {
@@ -44,4 +46,13 @@ Bitmap<T>::~Bitmap() {
 template<typename T>
 Bitmap<T>::Bitmap(int w, int h, int d, const T * data):Bitmap(w, h, d) {
     std::copy(data, data + w * h * d, this->dataP);
+}
+
+template<typename T>
+Bitmap<float> *Bitmap<T>::normalize(const Bitmap<byte> &input) {
+    Bitmap * bitmap = new Bitmap<float>(input.w, input.h, input.d);
+    for(int i = 0; i < input.w * input.h * input.d; i ++){
+        bitmap->data()[i] = 1.f / (256 - input.dataP[i]);
+    }
+    return bitmap;
 }

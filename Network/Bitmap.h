@@ -20,6 +20,15 @@ public:
     T getByte(int col, int row, int depth);
     void setBye(int col, int row, int depth, T b);
     T * data();
+
+    /**
+     *
+     * @param input
+     * @return normalized input. Each byte is now value equal to [ 1 / (256 - previousValue) ].
+     */
+    static Bitmap<float> * normalize(const Bitmap<byte> &input);
 };
+
+
 #include "Bitmap.cpp"
 #endif //NEURALNETLIBRARY_BITMAP_H
