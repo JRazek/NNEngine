@@ -32,7 +32,8 @@ namespace cn {
         friend ConvolutionLayer;
     public:
 
-        void appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount);
+        void appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount, int paddingX = 0,
+                                    int paddingY = 0);
 
         void appendLayer(FFLayer  * layer);
         void appendLayer(ConvolutionLayer * layer);

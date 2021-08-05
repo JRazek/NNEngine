@@ -7,6 +7,7 @@
 #include "Network.h"
 #include "layers/ConvolutionLayer.h"
 #include "layers/FFLayer.h"
+#include "../Utils/Utils.h"
 
 void cn::Network::appendLayer(cn::FFLayer * layer) {
     this->layers.push_back(layer);
@@ -39,8 +40,9 @@ cn::Network::~Network() {
     }
 }
 
-void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount) {
-    this->layers.push_back(new ConvolutionLayer(this->layers.size(), this, kernelsCount, 0, 0, 0, 0, 0));
+void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount, int paddingX,
+                                         int paddingY) {
+    this->layers.push_back(new ConvolutionLayer(this->layers.size(), this, kernelX, kernelY, kernelZ, kernelsCount, paddingX, paddingY));
 }
 
 const std::vector<cn::Layer *> *cn::Network::getLayers() {
