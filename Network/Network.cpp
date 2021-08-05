@@ -7,6 +7,7 @@
 #include "layers/ConvolutionLayer.h"
 #include "layers/FFLayer.h"
 #include "../Utils/Bitmap.h"
+#include "../Utils/Utils.h"
 
 void cn::Network::appendLayer(cn::FFLayer * layer) {
     this->layers.push_back(layer);
@@ -26,7 +27,11 @@ void cn::Network::feed(const byte *input) {
     this->data = input;
     cn::Bitmap<byte> bitmap(this->dataWidth, this->dataHeight, this->dataHeight, input);
     //normalize image
-    //this->layers.front()->run(&bitmap);
+    cn::Bitmap<float> * normalized = cn::Utils::normalize(bitmap);
+
+    this->layers.front()->run(normalized);
+
+    delete normalized;
 }
 
 cn::Network::~Network() {

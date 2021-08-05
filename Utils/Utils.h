@@ -8,13 +8,15 @@
 #include "Bitmap.h"
 
 namespace cn {
-
-    /**
-     *
-     * @param input
-     * @return normalized input. Each byte is now value equal to [ 1 / (256 - previousValue) ].
-     */
-    static Bitmap<float> * normalize(const Bitmap<unsigned char> &input);
+    class Utils{
+    public:
+        /**
+         *
+         * @param input
+         * @return normalized input. Each byte is now value equal to [ 1 / (256 - previousValue) ].
+         */
+        static Bitmap<float> * normalize(const Bitmap<unsigned char> &input);
+    };
 };
 
 
