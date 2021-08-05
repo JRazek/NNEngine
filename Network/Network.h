@@ -6,7 +6,7 @@
 #define NEURALNETLIBRARY_NETWORK_H
 
 #include <vector>
-#include "Bitmap.h"
+#include "../Utils/Bitmap.h"
 
 namespace cn {
     class Layer;

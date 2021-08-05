@@ -32,7 +32,7 @@ void cn::Bitmap<T>::setBye(int col, int row, int depth, T b) {
 }
 
 template<typename T>
-T *cn::Bitmap<T>::data() {
+T *cn::Bitmap<T>::data() const{
     return this->dataP;
 }
 
@@ -46,11 +46,4 @@ cn::Bitmap<T>::Bitmap(int w, int h, int d, const T * data): Bitmap(w, h, d) {
     std::copy(data, data + w * h * d, this->dataP);
 }
 
-template<typename T>
-cn::Bitmap<float> *cn::Bitmap<T>::normalize(const Bitmap<unsigned char> &input) {
-    Bitmap<float> * bitmap = new Bitmap<float>(input.w, input.h, input.d);
-    for(int i = 0; i < input.w * input.h * input.d; i ++){
-        bitmap->data()[i] = 1.f / (256 - input.dataP[i]);
-    }
-    return bitmap;
-}
+

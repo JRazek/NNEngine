@@ -6,7 +6,7 @@
 #define NEURALNETLIBRARY_LAYER_H
 
 #include <vector>
-#include "../Bitmap.h"
+#include "../../Utils/Bitmap.h"
 namespace cn {
     typedef unsigned char byte;
 

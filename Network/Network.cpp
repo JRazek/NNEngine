@@ -6,7 +6,7 @@
 #include "Network.h"
 #include "layers/ConvolutionLayer.h"
 #include "layers/FFLayer.h"
-#include "Bitmap.h"
+#include "../Utils/Bitmap.h"
 
 void cn::Network::appendLayer(cn::FFLayer * layer) {
     this->layers.push_back(layer);

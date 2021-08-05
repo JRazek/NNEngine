@@ -2,7 +2,7 @@
 // Created by user on 31.07.2021.
 //
 #include <iostream>
-#include "Network/Bitmap.h"
+#include "Utils/Bitmap.h"
 #include "Network/Network.h"
 #include <opencv2/opencv.hpp>
 int main(){

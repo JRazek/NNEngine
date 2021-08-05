@@ -20,14 +20,7 @@ namespace cn {
         ~Bitmap();
         T getByte(int col, int row, int depth);
         void setBye(int col, int row, int depth, T b);
-        T * data();
-
-        /**
-         *
-         * @param input
-         * @return normalized input. Each byte is now value equal to [ 1 / (256 - previousValue) ].
-         */
-        static Bitmap<float> * normalize(const Bitmap<unsigned char> &input);
+        T * data() const;
     };
 }
 
