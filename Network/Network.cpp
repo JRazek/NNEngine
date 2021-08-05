@@ -24,8 +24,9 @@ void Network::appendLayer(ConvolutionLayer * layer) {
 
 void Network::feed(const byte *input) {
     this->data = input;
-    Bitmap bitmap(this->dataWidth, this->dataHeight, this->dataHeight, input);
-    this->layers.front()->run(&bitmap);
+    Bitmap<byte> bitmap(this->dataWidth, this->dataHeight, this->dataHeight, input);
+    //normalize image
+    //this->layers.front()->run(&bitmap);
 }
 
 Network::~Network() {

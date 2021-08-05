@@ -21,6 +21,9 @@ protected:
 
 
     const byte * data;
+    /**
+     * what the dimensions of the byte array is after being normalized
+     */
     const int dataWidth;
     const int dataHeight;
     const int dataDepth;
@@ -34,7 +37,7 @@ public:
 
     /**
      * if first layer is convolution - use this feed method
-     * @param data - data to convolve
+     * @param data - dataP to convolve
      * @param w - width of tensor
      * @param h - height of tensor
      * @param d - depth of tensor
@@ -47,7 +50,7 @@ public:
      * @param data
      */
 
-    void feed(const Bitmap * const bitmap);
+    void feed(const Bitmap<float> * const bitmap);
 
 
     const std::vector<Layer *> * getLayers();

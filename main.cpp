@@ -10,13 +10,13 @@ int main(){
 
     int size = mat.cols * mat.rows * mat.channels();
 
-    Bitmap bitmap(mat.cols, mat.rows, mat.channels());
+    Bitmap<float> bitmap(mat.cols, mat.rows, mat.channels());
 
-    std::copy(mat.data, mat.data + size, bitmap.getData());
+    std::copy(mat.data, mat.data + size, bitmap.data());
 
     byte b = bitmap.getByte(99, 99, 2);
 
-    cv::Mat decoded = cv::Mat(bitmap.h, bitmap.w, CV_8UC(bitmap.d), bitmap.getData()).clone();
+    cv::Mat decoded = cv::Mat(bitmap.h, bitmap.w, CV_8UC(bitmap.d), bitmap.data()).clone();
 
     cv::imshow("image", decoded);
     cv::waitKey(10000);

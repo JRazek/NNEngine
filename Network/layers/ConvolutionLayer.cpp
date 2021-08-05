@@ -5,11 +5,11 @@
 #include <stdexcept>
 #include "ConvolutionLayer.h"
 
-void ConvolutionLayer::run(Bitmap *bitmap) {}
+void ConvolutionLayer::run(Bitmap<float> *bitmap) {}
 
 ConvolutionLayer::ConvolutionLayer(int id, Network *network, int kernelsCount) : Layer(id, network) {}
 
-Bitmap *ConvolutionLayer::convolve(const Bitmap *kernel, const Bitmap *input, int paddingX = 0, int paddingY = 0, int stepX = 1,
+Bitmap<float> *ConvolutionLayer::convolve(const Bitmap<float> *kernel, const Bitmap<float> *input, int paddingX = 0, int paddingY = 0, int stepX = 1,
                                    int stepY = 1) {
     if(!(kernel->w % 2 && kernel->h % 2 && kernel->d == input->d)){
         throw std::invalid_argument("wrong dimensions of kernel!");
@@ -21,7 +21,7 @@ Bitmap *ConvolutionLayer::convolve(const Bitmap *kernel, const Bitmap *input, in
         throw std::invalid_argument("kernel bigger than input!");
     }
 
-    Bitmap *bitmap = new Bitmap(sizeX, sizeY, 1);
+    Bitmap<float> *bitmap = new Bitmap<float>(sizeX, sizeY, 1);
     //convolution here
     return bitmap;
 }

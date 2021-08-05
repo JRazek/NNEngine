@@ -7,7 +7,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 add_executable(Test main.cpp)
 
-add_library(ConvolutionNetLib Network/Network.cpp Network/Network.h Network/layers/Layer.cpp Network/layers/Layer.h Network/layers/FFLayer.cpp Network/layers/FFLayer.h Network/layers/ConvolutionLayer.cpp Network/layers/ConvolutionLayer.h Network/Bitmap.cpp Network/Bitmap.h main.cpp)
+add_library(ConvolutionNetLib Network/Network.cpp Network/Network.h Network/layers/Layer.cpp Network/layers/Layer.h Network/layers/FFLayer.cpp Network/layers/FFLayer.h Network/layers/ConvolutionLayer.cpp Network/layers/ConvolutionLayer.h Network/Bitmap.h main.cpp)
 
 target_link_libraries(Test ConvolutionNetLib)
 target_link_libraries(Test ${OpenCV_LIBS})

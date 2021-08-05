@@ -12,7 +12,7 @@ class Layer;
 class FFLayer : public Layer{
 public:
     FFLayer(int id, Network * network, int inputSize);
-    void run(Bitmap *bitmap) override;
+    void run(Bitmap<float> *bitmap) override;
 };
 
 

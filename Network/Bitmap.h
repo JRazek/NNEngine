@@ -6,19 +6,20 @@
 #define NEURALNETLIBRARY_BITMAP_H
 
 typedef unsigned char byte;
+
+template<typename T>
 class Bitmap {
 private:
-    byte * data;
+    T * dataP;
 public:
     const int w, h, d;
     Bitmap(int w, int h, int d);
-    Bitmap(int w, int h, int d, const byte* data);
+    Bitmap(int w, int h, int d, const T* data);
     Bitmap(const Bitmap &bitmap);
     ~Bitmap();
-    byte getByte(int col, int row, int depth);
-    void setBye(int col, int row, int depth, byte b);
-    byte * getData();
+    T getByte(int col, int row, int depth);
+    void setBye(int col, int row, int depth, T b);
+    T * data();
 };
-
-
+#include "Bitmap.cpp"
 #endif //NEURALNETLIBRARY_BITMAP_H
