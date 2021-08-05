@@ -41,7 +41,7 @@ cn::Network::~Network() {
 }
 
 void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount) {
-    this->layers.push_back(new ConvolutionLayer(this->layers.size(), this, kernelsCount));
+    this->layers.push_back(new ConvolutionLayer(this->layers.size(), this, kernelsCount, 0, 0, 0, 0, 0));
 }
 
 const std::vector<cn::Layer *> *cn::Network::getLayers() {

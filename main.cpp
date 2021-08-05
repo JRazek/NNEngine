@@ -14,10 +14,12 @@ int main(){
 
     std::copy(mat.data, mat.data + size, bitmap.data());
 
-    cn::byte b = bitmap.getByte(99, 99, 2);
 
     cv::Mat decoded = cv::Mat(bitmap.h, bitmap.w, CV_8UC(bitmap.d), bitmap.data()).clone();
-//
+    network.appendConvolutionLayer(3, 3, 3, 1);
+    network.appendConvolutionLayer(3, 3, 1, 1);
+
+    //network.feed()
     //cv::imshow("image", decoded);
    // cv::waitKey(10000);
 

@@ -22,7 +22,6 @@ namespace cn {
         std::vector<Layer *> layers;
         friend class Layer;
 
-
         const byte * data;
         /**
          * what the dimensions of the byte array is after being normalized
