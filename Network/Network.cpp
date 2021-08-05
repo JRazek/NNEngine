@@ -3,18 +3,18 @@
 //
 
 #include <stdexcept>
-#include <iostream>
 #include "Network.h"
 #include "layers/ConvolutionLayer.h"
 #include "layers/FFLayer.h"
+#include "Bitmap.h"
 
-void Network::appendLayer(FFLayer * layer) {
+void cn::Network::appendLayer(cn::FFLayer * layer) {
     this->layers.push_back(layer);
 }
 
-void Network::appendLayer(ConvolutionLayer * layer) {
+void cn::Network::appendLayer(ConvolutionLayer * layer) {
     if(!this->layers.empty()){
-        if(auto * l = dynamic_cast<FFLayer *>(this->layers.back())) {
+        if(auto * l = dynamic_cast<cn::FFLayer *>(this->layers.back())) {
             throw std::invalid_argument("cannot use convolution layer after ff layer!");
         }else{
             this->layers.push_back(layer);
@@ -22,25 +22,25 @@ void Network::appendLayer(ConvolutionLayer * layer) {
     }
 }
 
-void Network::feed(const byte *input) {
+void cn::Network::feed(const byte *input) {
     this->data = input;
-    Bitmap<byte> bitmap(this->dataWidth, this->dataHeight, this->dataHeight, input);
+    cn::Bitmap<byte> bitmap(this->dataWidth, this->dataHeight, this->dataHeight, input);
     //normalize image
     //this->layers.front()->run(&bitmap);
 }
 
-Network::~Network() {
+cn::Network::~Network() {
     for(auto l : this->layers){
         delete l;
     }
 }
 
-void Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount) {
+void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount) {
     this->layers.push_back(new ConvolutionLayer(this->layers.size(), this, kernelsCount));
 }
 
-const std::vector<Layer *> *Network::getLayers() {
+const std::vector<cn::Layer *> *cn::Network::getLayers() {
     return &this->layers;
 }
 
-Network::Network(int w, int h, int d):dataWidth(w), dataHeight(h), dataDepth(d) {}
+cn::Network::Network(int w, int h, int d): dataWidth(w), dataHeight(h), dataDepth(d) {}

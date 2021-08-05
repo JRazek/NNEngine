@@ -5,12 +5,13 @@
 #include <stdexcept>
 #include "ConvolutionLayer.h"
 
-void ConvolutionLayer::run(Bitmap<float> *bitmap) {}
+void cn::ConvolutionLayer::run(cn::Bitmap<float> *bitmap) {}
 
-ConvolutionLayer::ConvolutionLayer(int id, Network *network, int kernelsCount) : Layer(id, network) {}
+cn::ConvolutionLayer::ConvolutionLayer(int id, cn::Network *network, int kernelsCount) : cn::Layer(id, network) {}
 
-Bitmap<float> *ConvolutionLayer::convolve(const Bitmap<float> *kernel, const Bitmap<float> *input, int paddingX = 0, int paddingY = 0, int stepX = 1,
-                                   int stepY = 1) {
+cn::Bitmap<float> *
+cn::ConvolutionLayer::convolve(const cn::Bitmap<float> *kernel, const cn::Bitmap<float> *input, int paddingX = 0, int paddingY = 0, int stepX = 1,
+                               int stepY = 1) {
     if(!(kernel->w % 2 && kernel->h % 2 && kernel->d == input->d)){
         throw std::invalid_argument("wrong dimensions of kernel!");
     }
@@ -21,12 +22,12 @@ Bitmap<float> *ConvolutionLayer::convolve(const Bitmap<float> *kernel, const Bit
         throw std::invalid_argument("kernel bigger than input!");
     }
 
-    Bitmap<float> *bitmap = new Bitmap<float>(sizeX, sizeY, 1);
+    cn::Bitmap<float> *bitmap = new cn::Bitmap<float>(sizeX, sizeY, 1);
     //convolution here
     return bitmap;
 }
 
-int ConvolutionLayer::afterConvolutionSize(int kernelSize, int inputSize, int padding, int step) {
+int cn::ConvolutionLayer::afterConvolutionSize(int kernelSize, int inputSize, int padding, int step) {
     return (inputSize + 2*padding - kernelSize) / step + 1;
 }
 

@@ -5,18 +5,18 @@
 #include <algorithm>
 
 template<typename T>
-Bitmap<T>::Bitmap(int w, int h, int d): w(w), h (h), d(d) {
+cn::Bitmap<T>::Bitmap(int w, int h, int d): w(w), h (h), d(d) {
     this->dataP = new T [w * h * d];
 }
 
 
 template<typename T>
-Bitmap<T>::Bitmap(const Bitmap &bitmap): Bitmap(bitmap.w, bitmap.w, bitmap.h) {
+cn::Bitmap<T>::Bitmap(const Bitmap<T> &bitmap): Bitmap(bitmap.w, bitmap.w, bitmap.h) {
     std::copy(bitmap.dataP, bitmap.dataP + w * h * d, this->dataP);
 }
 
 template<typename T>
-T Bitmap<T>::getByte(int col, int row, int depth) {
+T cn::Bitmap<T>::getByte(int col, int row, int depth) {
     if(col >= this->w or col < 0 or row >= this->h or row < 0 or depth >= this->d or depth < 0){
         throw std::invalid_argument("byte does not belong to bitmap!");
     }
@@ -24,7 +24,7 @@ T Bitmap<T>::getByte(int col, int row, int depth) {
 }
 
 template<typename T>
-void Bitmap<T>::setBye(int col, int row, int depth, T b) {
+void cn::Bitmap<T>::setBye(int col, int row, int depth, T b) {
     if(col >= this->w or col < 0 or row >= this->h or row < 0 or depth >= this->d or depth < 0){
         throw std::invalid_argument("wrong byte to set!");
     }
@@ -32,23 +32,23 @@ void Bitmap<T>::setBye(int col, int row, int depth, T b) {
 }
 
 template<typename T>
-T *Bitmap<T>::data() {
+T *cn::Bitmap<T>::data() {
     return this->dataP;
 }
 
 template<typename T>
-Bitmap<T>::~Bitmap() {
+cn::Bitmap<T>::~Bitmap() {
     delete [] dataP;
 }
 
 template<typename T>
-Bitmap<T>::Bitmap(int w, int h, int d, const T * data):Bitmap(w, h, d) {
+cn::Bitmap<T>::Bitmap(int w, int h, int d, const T * data): Bitmap(w, h, d) {
     std::copy(data, data + w * h * d, this->dataP);
 }
 
 template<typename T>
-Bitmap<float> *Bitmap<T>::normalize(const Bitmap<byte> &input) {
-    Bitmap * bitmap = new Bitmap<float>(input.w, input.h, input.d);
+cn::Bitmap<float> *cn::Bitmap<T>::normalize(const Bitmap<unsigned char> &input) {
+    Bitmap<float> * bitmap = new Bitmap<float>(input.w, input.h, input.d);
     for(int i = 0; i < input.w * input.h * input.d; i ++){
         bitmap->data()[i] = 1.f / (256 - input.dataP[i]);
     }

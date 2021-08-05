@@ -2,18 +2,19 @@
 // Created by user on 31.07.2021.
 //
 #include <iostream>
+#include "Network/Bitmap.h"
 #include "Network/Network.h"
 #include <opencv2/opencv.hpp>
 int main(){
     cv::Mat mat = cv::imread("resources/aPhoto.jpg");
-    Network network(800,800,3);
+    cn::Network network(800, 800, 3);
 
     int size = mat.cols * mat.rows * mat.channels();
-    Bitmap<byte> bitmap(mat.cols, mat.rows, mat.channels());
+    cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels());
 
     std::copy(mat.data, mat.data + size, bitmap.data());
 
-    byte b = bitmap.getByte(99, 99, 2);
+    cn::byte b = bitmap.getByte(99, 99, 2);
 
     cv::Mat decoded = cv::Mat(bitmap.h, bitmap.w, CV_8UC(bitmap.d), bitmap.data()).clone();
 //
