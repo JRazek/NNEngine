@@ -45,7 +45,7 @@ template<typename T>
 cn::Bitmap<T>::Bitmap(int w, int h, int d, const T * data, int options): Bitmap(w, h, d) {
    // cn::Utils::convert(data, w, h, d, options, 0);
    // delete [] test;
-
+    byte byte;
 }
 
 
