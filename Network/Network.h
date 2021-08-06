@@ -28,13 +28,14 @@ namespace cn {
         const int dataHeight;
         const int dataDepth;
         friend ConvolutionLayer;
+
+
+        void appendLayer(Layer * layer);
     public:
 
         void appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount, int paddingX = 0,
                                     int paddingY = 0);
 
-        void appendLayer(FFLayer  * layer);
-        void appendLayer(ConvolutionLayer * layer);
 
         /**
          * if first layer is convolution - use this feed method
@@ -51,7 +52,7 @@ namespace cn {
          * @param data
          */
 
-        void feed(const Bitmap<float> * const bitmap);
+        void feed(const Bitmap<float> &bitmap);
 
 
         const std::vector<Layer *> * getLayers();

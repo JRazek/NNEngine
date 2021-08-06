@@ -29,7 +29,6 @@ int main(){
     //cv::imshow("image", decoded);
     //cv::waitKey(10000);
 
-   // network.appendLayer()
 
 //
  //   std::cout<<b;

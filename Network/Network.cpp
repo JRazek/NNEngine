@@ -9,18 +9,9 @@
 #include "layers/FFLayer.h"
 #include "../Utils/Utils.h"
 
-void cn::Network::appendLayer(cn::FFLayer * layer) {
+void cn::Network::appendLayer(cn::Layer * layer) {
+    //todo validation!
     this->layers.push_back(layer);
-}
-
-void cn::Network::appendLayer(ConvolutionLayer * layer) {
-    if(!this->layers.empty()){
-        if(auto * l = dynamic_cast<cn::FFLayer *>(this->layers.back())) {
-            throw std::invalid_argument("cannot use convolution layer after ff layer!");
-        }else{
-            this->layers.push_back(layer);
-        }
-    }
 }
 
 void cn::Network::feed(const byte *input) {
