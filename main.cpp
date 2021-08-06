@@ -26,8 +26,8 @@ int main(){
     network.appendConvolutionLayer(3, 3, 1, 1);
 
     //network.feed()
-    //cv::imshow("image", decoded);
-    //cv::waitKey(10000);
+    cv::imshow("image", decoded);
+    cv::waitKey(10000);
 
 
 //

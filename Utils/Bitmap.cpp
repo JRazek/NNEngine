@@ -3,7 +3,7 @@
 //
 
 #include <algorithm>
-
+#include "Utils.h"
 template<typename T>
 cn::Bitmap<T>::Bitmap(int w, int h, int d): w(w), h (h), d(d) {
     this->dataP = new T [w * h * d];
@@ -43,15 +43,9 @@ cn::Bitmap<T>::~Bitmap() {
 
 template<typename T>
 cn::Bitmap<T>::Bitmap(int w, int h, int d, const T * data, int options): Bitmap(w, h, d) {
-    if(options == 0) {
-        std::copy(data, data + w * h * d, this->dataP);
-    }else if(options == 1){
-        for(int c = 0; c < d; c ++){
-            for(int i = 0; i < w * h; i ++){
-                this->dataP[w * h * c + i] = data[ d * i + c];
-            }
-        }
-    }
+   // cn::Utils::convert(data, w, h, d, options, 0);
+   // delete [] test;
+
 }
 
 
