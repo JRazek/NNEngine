@@ -42,8 +42,16 @@ cn::Bitmap<T>::~Bitmap() {
 }
 
 template<typename T>
-cn::Bitmap<T>::Bitmap(int w, int h, int d, const T * data): Bitmap(w, h, d) {
-    std::copy(data, data + w * h * d, this->dataP);
+cn::Bitmap<T>::Bitmap(int w, int h, int d, const T * data, int options): Bitmap(w, h, d) {
+    if(options == 0) {
+        std::copy(data, data + w * h * d, this->dataP);
+    }else if(options == 1){
+        for(int c = 0; c < d; c ++){
+            for(int i = 0; i < w * h; i ++){
+                this->dataP[w * h * c + i] = data[ d * i + c];
+            }
+        }
+    }
 }
 
 

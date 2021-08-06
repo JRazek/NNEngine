@@ -24,14 +24,11 @@ void cn::Network::appendLayer(ConvolutionLayer * layer) {
 }
 
 void cn::Network::feed(const byte *input) {
-    this->data = input;
-    cn::Bitmap<byte> bitmap(this->dataWidth, this->dataHeight, this->dataHeight, input);
+    cn::Bitmap<byte> bitmap(this->dataWidth, this->dataHeight, this->dataHeight, input, 0);
     //normalize image
-    cn::Bitmap<float> * normalized = cn::Utils::normalize(bitmap);
+    cn::Bitmap<float> normalized = cn::Utils::normalize(bitmap);
 
     this->layers.front()->run(normalized);
-
-    delete normalized;
 }
 
 cn::Network::~Network() {
@@ -50,5 +47,4 @@ const std::vector<cn::Layer *> *cn::Network::getLayers() {
 }
 
 cn::Network::Network(int w, int h, int d): dataWidth(w), dataHeight(h), dataDepth(d) {
-    this->data = new byte [w * h * d];
 }

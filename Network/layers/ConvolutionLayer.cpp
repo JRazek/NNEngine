@@ -5,7 +5,9 @@
 #include <stdexcept>
 #include "ConvolutionLayer.h"
 
-void cn::ConvolutionLayer::run(cn::Bitmap<float> *bitmap) {}
+void cn::ConvolutionLayer::run(cn::Bitmap<float> &bitmap) {
+
+}
 
 cn::ConvolutionLayer::ConvolutionLayer(int id, cn::Network *network, int kernelSizeX, int kernelSizeY, int kernelSizeZ, int kernelsCount, int paddingX, int paddingY,
                                        int strideX,
@@ -21,24 +23,24 @@ cn::ConvolutionLayer::ConvolutionLayer(int id, cn::Network *network, int kernelS
                                        cn::Layer(id, network) {
     kernels.reserve(kernelsCount);
     for(int i = 0; i < kernelsCount; i ++){
-        kernels.push_back(new Bitmap<float>(kernelSizeX, kernelSizeY, kernelSizeZ));
-        std::fill(kernels.back()->data(), kernels.back()->data() + kernelSizeX * kernelSizeY * kernelSizeZ, 0);
+        kernels.emplace_back(kernelSizeX, kernelSizeY, kernelSizeZ);
+        std::fill(kernels.back().data(), kernels.back().data() + kernelSizeX * kernelSizeY * kernelSizeZ, 0);
     }
 }
 
-cn::Bitmap<float> *cn::ConvolutionLayer::convolve(const cn::Bitmap<float> *kernel, const cn::Bitmap<float> *input,
-        int paddingX, int paddingY, int stepX, int stepY) {
-    if(!(kernel->w % 2 && kernel->h % 2 && kernel->d == input->d)){
+cn::Bitmap<float> cn::ConvolutionLayer::convolve(const Bitmap<float> &kernel, const Bitmap<float> &input,
+                                                 int paddingX, int paddingY, int stepX, int stepY) {
+    if(!(kernel.w % 2 && kernel.h % 2 && kernel.d == input.d)){
         throw std::invalid_argument("wrong dimensions of kernel!");
     }
-    int sizeX = ConvolutionLayer::afterConvolutionSize(kernel->w, input->w, paddingX, stepX);
-    int sizeY = ConvolutionLayer::afterConvolutionSize(kernel->h, input->h, paddingY, stepY);
+    int sizeX = ConvolutionLayer::afterConvolutionSize(kernel.w, input.w, paddingX, stepX);
+    int sizeY = ConvolutionLayer::afterConvolutionSize(kernel.h, input.h, paddingY, stepY);
 
     if(sizeX <= 0 || sizeY <= 0){
         throw std::invalid_argument("kernel bigger than input!");
     }
 
-    cn::Bitmap<float> *bitmap = new cn::Bitmap<float>(sizeX, sizeY, 1);
+    cn::Bitmap<float> bitmap (sizeX, sizeY, 1);
     //convolution here
     return bitmap;
 }

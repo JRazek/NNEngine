@@ -8,7 +8,6 @@
 #include <vector>
 #include "../../Utils/Bitmap.h"
 namespace cn {
-    typedef unsigned char byte;
 
     class Network;
 
@@ -18,7 +17,7 @@ namespace cn {
     public:
         const int id;
         Layer(int id, Network * network);
-        virtual void run(Bitmap<float> *bitmap) = 0;
+        virtual void run(Bitmap<float> &bitmap) = 0;
         virtual ~Layer();
     };
 }

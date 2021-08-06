@@ -13,7 +13,7 @@ namespace cn {
     class FFLayer : public cn::Layer{
     public:
         FFLayer(int id, Network * network, int inputSize);
-        void run(Bitmap<float> *bitmap) override;
+        void run(Bitmap<float> &bitmap) override;
     };
 }
 

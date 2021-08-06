@@ -19,18 +19,18 @@ namespace cn {
         const int strideX;
         const int strideY;
 
-        std::vector<Bitmap<float> *> kernels;
+        std::vector<Bitmap<float>> kernels;
 
     public:
         ConvolutionLayer(int id, cn::Network *network, int kernelSizeX, int kernelSizeY, int kernelSizeZ, int kernelsCount, int paddingX = 0, int paddingY = 0,
                          int strideX = 0, int strideY = 0);
 
-        void run(Bitmap<float> *bitmap) override;
+        void run(Bitmap<float> &bitmap) override;
 
 
 
         static int afterConvolutionSize(int kernelSize, int inputSize, int padding, int step);
-        static Bitmap<float> * convolve(const Bitmap<float> *kernel, const Bitmap<float> *input, int paddingX = 0, int paddingY = 0, int stepX = 1, int stepY = 1);
+        static Bitmap<float> convolve(const Bitmap<float> &kernel, const Bitmap<float> &input, int paddingX = 0, int paddingY = 0, int stepX = 1, int stepY = 1);
     };
 }
 

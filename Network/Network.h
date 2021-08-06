@@ -7,6 +7,7 @@
 
 #include <vector>
 #include "../Utils/Bitmap.h"
+#include "../Utils/Utils.h"
 
 namespace cn {
     class Layer;
@@ -15,14 +16,11 @@ namespace cn {
 
     class ConvolutionLayer;
 
-    typedef unsigned char byte;
-
     class Network {
     protected:
         std::vector<Layer *> layers;
         friend class Layer;
 
-        const byte * data;
         /**
          * what the dimensions of the byte array is after being normalized
          */

@@ -8,6 +8,6 @@ cn::FFLayer::FFLayer(int id, Network *network, int inputSize) : cn::Layer(id, ne
 
 }
 
-void cn::FFLayer::run(cn::Bitmap<float> *bitmap) {
+void cn::FFLayer::run(cn::Bitmap<float> &bitmap) {
 
 }
