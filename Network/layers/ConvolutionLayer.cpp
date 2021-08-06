@@ -21,7 +21,7 @@ cn::ConvolutionLayer::ConvolutionLayer(int id, cn::Network *network, int kernelS
                                        cn::Layer(id, network) {
     kernels.reserve(kernelsCount);
     for(int i = 0; i < kernelsCount; i ++){
-        kernels.push_back(new Bitmap<float>(0,0,0));
+        kernels.push_back(new Bitmap<float>(kernelSizeX, kernelSizeY, kernelSizeZ));
         std::fill(kernels.back()->data(), kernels.back()->data() + kernelSizeX * kernelSizeY * kernelSizeZ, 0);
     }
 }
