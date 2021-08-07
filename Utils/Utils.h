@@ -32,9 +32,12 @@ namespace cn {
          * @param inputType - format of input
          * @param outputType - format of input
          *
-         * @returns pointer to an array of converted data.
-         * @warning the array must be deallocated by the user.
-         * 0 - for standard (each column and channel is in ascending order)
+         * 0 - for standard (each row and channel is in ascending order)
+         * {0, 1, 2},
+         * {3, 4, 5},
+         * {6, 7, 8}
+         * indexing example.
+         *
          * 1 - Ordering pixel on (x, y) pos in each channel is next to each other. Sth like RGB ordering
          */
         template<typename T>

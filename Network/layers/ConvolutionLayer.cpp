@@ -41,7 +41,12 @@ cn::Bitmap<float> cn::ConvolutionLayer::convolve(const Bitmap<float> &kernel, co
     }
 
     cn::Bitmap<float> bitmap (sizeX, sizeY, 1);
+    std::fill(bitmap.data(), bitmap.data() + bitmap.w * bitmap.h * bitmap.d, 0);
     //convolution here
+    for(int c = 0; c < input.d; c ++){
+
+    }
+
     return bitmap;
 }
 

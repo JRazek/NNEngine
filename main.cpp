@@ -12,6 +12,10 @@ int main(){
 
     cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
 
+    bitmap.setCell(200, 100, 0, 255);
+    bitmap.setCell(200, 100, 1, 255);
+    bitmap.setCell(200, 100, 2, 255);
+
     std::vector<cn::byte> decodedRaw (bitmap.w * bitmap.h * bitmap.d);
     cn::Utils::convert(bitmap.data(), decodedRaw.data(), bitmap.w, bitmap.h, bitmap.d, 0, 1);
 

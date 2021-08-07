@@ -12,6 +12,10 @@ namespace cn {
     template<typename T>
     class Bitmap {
     private:
+
+        /**
+         * data should be stored in 0th format described in Utils.h file
+         */
         T * dataP;
     public:
         const int w, h, d;
