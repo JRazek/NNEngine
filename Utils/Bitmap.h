@@ -64,10 +64,9 @@ cn::Bitmap<T>::~Bitmap() {
 
 template<typename T>
 cn::Bitmap<T>::Bitmap(int w, int h, int d, const T * data, int options): Bitmap(w, h, d) {
-    T * b = cn::Utils::convert<T>(data, w, h, d, options, 0);
-    std::copy(b, b + w * h * d, this->dataP);
-
-    delete [] b;
+    std::vector<T> result (w * h * d);
+    cn::Utils::convert<T>(data, result.data(), w, h, d, options, 0);
+    std::copy(result.data(), result.data() + w * h * d, this->dataP);
 }//
 
 

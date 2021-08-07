@@ -38,23 +38,21 @@ namespace cn {
          * 1 - Ordering pixel on (x, y) pos in each channel is next to each other. Sth like RGB ordering
          */
         template<typename T>
-        static T *convert(const T *input, int w, int h, int d, int inputType, int outputType);
+        static void convert(const T *input, T *output, int w, int h, int d, int inputType, int outputType);
 
     };
 };
 
 
 template<typename T>
-T *cn::Utils::convert(const T *input, int w, int h, int d, int inputType, int outputType) {
-    T *data = new T [w * h * d];
+void cn::Utils::convert(const T *input, T *output, int w, int h, int d, int inputType, int outputType) {
     if(inputType == 1 && outputType == 0){
         for(int c = 0; c < d; c ++){
             for(int i = 0; i < w * h; i ++){
-                data[w * h * c + i] = input[ d * i + c];
+                output[w * h * c + i] = input[ d * i + c];
             }
         }
     }
-    return data;
 }
 
 #endif //NEURALNETLIBRARY_UTILS_H
