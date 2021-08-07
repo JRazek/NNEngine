@@ -23,7 +23,7 @@ namespace cn {
         Bitmap(int w, int h, int d, const T* data, int options = 0);
         Bitmap(const Bitmap &bitmap);
         ~Bitmap();
-        T getCell(int col, int row, int depth);
+        T getCell(int col, int row, int depth) const;
         void setCell(int col, int row, int depth, T b);
         T * data() const;
     };
@@ -41,7 +41,7 @@ cn::Bitmap<T>::Bitmap(const Bitmap<T> &bitmap): Bitmap(bitmap.w, bitmap.w, bitma
 }
 
 template<typename T>
-T cn::Bitmap<T>::getCell(int col, int row, int depth) {
+T cn::Bitmap<T>::getCell(int col, int row, int depth) const {
     if(col >= this->w or col < 0 or row >= this->h or row < 0 or depth >= this->d or depth < 0){
         throw std::invalid_argument("byte does not belong to bitmap!");
     }
