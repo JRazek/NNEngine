@@ -1,8 +1,8 @@
+#include "Bitmap.h"
+#include "Utils.h"
 //
 // Created by jrazek on 05.08.2021.
 //
-
-#include "Utils.h"
 
 cn::Bitmap<float> cn::Utils::normalize(const Bitmap<byte> &input) {
     Bitmap<float> bitmap (input.w, input.h, input.d);
@@ -12,15 +12,6 @@ cn::Bitmap<float> cn::Utils::normalize(const Bitmap<byte> &input) {
     return bitmap;
 }
 
-template<typename T>
-T *cn::Utils::convert(T *input, int w, int h, int d, int inputType, int outputType) {
-    T *data = new T [w * h * d];
-    if(inputType == 1 && outputType == 0){
-        for(int c = 0; c < d; c ++){
-            for(int i = 0; i < w * h; i ++){
-                data[w * h * c + i] = input[ d * i + c];
-            }
-        }
-    }
-    return data;
-}
+
+
+

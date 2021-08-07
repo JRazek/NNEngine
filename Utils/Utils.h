@@ -5,10 +5,14 @@
 #ifndef NEURALNETLIBRARY_UTILS_H
 #define NEURALNETLIBRARY_UTILS_H
 
-#include "Bitmap.h"
+
+#include <bits/stdint-uintn.h>
 
 namespace cn {
-    using byte = unsigned char;
+    using byte = uint8_t;
+
+    template<typename T>
+    class Bitmap;
 
     class Utils{
     public:
@@ -34,9 +38,23 @@ namespace cn {
          * 1 - Ordering pixel on (x, y) pos in each channel is next to each other. Sth like RGB ordering
          */
         template<typename T>
-        static T *convert(T *input, int w, int h, int d, int inputType, int outputType);
+        static T *convert(const T *input, int w, int h, int d, int inputType, int outputType);
+
     };
 };
 
+
+template<typename T>
+T *cn::Utils::convert(const T *input, int w, int h, int d, int inputType, int outputType) {
+    T *data = new T [w * h * d];
+    if(inputType == 1 && outputType == 0){
+        for(int c = 0; c < d; c ++){
+            for(int i = 0; i < w * h; i ++){
+                data[w * h * c + i] = input[ d * i + c];
+            }
+        }
+    }
+    return data;
+}
 
 #endif //NEURALNETLIBRARY_UTILS_H
