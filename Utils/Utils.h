@@ -49,7 +49,13 @@ void cn::Utils::convert(const T *input, T *output, int w, int h, int d, int inpu
     if(inputType == 1 && outputType == 0){
         for(int c = 0; c < d; c ++){
             for(int i = 0; i < w * h; i ++){
-                output[w * h * c + i] = input[ d * i + c];
+                output[w * h * c + i] = input[d * i + c];
+            }
+        }
+    }else if(inputType == 0 && outputType == 1){
+        for(int c = 0; c < d; c ++){
+            for(int i = 0; i < w * h; i ++){
+                output[d * i + c] = input[w * h * c + i];
             }
         }
     }
