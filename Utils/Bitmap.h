@@ -20,7 +20,7 @@ namespace cn {
     public:
         const int w, h, d;
         Bitmap(int w, int h, int d);
-        Bitmap(int w, int h, int d, const T* data, int options = 0);
+        Bitmap(int w, int h, int d, const T* data, int inputType = 0);
         Bitmap(const Bitmap &bitmap);
         ~Bitmap();
         T getCell(int col, int row, int depth) const;
@@ -67,10 +67,8 @@ cn::Bitmap<T>::~Bitmap() {
 }
 
 template<typename T>
-cn::Bitmap<T>::Bitmap(int w, int h, int d, const T * data, int options): Bitmap(w, h, d) {
-    std::vector<T> result (w * h * d);
-    cn::Utils::convert<T>(data, result.data(), w, h, d, options, 0);
-    std::copy(result.data(), result.data() + w * h * d, this->dataP);
+cn::Bitmap<T>::Bitmap(int w, int h, int d, const T * data, int inputType): Bitmap(w, h, d) {
+    cn::Utils::convert<T>(data, this->dataP, w, h, d, inputType, 0);
 }//
 
 

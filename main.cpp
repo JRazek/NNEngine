@@ -20,7 +20,7 @@ int main(){
 
     float kernelData [27];
     for(int i = 0; i < sizeof(kernelData)/sizeof(float); i ++){
-        kernelData[i] = (float)(i % 9);
+        kernelData[i] = (float)(i % 9) + 1;
     }
 
     float sampleImageData [75];

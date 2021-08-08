@@ -49,6 +49,9 @@ namespace cn {
 
 template<typename T>
 void cn::Utils::convert(const T *input, T *output, int w, int h, int d, int inputType, int outputType) {
+    if(inputType == outputType){
+        std::copy(input, input + w * h * d, output);
+    }
     if(inputType == 1 && outputType == 0){
         for(int c = 0; c < d; c ++){
             for(int i = 0; i < w * h; i ++){
