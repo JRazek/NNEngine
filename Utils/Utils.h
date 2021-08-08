@@ -85,14 +85,4 @@ void cn::Utils::convert(const T *input, T *output, int w, int h, int d, int inpu
     }
 }
 
-template<typename T>
-cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, int destSizeX, int destSizeY, int method) {
-    if(method == 0){
-        int kernelSizeX = input.w - destSizeX + 1;
-        int kernelSizeY = input.h - destSizeY + 1;
-
-    }
-    return cn::Bitmap<T>();
-}
-
 #endif //NEURALNETLIBRARY_UTILS_H

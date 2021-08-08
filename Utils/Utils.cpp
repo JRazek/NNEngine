@@ -13,6 +13,18 @@ cn::Bitmap<float> cn::Utils::normalize(const Bitmap<byte> &input) {
 }
 
 
+template<typename T>
+cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, int destSizeX, int destSizeY, int method) {
+    if(method == 0){
+        int kernelSizeX = input.w - destSizeX + 1;
+        int kernelSizeY = input.h - destSizeY + 1;
+        if(!(kernelSizeX % 2)){
+            //extend the pic by one pixel
+        }
+    }
+    return cn::Bitmap<T>();
+}
+
 
 cn::Bitmap<float> cn::Utils::convolve(const Bitmap<float> &kernel, const Bitmap<float> &input, int paddingX, int paddingY, int strideX, int strideY) {
     if(!(kernel.w % 2 && kernel.h % 2 && kernel.d == input.d)){
