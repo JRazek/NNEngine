@@ -57,6 +57,10 @@ namespace cn {
          */
         template<typename T>
         static Bitmap<T> transform(const Bitmap<T> &input, int destSizeX, int destSizeY, int method);
+
+
+        static int afterConvolutionSize(int kernelSize, int inputSize, int padding, int step);
+        static Bitmap<float> convolve(const Bitmap<float> &kernel, const Bitmap<float> &input, int paddingX = 0, int paddingY = 0, int strideX = 1, int strideY = 1);
     };
 };
 

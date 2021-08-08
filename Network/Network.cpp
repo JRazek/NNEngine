@@ -3,11 +3,8 @@
 //
 
 #include <stdexcept>
-#include <iostream>
 #include "Network.h"
 #include "layers/ConvolutionLayer.h"
-#include "layers/FFLayer.h"
-#include "../Utils/Utils.h"
 
 void cn::Network::appendLayer(cn::Layer * layer) {
     //todo validation!

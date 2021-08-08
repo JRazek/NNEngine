@@ -30,7 +30,7 @@ int main(){
     cn::Bitmap<float> sampleImage(5, 5, 3, sampleImageData);
 
 
-    cn::Bitmap<float> result = cn::ConvolutionLayer::convolve(kernel, sampleImage,1, 1);
+    cn::Bitmap<float> result = cn::Utils::convolve(kernel, sampleImage,1, 1);
 
     std::vector<float> encodedRGB(result.w * result.h * result.d);
     cn::Utils::convert<float>(result.data(), encodedRGB.data(), result.w, result.h, result.d, 0, 1);
