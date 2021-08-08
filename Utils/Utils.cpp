@@ -14,15 +14,24 @@ cn::Bitmap<float> cn::Utils::normalize(const Bitmap<byte> &input) {
 
 
 template<typename T>
-cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, int destSizeX, int destSizeY, int method) {
+cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int destSizeY, int method) {
+    //todo
+}
+
+
+template<typename T>
+cn::Bitmap<T> cn::Utils::downsample(const cn::Bitmap<T> &input, int destSizeX, int destSizeY, int method) {
     if(method == 0){
         int kernelSizeX = input.w - destSizeX + 1;
         int kernelSizeY = input.h - destSizeY + 1;
         if(!(kernelSizeX % 2)){
-            //extend the pic by one pixel
+            //extend the pic in X by one pixel
+        }
+        if(!(kernelSizeY % 2)){
+            //extend the pic in Y by one pixel
         }
     }
-    return cn::Bitmap<T>();
+    //todo
 }
 
 
@@ -67,5 +76,4 @@ cn::Bitmap<float> cn::Utils::convolve(const Bitmap<float> &kernel, const Bitmap<
 int cn::Utils::afterConvolutionSize(int kernelSize, int inputSize, int padding, int step) {
     return (inputSize + 2*padding - kernelSize) / step + 1;
 }
-
 

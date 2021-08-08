@@ -47,7 +47,7 @@ namespace cn {
         /**
          *
          * @tparam T
-         * @param input - bitmap to transform
+         * @param input - bitmap to downsample
          * @param destSizeX
          * @param destSizeY
          * @param method see below for types of methods
@@ -56,7 +56,22 @@ namespace cn {
          * @return transformed bitmap
          */
         template<typename T>
-        static Bitmap<T> transform(const Bitmap<T> &input, int destSizeX, int destSizeY, int method);
+        static Bitmap<T> downsample(const Bitmap<T> &input, int destSizeX, int destSizeY, int method);
+
+        /**
+         *
+         * @tparam T
+         * @param input - bitmap to downsample
+         * @param destSizeX
+         * @param destSizeY
+         * @param method see below for types of methods
+         * 0 - nearest neighbour
+         * 1 - bilinear interpolation
+         * @return transformed bitmap
+         */
+        template<typename T>
+        static Bitmap<T> upsample(const Bitmap<T> &input, int destSizeX, int destSizeY, int method);
+
 
 
         static int afterConvolutionSize(int kernelSize, int inputSize, int padding, int step);
