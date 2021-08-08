@@ -48,21 +48,21 @@ cn::Bitmap<float> cn::ConvolutionLayer::convolve(const Bitmap<float> &kernel, co
             }
         }
     }
-    cn::Bitmap<float> output (sizeX, sizeY, 1);
+    cn::Bitmap<float> output (sizeX, sizeY, input.d);
     std::fill(output.data(), output.data() + output.w * output.h * output.d, 0);
 
     for(int originY = kernel.h / 2; originY < paddedInput.h - kernel.h / 2; originY += strideY){
         for(int originX = kernel.w / 2; originX < paddedInput.w - kernel.w / 2; originX += strideX){
-            float sum = 0;
             for(int channel = 0; channel < paddedInput.d; channel++){
+                float sum = 0;
                 for(int ky = 0; ky < kernel.h; ky++){
                     for(int kx = 0; kx < kernel.w; kx++){
                         sum += kernel.getCell(kx, ky, channel) * paddedInput.getCell(originX - kernel.w / 2 + kx, originY - kernel.h / 2 + ky, channel);
                     }
                 }
+                output.setCell(originX - kernel.w / 2, originY - kernel.h / 2, channel, sum);
             }
             std::cout<<"";
-            output.setCell(originX - kernel.w / 2, originY - kernel.h / 2, 0, sum);
         }
     }
 

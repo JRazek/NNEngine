@@ -43,6 +43,20 @@ namespace cn {
         template<typename T>
         static void convert(const T *input, T *output, int w, int h, int d, int inputType, int outputType);
 
+
+        /**
+         *
+         * @tparam T
+         * @param input - bitmap to transform
+         * @param destSizeX
+         * @param destSizeY
+         * @param method see below for types of methods
+         * 0 - for average convolution kernel
+         *
+         * @return transformed bitmap
+         */
+        template<typename T>
+        static Bitmap<T> transform(const Bitmap<T> &input, int destSizeX, int destSizeY, int method);
     };
 };
 
@@ -65,6 +79,16 @@ void cn::Utils::convert(const T *input, T *output, int w, int h, int d, int inpu
             }
         }
     }
+}
+
+template<typename T>
+cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, int destSizeX, int destSizeY, int method) {
+    if(method == 0){
+        int kernelSizeX = input.w - destSizeX + 1;
+        int kernelSizeY = input.h - destSizeY + 1;
+
+    }
+    return cn::Bitmap<T>();
 }
 
 #endif //NEURALNETLIBRARY_UTILS_H
