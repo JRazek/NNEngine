@@ -4,6 +4,7 @@
 
 #include <stdexcept>
 #include "ConvolutionLayer.h"
+#include <iostream>
 
 void cn::ConvolutionLayer::run(cn::Bitmap<float> &bitmap) {
 
@@ -50,18 +51,18 @@ cn::Bitmap<float> cn::ConvolutionLayer::convolve(const Bitmap<float> &kernel, co
     cn::Bitmap<float> output (sizeX, sizeY, 1);
     std::fill(output.data(), output.data() + output.w * output.h * output.d, 0);
 
-    //convolution here
-    for(int c = 0; c < paddedInput.d; c ++){
-        for(int y = 0; y < paddedInput.h; y += strideY){
-            for(int x = 0; x < paddedInput.w; x += strideX){
-                float sum = 0;
-
+    for(int originY = kernel.h / 2; originY < paddedInput.h - kernel.h / 2; originY += strideY){
+        for(int originX = kernel.w / 2; originX < paddedInput.w - kernel.w / 2; originX += strideX){
+            float sum = 0;
+            for(int channel = 0; channel < paddedInput.d; channel++){
                 for(int ky = 0; ky < kernel.h; ky++){
                     for(int kx = 0; kx < kernel.w; kx++){
-
+                        sum += kernel.getCell(kx, ky, channel) * paddedInput.getCell(originX - kernel.w / 2 + kx, originY - kernel.h / 2 + ky, channel);
                     }
                 }
             }
+            std::cout<<"";
+            output.setCell(originX - kernel.w / 2, originY - kernel.h / 2, 0, sum);
         }
     }
 

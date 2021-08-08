@@ -5,6 +5,7 @@
 #include "Utils/Bitmap.h"
 #include "Utils/Utils.h"
 #include "Network/Network.h"
+#include "Network/layers/ConvolutionLayer.h"
 #include <opencv2/opencv.hpp>
 int main(){
     cv::Mat mat = cv::imread("resources/aPhoto.jpg");
@@ -12,24 +13,31 @@ int main(){
 
     cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
 
-    bitmap.setCell(200, 100, 0, 255);
-    bitmap.setCell(200, 100, 1, 255);
-    bitmap.setCell(200, 100, 2, 255);
-
-    std::vector<cn::byte> decodedRaw (bitmap.w * bitmap.h * bitmap.d);
-    cn::Utils::convert(bitmap.data(), decodedRaw.data(), bitmap.w, bitmap.h, bitmap.d, 0, 1);
-
-    cv::Mat decoded = cv::Mat(bitmap.h, bitmap.w, CV_8UC(bitmap.d), decodedRaw.data());
-
-    network.appendConvolutionLayer(3, 3, 3, 1);
-    network.appendConvolutionLayer(3, 3, 1, 1);
-
-    //network.feed()
-    cv::imshow("image", decoded);
-    cv::waitKey(10000);
+//    bitmap.setCell(200, 100, 0, 255);
+//    bitmap.setCell(200, 100, 1, 255);
+//    bitmap.setCell(200, 100, 2, 255);
 
 
-//
- //   std::cout<<b;
+    float kernelData [27];
+    for(int i = 0; i < sizeof(kernelData)/sizeof(float); i ++){
+        kernelData[i] = (float)(i % 9);
+    }
+
+    float sampleImageData [75];
+    std::fill(sampleImageData, sampleImageData + 75, 1);
+
+    cn::Bitmap<float> kernel(3, 3, 3, kernelData);
+    cn::Bitmap<float> sampleImage(5, 5, 3, sampleImageData);
+
+
+    cn::Bitmap<float> result = cn::ConvolutionLayer::convolve(kernel, sampleImage);
+
+    std::vector<float> encodedRGB(result.w * result.h * result.d);
+    cn::Utils::convert<float>(result.data(), encodedRGB.data(), result.w, result.h, result.d, 0, 1);
+
+
+//    cv::imshow("image", decoded);
+//    cv::waitKey(10000);
+
     return 0;
 }
