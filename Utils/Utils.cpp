@@ -1,6 +1,7 @@
 #include "Bitmap.h"
 #include "Utils.h"
 #include <unordered_set>
+#include <stack>
 //
 // Created by jrazek on 05.08.2021.
 //
@@ -12,7 +13,6 @@ cn::Bitmap<float> cn::Utils::normalize(const Bitmap<byte> &input) {
     }
     return bitmap;
 }
-
 
 template<typename T>
 cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int destSizeY, int method) {
@@ -34,11 +34,16 @@ cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int
             }
         }
     }
+    if(method == 0){
+        //todo optimization with kd or quad tree
+        //for(int y = 0; y < )
+        std::stack<int[3]> queue;
+
+    }
 
     delete [] filled;
     //todo
 }
-
 
 template<typename T>
 cn::Bitmap<T> cn::Utils::downsample(const cn::Bitmap<T> &input, int destSizeX, int destSizeY, int method) {
@@ -54,7 +59,6 @@ cn::Bitmap<T> cn::Utils::downsample(const cn::Bitmap<T> &input, int destSizeX, i
     }
     //todo
 }
-
 
 cn::Bitmap<float> cn::Utils::convolve(const Bitmap<float> &kernel, const Bitmap<float> &input, int paddingX, int paddingY, int strideX, int strideY) {
     if(!(kernel.w % 2 && kernel.h % 2 && kernel.d == input.d)){
