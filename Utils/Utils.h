@@ -74,7 +74,7 @@ namespace cn {
 
 
 
-        static int afterConvolutionSize(int kernelSize, int inputSize, int padding, int step);
+        static int afterConvolutionSize(int kernelSize, int inputSize, int padding, int stride);
         static Bitmap<float> convolve(const Bitmap<float> &kernel, const Bitmap<float> &input, int paddingX = 0, int paddingY = 0, int strideX = 1, int strideY = 1);
     };
 };

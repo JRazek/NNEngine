@@ -25,6 +25,8 @@ namespace cn {
         ~Bitmap();
         T getCell(int col, int row, int depth) const;
         void setCell(int col, int row, int depth, T b);
+        int getDataIndex(int col, int row, int depth) const;
+
         T * data() const;
     };
 }
@@ -42,18 +44,12 @@ cn::Bitmap<T>::Bitmap(const Bitmap<T> &bitmap): Bitmap(bitmap.w, bitmap.w, bitma
 
 template<typename T>
 T cn::Bitmap<T>::getCell(int col, int row, int depth) const {
-    if(col >= this->w or col < 0 or row >= this->h or row < 0 or depth >= this->d or depth < 0){
-        throw std::invalid_argument("byte does not belong to bitmap!");
-    }
-    return this->dataP[depth * w * h + row * w + col];
+    return this->dataP[getDataIndex(col, row, depth)];
 }
 
 template<typename T>
 void cn::Bitmap<T>::setCell(int col, int row, int depth, T b) {
-    if(col >= this->w or col < 0 or row >= this->h or row < 0 or depth >= this->d or depth < 0){
-        throw std::invalid_argument("wrong byte to set!");
-    }
-    this->dataP[depth * w * h + row * w + col] = b;
+    this->dataP[getDataIndex(col, row, depth)] = b;
 }
 
 template<typename T>
@@ -69,7 +65,16 @@ cn::Bitmap<T>::~Bitmap() {
 template<typename T>
 cn::Bitmap<T>::Bitmap(int w, int h, int d, const T * data, int inputType): Bitmap(w, h, d) {
     cn::Utils::convert<T>(data, this->dataP, w, h, d, inputType, 0);
-}//
+}
+
+template<typename T>
+int cn::Bitmap<T>::getDataIndex(int col, int row, int depth) const{
+    if(col >= this->w or col < 0 or row >= this->h or row < 0 or depth >= this->d or depth < 0){
+        throw std::invalid_argument("cell does not belong to bitmap!");
+    }
+    return depth * w * h + row * w + col;
+}
+//
 
 
 
