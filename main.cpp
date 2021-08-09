@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Utils/Bitmap.h"
 #include "Utils/Utils.h"
+#include "Utils/dataStructures/QuadTree.h"
 #include "Network/Network.h"
 #include "Network/layers/ConvolutionLayer.h"
 #include <opencv2/opencv.hpp>
@@ -37,10 +38,17 @@ int main(){
 
     cv::Mat decoded = cv::Mat(result.h, result.w, CV_8UC(result.d), encodedRGB.data());
 
-    cv::imshow("name", decoded);
-    cv::waitKey(10000);
+    //cv::imshow("name", decoded);
+   // cv::waitKey(10000);
 //    cv::imshow("image", decoded);
 //    cv::waitKey(10000);
 
+    QuadTree quadTree(100, 100);
+    quadTree.insertPoint(3, 3);
+    quadTree.insertPoint(3, 4);
+    quadTree.insertPoint(2, 3);
+    quadTree.removePoint(3, 3);
+    quadTree.removePoint(3, 4);
+    quadTree.removePoint(2, 3);
     return 0;
 }
