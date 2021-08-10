@@ -17,7 +17,7 @@ public:
 
     QuadTree(float sizeX, float sizeY);
 
-    void insertPoint(const PointData &pointD);
+    void insertPoint(PointData &pointD);
 
 
 
@@ -33,9 +33,9 @@ private:
     QuadTree * parent = nullptr;
 
     /**
-     * 0 - parent
-     * 1 - type
-     * 2 - type with data
+     * 0 - empty leaf
+     * 1 - leaf with data
+     * 2 - parent
      */
     int type;
     QuadTree * NW;

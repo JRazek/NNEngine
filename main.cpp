@@ -44,6 +44,8 @@ int main(){
     PointData pointData1({23, 32}, &t);
     quadTree.insertPoint(pointData1);
 
+    PointData pointData2({22, 32}, &t);
+    quadTree.insertPoint(pointData2);
     //std::pair<int, int> neighbor = quadTree.getNearestNeighbour({4, 4});
     return 0;
 }

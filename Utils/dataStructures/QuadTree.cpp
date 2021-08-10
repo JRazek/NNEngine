@@ -6,12 +6,35 @@
 #include <algorithm>
 #include <vector>
 
-void QuadTree::insertPoint(const PointData &pointD) {
+void QuadTree::insertPoint(PointData &pointD) {
+    if(this->belongs(pointD.point)){
+        if(this->type == 0){
+            this->pointData = &pointD;
+            this->type = 1;
+        }else{
+            if(this->type == 1) {
+                this->NW = new QuadTree(posX, posY,  sizeX / 2,  sizeY / 2, level + 1, this);
+                this->NE = new QuadTree(posX + sizeX / 2, posY,  sizeX / 2,  sizeY / 2, level + 1, this);
+                this->SW = new QuadTree(posX, posY + sizeY / 2,  sizeX / 2,  sizeY / 2, level + 1, this);
+                this->SE = new QuadTree(posX + sizeX / 2, posY + sizeY / 2,  sizeX / 2,  sizeY / 2, level + 1, this);
 
+                this->type = 2;
+                this->NW->insertPoint(*this->pointData);
+                this->NE->insertPoint(*this->pointData);
+                this->SW->insertPoint(*this->pointData);
+                this->SE->insertPoint(*this->pointData);
+                this->pointData = nullptr;
+            }
+            this->NW->insertPoint(pointD);
+            this->NE->insertPoint(pointD);
+            this->SW->insertPoint(pointD);
+            this->SE->insertPoint(pointD);
+        }
+    }
 }
 
 QuadTree::~QuadTree() {
-    if(this->type == 0){
+    if(this->type == 2){
         delete this->NW;
         delete this->NE;
         delete this->SW;
@@ -27,7 +50,7 @@ bool QuadTree::belongs(const std::pair<int, int> &point) const {
 }
 
 PointData * QuadTree::getNearestNeighbour(const std::pair<int, int> &point) {
-    return NULL;
+    return nullptr;
 }
 
 QuadTree::QuadTree(float posX, float posY, float sizeX, float sizeY, int level, QuadTree *parent):
@@ -36,7 +59,8 @@ QuadTree::QuadTree(float posX, float posY, float sizeX, float sizeY, int level, 
         sizeX(sizeX),
         sizeY(sizeY),
         level(level),
-        parent(parent)
+        parent(parent),
+        type(0)
         {}
 
 QuadTree::QuadTree(float sizeX, float sizeY):
