@@ -44,14 +44,20 @@ int main(){
 //    cv::waitKey(10000);
 
     QuadTree quadTree(1024, 1024, 15);
-    for(int i = 0; i < 1e5; i ++){
-        if(i == 1629)
-            std::cout<<"";
-        int randX = rand() % 1024;
-        int randY = rand() % 1024;
-        quadTree.insertPoint(randX, randY);
-        QuadTree * leaf = quadTree.getLeafContainingPoint({randX, randY});
-    }
+//    for(int i = 0; i < 1e5; i ++){
+//        int randX = rand() % 1024;
+//        int randY = rand() % 1024;
+//        quadTree.insertPoint(randX, randY);
+//        QuadTree * leaf = quadTree.getLeafContainingPoint({randX, randY});
+//    }
 
+    quadTree.insertPoint(4, 4);
+    quadTree.insertPoint(10, 20);
+    quadTree.insertPoint(11, 21);
+    quadTree.insertPoint(100, 100);
+    quadTree.insertPoint(500, 500);
+    quadTree.insertPoint(1000, 4);
+
+    std::pair<int, int> neighbor = quadTree.getNearestNeighbour({4, 4});
     return 0;
 }
