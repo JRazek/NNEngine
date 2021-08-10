@@ -20,7 +20,7 @@ public:
     QuadTree(float sizeX, float sizeY, int levelLimit);
     void insertPoint(float x, float y);
 
-    std::unordered_map<float, std::unordered_set<float>> points;
+
 
     ~QuadTree();
     [[nodiscard]] bool belongs(float x, float y) const;
@@ -29,13 +29,16 @@ public:
     std::pair<int, int> getNearestNeighbour(const std::pair<int, int> &point);
 private:
 
+
+
     QuadTree * parent = nullptr;
 
     /**
      * 0 - parent
      * 1 - leaf
+     * 2 - left with data
      */
-    bool type;
+    bool leaf;
     QuadTree * NW;
     QuadTree * NE;
     QuadTree * SW;

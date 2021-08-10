@@ -26,11 +26,13 @@ QuadTree::QuadTree(float sizeX, float sizeY, int levelLimit) : QuadTree(0, 0, si
 }
 
 void QuadTree::insertPoint(float x, float y) {
+    if(this->points.size()){
 
+    }
 }
 
 QuadTree::~QuadTree() {
-    if(!this->isLeaf){
+    if(!this->leaf){
         delete this->NW;
         delete this->NE;
         delete this->SW;
