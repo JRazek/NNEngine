@@ -30,7 +30,7 @@ public:
     std::pair<int, int> getNearestNeighbour(const std::pair<int, int> &point);
 private:
 
-    QuadTree * parent;
+    QuadTree * parent = nullptr;
 
     bool isLeaf = true;
     QuadTree * NW;

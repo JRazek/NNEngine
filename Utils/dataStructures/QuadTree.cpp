@@ -3,6 +3,8 @@
 //
 
 #include "QuadTree.h"
+#include <algorithm>
+#include <vector>
 
 QuadTree::QuadTree(float posX, float posY, float sizeX, float sizeY, int pointsLimit, int levelLimit, int level,
                    QuadTree *parent)
@@ -105,7 +107,20 @@ void QuadTree::getChildrenPoints(std::unordered_map<float, std::unordered_set<fl
 }
 
 std::pair<int, int> QuadTree::getNearestNeighbour(const std::pair<int, int> &point) {
-    //QuadTree * leaf =
+    std::vector<std::pair<int, int>> candidates;
+    if(this->belongs(point)){
+        QuadTree * leafContaining = getLeafContainingPoint(point);
+        for(auto &pX : leafContaining->points){
+            for(auto pY : pX.second){
+                candidates.push_back({pX.first, pY});
+            }
+        }
+        QuadTree * parentNode = leafContaining->parent;
+        while(parentNode != nullptr){
+            
+            parentNode = parentNode->parent;
+        }
+    }
     return std::pair<int, int>();
 }
 
