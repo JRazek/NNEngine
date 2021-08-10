@@ -38,25 +38,11 @@ int main(){
 
     cv::Mat decoded = cv::Mat(result.h, result.w, CV_8UC(result.d), encodedRGB.data());
 
-    //cv::imshow("name", decoded);
-   // cv::waitKey(10000);
-//    cv::imshow("image", decoded);
-//    cv::waitKey(10000);
 
-    QuadTree quadTree(1024, 1024, 15);
-//    for(int i = 0; i < 1e5; i ++){
-//        int randX = rand() % 1024;
-//        int randY = rand() % 1024;
-//        quadTree.insertPoint(randX, randY);
-//        QuadTree * leaf = quadTree.getLeafContainingPoint({randX, randY});
-//    }
-
-    quadTree.insertPoint(4, 4);
-    quadTree.insertPoint(10, 20);
-    quadTree.insertPoint(11, 21);
-    quadTree.insertPoint(100, 100);
-    quadTree.insertPoint(500, 500);
-    quadTree.insertPoint(1000, 4);
+    QuadTree quadTree(1024, 1024);
+    int t = 3;
+    PointData pointData1({23, 32}, &t);
+    quadTree.insertPoint(pointData1);
 
     //std::pair<int, int> neighbor = quadTree.getNearestNeighbour({4, 4});
     return 0;

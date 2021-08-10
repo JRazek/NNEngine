@@ -16,7 +16,8 @@ public:
     const int level;
 
     QuadTree(float sizeX, float sizeY);
-    void insertPoint(float x, float y);
+
+    void insertPoint(const PointData &pointD);
 
 
 
@@ -24,19 +25,19 @@ public:
     [[nodiscard]] bool belongs(float x, float y) const;
     [[nodiscard]] bool belongs(const std::pair<int, int> &point) const;
 
-    PointData<void> getNearestNeighbour(const std::pair<int, int> &point);
+    PointData * getNearestNeighbour(const std::pair<int, int> &point);
 private:
 
-    PointData<void> * pointData;
+    PointData * pointData;
 
     QuadTree * parent = nullptr;
 
     /**
      * 0 - parent
-     * 1 - leaf
-     * 2 - leaf with data
+     * 1 - type
+     * 2 - type with data
      */
-    int leaf;
+    int type;
     QuadTree * NW;
     QuadTree * NE;
     QuadTree * SW;
@@ -44,6 +45,7 @@ private:
 
     QuadTree(float posX, float posY, float sizeX, float sizeY, int level,
              QuadTree *parent);
+
 };
 
 

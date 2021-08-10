@@ -6,10 +6,9 @@
 #define NEURALNETLIBRARY_POINTDATA_H
 #include <vector>
 
-template<typename T>
 struct PointData {
     std::pair<float, float> point;
-    T * data;
+    void * data;
     /**
      *
      * @param point point where the data is located
@@ -17,13 +16,9 @@ struct PointData {
      * @note that no data is copied. This way its more efficient.
      * You should deallocate data by yourself if necessary.
      */
-    PointData(const std::pair<float, float> &point, T * data);
+    PointData(const std::pair<float, float> &point, void * data);
 };
 
-template<typename T>
-PointData<T>::PointData(const std::pair<float, float> &point, T *data):point(point), data(data) {
-
-}
 
 
 #endif //NEURALNETLIBRARY_POINTDATA_H

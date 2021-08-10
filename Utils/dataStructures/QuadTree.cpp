@@ -6,15 +6,12 @@
 #include <algorithm>
 #include <vector>
 
-
-
-
-void QuadTree::insertPoint(float x, float y) {
+void QuadTree::insertPoint(const PointData &pointD) {
 
 }
 
 QuadTree::~QuadTree() {
-    if(!this->leaf){
+    if(this->type == 0){
         delete this->NW;
         delete this->NE;
         delete this->SW;
@@ -29,8 +26,8 @@ bool QuadTree::belongs(const std::pair<int, int> &point) const {
     return belongs(point.first, point.second);
 }
 
-PointData<void> QuadTree::getNearestNeighbour(const std::pair<int, int> &point) {
-
+PointData * QuadTree::getNearestNeighbour(const std::pair<int, int> &point) {
+    return NULL;
 }
 
 QuadTree::QuadTree(float posX, float posY, float sizeX, float sizeY, int level, QuadTree *parent):
