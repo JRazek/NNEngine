@@ -13,6 +13,9 @@ void QuadTree::insertPoint(PointData &pointD) {
             this->type = 1;
         }else{
             if(this->type == 1) {
+                if(this->pointData->point == pointD.point){
+                    throw std::logic_error("SAME POINTS!");
+                }
                 this->NW = new QuadTree(posX, posY,  sizeX / 2,  sizeY / 2, level + 1, this);
                 this->NE = new QuadTree(posX + sizeX / 2, posY,  sizeX / 2,  sizeY / 2, level + 1, this);
                 this->SW = new QuadTree(posX, posY + sizeY / 2,  sizeX / 2,  sizeY / 2, level + 1, this);
