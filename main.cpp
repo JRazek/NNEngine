@@ -43,12 +43,15 @@ int main(){
 //    cv::imshow("image", decoded);
 //    cv::waitKey(10000);
 
-    QuadTree quadTree(100, 100);
-    quadTree.insertPoint(3, 3);
-    quadTree.insertPoint(3, 4);
-    quadTree.insertPoint(2, 3);
-    quadTree.removePoint(3, 3);
-    quadTree.removePoint(3, 4);
-    quadTree.removePoint(2, 3);
+    QuadTree quadTree(1024, 1024, 15);
+    for(int i = 0; i < 1e5; i ++){
+        if(i == 1629)
+            std::cout<<"";
+        int randX = rand() % 1024;
+        int randY = rand() % 1024;
+        quadTree.insertPoint(randX, randY);
+        QuadTree * leaf = quadTree.getLeafContainingPoint({randX, randY});
+    }
+
     return 0;
 }
