@@ -58,6 +58,6 @@ int main(){
     quadTree.insertPoint(500, 500);
     quadTree.insertPoint(1000, 4);
 
-    std::pair<int, int> neighbor = quadTree.getNearestNeighbour({4, 4});
+    //std::pair<int, int> neighbor = quadTree.getNearestNeighbour({4, 4});
     return 0;
 }
