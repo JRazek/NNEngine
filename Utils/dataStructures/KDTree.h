@@ -10,11 +10,15 @@ struct KDTree {
     bool dimension;
 
 
+    /**
+     * less or equal to left bigger to right
+     */
     KDTree * leftChild = nullptr;
     KDTree * rightChild = nullptr;
 
 
     PointData * pointData;
+
     /**
      *
      * @param pointsVec - dataset
@@ -25,7 +29,7 @@ struct KDTree {
     /**
      *
      * @param point finds nearest node from this pointData
-     * @return pair of nearest node from specified pointData, distance from it.
+     * @return pair of nearest node from specified pointData, distance squared from it.
      */
     std::pair<PointData *,  float> findNearestNeighbour(const std::pair<float, float> &point);
 

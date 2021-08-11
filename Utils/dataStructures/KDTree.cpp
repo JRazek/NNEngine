@@ -4,6 +4,7 @@
 
 #include "KDTree.h"
 #include <algorithm>
+#include <cmath>
 
 KDTree::KDTree(std::vector<PointData *> pointsVec, bool dimension) {
     if(pointsVec.size() == 1){
@@ -20,7 +21,6 @@ KDTree::KDTree(std::vector<PointData *> pointsVec, bool dimension) {
             return p1->point.second < p2->point.second;
         });
     }
-    //less or equal to left bigger to right
     auto it = pointsVec.begin() + pointsVec.size() / 2;
     while(it+1 != pointsVec.end()){
         if(!dimension) {
@@ -66,9 +66,52 @@ KDTree::~KDTree() {
 
 std::pair<PointData *, float> KDTree::findNearestNeighbour(const std::pair<float, float> &pointSearch) {
     std::pair<PointData *, float> nearest;
+    std::pair<PointData *, float> anotherNearest;
     if(!dimension){
         //x dim
-     //   if(this->pointData->point.first )
+        if(pointSearch.first <= this->pointData->point.first){
+            //go to left
+            if(this->leftChild == nullptr)
+                return {this->pointData, std::pow(pointSearch.first - this->pointData->point.first, 2)};
+            nearest = this->leftChild->findNearestNeighbour(pointSearch);
+
+            if(this->rightChild != nullptr && nearest.second >= pow(this->pointData->point.first - pointSearch.first, 2)){
+                anotherNearest = this->rightChild->findNearestNeighbour(pointSearch);
+            }
+
+        }else{
+            if(this->rightChild == nullptr)
+                return {this->pointData, std::pow(pointSearch.first - this->pointData->point.first, 2)};
+            nearest = this->rightChild->findNearestNeighbour(pointSearch);
+
+            if(this->leftChild != nullptr && nearest.second >= pow(this->pointData->point.first - pointSearch.first, 2)){
+                anotherNearest = this->leftChild->findNearestNeighbour(pointSearch);
+            }
+        }
+    }else{
+        if(pointSearch.second <= this->pointData->point.second){
+            //go to left
+            if(this->leftChild == nullptr)
+                return {this->pointData, std::pow(pointSearch.second - this->pointData->point.second, 2)};
+            nearest = this->leftChild->findNearestNeighbour(pointSearch);
+
+            if(this->rightChild != nullptr && nearest.second >= pow(this->pointData->point.second - pointSearch.second, 2)){
+                anotherNearest = this->rightChild->findNearestNeighbour(pointSearch);
+            }
+        }else{
+            if(this->rightChild == nullptr)
+                return {this->pointData, std::pow(pointSearch.second - this->pointData->point.second, 2)};
+            nearest = this->rightChild->findNearestNeighbour(pointSearch);
+
+            if(this->leftChild != nullptr && nearest.second >= pow(this->pointData->point.second - pointSearch.second, 2)){
+                anotherNearest = this->leftChild->findNearestNeighbour(pointSearch);
+            }
+        }
     }
-    return {nullptr, 2};
+
+    //here you have alleged nearest point
+
+    if(anotherNearest.second < nearest.second)
+        return anotherNearest;
+    return nearest;
 }
