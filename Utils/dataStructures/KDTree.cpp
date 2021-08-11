@@ -7,7 +7,7 @@
 
 KDTree::KDTree(std::vector<PointData *> pointsVec, bool dimension) {
     if(pointsVec.size() == 1){
-        this->point = pointsVec.front();
+        this->pointData = pointsVec.front();
         return;
     }
     this->dimension = dimension;
@@ -20,7 +20,7 @@ KDTree::KDTree(std::vector<PointData *> pointsVec, bool dimension) {
             return p1->point.second < p2->point.second;
         });
     }
-    this->point = pointsVec[pointsVec.size() / 2];
+    this->pointData = pointsVec[pointsVec.size() / 2];
     std::vector<PointData *> leftVec;
     std::vector<PointData *> rightVec;
     leftVec.reserve(pointsVec.size()/2);
@@ -28,7 +28,7 @@ KDTree::KDTree(std::vector<PointData *> pointsVec, bool dimension) {
 
     bool afterMid = false;
     for(auto p : pointsVec){
-        if(p != this->point){
+        if(p != this->pointData){
             if(!afterMid)
                 leftVec.push_back(p);
             else

@@ -11,7 +11,7 @@ struct PointData {
     void * data;
     /**
      *
-     * @param point point where the data is located
+     * @param point pointData where the data is located
      * @param data data itself
      * @note that no data is copied. This way its more efficient.
      * You should deallocate data by yourself if necessary.

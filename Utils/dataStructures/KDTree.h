@@ -14,7 +14,7 @@ struct KDTree {
     KDTree * rightChild = nullptr;
 
 
-    PointData * point;
+    PointData * pointData;
     /**
      *
      * @param pointsVec - dataset
@@ -24,8 +24,8 @@ struct KDTree {
 
     /**
      *
-     * @param point finds nearest node from this point
-     * @return pair of nearest node from specified point, distance from it.
+     * @param point finds nearest node from this pointData
+     * @return pair of nearest node from specified pointData, distance from it.
      */
     std::pair<PointData *,  float> findNearestNeighbour(const std::pair<float, float> &point);
 
