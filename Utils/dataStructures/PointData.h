@@ -17,6 +17,7 @@ struct PointData {
      * You should deallocate data by yourself if necessary.
      */
     PointData(const std::pair<float, float> &point, void * data);
+    PointData(const std::pair<float, float> &point);
 };
 
 

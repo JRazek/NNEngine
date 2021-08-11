@@ -5,3 +5,7 @@
 
 PointData::PointData(const std::pair<float, float> &point, void * data):point(point), data(data)
 {}
+
+PointData::PointData(const std::pair<float, float> &point):point(point){
+
+}
