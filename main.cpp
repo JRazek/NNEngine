@@ -5,6 +5,7 @@
 #include "Utils/Bitmap.h"
 #include "Utils/Utils.h"
 #include "Utils/dataStructures/QuadTree.h"
+#include "Utils/dataStructures/KDTree.h"
 #include "Network/Network.h"
 #include "Network/layers/ConvolutionLayer.h"
 #include <opencv2/opencv.hpp>
@@ -41,12 +42,16 @@ int main(){
 
     QuadTree quadTree(1024, 1024);
     int t = 3;
-    PointData pointData1({23, 32}, &t);
-    quadTree.insertPoint(pointData1);
+    PointData pointData1({7,2}, &t);
+    PointData pointData2({5,4}, &t);
+    PointData pointData3({2,3}, &t);
+    PointData pointData4({9,6}, &t);
+    PointData pointData5({8,1}, &t);
+    PointData pointData6({4,7}, &t);
 
-    PointData pointData2({22, 32}, &t);
-    quadTree.insertPoint(pointData2);
-    quadTree.insertPoint(pointData2);
+    std::vector<PointData *> points = {&pointData1, &pointData2, &pointData3, &pointData4, &pointData5, &pointData6};
+    KDTree kdTree (points);
+
     //std::pair<int, int> neighbor = quadTree.getNearestNeighbour({4, 4});
     return 0;
 }

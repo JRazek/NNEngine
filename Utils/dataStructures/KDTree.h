@@ -7,16 +7,13 @@
 #include <vector>
 #include "PointData.h"
 struct KDTree {
-    int median;
     bool dimension;
 
-    KDTree * left;
-    KDTree * right;
 
-    bool leaf = false;
-    /**
-     * if leaf - this will have a val
-     */
+    KDTree * leftChild = nullptr;
+    KDTree * rightChild = nullptr;
+
+
     PointData * point;
     /**
      *
@@ -24,12 +21,7 @@ struct KDTree {
      * @param dimension - 0 for x to split y for 1 to split
      */
     KDTree(std::vector<PointData *> pointsVec, bool dimension = 0);
-    ~KDTree(){
-        if(!leaf){
-            delete left;
-            delete right;
-        }
-    }
+    ~KDTree();
 };
 
 
