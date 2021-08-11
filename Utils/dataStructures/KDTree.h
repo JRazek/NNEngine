@@ -20,7 +20,7 @@ struct KDTree {
      * @param pointsVec - dataset
      * @param dimension - 0 for x to split y for 1 to split
      */
-    KDTree(std::vector<PointData *> pointsVec, bool dimension = 0);
+    explicit KDTree(std::vector<PointData *> pointsVec, bool dimension = false);
 
     /**
      *

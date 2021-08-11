@@ -20,7 +20,22 @@ KDTree::KDTree(std::vector<PointData *> pointsVec, bool dimension) {
             return p1->point.second < p2->point.second;
         });
     }
-    this->pointData = pointsVec[pointsVec.size() / 2];
+    //less or equal to left bigger to right
+    auto it = pointsVec.begin() + pointsVec.size() / 2;
+    while(it+1 != pointsVec.end()){
+        if(!dimension) {
+            if ((*it)->point.first == (*it+1)->point.first) {
+                ++it;
+            } else
+                break;
+        }else{
+            if ((*it)->point.second == (*it+1)->point.second) {
+                ++it;
+            } else
+                break;
+        }
+    }
+    this->pointData = (*it);
     std::vector<PointData *> leftVec;
     std::vector<PointData *> rightVec;
     leftVec.reserve(pointsVec.size()/2);
@@ -38,19 +53,22 @@ KDTree::KDTree(std::vector<PointData *> pointsVec, bool dimension) {
             afterMid = true;
         }
     }
-    if(leftVec.size())
+    if(!leftVec.empty())
         this->leftChild = new KDTree(leftVec, !dimension);
-    if(rightVec.size())
+    if(!rightVec.empty())
         this->rightChild = new KDTree(rightVec, !dimension);
 }
 
 KDTree::~KDTree() {
-    if(leftChild != nullptr)
-        delete leftChild;
-    if(rightChild != nullptr)
-        delete rightChild;
+    delete leftChild;
+    delete rightChild;
 }
 
-std::pair<PointData *,  float> KDTree::findNearestNeighbour(const std::pair<float, float> &pointSearch) {
+std::pair<PointData *, float> KDTree::findNearestNeighbour(const std::pair<float, float> &pointSearch) {
+    std::pair<PointData *, float> nearest;
+    if(!dimension){
+        //x dim
+     //   if(this->pointData->point.first )
+    }
     return {nullptr, 2};
 }
