@@ -51,6 +51,7 @@ int main(){
 
     std::vector<PointData *> points = {&pointData1, &pointData2, &pointData3, &pointData4, &pointData5, &pointData6};
     KDTree kdTree (points);
+    kdTree.findNearestNeighbour({4, 4});
 
     //std::pair<int, int> neighbor = quadTree.getNearestNeighbour({4, 4});
     return 0;

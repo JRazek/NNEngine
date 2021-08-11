@@ -50,3 +50,7 @@ KDTree::~KDTree() {
     if(rightChild != nullptr)
         delete rightChild;
 }
+
+std::pair<PointData *,  float> KDTree::findNearestNeighbour(const std::pair<float, float> &pointSearch) {
+    return {nullptr, 2};
+}
