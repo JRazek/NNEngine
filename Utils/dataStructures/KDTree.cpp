@@ -66,7 +66,7 @@ KDTree::~KDTree() {
 
 std::pair<PointData *, float> KDTree::findNearestNeighbour(const std::pair<float, float> &pointSearch) {
     std::pair<PointData *, float> nearest;
-    std::pair<PointData *, float> anotherNearest;
+    std::pair<PointData *, float> anotherNearest = {nullptr, INFINITY};
     if(!dimension){
         //x dim
         if(pointSearch.first <= this->pointData->point.first){
