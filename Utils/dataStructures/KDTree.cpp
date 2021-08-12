@@ -93,19 +93,17 @@ std::pair<PointData *, float> KDTree::findNearestNeighbour(const std::pair<float
     std::sort(nearest.begin(), nearest.end(), [](auto p1, auto p2){
         return p1.second < p2.second;
     });
-    //find better on the other side
 
+    //find better on the other side
     KDTree * another = side == 0 ? this->rightChild : this->leftChild;
     if(another != nullptr) {
         if (!dimension) {
-            //todo fix that check
             if (nearest[0].second > pow(this->pointData->point.first - pointSearch.first, 2)){
-                nearest[2] = another->findNearestNeighbour(pointSearch);//doesnt matter if not first after sort
+                nearest[2] = another->findNearestNeighbour(pointSearch);//nearest[2] doesnt matter after sort
             }
         } else {
-            //todo fix that check
             if (nearest[0].second > pow(this->pointData->point.second - pointSearch.second, 2)){
-                nearest[2] = another->findNearestNeighbour(pointSearch);
+                nearest[2] = another->findNearestNeighbour(pointSearch);//nearest[2] doesnt matter after sort
             }
         }
     }
