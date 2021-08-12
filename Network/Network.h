@@ -34,9 +34,11 @@ namespace cn {
         /**
          * what the dimensions of the byte array is after being normalized and sampled
          */
+
         const int inputDataWidth;
         const int inputDataHeight;
         const int inputDataDepth;
+
 
         /**
          * if first layer is convolution - use this feed method
@@ -48,6 +50,7 @@ namespace cn {
 
         void feed(const byte *input);
 
+
         /**
          * use this if and only if first layer is convolution
          * @param data
@@ -56,7 +59,12 @@ namespace cn {
         void feed(const Bitmap<float> &bitmap);
 
 
+        /**
+         *
+         * @return layers
+         */
         const std::vector<Layer *> * getLayers();
+
 
         /**
          * input size for feed

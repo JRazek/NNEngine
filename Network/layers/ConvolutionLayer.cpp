@@ -4,9 +4,18 @@
 
 #include <stdexcept>
 #include "ConvolutionLayer.h"
+#include "../Network.h"
 
 void cn::ConvolutionLayer::run(const Bitmap<float> &bitmap) {
-    //if(this->network->)
+    int sizeX = this->network->inputDataWidth;
+    int sizeY = this->network->inputDataHeight;
+    float factorX = (float)sizeX / (float)bitmap.w;
+    float factorY = (float)sizeY / (float)bitmap.h;
+
+
+    //todo!
+    //https://stackoverflow.com/questions/6133957/image-downsampling-algorithms
+
 }
 
 cn::ConvolutionLayer::ConvolutionLayer(int id, cn::Network *network, int kernelSizeX, int kernelSizeY, int kernelSizeZ, int kernelsCount, int paddingX, int paddingY,

@@ -47,7 +47,7 @@ cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int
 
     delete [] filled;
     for(auto p : pData){
-       // delete p;
+        delete p;
     }
     //todo
 }
