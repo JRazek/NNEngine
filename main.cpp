@@ -47,7 +47,7 @@ int main(){
     }
 
     KDTree kdTree(points);
-
+for(int j = 0; j < 10; j ++)
     for(int i = 0; i < testsCount; i ++){
         auto p = tests[i];
         auto res = kdTree.findNearestNeighbour(p.first);

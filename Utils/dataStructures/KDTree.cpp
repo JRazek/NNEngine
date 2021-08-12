@@ -103,12 +103,12 @@ std::pair<PointData *, float> KDTree::findNearestNeighbour(const std::pair<float
     if(another != nullptr) {
         if (!dimension) {
             //todo fix that check
-            if (nearest[0].second > pow(another->pointData->point.first - nearest[0].first->point.first, 2)){
+            if (nearest[0].second > pow(this->pointData->point.first - nearest[0].first->point.first, 2)){
                 nearest.push_back(another->findNearestNeighbour(pointSearch));
             }
         } else {
             //todo fix that check
-            if (nearest[0].second > pow(another->pointData->point.second - nearest[0].first->point.second, 2)){
+            if (nearest[0].second > pow(this->pointData->point.second - nearest[0].first->point.second, 2)){
                 nearest.push_back(another->findNearestNeighbour(pointSearch));
             }
         }
