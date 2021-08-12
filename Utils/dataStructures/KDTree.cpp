@@ -7,7 +7,7 @@
 #include <cmath>
 #include "../Utils.h"
 
-KDTree::KDTree(std::vector<PointData *> pointsVec, bool dimension) {
+KDTree::KDTree(std::vector<PointData *> pointsVec, bool dimension, KDTree * const parent) : parent(parent) {
     if(pointsVec.size() == 1){
         this->pointData = pointsVec.front();
         return;
@@ -55,9 +55,9 @@ KDTree::KDTree(std::vector<PointData *> pointsVec, bool dimension) {
         }
     }
     if(!leftVec.empty())
-        this->leftChild = new KDTree(leftVec, !dimension);
+        this->leftChild = new KDTree(leftVec, !dimension, this);
     if(!rightVec.empty())
-        this->rightChild = new KDTree(rightVec, !dimension);
+        this->rightChild = new KDTree(rightVec, !dimension, this);
 }
 
 KDTree::~KDTree() {
@@ -89,6 +89,7 @@ std::pair<PointData *, float> KDTree::findNearestNeighbour(const std::pair<float
         if(this->leftChild != nullptr)//naive check
             nearest[2] = this->leftChild->findNearestNeighbour(pointSearch);
     }
+
     std::sort(nearest.begin(), nearest.end(), [](auto p1, auto p2){
         return p1.second < p2.second;
     });

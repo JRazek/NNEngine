@@ -6,8 +6,19 @@
 #define NEURALNETLIBRARY_KDTREE_H
 #include <vector>
 #include "PointData.h"
+#include <cmath>
 struct KDTree {
+    /**
+     * dimension in which the node is splitting data
+     * false - x
+     * true - y
+     */
     bool dimension;
+
+    /**
+     * parent node
+     */
+    KDTree * const parent;
 
 
     /**
@@ -23,8 +34,9 @@ struct KDTree {
      *
      * @param pointsVec - dataset
      * @param dimension - 0 for x to split y for 1 to split
+     * @param segment - the segment on which the node is splitting data
      */
-    explicit KDTree(std::vector<PointData *> pointsVec, bool dimension = false);
+    explicit KDTree(std::vector<PointData *> pointsVec, bool dimension = false, KDTree * const parent = nullptr);
 
     /**
      *
