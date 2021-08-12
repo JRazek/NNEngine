@@ -50,11 +50,15 @@ int main(){
 
     for(auto p : tests){
         auto res = kdTree.findNearestNeighbour(p.first);
-        if(res.first->point == p.second){
+        float distSquaredTest = pow(p.first.first - p.second.first, 2) +  pow(p.first.second - p.second.second, 2);
+        if(res.second == distSquaredTest){
             std::cout<<"OK \n";
-        }else{
+        }else if (res.second < distSquaredTest){
+            std::cout<<"BETTER? \n";
+        }else {
             std::cout<<"WRONG \n";
         }
+
     }
     for(auto p : points){
         delete p;

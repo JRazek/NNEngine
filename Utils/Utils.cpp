@@ -2,6 +2,7 @@
 #include "Utils.h"
 #include <unordered_set>
 #include <stack>
+#include <cmath>
 //
 // Created by jrazek on 05.08.2021.
 //
@@ -100,5 +101,9 @@ cn::Bitmap<float> cn::Utils::convolve(const Bitmap<float> &kernel, const Bitmap<
 
 int cn::Utils::afterConvolutionSize(int kernelSize, int inputSize, int padding, int stride) {
     return (inputSize + 2*padding - kernelSize) / stride + 1;
+}
+
+float cn::Utils::distanceSquared(const std::pair<float, float> &p1, const std::pair<float, float> &p2) {
+    return std::pow(p1.first - p2.first, 2) + std::pow(p1.second - p2.second, 2);
 }
 

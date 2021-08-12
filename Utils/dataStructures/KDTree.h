@@ -29,7 +29,7 @@ struct KDTree {
     /**
      *
      * @param point finds nearest node from this pointData
-     * @return pair of nearest node from specified pointData, distance squared from it.
+     * @return pair of nearest node from specified pointData, distanceSquared squared from it.
      */
     std::pair<PointData *,  float> findNearestNeighbour(const std::pair<float, float> &point);
 
