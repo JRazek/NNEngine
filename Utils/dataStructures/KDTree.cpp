@@ -8,10 +8,6 @@
 #include "../Utils.h"
 
 KDTree::KDTree(std::vector<PointData *> pointsVec, bool dimension, KDTree * const parent) : parent(parent) {
-    if(pointsVec.size() == 1){
-        this->pointData = pointsVec.front();
-        return;
-    }
     this->dimension = dimension;
     if(dimension == 0) {
         std::sort(pointsVec.begin(), pointsVec.end(), [](const PointData *p1, const PointData *p2) {
@@ -103,13 +99,13 @@ std::pair<PointData *, float> KDTree::findNearestNeighbour(const std::pair<float
     if(another != nullptr) {
         if (!dimension) {
             //todo fix that check
-            if (nearest[0].second > pow(this->pointData->point.first - nearest[0].first->point.first, 2)){
-                nearest.push_back(another->findNearestNeighbour(pointSearch));
+            if (nearest[0].second > pow(this->pointData->point.first - pointSearch.first, 2)){
+                nearest[2] = another->findNearestNeighbour(pointSearch);//doesnt matter if not first after sort
             }
         } else {
             //todo fix that check
-            if (nearest[0].second > pow(this->pointData->point.second - nearest[0].first->point.second, 2)){
-                nearest.push_back(another->findNearestNeighbour(pointSearch));
+            if (nearest[0].second > pow(this->pointData->point.second - pointSearch.second, 2)){
+                nearest[2] = another->findNearestNeighbour(pointSearch);
             }
         }
     }

@@ -18,7 +18,7 @@ int main() {
     int seed = 4;
     srand(seed);
 
-    const int pointsCount = 100;
+    const int pointsCount = 10;
     const int testsCount = 10000;
 
 
