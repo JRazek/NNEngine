@@ -48,7 +48,8 @@ int main(){
 
     KDTree kdTree(points);
 
-    for(auto p : tests){
+    for(int i = 0; i < testsCount; i ++){
+        auto p = tests[i];
         auto res = kdTree.findNearestNeighbour(p.first);
         float distSquaredTest = pow(p.first.first - p.second.first, 2) +  pow(p.first.second - p.second.second, 2);
         if(res.second == distSquaredTest){

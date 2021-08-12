@@ -15,14 +15,14 @@ pair<float, float> nearestNeighbor(const pair<float, float> &point, vector<pair<
 }
 
 int main() {
-    int seed = 0;
+    int seed = 4;
     srand(seed);
 
-    const int pointsCount = 10;
-    const int testsCount = 10;
+    const int pointsCount = 100;
+    const int testsCount = 10000;
 
 
-    const int maxX = 10, maxY = 10;
+    const int maxX = 200, maxY = 200;
 
     vector<pair<float, float>> points(pointsCount);
 
