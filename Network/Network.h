@@ -21,12 +21,6 @@ namespace cn {
         std::vector<Layer *> layers;
         friend class Layer;
 
-        /**
-         * what the dimensions of the byte array is after being normalized
-         */
-        const int dataWidth;
-        const int dataHeight;
-        const int dataDepth;
         friend ConvolutionLayer;
 
 
@@ -36,6 +30,13 @@ namespace cn {
         void appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount, int paddingX = 0,
                                     int paddingY = 0);
 
+
+        /**
+         * what the dimensions of the byte array is after being normalized and sampled
+         */
+        const int inputDataWidth;
+        const int inputDataHeight;
+        const int inputDataDepth;
 
         /**
          * if first layer is convolution - use this feed method

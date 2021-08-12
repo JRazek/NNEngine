@@ -12,10 +12,11 @@ void cn::Network::appendLayer(cn::Layer * layer) {
 }
 
 void cn::Network::feed(const byte *input) {
-    cn::Bitmap<byte> bitmap(this->dataWidth, this->dataHeight, this->dataHeight, input, 0);
+    cn::Bitmap<byte> bitmap(this->inputDataWidth, this->inputDataHeight, this->inputDataHeight, input, 0);
     //normalize image
     cn::Bitmap<float> normalized = cn::Utils::normalize(bitmap);
-
+    if(this->layers.empty())
+        throw std::logic_error("network must have at least layer in order to feed it!");
     this->layers.front()->run(normalized);
 }
 
@@ -34,9 +35,12 @@ const std::vector<cn::Layer *> *cn::Network::getLayers() {
     return &this->layers;
 }
 
-cn::Network::Network(int w, int h, int d): dataWidth(w), dataHeight(h), dataDepth(d) {
+cn::Network::Network(int w, int h, int d): inputDataWidth(w), inputDataHeight(h), inputDataDepth(d) {
+
 }
 
 void cn::Network::feed(const cn::Bitmap<float> &bitmap) {
+    if(this->layers.empty())
+        throw std::logic_error("network must have at least layer in order to feed it!");
     this->layers.front()->run(bitmap);
 }

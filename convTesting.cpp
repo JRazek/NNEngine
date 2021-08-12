@@ -14,6 +14,8 @@ int main(){
 
     //int w, int h, int d, const T* data, int inputType = 0
     cn::Bitmap<float> bitmap = cn::Utils::normalize(cn::Bitmap<cn::byte>(mat.cols, mat.rows, mat.dims, mat.data, 1));
+    network.appendConvolutionLayer(3,3,3,1);
+
     network.feed(bitmap);
 
     //std::pair<int, int> neighbor = quadTree.getNearestNeighbour({4, 4});

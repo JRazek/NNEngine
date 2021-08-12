@@ -6,7 +6,7 @@
 #include "ConvolutionLayer.h"
 
 void cn::ConvolutionLayer::run(const Bitmap<float> &bitmap) {
-
+    //if(this->network->)
 }
 
 cn::ConvolutionLayer::ConvolutionLayer(int id, cn::Network *network, int kernelSizeX, int kernelSizeY, int kernelSizeZ, int kernelsCount, int paddingX, int paddingY,
