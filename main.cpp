@@ -47,10 +47,7 @@ int main(){
     }
 
     KDTree kdTree(points);
-for(int j = 0; j < 10; j ++)
     for(int i = 0; i < testsCount; i ++){
-        if(i == 36)
-            std::cout<<"";
         auto p = tests[i];
         auto res = kdTree.findNearestNeighbour(p.first);
         float distSquaredTest = pow(p.first.first - p.second.first, 2) +  pow(p.first.second - p.second.second, 2);

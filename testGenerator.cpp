@@ -22,7 +22,7 @@ int main() {
     const int testsCount = 10000;
 
 
-    const int maxX = 200, maxY = 200;
+    const int maxX = 1000, maxY = 1000;
 
     vector<pair<float, float>> points(pointsCount);
 
