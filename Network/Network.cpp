@@ -36,3 +36,7 @@ const std::vector<cn::Layer *> *cn::Network::getLayers() {
 
 cn::Network::Network(int w, int h, int d): dataWidth(w), dataHeight(h), dataDepth(d) {
 }
+
+void cn::Network::feed(const cn::Bitmap<float> &bitmap) {
+    this->layers.front()->run(bitmap);
+}

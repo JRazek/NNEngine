@@ -17,7 +17,7 @@ namespace cn {
     public:
         const int id;
         Layer(int id, Network * network);
-        virtual void run(Bitmap<float> &bitmap) = 0;
+        virtual void run(const Bitmap<float> &bitmap) = 0;
         virtual ~Layer();
     };
 }

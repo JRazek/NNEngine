@@ -3,6 +3,7 @@
 #include <unordered_set>
 #include <stack>
 #include <cmath>
+#include "dataStructures/KDTree.h"
 //
 // Created by jrazek on 05.08.2021.
 //
@@ -25,6 +26,9 @@ cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int
     bool * filled = new bool [destSizeX * destSizeY * input.d];
     std::fill(filled, filled + destSizeX * destSizeY * input.d, 0);
 
+    std::vector<PointData *> data(destSizeX * destSizeY * input.d);
+
+
     for(int c = 0; c < input.d;  c++){
         for(int y = 0; y < input.h; y++){
             for(int x = 0; x < input.w; x++){
@@ -36,9 +40,6 @@ cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int
         }
     }
     if(method == 0){
-        //todo optimization with kd or quad tree
-        //for(int y = 0; y < )
-        std::stack<int[3]> queue;
 
     }
 

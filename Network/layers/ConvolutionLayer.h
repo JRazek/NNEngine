@@ -25,7 +25,7 @@ namespace cn {
         ConvolutionLayer(int id, cn::Network *network, int kernelSizeX, int kernelSizeY, int kernelSizeZ, int kernelsCount, int paddingX = 0, int paddingY = 0,
                          int strideX = 0, int strideY = 0);
 
-        void run(Bitmap<float> &bitmap) override;
+        void run(const Bitmap<float> &bitmap) override;
 
     };
 }

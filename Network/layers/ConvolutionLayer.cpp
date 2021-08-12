@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include "ConvolutionLayer.h"
 
-void cn::ConvolutionLayer::run(cn::Bitmap<float> &bitmap) {
+void cn::ConvolutionLayer::run(const Bitmap<float> &bitmap) {
 
 }
 
