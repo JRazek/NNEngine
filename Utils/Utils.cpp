@@ -54,6 +54,12 @@ cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int
 
 template<typename T>
 cn::Bitmap<T> cn::Utils::downsample(const cn::Bitmap<T> &input, int destSizeX, int destSizeY, int method) {
+    float factorX = (float)destSizeX / (float)input.w;
+    float factorY = (float)destSizeY / (float)input.h;
+
+    if(factorX == 1 && factorY == 1)
+        return input;
+
     if(method == 0){
         int kernelSizeX = input.w - destSizeX + 1;
         int kernelSizeY = input.h - destSizeY + 1;
@@ -111,5 +117,13 @@ int cn::Utils::afterConvolutionSize(int kernelSize, int inputSize, int padding, 
 
 float cn::Utils::distanceSquared(const std::pair<float, float> &p1, const std::pair<float, float> &p2) {
     return std::pow(p1.first - p2.first, 2) + std::pow(p1.second - p2.second, 2);
+}
+
+template<typename T>
+cn::Bitmap<T> cn::Utils::resize(const cn::Bitmap<T> &input, int destSizeX, int destSizeY) {
+    float factorX = (float)destSizeX / (float)input.w;
+    float factorY = (float)destSizeY / (float)input.h;
+
+    return cn::Bitmap<T>(0, 0, 0);
 }
 

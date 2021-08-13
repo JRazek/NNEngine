@@ -18,6 +18,8 @@ KDTree::KDTree(std::vector<PointData *> pointsVec, bool dimension, KDTree * cons
             return p1->point.second < p2->point.second;
         });
     }
+
+    //todo check for UB!
     auto it = pointsVec.begin() + pointsVec.size() / 2;
     while(it+1 != pointsVec.end()){
         if(!dimension) {

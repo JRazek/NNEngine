@@ -58,6 +58,19 @@ namespace cn {
         template<typename T>
         static Bitmap<T> downsample(const Bitmap<T> &input, int destSizeX, int destSizeY, int method);
 
+
+        /**
+         *
+         * @tparam T - template param
+         * @param input - bitmap to resize
+         * @param destSizeX - wanted size in X axis
+         * @param destSizeY - wanted size in Y axis
+         * @return resampled bitmap
+         */
+        template<typename T>
+        static Bitmap<T> resize(const Bitmap<T> &input, int destSizeX, int destSizeY);
+
+
         /**
          *
          * @tparam T
