@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include "Network.h"
 #include "layers/ConvolutionLayer.h"
+#include "../Utils/Utils.h"
 
 void cn::Network::appendLayer(cn::Layer * layer) {
     //todo validation!
@@ -17,7 +18,12 @@ void cn::Network::feed(const byte *input) {
     cn::Bitmap<float> normalized = cn::Utils::normalize(bitmap);
     if(this->layers.empty())
         throw std::logic_error("network must have at least layer in order to feed it!");
-    this->layers.front()->run(normalized);
+
+    //todo override = operator
+//    normalized = cn::Utils::resize<float>(normalized, 1, 1);
+    cn::Bitmap<float> resized = cn::Utils::resize<float>(normalized, inputDataWidth, inputDataHeight);
+
+    this->layers.front()->run(resized);
 }
 
 cn::Network::~Network() {

@@ -52,26 +52,6 @@ cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int
     //todo
 }
 
-template<typename T>
-cn::Bitmap<T> cn::Utils::downsample(const cn::Bitmap<T> &input, int destSizeX, int destSizeY, int method) {
-    float factorX = (float)destSizeX / (float)input.w;
-    float factorY = (float)destSizeY / (float)input.h;
-
-    if(factorX == 1 && factorY == 1)
-        return input;
-
-    if(method == 0){
-        int kernelSizeX = input.w - destSizeX + 1;
-        int kernelSizeY = input.h - destSizeY + 1;
-        if(!(kernelSizeX % 2)){
-            //extend the pic in X by one pixel
-        }
-        if(!(kernelSizeY % 2)){
-            //extend the pic in Y by one pixel
-        }
-    }
-    //todo
-}
 
 cn::Bitmap<float> cn::Utils::convolve(const Bitmap<float> &kernel, const Bitmap<float> &input, int paddingX, int paddingY, int strideX, int strideY) {
     if(!(kernel.w % 2 && kernel.h % 2 && kernel.d == input.d)){
@@ -119,11 +99,4 @@ float cn::Utils::distanceSquared(const std::pair<float, float> &p1, const std::p
     return std::pow(p1.first - p2.first, 2) + std::pow(p1.second - p2.second, 2);
 }
 
-template<typename T>
-cn::Bitmap<T> cn::Utils::resize(const cn::Bitmap<T> &input, int destSizeX, int destSizeY) {
-    float factorX = (float)destSizeX / (float)input.w;
-    float factorY = (float)destSizeY / (float)input.h;
-
-    return cn::Bitmap<T>(0, 0, 0);
-}
 

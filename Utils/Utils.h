@@ -115,4 +115,35 @@ void cn::Utils::convert(const T *input, T *output, int w, int h, int d, int inpu
     }
 }
 
+template<typename T>
+cn::Bitmap<T> cn::Utils::resize(const cn::Bitmap<T> &input, int destSizeX, int destSizeY) {
+    float factorX = (float)destSizeX / (float)input.w;
+    float factorY = (float)destSizeY / (float)input.h;
+
+    return downsample(input, destSizeX, destSizeY, 0);
+}
+
+
+
+template<typename T>
+cn::Bitmap<T> cn::Utils::downsample(const cn::Bitmap<T> &input, int destSizeX, int destSizeY, int method) {
+    float factorX = (float)destSizeX / (float)input.w;
+    float factorY = (float)destSizeY / (float)input.h;
+
+    if(factorX == 1 && factorY == 1)
+        return input;
+
+    if(method == 0){
+        int kernelSizeX = input.w - destSizeX + 1;
+        int kernelSizeY = input.h - destSizeY + 1;
+        if(!(kernelSizeX % 2)){
+            //extend the pic in X by one pixel
+        }
+        if(!(kernelSizeY % 2)){
+            //extend the pic in Y by one pixel
+        }
+    }
+    //todo
+    return cn::Bitmap<T>(0, 0, 0);
+}
 #endif //NEURALNETLIBRARY_UTILS_H

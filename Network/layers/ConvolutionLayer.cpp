@@ -7,10 +7,8 @@
 #include "../Network.h"
 
 void cn::ConvolutionLayer::run(const Bitmap<float> &bitmap) {
-    int sizeX = this->network->inputDataWidth;
-    int sizeY = this->network->inputDataHeight;
-
-    Bitmap<float> result = cn::Utils::resize(bitmap, sizeX, sizeY);
+    //int sizeX = this->network->inputDataWidth;
+    //int sizeY = this->network->inputDataHeight;
 
     //todo!
     //https://stackoverflow.com/questions/6133957/image-downsampling-algorithms
