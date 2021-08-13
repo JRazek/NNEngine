@@ -7,6 +7,8 @@
 
 
 #include <bits/stdint-uintn.h>
+#include "dataStructures/PointData.h"
+#include "dataStructures/KDTree.h"
 
 namespace cn {
     using byte = uint8_t;
@@ -117,10 +119,8 @@ void cn::Utils::convert(const T *input, T *output, int w, int h, int d, int inpu
 
 template<typename T>
 cn::Bitmap<T> cn::Utils::resize(const cn::Bitmap<T> &input, int destSizeX, int destSizeY) {
-    float factorX = (float)destSizeX / (float)input.w;
-    float factorY = (float)destSizeY / (float)input.h;
-
-    return downsample(input, destSizeX, destSizeY, 0);
+    cn::Bitmap<T> sampled = upsample<T>(input, destSizeX, destSizeY, 0);
+    return downsample<T>(sampled, destSizeX, destSizeY, 0);
 }
 
 
@@ -144,6 +144,45 @@ cn::Bitmap<T> cn::Utils::downsample(const cn::Bitmap<T> &input, int destSizeX, i
         }
     }
     //todo
-    return cn::Bitmap<T>(0, 0, 0);
+    return input;
+}
+
+
+
+template<typename T>
+cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int destSizeY, int method) {
+    float factorX = (float)destSizeX / (float)input.w;
+    float factorY = (float)destSizeY / (float)input.h;
+    cn::Bitmap<T> result(destSizeX, destSizeY, input.d);
+
+    //otherwise stack overflow occurs
+    bool * filled = new bool [destSizeX * destSizeY * input.d];
+    std::fill(filled, filled + destSizeX * destSizeY * input.d, 0);
+
+    std::vector<PointData *> pData(destSizeX * destSizeY);
+
+    for(int c = 0; c < input.d;  c++){
+        for(int y = 0; y < input.h; y++){
+            for(int x = 0; x < input.w; x++){
+                int corrX = x * factorX;
+                int corrY = y * factorY;
+                result.setCell(corrX, corrY, c, input.getCell(x, y, c));
+                filled[result.getDataIndex(corrX, corrY, c)] = true;
+                if(c == 0 && method == 0)
+                    pData[input.getCell(x, y, c)] = new PointData({corrX, corrY});
+            }
+        }
+    }
+
+    if(method == 0){
+       // KDTree tree(pData);
+    }
+
+    delete [] filled;
+    for(auto p : pData){
+        delete p;
+    }
+    //todo
+    return result;
 }
 #endif //NEURALNETLIBRARY_UTILS_H

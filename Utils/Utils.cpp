@@ -16,41 +16,6 @@ cn::Bitmap<float> cn::Utils::normalize(const Bitmap<byte> &input) {
     return bitmap;
 }
 
-template<typename T>
-cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int destSizeY, int method) {
-    float factorX = (float)destSizeX / (float)input.w;
-    float factorY = (float)destSizeY / (float)input.h;
-    cn::Bitmap<T> result(destSizeX, destSizeY, input.d);
-
-    //otherwise stack overflow occurs
-    bool * filled = new bool [destSizeX * destSizeY * input.d];
-    std::fill(filled, filled + destSizeX * destSizeY * input.d, 0);
-
-    std::vector<PointData *> pData(destSizeX * destSizeY);
-
-    for(int c = 0; c < input.d;  c++){
-        for(int y = 0; y < input.h; y++){
-            for(int x = 0; x < input.w; x++){
-                int corrX = x * factorX;
-                int corrY = y * factorY;
-                result.setCell(corrX, corrY, c, input.getCell(x, y, c));
-                filled[result.getDataIndex(corrX, corrY, c)] = true;
-                if(c == 0 && method == 0)
-                    pData[input.getCell(x, y, c)] = new PointData({corrX, corrY});
-            }
-        }
-    }
-
-    if(method == 0){
-        KDTree tree(pData);
-    }
-
-    delete [] filled;
-    for(auto p : pData){
-        delete p;
-    }
-    //todo
-}
 
 
 cn::Bitmap<float> cn::Utils::convolve(const Bitmap<float> &kernel, const Bitmap<float> &input, int paddingX, int paddingY, int strideX, int strideY) {

@@ -38,7 +38,7 @@ cn::Bitmap<T>::Bitmap(int w, int h, int d): w(w), h (h), d(d) {
 }
 
 template<typename T>
-cn::Bitmap<T>::Bitmap(const Bitmap<T> &bitmap): Bitmap(bitmap.w, bitmap.w, bitmap.h) {
+cn::Bitmap<T>::Bitmap(const Bitmap<T> &bitmap): Bitmap(bitmap.w, bitmap.h, bitmap.d) {
     std::copy(bitmap.dataP, bitmap.dataP + w * h * d, this->dataP);
 }
 
