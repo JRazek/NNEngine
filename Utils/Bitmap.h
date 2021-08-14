@@ -25,7 +25,7 @@ namespace cn {
         ~Bitmap();
         T getCell(int col, int row, int depth) const;
         void setCell(int col, int row, int depth, T b);
-        int getDataIndex(int col, int row, int depth) const;
+        [[nodiscard]] int getDataIndex(int col, int row, int depth) const;
 
         T * data() const;
     };

@@ -9,6 +9,7 @@
 #include <bits/stdint-uintn.h>
 #include "dataStructures/PointData.h"
 #include "dataStructures/KDTree.h"
+#include <iostream>
 
 namespace cn {
     using byte = uint8_t;
@@ -159,7 +160,8 @@ cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int
     bool * filled = new bool [destSizeX * destSizeY * input.d];
     std::fill(filled, filled + destSizeX * destSizeY * input.d, 0);
 
-    std::vector<PointData *> pData(destSizeX * destSizeY);
+    std::vector<PointData *> pData;
+    pData.reserve(destSizeX * destSizeY);
 
     for(int c = 0; c < input.d;  c++){
         for(int y = 0; y < input.h; y++){
@@ -172,14 +174,19 @@ cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int
                     break;
                 result.setCell(corrX, corrY, c, input.getCell(x, y, c));
                 filled[result.getDataIndex(corrX, corrY, c)] = true;
-                if(c == 0 && method == 0)
-                    pData[input.getCell(x, y, c)] = new PointData({corrX, corrY});
+                if(c == 0 && method == 0) {
+                    pData.push_back(new PointData({corrX, corrY}));
+                }
             }
         }
     }
 
     if(method == 0){
-       // KDTree tree(pData);
+        for(auto p : pData){
+            if(p == nullptr)
+                std::cout<<"ERROR!";
+        }
+       KDTree tree(pData);
     }
 
     delete [] filled;
