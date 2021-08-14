@@ -10,28 +10,32 @@
 
 int main(){
     cv::Mat mat = cv::imread("resources/aPhoto.jpg");
-    cn::Network network(800, 800, 3);
+    cn::Network network(2000, 3000, 3);
 
     //int w, int h, int d, const T* data, int inputType = 0
 //    cn::Bitmap<cn::byte> bitmap = cn::Utils::normalize(cn::Bitmap<cn::byte>(mat.cols, mat.rows, mat.dims, mat.data, 1));
-    cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data);
+    cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
 
     //network.appendConvolutionLayer(3,3,3,1);
 
     //network.feed(bitmap);
 
-    cn::Bitmap<cn::byte> resampled = cn::Utils::resize(bitmap, 1000, 1000);
+    cn::Bitmap<cn::byte> resampled = cn::Utils::resize(bitmap, 2000, 3000);
 
-    cn::byte dataStorage [resampled.w * resampled.h * resampled.d];
-
-    cv::Mat resampledImg(1000, 1000, CV_8UC(3u), dataStorage);
-
+    auto * dataStorage = new cn::byte [resampled.w * resampled.h * resampled.d];
 
     cn::Utils::convert(resampled.data(), dataStorage, resampled.w, resampled.h, resampled.d, 0, 1);
+
+
+    cv::Mat resampledImg(resampled.h, resampled.w, CV_8UC(resampled.d), dataStorage);
+
+
 
     cv::imshow("img", resampledImg);
 
     cv::waitKey(10000);
     //std::pair<int, int> neighbor = quadTree.getNearestNeighbour({4, 4});
+
+    delete [] dataStorage;
     return 0;
 }

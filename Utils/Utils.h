@@ -163,9 +163,13 @@ cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int
 
     for(int c = 0; c < input.d;  c++){
         for(int y = 0; y < input.h; y++){
+            int corrY = y * factorY;
+            if(corrY >= result.h)
+                break;
             for(int x = 0; x < input.w; x++){
                 int corrX = x * factorX;
-                int corrY = y * factorY;
+                if(corrX >= result.w)
+                    break;
                 result.setCell(corrX, corrY, c, input.getCell(x, y, c));
                 filled[result.getDataIndex(corrX, corrY, c)] = true;
                 if(c == 0 && method == 0)
