@@ -16,9 +16,9 @@ int main(){
 //    cn::Bitmap<cn::byte> bitmap = cn::Utils::normalize(cn::Bitmap<cn::byte>(mat.cols, mat.rows, mat.dims, mat.data, 1));
     cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
 
-    //network.appendConvolutionLayer(3,3,3,1);
+    network.appendConvolutionLayer(3,3,3,1);
 
-    //network.feed(bitmap);
+   // network.feed(bitmap);
 
     cn::Bitmap<cn::byte> resampled = cn::Utils::resize(bitmap, 2000, 3000);
 
@@ -30,12 +30,13 @@ int main(){
     cv::Mat resampledImg(resampled.h, resampled.w, CV_8UC(resampled.d), dataStorage);
 
 
-
     cv::imshow("img", resampledImg);
 
-    cv::waitKey(10000);
+
+    while(cv::waitKey() != 48);
+
     //std::pair<int, int> neighbor = quadTree.getNearestNeighbour({4, 4});
 
-    delete [] dataStorage;
+    //delete [] dataStorage;
     return 0;
 }

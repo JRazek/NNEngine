@@ -8,8 +8,8 @@
 
 #include <bits/stdint-uintn.h>
 #include "dataStructures/PointData.h"
-#include "dataStructures/KDTree.h"
 #include <iostream>
+#include <queue>
 
 namespace cn {
     using byte = uint8_t;
@@ -94,6 +94,21 @@ namespace cn {
         static Bitmap<float> convolve(const Bitmap<float> &kernel, const Bitmap<float> &input, int paddingX = 0, int paddingY = 0, int strideX = 1, int strideY = 1);
 
         static float distanceSquared(const std::pair<float, float> &p1, const std::pair<float, float> &p2);
+
+
+        /**
+         *
+         * @tparam T
+         * @param bitmap - bitmap to search nn
+         * @param point - point from where the bfs starts
+         * @param filledArr - pointer to array of flags with filled pixels
+         * @return  returns nearest filled neighbour
+         */
+        template<typename T>
+        static std::pair<int, int>
+        nearestNeighbour(const Bitmap <T> &bitmap, const std::pair<int, int> &point, int channel,
+                         const bool *filledArr);
+
     };
 };
 
@@ -186,7 +201,17 @@ cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int
             if(p == nullptr)
                 std::cout<<"ERROR!";
         }
-       KDTree tree(pData);
+        for(int c = 0; c < result.d;  c++){
+            for(int y = 0; y < result.h; y++){
+                for(int x = 0; x < result.w; x++){
+                    if(!filled[result.getDataIndex(x, y, c)]){
+                        auto nn = nearestNeighbour(result, {x, y}, c, filled);
+                        result.setCell(x, y, c, result.getCell(nn.first, nn.second, c));
+                        filled[result.getDataIndex(x, y, c)] = true;
+                    }
+                }
+            }
+        }
     }
 
     delete [] filled;
@@ -196,4 +221,35 @@ cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int
     //todo
     return result;
 }
+
+template<typename T>
+std::pair<int, int>
+cn::Utils::nearestNeighbour(const Bitmap <T> &bitmap, const std::pair<int, int> &point, int channel,
+                            const bool *filledArr) {
+    auto belongs = [](const cn::Bitmap<T> &bitmap, const std::pair<int, int> &point){
+        return point.first >= 0 && point.first < bitmap.w && point.second >= 0 && point.second < bitmap.h;
+    };
+    if(!(belongs(bitmap, point))){
+        throw std::out_of_range("This point does not belong to bitmap!");
+    }
+
+    //from where, point
+    std::queue<std::pair<int, int>> queue;
+    queue.push(point);
+
+    while (!queue.empty()){
+        auto p = queue.front();
+        queue.pop();
+        if(belongs(bitmap, p)){
+            if(filledArr[bitmap.getDataIndex(p.first, p.second, channel)]){
+                //todo bfs with some optimization using hash map or sth
+            }
+        }
+    }
+
+
+
+    return std::pair<int, int>({-1, -1});
+}
+
 #endif //NEURALNETLIBRARY_UTILS_H
