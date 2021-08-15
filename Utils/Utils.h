@@ -10,6 +10,8 @@
 #include "dataStructures/PointData.h"
 #include <iostream>
 #include <queue>
+#include <unordered_set>
+
 
 namespace cn {
     using byte = uint8_t;
@@ -19,6 +21,7 @@ namespace cn {
 
     class Utils{
     public:
+        static inline int maxStackSize = 0;
         /**
          *
          * @param input
@@ -173,10 +176,8 @@ cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int
 
     //otherwise stack overflow occurs
     bool * filled = new bool [destSizeX * destSizeY * input.d];
-    std::fill(filled, filled + destSizeX * destSizeY * input.d, 0);
+    std::fill(filled, filled + destSizeX * destSizeY * input.d, false);
 
-    std::vector<PointData *> pData;
-    pData.reserve(destSizeX * destSizeY);
 
     for(int c = 0; c < input.d;  c++){
         for(int y = 0; y < input.h; y++){
@@ -189,42 +190,31 @@ cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int
                     break;
                 result.setCell(corrX, corrY, c, input.getCell(x, y, c));
                 filled[result.getDataIndex(corrX, corrY, c)] = true;
-                if(c == 0 && method == 0) {
-                    pData.push_back(new PointData({corrX, corrY}));
-                }
             }
         }
     }
 
     if(method == 0){
-        for(auto p : pData){
-            if(p == nullptr)
-                std::cout<<"ERROR!";
-        }
         for(int c = 0; c < result.d;  c++){
             for(int y = 0; y < result.h; y++){
                 for(int x = 0; x < result.w; x++){
                     if(!filled[result.getDataIndex(x, y, c)]){
                         auto nn = nearestNeighbour(result, {x, y}, c, filled);
                         result.setCell(x, y, c, result.getCell(nn.first, nn.second, c));
-                        filled[result.getDataIndex(x, y, c)] = true;
+                        //result.setCell(x, y, c, 255);
+                        //filled[result.getDataIndex(x, y, c)] = true;
                     }
                 }
             }
         }
     }
-
     delete [] filled;
-    for(auto p : pData){
-        delete p;
-    }
     //todo
     return result;
 }
 
 template<typename T>
-std::pair<int, int>
-cn::Utils::nearestNeighbour(const Bitmap <T> &bitmap, const std::pair<int, int> &point, int channel,
+std::pair<int, int> cn::Utils::nearestNeighbour(const Bitmap <T> &bitmap, const std::pair<int, int> &point, int channel,
                             const bool *filledArr) {
     auto belongs = [](const cn::Bitmap<T> &bitmap, const std::pair<int, int> &point){
         return point.first >= 0 && point.first < bitmap.w && point.second >= 0 && point.second < bitmap.h;
@@ -232,17 +222,39 @@ cn::Utils::nearestNeighbour(const Bitmap <T> &bitmap, const std::pair<int, int> 
     if(!(belongs(bitmap, point))){
         throw std::out_of_range("This point does not belong to bitmap!");
     }
+    auto hash = [](std::pair<int, int> const &pair){
+        std::size_t h1 = std::hash<int>()(pair.first);
+        std::size_t h2 = std::hash<int>()(pair.second);
+        return h1 ^ h2;
+    };
 
     //from where, point
     std::queue<std::pair<int, int>> queue;
     queue.push(point);
 
+    std::unordered_set<std::pair<int, int>, decltype(hash)> visited(10, hash);
+
     while (!queue.empty()){
+        if(queue.size() > maxStackSize){
+            maxStackSize = queue.size();
+        }
         auto p = queue.front();
         queue.pop();
+        visited.insert(p);
         if(belongs(bitmap, p)){
             if(filledArr[bitmap.getDataIndex(p.first, p.second, channel)]){
-                //todo bfs with some optimization using hash map or sth
+                return {p.first, p.second};
+            }
+            std::vector<std::pair<int,int>> neighbors(4);
+            neighbors[0] = {p.first - 1, p.second};
+            neighbors[1] = {p.first + 1, p.second};
+            neighbors[2] = {p.first, p.second - 1};
+            neighbors[3] = {p.first, p.second + 1};
+
+            for(auto n : neighbors) {
+                if (visited.find(n) == visited.end()) {
+                    queue.push(n);
+                }
             }
         }
     }
