@@ -12,8 +12,7 @@ int main(){
     cv::Mat mat = cv::imread("resources/aPhoto.jpg");
     cn::Network network(2000, 3000, 3);
 
-    //int w, int h, int d, const T* data, int inputType = 0
-//    cn::Bitmap<cn::byte> bitmap = cn::Utils::normalize(cn::Bitmap<cn::byte>(mat.cols, mat.rows, mat.dims, mat.data, 1));
+
     cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
 
     network.appendConvolutionLayer(3,3,3,1);
