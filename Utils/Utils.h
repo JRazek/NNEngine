@@ -121,8 +121,16 @@ void cn::Utils::convert(const T *input, T *output, int w, int h, int d, int inpu
 
 template<typename T>
 cn::Bitmap<T> cn::Utils::resize(const cn::Bitmap<T> &input, int destSizeX, int destSizeY) {
-    cn::Bitmap<T> sampled = upsample<T>(input, destSizeX, destSizeY, 0);
-    return downsample<T>(sampled, destSizeX, destSizeY, 0);
+    auto max = [](float x, float y){
+        return x > y ? x : y;
+    };
+
+    auto min = [](float x, float y){
+        return x < y ? x : y;
+    };
+
+    cn::Bitmap<T> sampled = upsample<T>(input, max(input.w, destSizeX), max(input.h, destSizeY), 0);
+    return downsample<T>(sampled, min(input.w, destSizeX), min(input.h, destSizeY), 0);
 }
 
 
@@ -135,33 +143,57 @@ cn::Bitmap<T> cn::Utils::downsample(const cn::Bitmap<T> &input, int destSizeX, i
     if(factorX == 1 && factorY == 1)
         return input;
 
-    if(method == 0){
-        int kernelSizeX = input.w - destSizeX + 1;
-        int kernelSizeY = input.h - destSizeY + 1;
-        if(!(kernelSizeX % 2)){
-            //extend the pic in X by one pixel
-        }
-        if(!(kernelSizeY % 2)){
-            //extend the pic in Y by one pixel
-        }
-    }
-    //todo
-    return input;
-}
+    std::vector<int> avgCount (destSizeX * destSizeY * input.d, 0);
 
-
-
-template<typename T>
-cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int destSizeY, int method) {
-    float factorX = (float)destSizeX / (float)input.w;
-    float factorY = (float)destSizeY / (float)input.h;
     cn::Bitmap<T> result(destSizeX, destSizeY, input.d);
 
     if(method == 0){
         for(int c = 0; c < result.d;  c++){
             for(int y = 0; y < result.h; y++){
                 for(int x = 0; x < result.w; x++){
-                    result.setCell(x, y, c, input.getCell(x / (int)factorX, y / (int)factorY, c));
+                    avgCount[result.getDataIndex(x, y, c)] += 1;
+                    int corrX = (int)((float)x / factorX);
+                    int corrY = (int)((float)y / factorY);
+                    result.setCell(x, y, c, result.getCell(x, y, c) + input.getCell(corrX, corrY, c));
+                }
+            }
+        }
+        for(int c = 0; c < result.d;  c++){
+            for(int y = 0; y < result.h; y++){
+                for(int x = 0; x < result.w; x++){
+                    result.setCell(x, y, c, result.getCell(x, y, c) / avgCount[result.getDataIndex(x, y, c)]);
+                }
+            }
+        }
+    }
+
+    for(auto n : avgCount){
+        if(n != 1){
+            std::cout<<"";
+        }
+    }
+
+    return result;
+}
+
+
+template<typename T>
+cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int destSizeY, int method) {
+    float factorX = (float)destSizeX / (float)input.w;
+    float factorY = (float)destSizeY / (float)input.h;
+
+    if(factorX == 1 && factorY == 1)
+        return input;
+
+    cn::Bitmap<T> result(destSizeX, destSizeY, input.d);
+
+    if(method == 0){
+        for(int c = 0; c < result.d;  c++){
+            for(int y = 0; y < result.h; y++){
+                int corrY = (int)((float)y / factorY);
+                for(int x = 0; x < result.w; x++){
+                    int corrX = (int)((float)x / factorX);
+                    result.setCell(x, y, c, input.getCell(corrX, corrY, c));
                 }
             }
         }

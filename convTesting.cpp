@@ -20,7 +20,7 @@ int main(){
 
    // network.feed(bitmap);
 
-    cn::Bitmap<cn::byte> resampled = cn::Utils::resize(bitmap, 2000, 3000);
+    cn::Bitmap<cn::byte> resampled = cn::Utils::resize(bitmap, 200, 500);
 
     auto * dataStorage = new cn::byte [resampled.w * resampled.h * resampled.d];
 
