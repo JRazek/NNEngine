@@ -84,33 +84,17 @@ namespace cn {
          * @param destSizeY
          * @param method see below for types of methods
          * 0 - nearest neighbour
-         * 1 - bilinear interpolation
+         * 1 - bilinear interpolation [not supported yet]
          * @return transformed bitmap
          */
         template<typename T>
         static Bitmap<T> upsample(const Bitmap<T> &input, int destSizeX, int destSizeY, int method);
 
 
-
         static int afterConvolutionSize(int kernelSize, int inputSize, int padding, int stride);
         static Bitmap<float> convolve(const Bitmap<float> &kernel, const Bitmap<float> &input, int paddingX = 0, int paddingY = 0, int strideX = 1, int strideY = 1);
 
         static float distanceSquared(const std::pair<float, float> &p1, const std::pair<float, float> &p2);
-
-
-        /**
-         *
-         * @tparam T
-         * @param bitmap - bitmap to search nn
-         * @param point - point from where the bfs starts
-         * @param filledArr - pointer to array of flags with filled pixels
-         * @return  returns nearest filled neighbour
-         */
-        template<typename T>
-        static std::pair<int, int>
-        nearestNeighbour(const Bitmap <T> &bitmap, const std::pair<int, int> &point, int channel,
-                         const bool *filledArr);
-
     };
 };
 
@@ -173,87 +157,16 @@ cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int
     float factorY = (float)destSizeY / (float)input.h;
     cn::Bitmap<T> result(destSizeX, destSizeY, input.d);
 
-    //otherwise stack overflow occurs
-    bool * filled = new bool [destSizeX * destSizeY * input.d];
-    std::fill(filled, filled + destSizeX * destSizeY * input.d, false);
-
-
-    for(int c = 0; c < input.d;  c++){
-        for(int y = 0; y < input.h; y++){
-            int corrY = y * factorY;
-            if(corrY >= result.h)
-                break;
-            for(int x = 0; x < input.w; x++){
-                int corrX = x * factorX;
-                if(corrX >= result.w)
-                    break;
-                result.setCell(corrX, corrY, c, input.getCell(x, y, c));
-                filled[result.getDataIndex(corrX, corrY, c)] = true;
-            }
-        }
-    }
-
     if(method == 0){
         for(int c = 0; c < result.d;  c++){
             for(int y = 0; y < result.h; y++){
                 for(int x = 0; x < result.w; x++){
-                    if(!filled[result.getDataIndex(x, y, c)]){
-                        auto nn = nearestNeighbour(result, {x, y}, c, filled);
-                        result.setCell(x, y, c, result.getCell(nn.first, nn.second, c));
-                        //result.setCell(x, y, c, 255);
-                        //filled[result.getDataIndex(x, y, c)] = true;
-                    }
+                    result.setCell(x, y, c, input.getCell(x / (int)factorX, y / (int)factorY, c));
                 }
             }
         }
     }
-    delete [] filled;
-    //todo
     return result;
-}
-
-template<typename T>
-std::pair<int, int> cn::Utils::nearestNeighbour(const Bitmap <T> &bitmap, const std::pair<int, int> &point, int channel, const bool *filledArr) {
-    auto belongs = [](const cn::Bitmap<T> &bitmap, const std::pair<int, int> &point){
-        return point.first >= 0 && point.first < bitmap.w && point.second >= 0 && point.second < bitmap.h;
-    };
-    if(!(belongs(bitmap, point))){
-        throw std::out_of_range("This point does not belong to bitmap!");
-    }
-    auto hash = [](std::pair<int, int> const &pair){
-        std::size_t h1 = std::hash<int>()(pair.first);
-        std::size_t h2 = std::hash<int>()(pair.second);
-        return h1 ^ h2;
-    };
-
-    //from where, point
-    std::queue<std::pair<int, int>> queue;
-    queue.push(point);
-
-    std::unordered_set<std::pair<int, int>, decltype(hash)> visited(10, hash);
-
-    while (!queue.empty()){
-        auto p = queue.front();
-        queue.pop();
-        visited.insert(p);
-        if(belongs(bitmap, p)){
-            if(filledArr[bitmap.getDataIndex(p.first, p.second, channel)]){
-                return {p.first, p.second};
-            }
-            std::vector<std::pair<int,int>> neighbors(4);
-            neighbors[0] = {p.first - 1, p.second};
-            neighbors[1] = {p.first + 1, p.second};
-            neighbors[2] = {p.first, p.second - 1};
-            neighbors[3] = {p.first, p.second + 1};
-
-            for(auto n : neighbors) {
-                if (visited.find(n) == visited.end()) {
-                    queue.push(n);
-                }
-            }
-        }
-    }
-    return std::pair<int, int>({-1, -1});
 }
 
 #endif //NEURALNETLIBRARY_UTILS_H
