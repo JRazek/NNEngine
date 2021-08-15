@@ -21,7 +21,6 @@ namespace cn {
 
     class Utils{
     public:
-        static inline int maxStackSize = 0;
         /**
          *
          * @param input
@@ -234,9 +233,6 @@ std::pair<int, int> cn::Utils::nearestNeighbour(const Bitmap <T> &bitmap, const 
     std::unordered_set<std::pair<int, int>, decltype(hash)> visited(10, hash);
 
     while (!queue.empty()){
-        if(queue.size() > maxStackSize){
-            maxStackSize = queue.size();
-        }
         auto p = queue.front();
         queue.pop();
         visited.insert(p);
