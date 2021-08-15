@@ -214,8 +214,7 @@ cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int
 }
 
 template<typename T>
-std::pair<int, int> cn::Utils::nearestNeighbour(const Bitmap <T> &bitmap, const std::pair<int, int> &point, int channel,
-                            const bool *filledArr) {
+std::pair<int, int> cn::Utils::nearestNeighbour(const Bitmap <T> &bitmap, const std::pair<int, int> &point, int channel, const bool *filledArr) {
     auto belongs = [](const cn::Bitmap<T> &bitmap, const std::pair<int, int> &point){
         return point.first >= 0 && point.first < bitmap.w && point.second >= 0 && point.second < bitmap.h;
     };
@@ -258,9 +257,6 @@ std::pair<int, int> cn::Utils::nearestNeighbour(const Bitmap <T> &bitmap, const 
             }
         }
     }
-
-
-
     return std::pair<int, int>({-1, -1});
 }
 
