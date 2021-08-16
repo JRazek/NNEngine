@@ -15,22 +15,22 @@ void cn::ConvolutionLayer::run(const Bitmap<float> &bitmap) {
 
 }
 
-cn::ConvolutionLayer::ConvolutionLayer(int id, cn::Network *network, int kernelSizeX, int kernelSizeY, int kernelSizeZ, int kernelsCount, int paddingX, int paddingY,
-                                       int strideX,
-                                       int strideY) :
-                                       kernelSizeX(kernelSizeX),
-                                       kernelSizeY(kernelSizeY),
-                                       kernelSizeZ(kernelSizeZ),
-                                       kernelsCount(kernelsCount),
-                                       paddingX(paddingX),
-                                       paddingY(paddingY),
-                                       strideX(strideX),
-                                       strideY(strideY),
-                                       cn::Layer(id, network) {
-    kernels.reserve(kernelsCount);
-    for(int i = 0; i < kernelsCount; i ++){
-        kernels.emplace_back(kernelSizeX, kernelSizeY, kernelSizeZ);
-        std::fill(kernels.back().data(), kernels.back().data() + kernelSizeX * kernelSizeY * kernelSizeZ, 0);
+cn::ConvolutionLayer::ConvolutionLayer(int _id, cn::Network *_network, int _kernelSizeX, int _kernelSizeY, int _kernelSizeZ, int _kernelsCount, int _paddingX, int _paddingY,
+                                       int _strideX,
+                                       int _strideY) :
+                                       kernelSizeX(_kernelSizeX),
+                                       kernelSizeY(_kernelSizeY),
+                                       kernelSizeZ(_kernelSizeZ),
+                                       kernelsCount(_kernelsCount),
+                                       paddingX(_paddingX),
+                                       paddingY(_paddingY),
+                                       strideX(_strideX),
+                                       strideY(_strideY),
+                                       cn::Layer(_id, _network) {
+    kernels.reserve(_kernelsCount);
+    for(int i = 0; i < _kernelsCount; i ++){
+        kernels.emplace_back(_kernelSizeX, _kernelSizeY, _kernelSizeZ);
+        std::fill(kernels.back().data(), kernels.back().data() + _kernelSizeX * _kernelSizeY * _kernelSizeZ, 0);
     }
 }
 

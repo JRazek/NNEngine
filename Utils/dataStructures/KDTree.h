@@ -32,11 +32,11 @@ struct KDTree {
 
     /**
      *
-     * @param pointsVec - dataset
-     * @param dimension - 0 for x to split y for 1 to split
+     * @param _pointsVec - dataset
+     * @param _dimension - 0 for x to split y for 1 to split
      * @param segment - the segment on which the node is splitting data
      */
-    explicit KDTree(std::vector<PointData *> pointsVec, bool dimension = false, KDTree * parent = nullptr);
+    explicit KDTree(std::vector<PointData *> _pointsVec, bool _dimension = false, KDTree * _parent = nullptr);
 
     /**
      *

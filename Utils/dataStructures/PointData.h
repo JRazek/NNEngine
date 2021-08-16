@@ -11,13 +11,13 @@ struct PointData {
     void * data;
     /**
      *
-     * @param point pointData where the data is located
-     * @param data data itself
+     * @param _point pointData where the data is located
+     * @param _data data itself
      * @note that no data is copied. This way its more efficient.
      * You should deallocate data by yourself if necessary.
      */
-    PointData(const std::pair<float, float> &point, void * data);
-    PointData(const std::pair<float, float> &point);
+    PointData(const std::pair<float, float> &_point, void * _data);
+    PointData(const std::pair<float, float> &_point);
 };
 
 

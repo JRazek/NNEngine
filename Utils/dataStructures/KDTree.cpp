@@ -7,21 +7,21 @@
 #include <cmath>
 #include "../Utils.h"
 
-KDTree::KDTree(std::vector<PointData *> pointsVec, bool dimension, KDTree * const parent) : parent(parent) {
-    this->dimension = dimension;
-    if(dimension == 0) {
-        std::sort(pointsVec.begin(), pointsVec.end(), [](const PointData *p1, const PointData *p2) {
+KDTree::KDTree(std::vector<PointData *> _pointsVec, bool _dimension, KDTree * const _parent) : parent(_parent) {
+    this->dimension = _dimension;
+    if(_dimension == 0) {
+        std::sort(_pointsVec.begin(), _pointsVec.end(), [](const PointData *p1, const PointData *p2) {
             return p1->point.first < p2->point.first;
         });
     }else{
-        std::sort(pointsVec.begin(), pointsVec.end(), [](const PointData *p1, const PointData *p2) {
+        std::sort(_pointsVec.begin(), _pointsVec.end(), [](const PointData *p1, const PointData *p2) {
             return p1->point.second < p2->point.second;
         });
     }
 
-    auto it = pointsVec.begin() + pointsVec.size() / 2;
-    while(it+1 != pointsVec.end()){
-        if(!dimension) {
+    auto it = _pointsVec.begin() + _pointsVec.size() / 2;
+    while(it+1 != _pointsVec.end()){
+        if(!_dimension) {
             if ((*it)->point.first == (*it+1)->point.first) {
                 ++it;
             } else
@@ -36,11 +36,11 @@ KDTree::KDTree(std::vector<PointData *> pointsVec, bool dimension, KDTree * cons
     this->pointData = (*it);
     std::vector<PointData *> leftVec;
     std::vector<PointData *> rightVec;
-    leftVec.reserve(pointsVec.size()/2);
-    rightVec.reserve(pointsVec.size()/2);
+    leftVec.reserve(_pointsVec.size() / 2);
+    rightVec.reserve(_pointsVec.size() / 2);
 
     bool afterMid = false;
-    for(auto p : pointsVec){
+    for(auto p : _pointsVec){
         if(p != this->pointData){
             if(!afterMid)
                 leftVec.push_back(p);
@@ -52,9 +52,9 @@ KDTree::KDTree(std::vector<PointData *> pointsVec, bool dimension, KDTree * cons
         }
     }
     if(!leftVec.empty())
-        this->leftChild = new KDTree(leftVec, !dimension, this);
+        this->leftChild = new KDTree(leftVec, !_dimension, this);
     if(!rightVec.empty())
-        this->rightChild = new KDTree(rightVec, !dimension, this);
+        this->rightChild = new KDTree(rightVec, !_dimension, this);
 }
 
 KDTree::~KDTree() {

@@ -19,8 +19,8 @@ namespace cn {
         T * dataP;
     public:
         const int w, h, d;
-        Bitmap(int w, int h, int d);
-        Bitmap(int w, int h, int d, const T* data, int inputType = 0);
+        Bitmap(int _w, int _h, int _d);
+        Bitmap(int _w, int _h, int _d, const T* data, int inputType = 0);
         Bitmap(const Bitmap &bitmap);
         ~Bitmap();
         T getCell(int col, int row, int depth) const;
@@ -33,8 +33,8 @@ namespace cn {
 
 /////DEFINITIONS/////
 template<typename T>
-cn::Bitmap<T>::Bitmap(int w, int h, int d): w(w), h (h), d(d) {
-    this->dataP = new T [w * h * d];
+cn::Bitmap<T>::Bitmap(int _w, int _h, int _d): w(_w), h (_h), d(_d) {
+    this->dataP = new T [_w * _h * _d];
 }
 
 template<typename T>
@@ -63,8 +63,8 @@ cn::Bitmap<T>::~Bitmap() {
 }
 
 template<typename T>
-cn::Bitmap<T>::Bitmap(int w, int h, int d, const T * data, int inputType): Bitmap(w, h, d) {
-    cn::Utils::convert<T>(data, this->dataP, w, h, d, inputType, 0);
+cn::Bitmap<T>::Bitmap(int _w, int _h, int _d, const T * data, int inputType): Bitmap(_w, _h, _d) {
+    cn::Utils::convert<T>(data, this->dataP, _w, _h, _d, inputType, 0);
 }
 
 template<typename T>
