@@ -178,12 +178,6 @@ cn::Bitmap<T> cn::Utils::downsample(const cn::Bitmap<T> &input, int destSizeX, i
         }
     }
 
-    for(auto n : avgCount){
-        if(n != 1){
-            std::cout<<"";
-        }
-    }
-
     return result;
 }
 
