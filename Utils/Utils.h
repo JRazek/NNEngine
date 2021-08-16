@@ -11,6 +11,7 @@
 #include <iostream>
 #include <queue>
 #include <unordered_set>
+#include "dataStructures/TMatrix.h"
 
 
 namespace cn {
@@ -89,6 +90,16 @@ namespace cn {
          */
         template<typename T>
         static Bitmap<T> upsample(const Bitmap<T> &input, int destSizeX, int destSizeY, int method);
+
+        /**
+         *
+         * @tparam T
+         * @param input image to transform
+         * @param tMatrix matrix for linear transformation of an image
+         * @return transformed image
+         */
+        template<typename T>
+        static Bitmap<T> transform(const Bitmap<T> &input, const TMatrix &tMatrix);
 
 
         static int afterConvolutionSize(int kernelSize, int inputSize, int padding, int stride);
@@ -199,6 +210,11 @@ cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int
         }
     }
     return result;
+}
+
+template<typename T>
+cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, const TMatrix &tMatrix) {
+    return cn::Bitmap<T>();
 }
 
 #endif //NEURALNETLIBRARY_UTILS_H

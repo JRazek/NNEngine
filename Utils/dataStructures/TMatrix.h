@@ -5,11 +5,16 @@
 #ifndef NEURALNETLIBRARY_TMATRIX_H
 #define NEURALNETLIBRARY_TMATRIX_H
 #include <functional>
-#include <utility>
 
 struct TMatrix {
-//    std::function<float()> a;
-//    TMatrix(const std::function<float()> &a):a(a){}
+    using func = std::function<float(float)> ;
+    /**
+     * matrix of a functions for space transformation
+     * | a, b |
+     * | c, d |
+     */
+    std::function<float(float)> a, b, c, d;
+    TMatrix(const func &_a, const func &_b, const func &_c, const func &_d);
 };
 
 

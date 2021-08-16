@@ -12,14 +12,11 @@ int main(){
     cv::Mat mat = cv::imread("resources/aPhoto.jpg");
     cn::Network network(2000, 3000, 3);
 
-
     cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
 
     network.appendConvolutionLayer(3,3,3,1);
 
-   // network.feed(bitmap);
-
-    cn::Bitmap<cn::byte> resampled = cn::Utils::resize(bitmap, 200, 500);
+    cn::Bitmap<cn::byte> resampled = cn::Utils::resize(bitmap, 3000, 4500);
 
     auto * dataStorage = new cn::byte [resampled.w * resampled.h * resampled.d];
 
