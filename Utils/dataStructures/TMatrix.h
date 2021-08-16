@@ -7,6 +7,10 @@
 #include <functional>
 #include "Vector2f.h"
 
+
+/**
+ * 2 x 2 2D transformation matrix
+ */
 struct TMatrix {
     using func = std::function<float(float)> ;
     /**
@@ -18,6 +22,12 @@ struct TMatrix {
     TMatrix(float _a, float _b, float _c, float _d);
     [[nodiscard]] Vector2f getIHat() const;
     [[nodiscard]] Vector2f getJHat() const;
+    [[nodiscard]] Vector2f transform(const Vector2f &vector2F) const;
+
+
+    Vector2f operator *(Vector2f vec) const;
+    TMatrix operator *(float scalar) const;
+    TMatrix operator *(TMatrix other) const;
 };
 
 

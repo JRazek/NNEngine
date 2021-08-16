@@ -17,3 +17,17 @@ Vector2f TMatrix::getIHat() const {
 Vector2f TMatrix::getJHat() const {
     return {b, d};
 }
+
+Vector2f TMatrix::transform(const Vector2f &vector2F) const {
+    return {a * vector2F.x + b * vector2F.y, c * vector2F.x + d * vector2F.y};
+}
+
+
+TMatrix TMatrix::operator*(float scalar) const {
+    return TMatrix(a * scalar, b * scalar, c * scalar, d * scalar);
+}
+
+Vector2f TMatrix::operator*(Vector2f vec) const {
+    return transform(vec);
+}
+
