@@ -25,6 +25,7 @@ int main(){
 
     cv::Mat resampledImg(resampled.h, resampled.w, CV_8UC(resampled.d), dataStorage);
 
+    cn::Bitmap<cn::byte> transformed = cn::Utils::transform(resampled, {1, 0,0,1});
 
     cv::imshow("img", resampledImg);
 

@@ -12,6 +12,7 @@
 #include <queue>
 #include <unordered_set>
 #include "dataStructures/TMatrix.h"
+#include <cmath>
 
 
 namespace cn {
@@ -99,7 +100,7 @@ namespace cn {
          * @return transformed image
          */
         template<typename T>
-        static Bitmap<T> transform(const Bitmap<T> &input, const TMatrix &tMatrix);
+        static Bitmap<T> transform(const Bitmap<T> &input, const TMatrix<float> &tMatrix);
 
 
         static int afterConvolutionSize(int kernelSize, int inputSize, int padding, int stride);
@@ -207,8 +208,26 @@ cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int
 }
 
 template<typename T>
-cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, const TMatrix &tMatrix) {
-    return cn::Bitmap<T>();
+cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, const TMatrix<float> &tMatrix) {
+    float maxX = 0, minX = INFINITY, maxY = 0, minY = INFINITY;
+    std::vector<Vector2<int>> edges(4);
+    edges[0] = {0,0};
+    edges[1] = {input.w, 0};
+    edges[2] = {input.w, input.h};
+    edges[3] = {0, input.h};
+    for(auto &e : edges){
+        e = tMatrix * e;
+        float x = e.x, y = e.y;
+        maxX = std::max(x, maxX);
+        minX = std::min(x, minX);
+        maxY = std::max(y, maxY);
+        minY = std::min(y, minY);
+    }
+    int w = (int)(maxX - minX);
+    int h = (int)(maxY - minY);
+
+    cn::Bitmap<T> result(w, h, input.d);
+    return result;
 }
 
 #endif //NEURALNETLIBRARY_UTILS_H
