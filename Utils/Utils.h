@@ -209,7 +209,7 @@ cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int
 
 template<typename T>
 cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, const TMatrix<float> &tMatrix) {
-    float maxX = 0, minX = INFINITY, maxY = 0, minY = INFINITY;
+    int maxX = 0, minX = INT32_MAX, maxY = 0, minY = INT32_MAX;
     std::vector<Vector2<int>> edges(4);
     edges[0] = {0,0};
     edges[1] = {input.w, 0};
@@ -217,7 +217,7 @@ cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, const TMatrix<flo
     edges[3] = {0, input.h};
     for(auto &e : edges){
         e = tMatrix * e;
-        float x = e.x, y = e.y;
+        int x = e.x, y = e.y;
         maxX = std::max(x, maxX);
         minX = std::min(x, minX);
         maxY = std::max(y, maxY);
@@ -225,6 +225,20 @@ cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, const TMatrix<flo
     }
     int w = (int)(maxX - minX);
     int h = (int)(maxY - minY);
+
+    Vector2<int> shift = {minX, minY};
+    shift = shift * -1;
+
+    for(int y = 0; y < input.h; y++){
+        for(int x = 0; x < input.w; x++){
+            Vector2<int> v(x,y);
+            //v = v * tMatrix;
+            for(int c = 0; c < input.d; c++){
+
+            }
+        }
+    }
+
 
     cn::Bitmap<T> result(w, h, input.d);
     return result;

@@ -15,6 +15,9 @@ struct Vector2 {
 
     template<typename Y>
     Vector2<T> operator=(const Vector2<Y> &other);
+    Vector2<T> operator*(const T &scalar);
+    Vector2<T> operator+(const Vector2<T> &other);
+    Vector2<T> operator-(const Vector2<T> &other);
 };
 
 template<typename T>
@@ -24,14 +27,27 @@ template<typename T>
 Vector2<T>::Vector2(T _x, T _y): x(_x), y(_y) {}
 
 template<typename T>
-Vector2<T>::Vector2(): x(0), y(0) {
-
-}
+Vector2<T>::Vector2(): x(0), y(0) {}
 
 template<typename T>
 template<typename Y>
 Vector2<T> Vector2<T>::operator=(const Vector2<Y> &other) {
     return Vector2<T>((T)other.x, (T)other.y);
+}
+
+template<typename T>
+Vector2<T> Vector2<T>::operator*(const T &scalar) {
+    return Vector2<T>(scalar * x, scalar * y);
+}
+
+template<typename T>
+Vector2<T> Vector2<T>::operator+(const Vector2<T> &other) {
+    return Vector2<T>(x + other.x, y + other.y);
+}
+
+template<typename T>
+Vector2<T> Vector2<T>::operator-(const Vector2<T> &other) {
+    return Vector2<T>(x - other.x, y - other.y);
 }
 
 
