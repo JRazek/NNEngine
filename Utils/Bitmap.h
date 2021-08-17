@@ -22,11 +22,14 @@ namespace cn {
         Bitmap(int _w, int _h, int _d);
         Bitmap(int _w, int _h, int _d, const T* data, int inputType = 0);
         Bitmap(const Bitmap &bitmap);
+        Bitmap(Bitmap &&bitmap);
         ~Bitmap();
         T getCell(int col, int row, int depth) const;
         void setCell(int col, int row, int depth, T b);
+        void setData(const T * data, int inputType = 0);
         [[nodiscard]] int getDataIndex(int col, int row, int depth) const;
 
+        Bitmap<T> operator=(const Bitmap<T> &other);
         T * data() const;
     };
 }
@@ -64,7 +67,7 @@ cn::Bitmap<T>::~Bitmap() {
 
 template<typename T>
 cn::Bitmap<T>::Bitmap(int _w, int _h, int _d, const T * data, int inputType): Bitmap(_w, _h, _d) {
-    cn::Utils::convert<T>(data, this->dataP, _w, _h, _d, inputType, 0);
+    setData(data, inputType);
 }
 
 template<typename T>
@@ -73,6 +76,21 @@ int cn::Bitmap<T>::getDataIndex(int col, int row, int depth) const{
         throw std::invalid_argument("cell does not belong to bitmap!");
     }
     return depth * w * h + row * w + col;
+}
+
+template<typename T>
+cn::Bitmap<T> cn::Bitmap<T>::operator=(const cn::Bitmap<T> &other) {
+    return cn::Bitmap<T>(other.w, other.h, other.d, other.data());
+}
+
+template<typename T>
+cn::Bitmap<T>::Bitmap(cn::Bitmap<T> &&bitmap):Bitmap<T>(bitmap.w, bitmap.h, bitmap.d) {
+    std::move(bitmap.data(), bitmap.data() + w * h * d, dataP);
+}
+
+template<typename T>
+void cn::Bitmap<T>::setData(const T *data, int inputType) {
+    cn::Utils::convert(data, dataP, w, h, d, inputType, 0);
 }
 //
 

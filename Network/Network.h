@@ -78,6 +78,13 @@ namespace cn {
 
         Network(int w, int h, int d);
 
+
+        /**
+         * not supported yet
+         */
+        Network(const Network&) = delete;
+
+
         ~Network();
     };
 }

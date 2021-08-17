@@ -7,12 +7,13 @@
 #include "../Network.h"
 
 void cn::ConvolutionLayer::run(const Bitmap<float> &bitmap) {
-    //int sizeX = this->network->inputDataWidth;
-    //int sizeY = this->network->inputDataHeight;
-
-    //todo!
-    //https://stackoverflow.com/questions/6133957/image-downsampling-algorithms
-
+    //convolve bitmap - must have correct sizes etc. Garbage in garbage out.
+    std::vector<Bitmap<float>> output;
+    output.reserve(4);
+    for(int i = 0; i < kernels.size(); i ++){
+        Bitmap<float> * kernel = &kernels[i];
+        output.push_back(Utils::convolve(*kernel, bitmap, paddingX, paddingY, strideX, strideY));
+    }
 }
 
 cn::ConvolutionLayer::ConvolutionLayer(int _id, cn::Network *_network, int _kernelSizeX, int _kernelSizeY, int _kernelSizeZ, int _kernelsCount, int _paddingX, int _paddingY,
