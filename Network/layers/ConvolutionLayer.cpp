@@ -10,11 +10,15 @@ void cn::ConvolutionLayer::run(const Bitmap<float> &bitmap) {
     //convolve bitmap - must have correct sizes etc. Garbage in garbage out.
     int outW = Utils::afterConvolutionSize(kernelSizeX, bitmap.w, paddingX, strideX);
     int outH = Utils::afterConvolutionSize(kernelSizeY, bitmap.h, paddingY, strideY);
-    Layer::output = new Bitmap<float>(outW, outH, kernelsCount);
+    output = new Bitmap<float>(outW, outH, kernelsCount);
     for(int i = 0; i < kernels.size(); i ++){
         Bitmap<float> * kernel = &kernels[i];
         output->setLayer(i, Utils::convolve(*kernel, bitmap, paddingX, paddingY, strideX, strideY).data());
     }
+    for(auto it = output->data(); it != output->data() + outW * outH * kernelsCount; ++it){
+        *it = activationFunction.func(*it);
+    }
+    std::cout<<"";
 }
 
 void cn::ConvolutionLayer::randomInit() {
@@ -25,13 +29,16 @@ void cn::ConvolutionLayer::randomInit() {
     }
 }
 
-cn::ConvolutionLayer::ConvolutionLayer(int _id, cn::Network *_network, int _kernelSizeX, int _kernelSizeY, int _kernelSizeZ, int _kernelsCount, int _paddingX, int _paddingY,
-                                       int _strideX,
-                                       int _strideY) :
+cn::ConvolutionLayer::ConvolutionLayer(int _id, cn::Network *_network, int _kernelSizeX, int _kernelSizeY,
+                                       int _kernelSizeZ,
+                                       int _kernelsCount, const DifferentiableFunction &_activationFunction, int _paddingX,
+                                       int _paddingY,
+                                       int _strideX, int _strideY) :
                                        kernelSizeX(_kernelSizeX),
                                        kernelSizeY(_kernelSizeY),
                                        kernelSizeZ(_kernelSizeZ),
                                        kernelsCount(_kernelsCount),
+                                       activationFunction(_activationFunction),
                                        paddingX(_paddingX),
                                        paddingY(_paddingY),
                                        strideX(_strideX),

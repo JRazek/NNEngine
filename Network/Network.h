@@ -6,7 +6,6 @@
 #define NEURALNETLIBRARY_NETWORK_H
 
 #include <vector>
-#include "../Utils/Bitmap.h"
 #include "../Utils/Utils.h"
 
 namespace cn {
@@ -23,11 +22,11 @@ namespace cn {
 
         friend ConvolutionLayer;
 
-
         void appendLayer(Layer * layer);
+
     public:
 
-        void appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount, int paddingX = 0,
+        void appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount, const DifferentiableFunction &function, int paddingX = 0,
                                     int paddingY = 0, int strideX = 1, int strideY = 1);
 
 

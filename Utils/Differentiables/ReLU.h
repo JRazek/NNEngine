@@ -8,8 +8,8 @@
 #include "DifferentiableFunction.h"
 
 struct ReLU : public DifferentiableFunction{
-    float func(float x) override;
-    float diff(float x) override;
+    float func(float x) const override;
+    float diff(float x) const override;
 };
 
 

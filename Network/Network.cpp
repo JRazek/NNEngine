@@ -5,7 +5,6 @@
 #include <stdexcept>
 #include "Network.h"
 #include "layers/ConvolutionLayer.h"
-#include "../Utils/Utils.h"
 
 void cn::Network::appendLayer(cn::Layer * layer) {
     //todo validation!
@@ -25,11 +24,12 @@ cn::Network::~Network() {
     }
 }
 
-void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount, int paddingX,
+void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount, const DifferentiableFunction &function, int paddingX,
                                          int paddingY, int strideX, int strideY) {
 
 
-    this->layers.push_back(new ConvolutionLayer(this->layers.size(), this, kernelX, kernelY, kernelZ, kernelsCount, paddingX, paddingY, strideX, strideY));
+    this->layers.push_back(new ConvolutionLayer(this->layers.size(), this, kernelX, kernelY, kernelZ, kernelsCount,
+                                                function, paddingX, paddingY, strideX, strideY));
 }
 
 const std::vector<cn::Layer *> *cn::Network::getLayers() {
