@@ -1,8 +1,6 @@
 //
 // Created by jrazek on 27.07.2021.
 //
-
-#include <stdexcept>
 #include "ConvolutionLayer.h"
 #include "../Network.h"
 
@@ -18,7 +16,6 @@ void cn::ConvolutionLayer::run(const Bitmap<float> &bitmap) {
     for(auto it = output->data(); it != output->data() + outW * outH * kernelsCount; ++it){
         *it = activationFunction.func(*it);
     }
-    std::cout<<"";
 }
 
 void cn::ConvolutionLayer::randomInit() {
