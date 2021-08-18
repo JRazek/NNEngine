@@ -16,7 +16,7 @@ void cn::Network::feed(const byte *input) {
     cn::Bitmap<byte> bitmap(this->inputDataWidth, this->inputDataHeight, this->inputDataHeight, input, 0);
     cn::Bitmap<float> normalized = cn::Utils::normalize(bitmap);
     if(this->layers.empty())
-        throw std::logic_error("network must have at least layer in order to feed it!");
+        throw std::logic_error("network must have at least one layer in order to feed it!");
 
     cn::Bitmap<float> resized = cn::Utils::resize<float>(normalized, inputDataWidth, inputDataHeight);
 
