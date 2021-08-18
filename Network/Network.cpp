@@ -44,7 +44,7 @@ cn::Network::Network(int w, int h, int d): inputDataWidth(w), inputDataHeight(h)
 
 void cn::Network::feed(const cn::Bitmap<float> &bitmap) {
     if(this->layers.empty())
-        throw std::logic_error("network must have at least layer in order to feed it!");
+        throw std::logic_error("network must have at least one layer in order to feed it!");
     const Bitmap<float> * output = &bitmap;
     for(int i = 0; i < layers.size(); i ++){
         auto layer = layers[i];
