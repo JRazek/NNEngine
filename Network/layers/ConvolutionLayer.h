@@ -6,9 +6,10 @@
 #define NEURALNETLIBRARY_CONVOLUTIONLAYER_H
 
 #include "Layer.h"
+#include "RandomInitiable.h"
 
 namespace cn {
-    class ConvolutionLayer : public cn::Layer{
+    class ConvolutionLayer : public cn::Layer, public RandomInitiable{
     private:
         const int kernelSizeX;
         const int kernelSizeY;
@@ -26,7 +27,7 @@ namespace cn {
         ConvolutionLayer(int _id, cn::Network *_network, int _kernelSizeX, int _kernelSizeY, int _kernelSizeZ,
                          int _kernelsCount, const DifferentiableFunction &_activationFunction, int _paddingX, int _paddingY,
                          int _strideX, int _strideY);
-        void randomInit();
+        void randomInit() override ;
         void run(const Bitmap<float> &bitmap) override;
     };
 }

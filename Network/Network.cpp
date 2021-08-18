@@ -9,12 +9,12 @@
 
 void cn::Network::appendLayer(cn::Layer * layer) {
     //todo validation!
-    this->layers.push_back(layer);
+    layers.push_back(layer);
 }
 
 void cn::Network::feed(const byte *input) {
     cn::Bitmap<byte> bitmap(inputDataWidth, inputDataHeight, inputDataHeight, input, 0);
-    if(this->layers.empty())
+    if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
     feed(cn::Utils::normalize(bitmap));
 }
@@ -28,13 +28,14 @@ cn::Network::~Network() {
 void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount, const DifferentiableFunction &function, int paddingX,
                                          int paddingY, int strideX, int strideY) {
 
-
-    this->layers.push_back(new ConvolutionLayer(this->layers.size(), this, kernelX, kernelY, kernelZ, kernelsCount,
-                                                function, paddingX, paddingY, strideX, strideY));
+    ConvolutionLayer *c = new ConvolutionLayer(this->layers.size(), this, kernelX, kernelY, kernelZ, kernelsCount,
+                                              function, paddingX, paddingY, strideX, strideY);
+    randomInitLayers.push_back(c);
+    layers.push_back(c);
 }
 
 const std::vector<cn::Layer *> *cn::Network::getLayers() {
-    return &this->layers;
+    return &layers;
 }
 
 cn::Network::Network(int w, int h, int d, int seed)
@@ -43,7 +44,7 @@ cn::Network::Network(int w, int h, int d, int seed)
 void cn::Network::feed(const cn::Bitmap<float> &bitmap) {
     cn::Bitmap<float> resized = cn::Utils::resize<float>(bitmap, inputDataWidth, inputDataHeight);
 
-    if(this->layers.empty())
+    if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
     const Bitmap<float> * input = &resized;
     for(int i = 0; i < layers.size(); i ++){
@@ -59,17 +60,11 @@ void cn::Network::feed(const cn::Bitmap<cn::byte> &bitmap) {
 
 float cn::Network::genWeightRandom() {
     std::uniform_real_distribution<> dis(-1, 1);
-    float tmp = dis(randomEngine);
-    return tmp;
+    return dis(randomEngine);
 }
 
 void cn::Network::initRandom() {
-    for(auto l : layers){
-        if(Utils::instanceof<ConvolutionLayer *>(l)){
-            ((ConvolutionLayer *)l)->randomInit();
-        }else if(Utils::instanceof<FFLayer *>(l)){
-            ((FFLayer *)l)->randomInit();
-        }
-
+    for(auto l : randomInitLayers){
+        l->randomInit();
     }
 }

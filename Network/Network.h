@@ -8,6 +8,7 @@
 #include <vector>
 #include <random>
 #include "../Utils/Utils.h"
+#include "layers/RandomInitiable.h"
 
 namespace cn {
     class Layer;
@@ -18,6 +19,7 @@ namespace cn {
         std::default_random_engine randomEngine;
 
     protected:
+        std::vector<RandomInitiable *> randomInitLayers;
         std::vector<Layer *> layers;
         friend class Layer;
 
