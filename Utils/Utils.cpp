@@ -71,3 +71,4 @@ std::function<float(float)> cn::Utils::ReLU = std::function<float(float)>([](flo
 std::function<float(float)> cn::Utils::Sigmoid = std::function<float(float)>([](float n){
    return (1.f/(1.f + std::pow(std::exp(1), -n)));
 });
+

@@ -72,6 +72,8 @@ namespace cn {
          */
         Network(const Network&) = delete;
 
+        void initRandom();
+
         float genWeightRandom();
 
         ~Network();

@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include "Network.h"
 #include "layers/ConvolutionLayer.h"
+#include "layers/FFLayer.h"
 
 void cn::Network::appendLayer(cn::Layer * layer) {
     //todo validation!
@@ -58,5 +59,17 @@ void cn::Network::feed(const cn::Bitmap<cn::byte> &bitmap) {
 
 float cn::Network::genWeightRandom() {
     std::uniform_real_distribution<> dis(-1, 1);
-    return dis(randomEngine);
+    float tmp = dis(randomEngine);
+    return tmp;
+}
+
+void cn::Network::initRandom() {
+    for(auto l : layers){
+        if(Utils::instanceof<ConvolutionLayer *>(l)){
+            ((ConvolutionLayer *)l)->randomInit();
+        }else if(Utils::instanceof<FFLayer *>(l)){
+            ((FFLayer *)l)->randomInit();
+        }
+
+    }
 }

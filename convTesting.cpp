@@ -17,6 +17,7 @@ int main(){
 
     network.appendConvolutionLayer(3, 3, 3, 3, reLu);
     network.appendConvolutionLayer(3, 3, 3, 3, reLu);
+    network.initRandom();
 
     network.feed(bitmap);
 

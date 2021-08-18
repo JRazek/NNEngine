@@ -130,6 +130,9 @@ namespace cn {
         static Bitmap<float> convolve(const Bitmap<float> &kernel, const Bitmap<float> &input, int paddingX = 0, int paddingY = 0, int strideX = 1, int strideY = 1);
 
         static float distanceSquared(const std::pair<float, float> &p1, const std::pair<float, float> &p2);
+
+        template<typename Base, typename T>
+        static bool instanceof(const T *);
     };
 };
 
@@ -168,6 +171,10 @@ cn::Bitmap<T> cn::Utils::resize(const cn::Bitmap<T> &input, int destSizeX, int d
 }
 
 
+template<typename Base, typename T>
+bool cn::Utils::instanceof(const T *) {
+    return std::is_base_of_v<Base, T>;
+}
 
 template<typename T>
 cn::Bitmap<T> cn::Utils::downsample(const cn::Bitmap<T> &input, int destSizeX, int destSizeY, int method) {
