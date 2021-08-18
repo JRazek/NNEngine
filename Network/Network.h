@@ -15,8 +15,7 @@ namespace cn {
     class ConvolutionLayer;
 
     class Network {
-        std::default_random_engine e;
-        std::uniform_real_distribution<> dis;
+        std::default_random_engine randomEngine;
 
     protected:
         std::vector<Layer *> layers;
