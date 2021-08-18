@@ -102,6 +102,16 @@ namespace cn {
         template<typename T>
         static Bitmap<T> transform(const Bitmap<T> &input, const TMatrix<float> &tMatrix);
 
+        /**
+         *
+         * @tparam T
+         * @param input image to rotate
+         * @param rad radians to rotate anticlockwise
+         * @return rotated bitmap
+         */
+        template<typename T>
+        static Bitmap<T> rotate(const Bitmap<T> &input, float rad);
+
 
         static int afterConvolutionSize(int kernelSize, int inputSize, int padding, int stride);
         static Bitmap<float> convolve(const Bitmap<float> &kernel, const Bitmap<float> &input, int paddingX = 0, int paddingY = 0, int strideX = 1, int strideY = 1);
@@ -225,6 +235,8 @@ cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, const TMatrix<flo
     }
     int w = (int)(maxX - minX);
     int h = (int)(maxY - minY);
+    cn::Bitmap<T> result(w, h, input.d);
+    std::fill(result.data(), result.data() + w * h * result.d, 0);
 
     Vector2<int> shift = {minX, minY};
     shift = shift * -1;
@@ -232,16 +244,26 @@ cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, const TMatrix<flo
     for(int y = 0; y < input.h; y++){
         for(int x = 0; x < input.w; x++){
             Vector2<int> v(x,y);
-            //v = v * tMatrix;
+            v = v * tMatrix + shift;
+            if(v.x >= 2048)
+                std::cout<<"";
             for(int c = 0; c < input.d; c++){
-
+                T cell = input.getCell(x, y, c);
+                result.setCell(v.x, v.y, c, cell);
             }
         }
     }
 
 
-    cn::Bitmap<T> result(w, h, input.d);
     return result;
+}
+
+template<typename T>
+cn::Bitmap<T> cn::Utils::rotate(const cn::Bitmap<T> &input, float rad) {
+    float sin = std::sin(rad);
+    float cos = std::cos(rad);
+    TMatrix<float> rotationMatrix(cos, -sin, sin, cos);
+    return transform<T>(input, rotationMatrix);
 }
 
 #endif //NEURALNETLIBRARY_UTILS_H

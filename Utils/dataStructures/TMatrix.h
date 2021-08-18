@@ -28,7 +28,7 @@ struct TMatrix {
     [[nodiscard]] Vector2<T> transform(const Vector2<Y> &vector2) const;
 
     template<typename Y>
-    Vector2<T> operator *(Vector2<Y> vec) const;
+    Vector2<T> operator *(const Vector2<Y> &vec) const;
     TMatrix operator *(T scalar) const;
     TMatrix operator *(TMatrix other) const;
 };
@@ -64,7 +64,7 @@ TMatrix<T> TMatrix<T>::operator*(T scalar) const {
 }
 template<typename T>
 template<typename Y>
-Vector2<T> TMatrix<T>::operator*(const Vector2<Y> vec) const {
+Vector2<T> TMatrix<T>::operator*(const Vector2<Y> &vec) const {
     return transform(vec);
 }
 

@@ -18,16 +18,15 @@ int main(){
 
     cn::Bitmap<cn::byte> resampled = cn::Utils::resize(bitmap, 3000, 4500);
 
-    auto * dataStorage = new cn::byte [resampled.w * resampled.h * resampled.d];
+    cn::Bitmap<cn::byte> rotated = cn::Utils::rotate(resampled,5);
 
-    cn::Utils::convert(resampled.data(), dataStorage, resampled.w, resampled.h, resampled.d, 0, 1);
+    auto * dataStorage = new cn::byte [rotated.w * rotated.h * rotated.d];
 
+    cn::Utils::convert(rotated.data(), dataStorage, rotated.w, rotated.h, rotated.d, 0, 1);
 
-    cv::Mat resampledImg(resampled.h, resampled.w, CV_8UC(resampled.d), dataStorage);
+    cv::Mat transformedImg(rotated.h, rotated.w, CV_8UC(rotated.d), dataStorage);
 
-    cn::Bitmap<cn::byte> transformed = cn::Utils::transform(resampled, {1, 0,0,1});
-
-    cv::imshow("img", resampledImg);
+    cv::imshow("img", transformedImg);
 
 
     while(cv::waitKey() != 48);
