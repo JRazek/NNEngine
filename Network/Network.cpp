@@ -28,11 +28,8 @@ cn::Network::~Network() {
 void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount, int paddingX,
                                          int paddingY, int strideX, int strideY) {
 
-    auto fun = [](float n) {
-        return 1.f;
-    };
-    std::function<float(float)> activation(fun);
-    this->layers.push_back(new ConvolutionLayer(this->layers.size(), this, kernelX, kernelY, kernelZ, kernelsCount, activation, paddingX, paddingY, strideX, strideY));
+
+    this->layers.push_back(new ConvolutionLayer(this->layers.size(), this, kernelX, kernelY, kernelZ, kernelsCount, paddingX, paddingY, strideX, strideY));
 }
 
 const std::vector<cn::Layer *> *cn::Network::getLayers() {

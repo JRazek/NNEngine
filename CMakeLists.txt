@@ -9,7 +9,7 @@ add_executable(Test structureTesting.cpp)
 add_executable(TestGenerator testGenerator.cpp)
 add_executable(Main convTesting.cpp)
 
-add_library(ConvolutionNetLib Network/Network.cpp Network/Network.h Network/layers/Layer.cpp Network/layers/Layer.h Network/layers/FFLayer.cpp Network/layers/FFLayer.h Network/layers/ConvolutionLayer.cpp Network/layers/ConvolutionLayer.h Utils/Bitmap.h structureTesting.cpp Utils/Utils.cpp Utils/Utils.h Utils/dataStructures/QuadTree.cpp Utils/dataStructures/QuadTree.h Utils/dataStructures/PointData.h Utils/dataStructures/PointData.cpp Utils/dataStructures/KDTree.cpp Utils/dataStructures/KDTree.h testGenerator.cpp convTesting.cpp Utils/dataStructures/TMatrix.h Utils/dataStructures/Vector2.h)
+add_library(ConvolutionNetLib Network/Network.cpp Network/Network.h Network/layers/Layer.cpp Network/layers/Layer.h Network/layers/FFLayer.cpp Network/layers/FFLayer.h Network/layers/ConvolutionLayer.cpp Network/layers/ConvolutionLayer.h Utils/Bitmap.h structureTesting.cpp Utils/Utils.cpp Utils/Utils.h Utils/dataStructures/QuadTree.cpp Utils/dataStructures/QuadTree.h Utils/dataStructures/PointData.h Utils/dataStructures/PointData.cpp Utils/dataStructures/KDTree.cpp Utils/dataStructures/KDTree.h testGenerator.cpp convTesting.cpp Utils/dataStructures/TMatrix.h Utils/dataStructures/Vector2.h Utils/Differentiables/DifferentiableFunction.h Utils/Differentiables/ReLU.cpp Utils/Differentiables/ReLU.h Utils/Differentiables/Sigmoid.cpp Utils/Differentiables/Sigmoid.h)
 
 target_link_libraries(Main ConvolutionNetLib)
 target_link_libraries(Main ${OpenCV_LIBS})

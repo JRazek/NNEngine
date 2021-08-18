@@ -25,14 +25,13 @@ void cn::ConvolutionLayer::randomInit() {
     }
 }
 
-cn::ConvolutionLayer::ConvolutionLayer(int _id, cn::Network *_network, int _kernelSizeX, int _kernelSizeY, int _kernelSizeZ, int _kernelsCount, const std::function<float(float)> &_activation, int _paddingX, int _paddingY,
+cn::ConvolutionLayer::ConvolutionLayer(int _id, cn::Network *_network, int _kernelSizeX, int _kernelSizeY, int _kernelSizeZ, int _kernelsCount, int _paddingX, int _paddingY,
                                        int _strideX,
                                        int _strideY) :
                                        kernelSizeX(_kernelSizeX),
                                        kernelSizeY(_kernelSizeY),
                                        kernelSizeZ(_kernelSizeZ),
                                        kernelsCount(_kernelsCount),
-                                       activation(_activation),
                                        paddingX(_paddingX),
                                        paddingY(_paddingY),
                                        strideX(_strideX),
