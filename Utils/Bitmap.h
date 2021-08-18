@@ -20,14 +20,14 @@ namespace cn {
     public:
         const int w, h, d;
         Bitmap(int _w, int _h, int _d);
-        Bitmap(int _w, int _h, int _d, const T* data, int inputType = 0);
+        Bitmap(int _w, int _h, int _d, const T *data, int inputType = 0);
         Bitmap(const Bitmap &bitmap);
         Bitmap(Bitmap &&bitmap);
         ~Bitmap();
         T getCell(int col, int row, int depth) const;
         void setCell(int col, int row, int depth, T b);
         void setData(const T * data, int inputType = 0);
-        void setLayer(int layerID, const T * data);
+        void setLayer(int layerID, const T *data);
         [[nodiscard]] int getDataIndex(int col, int row, int depth) const;
 
         Bitmap<T> operator=(const Bitmap<T> &other);
@@ -67,7 +67,7 @@ cn::Bitmap<T>::~Bitmap() {
 }
 
 template<typename T>
-cn::Bitmap<T>::Bitmap(int _w, int _h, int _d, const T * data, int inputType): Bitmap(_w, _h, _d) {
+cn::Bitmap<T>::Bitmap(int _w, int _h, int _d, const T *data, int inputType): Bitmap(_w, _h, _d) {
     setData(data, inputType);
 }
 
