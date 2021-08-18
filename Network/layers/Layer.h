@@ -15,6 +15,7 @@ namespace cn {
     protected:
         Network * network;
     public:
+        Bitmap<float> * output = nullptr;
         const int id;
         Layer(int _id, Network * network);
         virtual void run(const Bitmap<float> &bitmap) = 0;

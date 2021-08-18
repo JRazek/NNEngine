@@ -8,11 +8,12 @@
 
 void cn::ConvolutionLayer::run(const Bitmap<float> &bitmap) {
     //convolve bitmap - must have correct sizes etc. Garbage in garbage out.
-    std::vector<Bitmap<float>> output;
-    output.reserve(4);
+    int outW = Utils::afterConvolutionSize(kernelSizeX, bitmap.w, paddingX, strideX);
+    int outH = Utils::afterConvolutionSize(kernelSizeY, bitmap.h, paddingY, strideY);
+    Layer::output = new Bitmap<float>(outW, outH, kernelsCount);
     for(int i = 0; i < kernels.size(); i ++){
         Bitmap<float> * kernel = &kernels[i];
-        output.push_back(Utils::convolve(*kernel, bitmap, paddingX, paddingY, strideX, strideY));
+        output->setLayer(i, Utils::convolve(*kernel, bitmap, paddingX, paddingY, strideX, strideY).data());
     }
 }
 

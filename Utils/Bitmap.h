@@ -27,6 +27,7 @@ namespace cn {
         T getCell(int col, int row, int depth) const;
         void setCell(int col, int row, int depth, T b);
         void setData(const T * data, int inputType = 0);
+        void setLayer(int layerID, const T * data);
         [[nodiscard]] int getDataIndex(int col, int row, int depth) const;
 
         Bitmap<T> operator=(const Bitmap<T> &other);
@@ -91,6 +92,11 @@ cn::Bitmap<T>::Bitmap(cn::Bitmap<T> &&bitmap):Bitmap<T>(bitmap.w, bitmap.h, bitm
 template<typename T>
 void cn::Bitmap<T>::setData(const T *data, int inputType) {
     cn::Utils::convert(data, dataP, w, h, d, inputType, 0);
+}
+
+template<typename T>
+void cn::Bitmap<T>::setLayer(int layerID, const T *data) {
+    std::copy(data + w * h * layerID, data + w * h * (layerID + 1), dataP);
 }
 //
 

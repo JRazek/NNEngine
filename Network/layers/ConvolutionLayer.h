@@ -21,12 +21,12 @@ namespace cn {
 
         std::vector<Bitmap<float>> kernels;
 
+
     public:
-        ConvolutionLayer(int _id, cn::Network *_network, int _kernelSizeX, int _kernelSizeY, int _kernelSizeZ, int _kernelsCount, int _paddingX = 0, int _paddingY = 0,
-                         int _strideX = 0, int _strideY = 0);
+        ConvolutionLayer(int _id, cn::Network *_network, int _kernelSizeX, int _kernelSizeY, int _kernelSizeZ, int _kernelsCount, int _paddingX, int _paddingY,
+                         int _strideX, int _strideY);
 
         void run(const Bitmap<float> &bitmap) override;
-
     };
 }
 
