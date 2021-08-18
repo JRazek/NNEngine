@@ -24,7 +24,7 @@ void cn::ConvolutionLayer::run(const Bitmap<float> &bitmap) {
 void cn::ConvolutionLayer::randomInit() {
     for(auto &k : kernels){
         for(auto it = k.data(); it != k.data() + k.w * k.h * k.d; ++it){
-            *it = network->genWeightRandom();
+            *it = network->getWeightRandom();
         }
     }
 }

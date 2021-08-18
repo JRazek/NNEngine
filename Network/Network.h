@@ -76,7 +76,7 @@ namespace cn {
 
         void initRandom();
 
-        float genWeightRandom();
+        float getWeightRandom();
 
         ~Network();
     };

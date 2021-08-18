@@ -14,6 +14,6 @@ void cn::FFLayer::run(const Bitmap<float> &bitmap) {
 
 void cn::FFLayer::randomInit() {
     for(auto &w : weights){
-        w = network->genWeightRandom();
+        w = network->getWeightRandom();
     }
 }
