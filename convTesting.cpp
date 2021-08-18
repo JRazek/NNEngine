@@ -13,7 +13,8 @@ int main(){
 
     cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
 
-    network.appendConvolutionLayer(3,3,3,1);
+    network.appendConvolutionLayer(3,3,3,3);
+    network.appendConvolutionLayer(3,3,3,3);
 
     network.feed(bitmap);
 

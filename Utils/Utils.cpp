@@ -28,7 +28,7 @@ cn::Bitmap<float> cn::Utils::convolve(const Bitmap<float> &kernel, const Bitmap<
     if(sizeX <= 0 || sizeY <= 0){
         throw std::invalid_argument("kernel bigger than input!");
     }
-    cn::Bitmap<float> paddedInput (input.w + 2 * paddingX, input.h + 2 * paddingY, input.d);
+    cn::Bitmap<float> paddedInput (input.w + paddingX * 2, input.h + paddingY * 2, input.d);
     for(int c = 0; c < input.d; c ++){
         for(int y = 0; y < input.h; y += strideY){
             for(int x = 0; x < input.w; x += strideX){
@@ -64,4 +64,10 @@ float cn::Utils::distanceSquared(const std::pair<float, float> &p1, const std::p
     return std::pow(p1.first - p2.first, 2) + std::pow(p1.second - p2.second, 2);
 }
 
+std::function<float(float)> cn::Utils::ReLU = std::function<float(float)>([](float n){
+    return std::max(0.f, n);
+});
 
+std::function<float(float)> cn::Utils::Sigmoid = std::function<float(float)>([](float n){
+   return (1.f/(1.f + std::pow(std::exp(1), -n)));
+});

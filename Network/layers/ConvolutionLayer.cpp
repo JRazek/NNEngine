@@ -17,13 +17,22 @@ void cn::ConvolutionLayer::run(const Bitmap<float> &bitmap) {
     }
 }
 
-cn::ConvolutionLayer::ConvolutionLayer(int _id, cn::Network *_network, int _kernelSizeX, int _kernelSizeY, int _kernelSizeZ, int _kernelsCount, int _paddingX, int _paddingY,
+void cn::ConvolutionLayer::randomInit() {
+    for(auto &k : kernels){
+        for(auto it = k.data(); it != k.data() + k.w * k.h * k.d; ++it){
+            //todo rand float
+        }
+    }
+}
+
+cn::ConvolutionLayer::ConvolutionLayer(int _id, cn::Network *_network, int _kernelSizeX, int _kernelSizeY, int _kernelSizeZ, int _kernelsCount, const std::function<float(float)> &_activation, int _paddingX, int _paddingY,
                                        int _strideX,
                                        int _strideY) :
                                        kernelSizeX(_kernelSizeX),
                                        kernelSizeY(_kernelSizeY),
                                        kernelSizeZ(_kernelSizeZ),
                                        kernelsCount(_kernelsCount),
+                                       activation(_activation),
                                        paddingX(_paddingX),
                                        paddingY(_paddingY),
                                        strideX(_strideX),
@@ -32,7 +41,7 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, cn::Network *_network, int _kern
     kernels.reserve(_kernelsCount);
     for(int i = 0; i < _kernelsCount; i ++){
         kernels.emplace_back(_kernelSizeX, _kernelSizeY, _kernelSizeZ);
-        std::fill(kernels.back().data(), kernels.back().data() + _kernelSizeX * _kernelSizeY * _kernelSizeZ, 0);
+        //std::fill(kernels.back().data(), kernels.back().data() + _kernelSizeX * _kernelSizeY * _kernelSizeZ, 0);
     }
 }
 

@@ -14,13 +14,9 @@ void cn::Network::appendLayer(cn::Layer * layer) {
 
 void cn::Network::feed(const byte *input) {
     cn::Bitmap<byte> bitmap(inputDataWidth, inputDataHeight, inputDataHeight, input, 0);
-    cn::Bitmap<float> normalized = cn::Utils::normalize(bitmap);
     if(this->layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
-
-    cn::Bitmap<float> resized = cn::Utils::resize<float>(normalized, inputDataWidth, inputDataHeight);
-
-    feed(resized);
+    feed(cn::Utils::normalize(bitmap));
 }
 
 cn::Network::~Network() {
@@ -31,7 +27,12 @@ cn::Network::~Network() {
 
 void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount, int paddingX,
                                          int paddingY, int strideX, int strideY) {
-    this->layers.push_back(new ConvolutionLayer(this->layers.size(), this, kernelX, kernelY, kernelZ, kernelsCount, paddingX, paddingY, strideX, strideY));
+
+    auto fun = [](float n) {
+        return 1.f;
+    };
+    std::function<float(float)> activation(fun);
+    this->layers.push_back(new ConvolutionLayer(this->layers.size(), this, kernelX, kernelY, kernelZ, kernelsCount, activation, paddingX, paddingY, strideX, strideY));
 }
 
 const std::vector<cn::Layer *> *cn::Network::getLayers() {
@@ -43,9 +44,11 @@ cn::Network::Network(int w, int h, int d): inputDataWidth(w), inputDataHeight(h)
 }
 
 void cn::Network::feed(const cn::Bitmap<float> &bitmap) {
+    cn::Bitmap<float> resized = cn::Utils::resize<float>(bitmap, inputDataWidth, inputDataHeight);
+
     if(this->layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
-    const Bitmap<float> * input = &bitmap;
+    const Bitmap<float> * input = &resized;
     for(int i = 0; i < layers.size(); i ++){
         auto layer = layers[i];
         layer->run(*input);

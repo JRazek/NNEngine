@@ -24,6 +24,17 @@ namespace cn {
     class Utils{
     public:
         /**
+         * ReLU function wrapper
+         */
+        static std::function<float(float)> ReLU;
+
+
+        /**
+         * Sigmoid function wrapper
+         */
+        static std::function<float(float)> Sigmoid;
+
+        /**
          *
          * @param input
          * @return normalized input. Each byte is now value equal to [ x / 255 ].
@@ -119,7 +130,6 @@ namespace cn {
         static float distanceSquared(const std::pair<float, float> &p1, const std::pair<float, float> &p2);
     };
 };
-
 
 template<typename T>
 void cn::Utils::convert(const T *input, T *output, int w, int h, int d, int inputType, int outputType) {
