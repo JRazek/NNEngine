@@ -15,9 +15,9 @@ int main(){
 
     network.appendConvolutionLayer(3,3,3,1);
 
-    cn::Bitmap<cn::byte> resampled = cn::Utils::resize(bitmap, 1000, 1500);
+    cn::Bitmap<cn::byte> resampled = cn::Utils::resize(bitmap, 1000, 1000);
 
-    cn::Bitmap<cn::byte> rotated = cn::Utils::rotate(resampled, M_PI/2.f);
+    cn::Bitmap<cn::byte> rotated = cn::Utils::rotate(resampled, M_PI/4.f);
 
     auto * dataStorage = new cn::byte [rotated.w * rotated.h * rotated.d];
 

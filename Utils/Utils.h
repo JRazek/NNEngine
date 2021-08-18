@@ -245,8 +245,6 @@ cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, const TMatrix<flo
         for(int x = 0; x < input.w; x++){
             Vector2<int> v(x,y);
             v = v * tMatrix + shift;
-            if(v.x >= 2048)
-                std::cout<<"";
             for(int c = 0; c < input.d; c++){
                 T cell = input.getCell(x, y, c);
                 result.setCell(v.x, v.y, c, cell);
