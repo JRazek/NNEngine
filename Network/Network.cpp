@@ -30,8 +30,8 @@ cn::Network::~Network() {
 }
 
 void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount, int paddingX,
-                                         int paddingY) {
-    this->layers.push_back(new ConvolutionLayer(this->layers.size(), this, kernelX, kernelY, kernelZ, kernelsCount, paddingX, paddingY));
+                                         int paddingY, int strideX, int strideY) {
+    this->layers.push_back(new ConvolutionLayer(this->layers.size(), this, kernelX, kernelY, kernelZ, kernelsCount, paddingX, paddingY, strideX, strideY));
 }
 
 const std::vector<cn::Layer *> *cn::Network::getLayers() {
@@ -46,4 +46,8 @@ void cn::Network::feed(const cn::Bitmap<float> &bitmap) {
     if(this->layers.empty())
         throw std::logic_error("network must have at least layer in order to feed it!");
     this->layers.front()->run(bitmap);
+}
+
+void cn::Network::feed(const cn::Bitmap<cn::byte> &bitmap) {
+    this->layers.front()->run(cn::Utils::normalize(bitmap));
 }

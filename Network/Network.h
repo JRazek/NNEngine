@@ -28,7 +28,7 @@ namespace cn {
     public:
 
         void appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount, int paddingX = 0,
-                                    int paddingY = 0);
+                                    int paddingY = 0, int strideX = 1, int strideY = 1);
 
 
         /**
@@ -40,23 +40,11 @@ namespace cn {
         const int inputDataDepth;
 
 
-        /**
-         * if first layer is convolution - use this feed method
-         * @param data - dataP to convolve
-         * @param w - width of tensor
-         * @param h - height of tensor
-         * @param d - depth of tensor
-         */
 
         void feed(const byte *input);
 
-
-        /**
-         * use this if and only if first layer is convolution
-         * @param data
-         */
-
         void feed(const Bitmap<float> &bitmap);
+        void feed(const Bitmap<cn::byte> &bitmap);
 
 
         /**
