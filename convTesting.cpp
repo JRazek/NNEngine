@@ -9,7 +9,7 @@
 #include <opencv2/opencv.hpp>
 int main(){
     cv::Mat mat = cv::imread("resources/aPhoto.jpg");
-    cn::Network network(400, 400, 3);
+    cn::Network network(400, 400, 3, 0);
 
     cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
 

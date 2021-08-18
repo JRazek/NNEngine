@@ -6,16 +6,18 @@
 #define NEURALNETLIBRARY_NETWORK_H
 
 #include <vector>
+#include <random>
 #include "../Utils/Utils.h"
 
 namespace cn {
     class Layer;
-
     class FFLayer;
-
     class ConvolutionLayer;
 
     class Network {
+        std::default_random_engine e;
+        std::uniform_real_distribution<> dis;
+
     protected:
         std::vector<Layer *> layers;
         friend class Layer;
@@ -58,12 +60,12 @@ namespace cn {
          * @param w width
          * @param h height
          * @param d depth
-         *
+         * @param seed - seed for random engine
          * if the first layer is image - set all the properties.
          * In case of using only FFLayers - set height and depth to 1.
          */
 
-        Network(int w, int h, int d);
+        Network(int w, int h, int d, int seed = 0);
 
 
         /**
@@ -71,6 +73,7 @@ namespace cn {
          */
         Network(const Network&) = delete;
 
+        float genWeightRandom();
 
         ~Network();
     };

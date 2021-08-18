@@ -36,9 +36,8 @@ const std::vector<cn::Layer *> *cn::Network::getLayers() {
     return &this->layers;
 }
 
-cn::Network::Network(int w, int h, int d): inputDataWidth(w), inputDataHeight(h), inputDataDepth(d) {
-
-}
+cn::Network::Network(int w, int h, int d, int seed)
+        : inputDataWidth(w), inputDataHeight(h), inputDataDepth(d), e(seed), dis(std::uniform_real_distribution<>(-1, 1)) {}
 
 void cn::Network::feed(const cn::Bitmap<float> &bitmap) {
     cn::Bitmap<float> resized = cn::Utils::resize<float>(bitmap, inputDataWidth, inputDataHeight);
@@ -55,4 +54,8 @@ void cn::Network::feed(const cn::Bitmap<float> &bitmap) {
 
 void cn::Network::feed(const cn::Bitmap<cn::byte> &bitmap) {
     feed(cn::Utils::normalize(bitmap));
+}
+
+float cn::Network::genWeightRandom() {
+    return dis(e);
 }

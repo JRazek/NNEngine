@@ -13,7 +13,7 @@
 
 int main(){
     cv::Mat mat = cv::imread("resources/aPhoto.jpg");
-    cn::Network network(800, 800, 3);
+    cn::Network network(800, 800, 3, 0);
 
 
     //QuadTree quadTree(1024, 1024);
