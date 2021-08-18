@@ -7,7 +7,6 @@
 #include "Network/Network.h"
 #include "Network/layers/ConvolutionLayer.h"
 #include <opencv2/opencv.hpp>
-
 int main(){
     cv::Mat mat = cv::imread("resources/aPhoto.jpg");
     cn::Network network(2000, 3000, 3);
@@ -16,9 +15,9 @@ int main(){
 
     network.appendConvolutionLayer(3,3,3,1);
 
-    cn::Bitmap<cn::byte> resampled = cn::Utils::resize(bitmap, 3000, 4500);
+    cn::Bitmap<cn::byte> resampled = cn::Utils::resize(bitmap, 1000, 1500);
 
-    cn::Bitmap<cn::byte> rotated = cn::Utils::rotate(resampled,5);
+    cn::Bitmap<cn::byte> rotated = cn::Utils::rotate(resampled, M_PI/2.f);
 
     auto * dataStorage = new cn::byte [rotated.w * rotated.h * rotated.d];
 
@@ -33,6 +32,6 @@ int main(){
 
     //std::pair<int, int> neighbor = quadTree.getNearestNeighbour({4, 4});
 
-    //delete [] dataStorage;
+    delete [] dataStorage;
     return 0;
 }

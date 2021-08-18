@@ -222,9 +222,9 @@ cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, const TMatrix<flo
     int maxX = 0, minX = INT32_MAX, maxY = 0, minY = INT32_MAX;
     std::vector<Vector2<int>> edges(4);
     edges[0] = {0,0};
-    edges[1] = {input.w, 0};
-    edges[2] = {input.w, input.h};
-    edges[3] = {0, input.h};
+    edges[1] = {input.w - 1, 0};
+    edges[2] = {input.w - 1, input.h - 1};
+    edges[3] = {0, input.h - 1};
     for(auto &e : edges){
         e = tMatrix * e;
         int x = e.x, y = e.y;
@@ -233,8 +233,8 @@ cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, const TMatrix<flo
         maxY = std::max(y, maxY);
         minY = std::min(y, minY);
     }
-    int w = (int)(maxX - minX);
-    int h = (int)(maxY - minY);
+    int w = (int)(maxX - minX) + 1;
+    int h = (int)(maxY - minY) + 1;
     cn::Bitmap<T> result(w, h, input.d);
     std::fill(result.data(), result.data() + w * h * result.d, 0);
 
