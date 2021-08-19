@@ -181,29 +181,27 @@ cn::Bitmap<T> cn::Utils::downsample(const cn::Bitmap<T> &input, int destSizeX, i
 
     std::vector<int> avgCount (destSizeX * destSizeY * input.d, 0);
 
-    cn::Bitmap<T> result(destSizeX, destSizeY, input.d);
+    cn::Bitmap<T> output(destSizeX, destSizeY, input.d);
 
     if(method == 0){
-        for(int c = 0; c < result.d;  c++){
-            for(int y = 0; y < result.h; y++){
-                for(int x = 0; x < result.w; x++){
-                    avgCount[result.getDataIndex(x, y, c)] += 1;
-                    int corrX = (int)((float)x / factorX);
+        for(int c = 0; c < output.d; c++){
+            for(int y = 0; y < output.h; y++){
+                for(int x = 0; x < output.w; x++){
+                    avgCount[output.getDataIndex(x, y, c)] += 1;int corrX = (int)((float)x / factorX);
                     int corrY = (int)((float)y / factorY);
-                    result.setCell(x, y, c, result.getCell(x, y, c) + input.getCell(corrX, corrY, c));
+                    output.setCell(x, y, c, output.getCell(x, y, c) + input.getCell(corrX, corrY, c));
                 }
             }
         }
-        for(int c = 0; c < result.d;  c++){
-            for(int y = 0; y < result.h; y++){
-                for(int x = 0; x < result.w; x++){
-                    result.setCell(x, y, c, result.getCell(x, y, c) / avgCount[result.getDataIndex(x, y, c)]);
+        for(int c = 0; c < output.d; c++){
+            for(int y = 0; y < output.h; y++){
+                for(int x = 0; x < output.w; x++){
+                    output.setCell(x, y, c, output.getCell(x, y, c) / avgCount[output.getDataIndex(x, y, c)]);
                 }
             }
         }
     }
-
-    return result;
+    return output;
 }
 
 
