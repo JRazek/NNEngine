@@ -14,7 +14,7 @@ void cn::ConvolutionLayer::run(const Bitmap<float> &bitmap) {
     std::fill(tmp, tmp + outW * outH, 0);
 
     for(int i = 0; i < kernelsCount; i ++){
-        //todo FUCKING FIX
+        //todo - convolution has ub. Find it ;)
         Bitmap<float> layer = Utils::sumBitmapLayers(Utils::convolve(kernels[i], bitmap, paddingX, paddingY, strideX, strideY));
         //std::fill(layer.data(), layer.data() + outW * outH, 0);
 
