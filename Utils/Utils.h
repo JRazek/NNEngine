@@ -130,6 +130,9 @@ namespace cn {
         static Bitmap<float> convolve(const Bitmap<float> &kernel, const Bitmap<float> &input, int paddingX = 0, int paddingY = 0, int strideX = 1, int strideY = 1);
 
         static float distanceSquared(const std::pair<float, float> &p1, const std::pair<float, float> &p2);
+
+        template<typename T>
+        static Bitmap<T>sumBitmapLayers(const Bitmap <T> &input);
     };
 };
 
@@ -226,6 +229,20 @@ cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int
         }
     }
     return result;
+}
+
+template<typename T>
+cn::Bitmap<T> cn::Utils::sumBitmapLayers(const cn::Bitmap<T> &input){
+    cn::Bitmap<T> output(input.w, input.h, 1);
+    std::fill(output.data(), output.data() + output.w * output.h, 0);
+    for(int c = 0; c < input.d;  c++){
+        for(int y = 0; y < input.h; y++){
+            for(int x = 0; x < input.w; x++){
+                output.setCell(x, y, 0, output.getCell(x, y, 0) + input.getCell(x, y, c));
+            }
+        }
+    }
+    return output;
 }
 
 template<typename T>

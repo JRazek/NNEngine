@@ -52,7 +52,6 @@ cn::Bitmap<float> cn::Utils::convolve(const Bitmap<float> &kernel, const Bitmap<
             }
         }
     }
-
     return output;
 }
 

@@ -9,11 +9,19 @@ void cn::ConvolutionLayer::run(const Bitmap<float> &bitmap) {
     int outW = Utils::afterConvolutionSize(kernelSizeX, bitmap.w, paddingX, strideX);
     int outH = Utils::afterConvolutionSize(kernelSizeY, bitmap.h, paddingY, strideY);
     output = new Bitmap<float>(outW, outH, kernelsCount);
-    for(int i = 0; i < kernels.size(); i ++){
-        Bitmap<float> * kernel = &kernels[i];
-        output->setLayer(i, Utils::convolve(*kernel, bitmap, paddingX, paddingY, strideX, strideY).data());
+
+    float *tmp = new float [outW * outH];
+    std::fill(tmp, tmp + outW * outH, 0);
+
+    for(int i = 0; i < kernelsCount; i ++){
+        //todo FUCKING FIX
+        Bitmap<float> layer = Utils::sumBitmapLayers(Utils::convolve(kernels[i], bitmap, paddingX, paddingY, strideX, strideY));
+        //std::fill(layer.data(), layer.data() + outW * outH, 0);
+
+        output->setLayer(i, layer.data());
     }
-    for(auto it = output->data(); it != output->data() + outW * outH * kernelsCount; ++it){
+    delete [] tmp;
+    for(auto it = output->data(); it != output->data() + outW * outH; ++it){
         *it = activationFunction.func(*it);
     }
 }

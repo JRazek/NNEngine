@@ -27,7 +27,7 @@ namespace cn {
         T getCell(int col, int row, int depth) const;
         void setCell(int col, int row, int depth, T b);
         void setData(const T * data, int inputType = 0);
-        void setLayer(int layerID, const T *data);
+        void setLayer(int layerID, T *input);
         [[nodiscard]] int getDataIndex(int col, int row, int depth) const;
 
         Bitmap<T> operator=(const Bitmap<T> &other);
@@ -95,11 +95,10 @@ void cn::Bitmap<T>::setData(const T *data, int inputType) {
 }
 
 template<typename T>
-void cn::Bitmap<T>::setLayer(int layerID, const T *data) {
-    std::copy(data + w * h * layerID, data + w * h * (layerID + 1), dataP);
+void cn::Bitmap<T>::setLayer(int layerID, T *input) {
+    std::copy(input, input + w * h, dataP + w * h * layerID);
 }
 //
-
 
 
 #endif //NEURALNETLIBRARY_BITMAP_H
