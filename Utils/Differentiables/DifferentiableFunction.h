@@ -8,7 +8,7 @@
 
 struct DifferentiableFunction {
     virtual float func(float x) const = 0;
-    virtual float diff(float x) const = 0;
+    virtual float derive(float x) const = 0;
 };
 
 

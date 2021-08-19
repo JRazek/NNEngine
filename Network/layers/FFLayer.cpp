@@ -18,6 +18,7 @@ void cn::FFLayer::run(const Bitmap<float> &bitmap) {
     if(bitmap.h != 1 || bitmap.d != 1 || bitmap.w < 1){
         throw std::logic_error("bitmap input to ff layer must be a normalized vector type!");
     }
+    //todo flow
 }
 
 void cn::FFLayer::randomInit() {

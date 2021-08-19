@@ -9,7 +9,7 @@
 
 struct Sigmoid : public DifferentiableFunction{
     float func(float x) const override;
-    float diff(float x) const override;
+    float derive(float x) const override;
 };
 
 
