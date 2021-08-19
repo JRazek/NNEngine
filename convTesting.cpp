@@ -6,6 +6,7 @@
 #include "Utils/Utils.h"
 #include "Network/Network.h"
 #include "Network/layers/ConvolutionLayer.h"
+#include "Network/layers/FlatteningLayer.h"
 #include <opencv2/opencv.hpp>
 int main(){
     cv::Mat mat = cv::imread("resources/aPhoto.jpg");

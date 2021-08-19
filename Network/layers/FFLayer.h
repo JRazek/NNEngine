@@ -5,17 +5,31 @@
 #ifndef NEURALNETLIBRARY_FFLAYER_H
 #define NEURALNETLIBRARY_FFLAYER_H
 
-#include "Layer.h"
-#include "RandomInitiable.h"
+#include "interfaces/Layer.h"
+#include "../../Utils/Differentiables/DifferentiableFunction.h"
+#include "interfaces/RandomInitiable.h"
 
 namespace cn {
-    class Layer;
     class Network;
+
     class FFLayer : public cn::Layer, public RandomInitiable{
+        std::vector<float> biases;
         std::vector<float> weights;
+        std::vector<float> outputs;
+        const DifferentiableFunction &differentiableFunction;
+
+        const int neuronsCount;
     public:
         void randomInit() override ;
-        FFLayer(int _id, Network * _network, int _inputSize);
+        /**
+         *
+         * @param _id id of layer in network
+         * @param _differentiableFunction function with its derivative
+         * @param _network network to which layer belongs
+         * @param _neuronsCount input size (neuron count)
+         */
+        FFLayer(int _id, const DifferentiableFunction &_differentiableFunction, Network * _network, int _neuronsCount);
+
         void run(const Bitmap<float> &bitmap) override;
     };
 }

@@ -5,8 +5,8 @@
 #ifndef NEURALNETLIBRARY_CONVOLUTIONLAYER_H
 #define NEURALNETLIBRARY_CONVOLUTIONLAYER_H
 
-#include "Layer.h"
-#include "RandomInitiable.h"
+#include "interfaces/Layer.h"
+#include "interfaces/RandomInitiable.h"
 
 namespace cn {
     class ConvolutionLayer : public cn::Layer, public RandomInitiable{

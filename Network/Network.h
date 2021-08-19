@@ -8,7 +8,7 @@
 #include <vector>
 #include <random>
 #include "../Utils/Utils.h"
-#include "layers/RandomInitiable.h"
+#include "layers/interfaces/RandomInitiable.h"
 
 namespace cn {
     class Layer;
