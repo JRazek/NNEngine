@@ -19,6 +19,7 @@ int main(){
 
     network.appendConvolutionLayer(3, 3, 3, 3, reLu);
     network.appendConvolutionLayer(3, 3, 3, 3, reLu);
+    network.appendFlatteningLayer();
     network.appendFFLayer(10, sigmoid);
     network.initRandom();
 

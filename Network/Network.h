@@ -34,6 +34,8 @@ namespace cn {
 
         void appendFFLayer(int neuronsCount, const DifferentiableFunction &differentiableFunction);
 
+        void appendFlatteningLayer();
+
 
         /**
          * what the dimensions of the byte array is after being normalized and sampled

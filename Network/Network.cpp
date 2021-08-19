@@ -6,6 +6,7 @@
 #include "Network.h"
 #include "layers/ConvolutionLayer.h"
 #include "layers/FFLayer.h"
+#include "layers/FlatteningLayer.h"
 
 void cn::Network::appendLayer(cn::Layer * layer) {
     //todo validation!
@@ -72,5 +73,10 @@ void cn::Network::initRandom() {
 void cn::Network::appendFFLayer(int neuronsCount, const DifferentiableFunction &differentiableFunction) {
     FFLayer *f = new FFLayer(layers.size(), neuronsCount, differentiableFunction, this);
     randomInitLayers.push_back(f);
+    layers.push_back(f);
+}
+
+void cn::Network::appendFlatteningLayer() {
+    FlatteningLayer *f = new FlatteningLayer(layers.size(), this);
     layers.push_back(f);
 }
