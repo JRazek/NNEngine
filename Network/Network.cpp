@@ -43,14 +43,11 @@ cn::Network::Network(int w, int h, int d, int seed)
         : inputDataWidth(w), inputDataHeight(h), inputDataDepth(d), randomEngine(seed) {}
 
 void cn::Network::feed(const cn::Bitmap<float> &bitmap) {
-   // std::fill(bitmap.data(), bitmap.data() + bitmap.w * bitmap.h * bitmap.d, 0);
     cn::Bitmap<float> resized = cn::Utils::resize<float>(bitmap, inputDataWidth, inputDataHeight);
-   // std::fill(resized.data(), resized.data() + resized.w * resized.h * resized.d, 0);
 
     if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
     const Bitmap<float> * input = &resized;
-   // std::fill(input->data(), input->data() + inputDataWidth * inputDataHeight * inputDataDepth, 0);
     for(int i = 0; i < layers.size(); i ++){
         auto layer = layers[i];
         layer->run(*input);
@@ -59,7 +56,6 @@ void cn::Network::feed(const cn::Bitmap<float> &bitmap) {
 }
 
 void cn::Network::feed(const cn::Bitmap<cn::byte> &bitmap) {
-    //todo fix
     feed(Utils::normalize(bitmap));
 }
 

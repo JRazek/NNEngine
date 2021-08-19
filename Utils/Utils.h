@@ -182,12 +182,14 @@ cn::Bitmap<T> cn::Utils::downsample(const cn::Bitmap<T> &input, int destSizeX, i
     std::vector<int> avgCount (destSizeX * destSizeY * input.d, 0);
 
     cn::Bitmap<T> output(destSizeX, destSizeY, input.d);
+    std::fill(output.data(), output.data() + output.w * output.h * output.d, 0);
 
     if(method == 0){
         for(int c = 0; c < output.d; c++){
             for(int y = 0; y < output.h; y++){
                 for(int x = 0; x < output.w; x++){
-                    avgCount[output.getDataIndex(x, y, c)] += 1;int corrX = (int)((float)x / factorX);
+                    avgCount[output.getDataIndex(x, y, c)] += 1;
+                    int corrX = (int)((float)x / factorX);
                     int corrY = (int)((float)y / factorY);
                     output.setCell(x, y, c, output.getCell(x, y, c) + input.getCell(corrX, corrY, c));
                 }
