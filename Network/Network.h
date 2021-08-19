@@ -46,7 +46,10 @@ namespace cn {
         const int inputDataDepth;
 
 
-
+        /**
+         *
+         * @param takes input in 1 format type
+         */
         void feed(const byte *input);
 
         void feed(const Bitmap<float> &bitmap);

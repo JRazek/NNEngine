@@ -29,6 +29,9 @@ cn::Bitmap<float> cn::Utils::convolve(const Bitmap<float> &kernel, const Bitmap<
         throw std::invalid_argument("kernel bigger than input!");
     }
     cn::Bitmap<float> paddedInput (input.w + paddingX * 2, input.h + paddingY * 2, input.d);
+
+    std::fill(paddedInput.data(), paddedInput.data() + paddedInput.w * paddedInput.h * paddedInput.d, 0);
+
     for(int c = 0; c < input.d; c ++){
         for(int y = 0; y < input.h; y += strideY){
             for(int x = 0; x < input.w; x += strideX){
@@ -37,10 +40,11 @@ cn::Bitmap<float> cn::Utils::convolve(const Bitmap<float> &kernel, const Bitmap<
         }
     }
     cn::Bitmap<float> output (sizeX, sizeY, input.d);
-    std::fill(output.data(), output.data() + output.w * output.h * output.d, 0);
 
     for(int originY = kernel.h / 2; originY < paddedInput.h - kernel.h / 2; originY += strideY){
         for(int originX = kernel.w / 2; originX < paddedInput.w - kernel.w / 2; originX += strideX){
+            int outputX = originX - kernel.w / 2;
+            int outputY = originY - kernel.h / 2;
             for(int channel = 0; channel < paddedInput.d; channel++){
                 float sum = 0;
                 for(int ky = 0; ky < kernel.h; ky++){
@@ -48,10 +52,11 @@ cn::Bitmap<float> cn::Utils::convolve(const Bitmap<float> &kernel, const Bitmap<
                         sum += kernel.getCell(kx, ky, channel) * paddedInput.getCell(originX - kernel.w / 2 + kx, originY - kernel.h / 2 + ky, channel);
                     }
                 }
-                output.setCell(originX - kernel.w / 2, originY - kernel.h / 2, channel, sum);
+                output.setCell(outputX, outputY, channel, sum);
             }
         }
     }
+
     return output;
 }
 
