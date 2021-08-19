@@ -15,9 +15,11 @@ int main(){
     cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
 
     ReLU reLu;
+    Sigmoid sigmoid;
 
     network.appendConvolutionLayer(3, 3, 3, 3, reLu);
     network.appendConvolutionLayer(3, 3, 3, 3, reLu);
+    network.appendFFLayer(10, sigmoid);
     network.initRandom();
 
     network.feed(bitmap);

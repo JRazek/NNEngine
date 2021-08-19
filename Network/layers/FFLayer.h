@@ -24,11 +24,11 @@ namespace cn {
         /**
          *
          * @param _id id of layer in network
-         * @param _differentiableFunction function with its derivative
          * @param _network network to which layer belongs
+         * @param _differentiableFunction function with its derivative
          * @param _neuronsCount input size (neuron count)
          */
-        FFLayer(int _id, const DifferentiableFunction &_differentiableFunction, Network * _network, int _neuronsCount);
+        FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_differentiableFunction, Network *_network);
 
         void run(const Bitmap<float> &bitmap) override;
     };

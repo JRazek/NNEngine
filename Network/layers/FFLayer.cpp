@@ -5,7 +5,7 @@
 #include "FFLayer.h"
 #include "../Network.h"
 
-cn::FFLayer::FFLayer(int _id, const DifferentiableFunction &_differentiableFunction, Network *_network, int _neuronsCount):
+cn::FFLayer::FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_differentiableFunction, Network *_network) :
         cn::Layer(_id, _network),
         neuronsCount(_neuronsCount),
         differentiableFunction(_differentiableFunction),
@@ -15,7 +15,9 @@ cn::FFLayer::FFLayer(int _id, const DifferentiableFunction &_differentiableFunct
 {}
 
 void cn::FFLayer::run(const Bitmap<float> &bitmap) {
-
+    if(bitmap.h != 1 || bitmap.d != 1 || bitmap.w < 1){
+        throw std::logic_error("bitmap input to ff layer must be a normalized vector type!");
+    }
 }
 
 void cn::FFLayer::randomInit() {

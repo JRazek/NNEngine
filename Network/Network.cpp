@@ -25,11 +25,11 @@ cn::Network::~Network() {
     }
 }
 
-void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount, const DifferentiableFunction &function, int paddingX,
+void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount, const DifferentiableFunction &differentiableFunction, int paddingX,
                                          int paddingY, int strideX, int strideY) {
 
     ConvolutionLayer *c = new ConvolutionLayer(this->layers.size(), this, kernelX, kernelY, kernelZ, kernelsCount,
-                                              function, paddingX, paddingY, strideX, strideY);
+                                               differentiableFunction, paddingX, paddingY, strideX, strideY);
     randomInitLayers.push_back(c);
     layers.push_back(c);
 }
@@ -67,4 +67,10 @@ void cn::Network::initRandom() {
     for(auto l : randomInitLayers){
         l->randomInit();
     }
+}
+
+void cn::Network::appendFFLayer(int neuronsCount, const DifferentiableFunction &differentiableFunction) {
+    FFLayer *f = new FFLayer(layers.size(), neuronsCount, differentiableFunction, this);
+    randomInitLayers.push_back(f);
+    layers.push_back(f);
 }
