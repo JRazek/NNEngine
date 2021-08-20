@@ -22,8 +22,11 @@ void cn::ConvolutionLayer::run(const Bitmap<float> &bitmap) {
 void cn::ConvolutionLayer::randomInit() {
     for(auto &k : kernels){
         for(auto it = k.data(); it != k.data() + k.w * k.h * k.d; ++it){
-            *it = network->getWeightRandom();
+            *it = network->getRandom(-1, 1);
         }
+    }
+    for(auto &b : biases){
+        b = network->getRandom(-5, 5);
     }
 }
 
@@ -41,11 +44,11 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, cn::Network *_network, int _kern
                                        paddingY(_paddingY),
                                        strideX(_strideX),
                                        strideY(_strideY),
+                                       biases(kernelsCount),
                                        cn::Layer(_id, _network) {
     kernels.reserve(_kernelsCount);
     for(int i = 0; i < _kernelsCount; i ++){
         kernels.emplace_back(_kernelSizeX, _kernelSizeY, _kernelSizeZ);
-        //std::fill(kernels.back().data(), kernels.back().data() + _kernelSizeX * _kernelSizeY * _kernelSizeZ, 0);
     }
 }
 

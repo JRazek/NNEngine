@@ -21,13 +21,15 @@ namespace cn {
         const int strideY;
 
         const DifferentiableFunction &activationFunction;
+
         std::vector<Bitmap<float>> kernels;
+        std::vector<float> biases;//ith corresponds to ith kernel
 
     public:
         ConvolutionLayer(int _id, cn::Network *_network, int _kernelSizeX, int _kernelSizeY, int _kernelSizeZ,
                          int _kernelsCount, const DifferentiableFunction &_activationFunction, int _paddingX, int _paddingY,
                          int _strideX, int _strideY);
-        void randomInit() override ;
+        void randomInit() override;
         void run(const Bitmap<float> &bitmap) override;
     };
 }

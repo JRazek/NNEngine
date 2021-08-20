@@ -18,6 +18,9 @@ namespace cn {
         Bitmap<float> * output = nullptr;
         const int id;
         Layer(int _id, Network * network);
+
+        Layer(Layer &layer) = delete;
+
         virtual void run(const Bitmap<float> &bitmap) = 0;
         virtual ~Layer();
     };

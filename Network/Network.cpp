@@ -59,8 +59,8 @@ void cn::Network::feed(const cn::Bitmap<cn::byte> &bitmap) {
     feed(Utils::normalize(bitmap));
 }
 
-float cn::Network::getWeightRandom() {
-    std::uniform_real_distribution<> dis(-1, 1);
+float cn::Network::getRandom(float low, float high) {
+    std::uniform_real_distribution<> dis(low, high);
     return dis(randomEngine);
 }
 
