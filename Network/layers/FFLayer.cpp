@@ -27,7 +27,14 @@ void cn::FFLayer::run(const Bitmap<float> &bitmap) {
     if(bitmap.h != 1 || bitmap.d != 1 || bitmap.w < 1){
         throw std::logic_error("bitmap input to ff layer must be a normalized vector type!");
     }
-    //todo flow
+    auto input = network->layers[id - 1]->output.value();
+    for(int n = 0; n < neuronsCount; n ++){
+        outputs[n] = biases[n];
+        for(int i = 0; i < input.w; i ++){
+            outputs[n] += getWeight(n, i) * input.getCell(i, 0, 0);
+        }
+        outputs[n] = differentiableFunction.func(outputs[n]);
+    }
 }
 
 void cn::FFLayer::randomInit() {
@@ -37,4 +44,9 @@ void cn::FFLayer::randomInit() {
     for(auto &b : biases){
         b = network->getRandom(-5, 5);
     }
+}
+
+float cn::FFLayer::getWeight(int neuron, int weightID) {
+    int perNeuron = weights.size() / neuronsCount;
+    return weights[perNeuron * neuron + weightID];
 }

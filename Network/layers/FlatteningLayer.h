@@ -13,6 +13,7 @@ namespace cn {
     public:
         FlatteningLayer(int _id, Network * _network);
         void run(const Bitmap<float> &bitmap) override;
+
     };
 }
 #endif //NEURALNETLIBRARY_FLATTENINGLAYER_H
