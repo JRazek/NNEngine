@@ -41,7 +41,7 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, cn::Network *_network, int _kern
     sizeX = Utils::afterConvolutionSize(kernelSizeX, inputX, paddingX, strideX);
     sizeY = Utils::afterConvolutionSize(kernelSizeY, inputY, paddingY, strideY);
     sizeZ = kernelsCount;
-    output = new Bitmap<float>(sizeX, sizeY, sizeZ);
+    output.emplace(Bitmap<float>(sizeX, sizeY, sizeZ));
 }
 
 void cn::ConvolutionLayer::run(const Bitmap<float> &bitmap) {

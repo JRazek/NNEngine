@@ -51,7 +51,7 @@ void cn::Network::feed(const cn::Bitmap<float> &bitmap) {
     for(int i = 0; i < layers.size(); i ++){
         auto layer = layers[i];
         layer->run(*input);
-        input = layer->output;
+        input = &layer->output.value();
     }
 }
 

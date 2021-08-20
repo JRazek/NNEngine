@@ -20,7 +20,7 @@ cn::FFLayer::FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_
         }
         weights = std::vector<float>(neuronsCount * prev->w);
     }
-    output = new Bitmap<float>(neuronsCount, 1, 1);
+    output.emplace(Bitmap<float>(neuronsCount, 1, 1));
 }
 
 void cn::FFLayer::run(const Bitmap<float> &bitmap) {

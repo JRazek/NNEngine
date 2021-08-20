@@ -13,7 +13,7 @@ cn::FlatteningLayer::FlatteningLayer(int _id, cn::Network *_network) : Layer(_id
         auto prev = network->layers[id - 1]->output;
         size = prev->w * prev->h * prev->d;
     }
-    output = new Bitmap<float>(size, 1, 1);
+    output.emplace(Bitmap<float>(size, 1, 1));
 }
 
 void cn::FlatteningLayer::run(const cn::Bitmap<float> &bitmap) {
