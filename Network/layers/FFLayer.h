@@ -15,7 +15,6 @@ namespace cn {
     class FFLayer : public cn::Layer, public RandomInitiable{
         std::vector<float> biases;
         std::vector<float> weights;
-        std::vector<float> outputs;
         const DifferentiableFunction &differentiableFunction;
 
         const int neuronsCount;

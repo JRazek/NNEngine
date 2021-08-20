@@ -31,7 +31,7 @@ namespace cn {
 
     public:
 
-        void appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount, const DifferentiableFunction &differentiableFunction, int paddingX = 0,
+        void appendConvolutionLayer(int kernelX, int kernelY, int kernelsCount, const DifferentiableFunction &differentiableFunction, int paddingX = 0,
                                     int paddingY = 0, int strideX = 1, int strideY = 1);
 
         void appendFFLayer(int neuronsCount, const DifferentiableFunction &differentiableFunction);

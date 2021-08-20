@@ -10,18 +10,17 @@
 #include <opencv2/opencv.hpp>
 int main(){
     cv::Mat mat = cv::imread("resources/aPhoto.jpg");
-    cn::Network network(20, 20, 3, 0);
+    cn::Network network(100, 100, 3, 0);
 
     cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
 
     ReLU reLu;
     Sigmoid sigmoid;
 
-    network.appendConvolutionLayer(3, 3, 3, 3, reLu);
-    network.appendBatchNormalizationLayer();
-    network.appendConvolutionLayer(3, 3, 3, 3, reLu);
+    network.appendConvolutionLayer(3, 3, 3, reLu);
+    network.appendConvolutionLayer(3, 3, 3, reLu);
     network.appendFlatteningLayer();
-    network.appendFFLayer(10, sigmoid);
+    network.appendFFLayer(100, sigmoid);
     network.initRandom();
 
     network.feed(bitmap);
