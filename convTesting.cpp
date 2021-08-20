@@ -18,6 +18,7 @@ int main(){
     Sigmoid sigmoid;
 
     network.appendConvolutionLayer(3, 3, 3, 3, reLu);
+    network.appendBatchNormalizationLayer();
     network.appendConvolutionLayer(3, 3, 3, 3, reLu);
     network.appendFlatteningLayer();
     network.appendFFLayer(10, sigmoid);

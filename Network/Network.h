@@ -15,6 +15,7 @@ namespace cn {
     class FFLayer;
     class ConvolutionLayer;
     class FlatteningLayer;
+    class BatchNormalizationLayer;
 
     class Network {
         std::default_random_engine randomEngine;
@@ -26,6 +27,7 @@ namespace cn {
         friend class FFLayer;
         friend class FlatteningLayer;
         friend class ConvolutionLayer;
+        friend class BatchNormalizationLayer;
 
         void appendLayer(Layer * layer);
 
@@ -37,6 +39,8 @@ namespace cn {
         void appendFFLayer(int neuronsCount, const DifferentiableFunction &differentiableFunction);
 
         void appendFlatteningLayer();
+
+        void appendBatchNormalizationLayer();
 
 
         /**

@@ -17,5 +17,7 @@ cn::FlatteningLayer::FlatteningLayer(int _id, cn::Network *_network) : Layer(_id
 }
 
 void cn::FlatteningLayer::run(const cn::Bitmap<float> &bitmap) {
+    if(output->w != bitmap.w * bitmap.h * bitmap.d)
+        throw std::logic_error("invalid bitmap input for flattening layer!");
     std::copy(bitmap.data(), bitmap.data() + bitmap.w * bitmap.h * bitmap.d, output->data());
 }

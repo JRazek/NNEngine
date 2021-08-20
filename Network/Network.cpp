@@ -7,6 +7,7 @@
 #include "layers/ConvolutionLayer.h"
 #include "layers/FFLayer.h"
 #include "layers/FlatteningLayer.h"
+#include "layers/BatchNormalizationLayer.h"
 
 void cn::Network::appendLayer(cn::Layer * layer) {
     //todo validation!
@@ -79,4 +80,9 @@ void cn::Network::appendFFLayer(int neuronsCount, const DifferentiableFunction &
 void cn::Network::appendFlatteningLayer() {
     FlatteningLayer *f = new FlatteningLayer(layers.size(), this);
     layers.push_back(f);
+}
+
+void cn::Network::appendBatchNormalizationLayer() {
+    BatchNormalizationLayer *b = new BatchNormalizationLayer(layers.size(), this);
+    layers.push_back(b);
 }
