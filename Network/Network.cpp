@@ -9,11 +9,6 @@
 #include "layers/FlatteningLayer.h"
 #include "layers/BatchNormalizationLayer.h"
 
-void cn::Network::appendLayer(cn::Layer * layer) {
-    //todo validation!
-    layers.push_back(layer);
-}
-
 void cn::Network::feed(const byte *input) {
     cn::Bitmap<byte> bitmap(inputDataWidth, inputDataHeight, inputDataDepth, input, 0);
     if(layers.empty())

@@ -29,8 +29,6 @@ namespace cn {
         friend class ConvolutionLayer;
         friend class BatchNormalizationLayer;
 
-        void appendLayer(Layer * layer);
-
     public:
 
         void appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount, const DifferentiableFunction &differentiableFunction, int paddingX = 0,
