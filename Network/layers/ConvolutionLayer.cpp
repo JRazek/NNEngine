@@ -5,13 +5,11 @@
 #include "../Network.h"
 
 cn::ConvolutionLayer::ConvolutionLayer(int _id, cn::Network *_network, int _kernelSizeX, int _kernelSizeY,
-                                       int _kernelSizeZ,
-                                       int _kernelsCount, const DifferentiableFunction &_activationFunction, int _paddingX,
-                                       int _paddingY,
-                                       int _strideX, int _strideY) :
+                                       int _kernelsCount, const DifferentiableFunction &_activationFunction,
+                                       int _paddingX, int _paddingY, int _strideX, int _strideY) :
         kernelSizeX(_kernelSizeX),
         kernelSizeY(_kernelSizeY),
-        kernelSizeZ(_kernelSizeZ),
+        kernelSizeZ(_id == 0 ? _network->inputDataDepth : network->layers[id - 1]->output->d),
         kernelsCount(_kernelsCount),
         activationFunction(_activationFunction),
         paddingX(_paddingX),
@@ -20,24 +18,23 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, cn::Network *_network, int _kern
         strideY(_strideY),
         biases(kernelsCount),
         cn::Layer(_id, _network) {
-    kernels.reserve(_kernelsCount);
 
-    for(int i = 0; i < _kernelsCount; i ++){
-        kernels.emplace_back(_kernelSizeX, _kernelSizeY, _kernelSizeZ);
-    }
-    int inputX, inputY, inputZ;
+    int inputX, inputY;
     int sizeX, sizeY, sizeZ;
     if(id == 0){
         inputX = network->inputDataWidth;
         inputY = network->inputDataHeight;
-        inputZ = network->inputDataDepth;
     }else{
         inputX = network->layers[id - 1]->output->w;
         inputY = network->layers[id - 1]->output->h;
-        inputZ = network->layers[id - 1]->output->d;
     }
-    if(inputZ != kernelSizeZ)
-        throw std::logic_error("kernel size and input channels does not match!");
+
+    kernels.reserve(_kernelsCount);
+
+    for(int i = 0; i < _kernelsCount; i ++){
+        kernels.emplace_back(kernelSizeX, kernelSizeY, kernelSizeZ);
+    }
+
     sizeX = Utils::afterConvolutionSize(kernelSizeX, inputX, paddingX, strideX);
     sizeY = Utils::afterConvolutionSize(kernelSizeY, inputY, paddingY, strideY);
     sizeZ = kernelsCount;
