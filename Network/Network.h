@@ -14,6 +14,7 @@ namespace cn {
     class Layer;
     class FFLayer;
     class ConvolutionLayer;
+    class FlatteningLayer;
 
     class Network {
         std::default_random_engine randomEngine;
@@ -22,8 +23,9 @@ namespace cn {
         std::vector<RandomInitiable *> randomInitLayers;
         std::vector<Layer *> layers;
         friend class Layer;
-
-        friend ConvolutionLayer;
+        friend class FFLayer;
+        friend class FlatteningLayer;
+        friend class ConvolutionLayer;
 
         void appendLayer(Layer * layer);
 

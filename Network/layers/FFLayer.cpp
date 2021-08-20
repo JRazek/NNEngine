@@ -9,10 +9,19 @@ cn::FFLayer::FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_
         cn::Layer(_id, _network),
         neuronsCount(_neuronsCount),
         differentiableFunction(_differentiableFunction),
-        weights(_neuronsCount),
         biases(_neuronsCount),
-        outputs(_neuronsCount)
-{}
+        outputs(_neuronsCount){
+    if(id == 0){
+        throw std::logic_error("FFLayer must not be the first layer in the network!");
+    }else{
+        auto prev = network->layers[id - 1]->output;
+        if(prev->w < 1 || prev->h != 1 || prev->d != 1){
+            throw std::logic_error("There must be a vector output layer before FFLayer!");
+        }
+        weights = std::vector<float>(neuronsCount * prev->w);
+    }
+    output = new Bitmap<float>(neuronsCount, 1, 1);
+}
 
 void cn::FFLayer::run(const Bitmap<float> &bitmap) {
     if(bitmap.h != 1 || bitmap.d != 1 || bitmap.w < 1){
