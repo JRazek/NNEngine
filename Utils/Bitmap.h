@@ -23,6 +23,7 @@ namespace cn {
         Bitmap(int _w, int _h, int _d, const T *data, int inputType = 0);
         Bitmap(const Bitmap &bitmap);
         Bitmap(Bitmap &&bitmap);
+        Bitmap() = delete;
         ~Bitmap();
         T getCell(int col, int row, int depth) const;
         void setCell(int col, int row, int depth, T b);
