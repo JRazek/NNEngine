@@ -16,7 +16,6 @@ namespace cn {
     protected:
         Network * network;
     public:
-        //Bitmap<float> * output = nullptr;
         std::optional<Bitmap<float>> output;
 
         const int id;
@@ -25,6 +24,7 @@ namespace cn {
         Layer(Layer &layer) = delete;
 
         virtual void run(const Bitmap<float> &bitmap) = 0;
+        virtual ~Layer() = default;
     };
 }
 

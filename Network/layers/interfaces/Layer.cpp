@@ -5,4 +5,3 @@
 #include "Layer.h"
 
 cn::Layer::Layer(int _id, cn::Network *network): id(_id), network(network){}
-
