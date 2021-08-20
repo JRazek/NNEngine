@@ -21,8 +21,6 @@ namespace cn {
         const int id;
         Layer(int _id, Network * _network);
 
-        Layer(Layer &layer) = delete;
-
         virtual void run(const Bitmap<float> &bitmap) = 0;
         virtual ~Layer() = default;
     };
