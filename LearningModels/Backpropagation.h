@@ -6,13 +6,17 @@
 #define NEURALNETLIBRARY_BACKPROPAGATION_H
 
 namespace cn {
+    template<typename T>
+    struct Bitmap;
     class Network;
 
     class Backpropagation {
 
-        Network *network;
+        Network &network;
+        int iteration;
 
         Backpropagation(Network &_network);
+        void propagate(const Bitmap<float> &target);
     };
 
 }
