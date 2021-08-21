@@ -26,7 +26,7 @@ cn::Network::~Network() {
 void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelsCount, const DifferentiableFunction &differentiableFunction, int paddingX,
                                          int paddingY, int strideX, int strideY) {
 
-    ConvolutionLayer *c = new ConvolutionLayer(this->layers.size(), this, kernelX, kernelY, kernelsCount,
+    ConvolutionLayer *c = new ConvolutionLayer(this->layers.size(), *this, kernelX, kernelY, kernelsCount,
                                                differentiableFunction, paddingX, paddingY, strideX, strideY);
     randomInitLayers.push_back(c);
     layers.push_back(c);
@@ -68,23 +68,23 @@ void cn::Network::initRandom() {
 }
 
 void cn::Network::appendFFLayer(int neuronsCount, const DifferentiableFunction &differentiableFunction) {
-    FFLayer *f = new FFLayer(layers.size(), neuronsCount, differentiableFunction, this);
+    FFLayer *f = new FFLayer(layers.size(), neuronsCount, differentiableFunction, *this);
     randomInitLayers.push_back(f);
     layers.push_back(f);
 }
 
 void cn::Network::appendFlatteningLayer() {
-    FlatteningLayer *f = new FlatteningLayer(layers.size(), this);
+    FlatteningLayer *f = new FlatteningLayer(layers.size(), *this);
     layers.push_back(f);
 }
 
 void cn::Network::appendBatchNormalizationLayer() {
-    BatchNormalizationLayer *b = new BatchNormalizationLayer(layers.size(), this);
+    BatchNormalizationLayer *b = new BatchNormalizationLayer(layers.size(), *this);
     layers.push_back(b);
 }
 
 void cn::Network::appendMaxPoolingLayer(int kernelSizeX, int kernelSizeY) {
-    MaxPoolingLayer *m = new MaxPoolingLayer(layers.size(), this, kernelSizeX, kernelSizeY);
+    MaxPoolingLayer *m = new MaxPoolingLayer(layers.size(), *this, kernelSizeX, kernelSizeY);
     layers.push_back(m);
 }
 

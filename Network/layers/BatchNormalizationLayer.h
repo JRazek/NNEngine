@@ -11,7 +11,7 @@ namespace cn {
 
         float normalizationFactor;
     public:
-        BatchNormalizationLayer(int _id, cn::Network *_network);
+        BatchNormalizationLayer(int _id, Network &_network);
         void run(const Bitmap<float> &bitmap) override;
     };
 }

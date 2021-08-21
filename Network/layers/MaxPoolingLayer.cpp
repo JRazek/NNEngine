@@ -5,7 +5,7 @@
 #include "MaxPoolingLayer.h"
 #include "../Network.h"
 
-cn::MaxPoolingLayer::MaxPoolingLayer(int _id, cn::Network *_network, int _kernelSizeX, int _kernelSizeY) :
+cn::MaxPoolingLayer::MaxPoolingLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY) :
         Layer(_id, _network),
         kernelSizeX(_kernelSizeX),
         kernelSizeY(_kernelSizeY){

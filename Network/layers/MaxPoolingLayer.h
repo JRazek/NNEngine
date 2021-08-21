@@ -10,7 +10,7 @@ namespace cn {
     class MaxPoolingLayer : public Layer{
     public:
         const int kernelSizeX, kernelSizeY;
-        MaxPoolingLayer(int _id, cn::Network *_network, int _kernelSizeX, int _kernelSizeY);
+        MaxPoolingLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY);
         void run(const Bitmap<float> &bitmap) override;
     };
 }

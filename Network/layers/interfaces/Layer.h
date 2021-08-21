@@ -19,7 +19,7 @@ namespace cn {
         std::optional<Bitmap<float>> output;
 
         const int id;
-        Layer(int _id, Network * _network);
+        Layer(int _id, Network &_network);
 
         virtual void run(const Bitmap<float> &bitmap) = 0;
         virtual ~Layer() = default;

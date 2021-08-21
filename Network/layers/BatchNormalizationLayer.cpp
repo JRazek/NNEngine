@@ -5,7 +5,7 @@
 #include "BatchNormalizationLayer.h"
 #include "../Network.h"
 
-cn::BatchNormalizationLayer::BatchNormalizationLayer(int _id, cn::Network *_network) : Layer(_id, _network) {
+cn::BatchNormalizationLayer::BatchNormalizationLayer(int _id, Network &_network) : Layer(_id, _network) {
     int sizeX, sizeY, sizeZ;
     if(id == 0){
         sizeX = network->inputDataWidth;

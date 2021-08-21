@@ -5,7 +5,7 @@
 #include "FlatteningLayer.h"
 #include "../Network.h"
 
-cn::FlatteningLayer::FlatteningLayer(int _id, cn::Network *_network) : Layer(_id, _network) {
+cn::FlatteningLayer::FlatteningLayer(int _id, Network &_network) : Layer(_id, _network) {
     int size;
     if(id == 0){
         size = network->inputDataWidth * network->inputDataHeight * network->inputDataDepth;

@@ -4,4 +4,4 @@
 
 #include "Layer.h"
 
-cn::Layer::Layer(int _id, cn::Network *_network): id(_id), network(_network){}
+cn::Layer::Layer(int _id, Network &_network): id(_id), network(&_network){}
