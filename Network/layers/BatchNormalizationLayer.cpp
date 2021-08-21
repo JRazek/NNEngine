@@ -12,7 +12,7 @@ cn::BatchNormalizationLayer::BatchNormalizationLayer(int _id, cn::Network *_netw
         sizeY = network->inputDataHeight;
         sizeZ = network->inputDataDepth;
     }else{
-        auto prev = &network->layers[id - 1]->output.value();
+        Bitmap<float> *prev = &network->layers[id - 1]->output.value();
         sizeX = prev->w;
         sizeY = prev->h;
         sizeZ = prev->d;
