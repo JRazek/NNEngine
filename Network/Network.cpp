@@ -87,3 +87,7 @@ void cn::Network::appendMaxPoolingLayer(int kernelSizeX, int kernelSizeY) {
     MaxPoolingLayer *m = new MaxPoolingLayer(layers.size(), this, kernelSizeX, kernelSizeY);
     layers.push_back(m);
 }
+
+cn::Bitmap<float> cn::Network::getOutput() {
+    return layers.back()->output.value();
+}

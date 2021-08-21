@@ -81,7 +81,7 @@ namespace cn {
          * In case of using only FFLayers - set height and depth to 1.
          */
 
-        Network(int w, int h, int d, int seed = 0);
+        Network(int w, int h, int d, int seed = 1);
 
 
         /**
@@ -89,8 +89,24 @@ namespace cn {
          */
         Network(const Network&) = delete;
 
+        /**
+         * randomly initialized all the weights and biases of the network
+         */
         void initRandom();
 
+
+        /**
+         *
+         * @return the output from the last layer of the network
+         */
+        Bitmap<float> getOutput();
+
+        /**
+         *
+         * @param low lower bound for number
+         * @param high higher bound for number
+         * @return pseudorandom number with seed given in constructor
+         */
         float getRandom(float low, float high);
 
         ~Network();
