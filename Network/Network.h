@@ -99,7 +99,7 @@ namespace cn {
          *
          * @return the output from the last layer of the network
          */
-        Bitmap<float> getOutput();
+        Bitmap<float> & getOutput();
 
         /**
          *
