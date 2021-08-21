@@ -6,12 +6,12 @@
 #define NEURALNETLIBRARY_CONVOLUTIONLAYER_H
 
 #include "interfaces/Layer.h"
-#include "interfaces/RandomInitiable.h"
+#include "interfaces/Learnable.h"
 
 template<typename T>
 struct Vector3;
 namespace cn {
-    class ConvolutionLayer : public cn::Layer, public RandomInitiable{
+    class ConvolutionLayer : public cn::Layer, public Learnable{
     private:
         const int kernelSizeX;
         const int kernelSizeY;

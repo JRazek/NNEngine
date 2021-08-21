@@ -7,12 +7,12 @@
 
 #include "interfaces/Layer.h"
 #include "../../Utils/Differentiables/DifferentiableFunction.h"
-#include "interfaces/RandomInitiable.h"
+#include "interfaces/Learnable.h"
 
 namespace cn {
     class Network;
 
-    class FFLayer : public cn::Layer, public RandomInitiable{
+    class FFLayer : public cn::Layer, public Learnable{
         std::vector<float> biases;
         std::vector<float> weights;
         const DifferentiableFunction &differentiableFunction;
