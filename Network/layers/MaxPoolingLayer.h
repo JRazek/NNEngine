@@ -12,6 +12,7 @@ namespace cn {
         const int kernelSizeX, kernelSizeY;
         MaxPoolingLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY);
         void run(const Bitmap<float> &bitmap) override;
+        float getChain(int neuronID) override;
     };
 }
 

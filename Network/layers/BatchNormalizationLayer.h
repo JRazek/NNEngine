@@ -13,6 +13,7 @@ namespace cn {
     public:
         BatchNormalizationLayer(int _id, Network &_network);
         void run(const Bitmap<float> &bitmap) override;
+        float getChain(int neuronID) override;
     };
 }
 #endif //NEURALNETLIBRARY_BATCHNORMALIZATIONLAYER_H

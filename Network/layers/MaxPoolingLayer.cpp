@@ -30,3 +30,7 @@ void cn::MaxPoolingLayer::run(const cn::Bitmap<float> &bitmap) {
     }
     std::copy(res.data(), res.data() + res.w * res.h * res.d, output->data());
 }
+
+float cn::MaxPoolingLayer::getChain(int neuronID) {
+    return 0;
+}

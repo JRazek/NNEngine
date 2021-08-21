@@ -11,7 +11,7 @@
 template<typename T>
 struct Vector3;
 namespace cn {
-    class ConvolutionLayer : public cn::Layer, public Learnable{
+    class ConvolutionLayer : public Learnable{
     private:
         const int kernelSizeX;
         const int kernelSizeY;

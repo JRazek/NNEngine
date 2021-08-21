@@ -23,6 +23,13 @@ namespace cn {
 
         virtual void run(const Bitmap<float> &bitmap) = 0;
         virtual ~Layer() = default;
+
+        /**
+         *
+         * @param neuronID - in case of FF - neuron, in case of Conv - kernel
+         * @return differentiation chain calculated from that neuron
+         */
+        virtual float getChain(int neuronID) = 0;
     };
 }
 

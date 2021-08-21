@@ -4,24 +4,27 @@
 
 #ifndef NEURALNETLIBRARY_LEARNABLE_H
 #define NEURALNETLIBRARY_LEARNABLE_H
+#include "Layer.h"
 
 namespace cn {
-    struct Learnable {
+    struct Learnable : public Layer{
 
         const int neuronsCount;
-        Learnable(int _neuronsCount);
+        Learnable(int id, cn::Network &network, int _neuronsCount);
+
+        /**
+         * dp for chain and computation saving
+         */
+        float memoizedChain;
+        /**
+         * info if chain is saved
+         */
+        bool memoizedChainFlag = false;
 
         /**
          * randomly initializes all the learnable elements in the layer
          */
         virtual void randomInit() = 0;
-
-        /**
-         *
-         * @param neuronID - in case of FF - neuron, in case of Conv - kernel
-         * @return differentiation chain calculated from that neuron
-         */
-        virtual float getChain(int neuronID) = 0;
     };
 }
 

@@ -12,7 +12,7 @@
 namespace cn {
     class Network;
 
-    class FFLayer : public cn::Layer, public Learnable{
+    class FFLayer : public Learnable{
         std::vector<float> biases;
         std::vector<float> weights;
         const DifferentiableFunction &differentiableFunction;

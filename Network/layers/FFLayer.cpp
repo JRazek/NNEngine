@@ -6,10 +6,9 @@
 #include "../Network.h"
 
 cn::FFLayer::FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_differentiableFunction, Network &_network) :
-        cn::Layer(_id, _network),
         differentiableFunction(_differentiableFunction),
         biases(_neuronsCount),
-        Learnable(_neuronsCount){
+        Learnable(_id, _network, _neuronsCount) {
     if(id == 0){
         throw std::logic_error("FFLayer must not be the first layer in the network!");
     }else{
