@@ -8,6 +8,7 @@
 #include "layers/FFLayer.h"
 #include "layers/FlatteningLayer.h"
 #include "layers/BatchNormalizationLayer.h"
+#include "layers/MaxPoolingLayer.h"
 
 void cn::Network::feed(const byte *input) {
     cn::Bitmap<byte> bitmap(inputDataWidth, inputDataHeight, inputDataDepth, input, 0);
@@ -80,4 +81,9 @@ void cn::Network::appendFlatteningLayer() {
 void cn::Network::appendBatchNormalizationLayer() {
     BatchNormalizationLayer *b = new BatchNormalizationLayer(layers.size(), this);
     layers.push_back(b);
+}
+
+void cn::Network::appendMaxPoolingLayer(int kernelSizeX, int kernelSizeY) {
+    MaxPoolingLayer *m = new MaxPoolingLayer(layers.size(), this, kernelSizeX, kernelSizeY);
+    layers.push_back(m);
 }

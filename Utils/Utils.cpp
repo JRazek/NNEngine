@@ -68,11 +68,24 @@ float cn::Utils::distanceSquared(const std::pair<float, float> &p1, const std::p
     return std::pow(p1.first - p2.first, 2) + std::pow(p1.second - p2.second, 2);
 }
 
-std::function<float(float)> cn::Utils::ReLU = std::function<float(float)>([](float n){
-    return std::max(0.f, n);
-});
+int cn::Utils::afterMaxPoolSize(int kernelSize, int inputSize) {
+    return inputSize/kernelSize;
+}
 
-std::function<float(float)> cn::Utils::Sigmoid = std::function<float(float)>([](float n){
-   return (1.f/(1.f + std::pow(std::exp(1), -n)));
-});
-
+cn::Bitmap<float> cn::Utils::maxPool(const cn::Bitmap<float> &input, int kernelSizeX, int kernelSizeY) {
+    Bitmap<float> output(afterMaxPoolSize(kernelSizeX, input.w), afterMaxPoolSize(kernelSizeY, input.h), input.d);
+    for(int c = 0; c < input.d; c++){
+        for(int y = 0; y < input.h; y += kernelSizeY){
+            for(int x = 0; x < input.w; x += kernelSizeX){
+                float max = 0;
+                for(int kY = 0; kY < kernelSizeY; kY++){
+                    for(int kX = 0; kX < kernelSizeX; kX++){
+                        max = std::max(input.getCell(x + kX, y + kY, c), max);
+                    }
+                }
+                output.setCell(x / kernelSizeX, y / kernelSizeY, c, max);
+            }
+        }
+    }
+    return output;
+}

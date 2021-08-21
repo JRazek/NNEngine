@@ -38,6 +38,8 @@ namespace cn {
 /////DEFINITIONS/////
 template<typename T>
 cn::Bitmap<T>::Bitmap(int _w, int _h, int _d): w(_w), h (_h), d(_d) {
+    if(_w < 1 || _h < 1 || _d < 1)
+        throw std::logic_error("invalid bitmap size!");
     dataP = new T [_w * _h * _d];
 }
 

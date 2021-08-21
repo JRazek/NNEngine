@@ -16,6 +16,7 @@ namespace cn {
     class ConvolutionLayer;
     class FlatteningLayer;
     class BatchNormalizationLayer;
+    class MaxPoolingLayer;
 
     class Network {
         std::default_random_engine randomEngine;
@@ -28,6 +29,7 @@ namespace cn {
         friend class FlatteningLayer;
         friend class ConvolutionLayer;
         friend class BatchNormalizationLayer;
+        friend class MaxPoolingLayer;
 
     public:
 
@@ -39,6 +41,8 @@ namespace cn {
         void appendFlatteningLayer();
 
         void appendBatchNormalizationLayer();
+
+        void appendMaxPoolingLayer(int kernelSizeX, int kernelSizeY);
 
 
         /**

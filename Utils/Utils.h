@@ -25,16 +25,7 @@ namespace cn {
 
     class Utils{
     public:
-        /**
-         * ReLU function wrapper
-         */
-        static std::function<float(float)> ReLU;
 
-
-        /**
-         * Sigmoid function wrapper
-         */
-        static std::function<float(float)> Sigmoid;
 
         /**
          *
@@ -128,6 +119,10 @@ namespace cn {
 
         static int afterConvolutionSize(int kernelSize, int inputSize, int padding, int stride);
         static Bitmap<float> convolve(const Bitmap<float> &kernel, const Bitmap<float> &input, int paddingX = 0, int paddingY = 0, int strideX = 1, int strideY = 1);
+
+
+        static int afterMaxPoolSize(int kernelSize, int inputSize);
+        static Bitmap<float> maxPool(const Bitmap<float> &input, int kernelSizeX, int kernelSizeY);
 
         static float distanceSquared(const std::pair<float, float> &p1, const std::pair<float, float> &p2);
 
@@ -291,5 +286,6 @@ cn::Bitmap<T> cn::Utils::rotate(const cn::Bitmap<T> &input, float rad) {
     TMatrix<float> rotationMatrix(cos, -sin, sin, cos);
     return transform<T>(input, rotationMatrix);
 }
+
 
 #endif //NEURALNETLIBRARY_UTILS_H
