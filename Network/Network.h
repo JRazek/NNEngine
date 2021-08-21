@@ -17,12 +17,13 @@ namespace cn {
     class FlatteningLayer;
     class BatchNormalizationLayer;
     class MaxPoolingLayer;
+    class Backpropagation;
 
     class Network {
         std::default_random_engine randomEngine;
 
     protected:
-        std::vector<Learnable *> randomInitLayers;
+        std::vector<Learnable *> learnableLayers;
         std::vector<Layer *> layers;
         friend class Layer;
         friend class FFLayer;
@@ -30,6 +31,7 @@ namespace cn {
         friend class ConvolutionLayer;
         friend class BatchNormalizationLayer;
         friend class MaxPoolingLayer;
+        friend class Backpropagation;
 
     public:
 

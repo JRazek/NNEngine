@@ -7,9 +7,9 @@
 
 cn::FFLayer::FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_differentiableFunction, Network &_network) :
         cn::Layer(_id, _network),
-        neuronsCount(_neuronsCount),
         differentiableFunction(_differentiableFunction),
-        biases(_neuronsCount){
+        biases(_neuronsCount),
+        Learnable(_neuronsCount){
     if(id == 0){
         throw std::logic_error("FFLayer must not be the first layer in the network!");
     }else{
@@ -49,4 +49,8 @@ void cn::FFLayer::randomInit() {
 float cn::FFLayer::getWeight(int neuron, int weightID) {
     int perNeuron = weights.size() / neuronsCount;
     return weights[perNeuron * neuron + weightID];
+}
+
+float cn::FFLayer::getChain(int neuronID) {
+    return 0;
 }

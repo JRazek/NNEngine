@@ -17,7 +17,8 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSi
         strideX(_strideX),
         strideY(_strideY),
         biases(kernelsCount),
-        cn::Layer(_id, _network) {
+        cn::Layer(_id, _network),
+        Learnable(kernelsCount){
 
     int inputX, inputY;
     int sizeX, sizeY, sizeZ;
@@ -64,5 +65,9 @@ void cn::ConvolutionLayer::randomInit() {
     for(auto &b : biases){
         b = network->getRandom(-5, 5);
     }
+}
+
+float cn::ConvolutionLayer::getChain(int neuronID) {
+    return 0;
 }
 

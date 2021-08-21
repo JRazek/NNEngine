@@ -17,7 +17,6 @@ namespace cn {
         std::vector<float> weights;
         const DifferentiableFunction &differentiableFunction;
 
-        const int neuronsCount;
     public:
         void randomInit() override ;
         /**
@@ -30,10 +29,13 @@ namespace cn {
         FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_differentiableFunction, Network &_network);
 
         void run(const Bitmap<float> &bitmap) override;
-        /*
+
+        /**
          * returns ith weight belonging to the neuron
          */
         float getWeight(int neuron, int weightID);
+
+        float getChain(int neuronID) override;
     };
 }
 
