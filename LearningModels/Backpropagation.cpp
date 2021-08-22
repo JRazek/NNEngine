@@ -3,8 +3,8 @@
 //
 
 #include "Backpropagation.h"
-#include "../Network/Network.h"
 #include "../Utils/Bitmap.h"
+#include "../Network/Network.h"
 cn::Backpropagation::Backpropagation(cn::Network &_network): network(_network) {
 
 }
