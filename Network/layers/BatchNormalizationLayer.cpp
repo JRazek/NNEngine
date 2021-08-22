@@ -37,5 +37,5 @@ void cn::BatchNormalizationLayer::run(const cn::Bitmap<float> &bitmap) {
 }
 
 float cn::BatchNormalizationLayer::getChain(int neuronID) {
-    return 0;
+    return normalizationFactor;
 }
