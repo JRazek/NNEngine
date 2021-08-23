@@ -31,6 +31,7 @@ namespace cn {
                          int _paddingX, int _paddingY, int _strideX, int _strideY);
         void randomInit() override;
         void run(const Bitmap<float> &bitmap) override;
+        virtual float diffWeight(int neuronID, int weightID) override;
         float getChain(int neuronID) override;
     };
 }

@@ -19,7 +19,11 @@ void cn::Backpropagation::propagate(const cn::Bitmap<float> &target) {
     for(auto p : network.learnableLayers){
         std::vector<float> gradients(p->neuronsCount);
         for(int i = 0; i < p->neuronsCount; i ++){
-            gradients[i] = p->getChain(i);
+            int weightsPerNeuron = p->netValues->w * p->netValues->h * p->netValues->d / p->neuronsCount;
+            for(int j = 0; j < weightsPerNeuron; j ++) {
+                float gradient = -1 * p->diffWeight(i, j);
+                std::cout << gradient << "\n";
+            }
         }
     }
 }

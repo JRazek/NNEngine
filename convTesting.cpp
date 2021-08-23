@@ -8,19 +8,17 @@
 #include "Network/layers/ConvolutionLayer.h"
 #include "Network/layers/FlatteningLayer.h"
 #include <opencv2/opencv.hpp>
+#include "LearningModels/Backpropagation.h"
 int main(){
     cv::Mat mat = cv::imread("resources/aPhoto.jpg");
-    cn::Network network(100, 100, 3, 1);
+    cn::Network network(100, 1, 3, 1);
 
     cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
+    cn::Backpropagation backpropagation(network);
 
     ReLU reLu;
     Sigmoid sigmoid;
 
-    network.appendConvolutionLayer(3, 3, 1, reLu);
-    network.appendConvolutionLayer(3, 3, 1, reLu);
-    network.appendBatchNormalizationLayer();
-    network.appendMaxPoolingLayer(2, 2);
     network.appendFlatteningLayer();
     network.appendFFLayer(100, sigmoid);
     network.appendFFLayer(10, sigmoid);
@@ -28,10 +26,18 @@ int main(){
 
     network.feed(bitmap);
 
+    cn::Bitmap<float> target(10, 1, 1);
+
+    for(int i = 0; i < 10; i ++){
+        target.setCell(i, 0, 0, 1);
+    }
+
+    backpropagation.propagate(target);
+    /*
     cn::Bitmap<float> result = network.getOutput();
     for(int i = 0; i < 10; i ++){
         std::cout<<result.getCell(i, 0, 0)<<"\n";
-    }
+    }*/
 
   //  cn::Bitmap<cn::byte> resampled = cn::Utils::resize(bitmap, 600, 600);
 

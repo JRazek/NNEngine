@@ -14,6 +14,8 @@ namespace cn {
         Learnable(int id, cn::Network &network, int _neuronsCount,
                   const DifferentiableFunction &differentiableFunction);
 
+        std::optional<Bitmap<float>> netValues;
+
         const DifferentiableFunction &activationFunction;
 
         /**
@@ -28,6 +30,8 @@ namespace cn {
         /**
          * randomly initializes all the learnable elements in the layer
          */
+
+        virtual float diffWeight(int neuronID, int weightID) = 0;
 
         virtual void randomInit() = 0;
     };

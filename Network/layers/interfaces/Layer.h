@@ -26,10 +26,10 @@ namespace cn {
 
         /**
          *
-         * @param neuronID - in case of FF - neuron, in case of Conv - kernel
+         * @param entryID - in case of FF - neuron, in case of Conv - kernel
          * @return differentiation chain calculated from that neuron
          */
-        virtual float getChain(int neuronID) = 0;
+        virtual float getChain(int entryID) = 0;
     };
 }
 
