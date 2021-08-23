@@ -11,13 +11,12 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSi
         kernelSizeY(_kernelSizeY),
         kernelSizeZ(_id == 0 ? _network.inputDataDepth : network->layers[id - 1]->output->d),
         kernelsCount(_kernelsCount),
-        activationFunction(_activationFunction),
         paddingX(_paddingX),
         paddingY(_paddingY),
         strideX(_strideX),
         strideY(_strideY),
         biases(kernelsCount),
-        Learnable(_id, _network, _kernelsCount) {
+        Learnable(_id, _network, _kernelsCount, _activationFunction) {
 
     int inputX, inputY;
     int sizeX, sizeY, sizeZ;

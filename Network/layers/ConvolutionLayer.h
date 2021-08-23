@@ -22,8 +22,6 @@ namespace cn {
         const int strideX;
         const int strideY;
 
-        const DifferentiableFunction &activationFunction;
-
         std::vector<Bitmap<float>> kernels;
         std::vector<float> biases;//ith corresponds to ith kernel
 

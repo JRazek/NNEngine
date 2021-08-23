@@ -23,5 +23,5 @@ void cn::FlatteningLayer::run(const cn::Bitmap<float> &bitmap) {
 }
 
 float cn::FlatteningLayer::getChain(int neuronID) {
-    return 1;
+    return id != network->layers.size() - 1 ? network->layers[id + 1]->getChain(neuronID) : 1;
 }

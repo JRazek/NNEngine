@@ -7,10 +7,14 @@
 #include "Layer.h"
 
 namespace cn {
-    struct Learnable : public Layer{
+    class Learnable : public Layer{
+    public:
 
         const int neuronsCount;
-        Learnable(int id, cn::Network &network, int _neuronsCount);
+        Learnable(int id, cn::Network &network, int _neuronsCount,
+                  const DifferentiableFunction &differentiableFunction);
+
+        const DifferentiableFunction &activationFunction;
 
         /**
          * dp for chain and computation saving
@@ -24,6 +28,7 @@ namespace cn {
         /**
          * randomly initializes all the learnable elements in the layer
          */
+
         virtual void randomInit() = 0;
     };
 }

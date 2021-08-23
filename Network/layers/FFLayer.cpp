@@ -6,9 +6,8 @@
 #include "../Network.h"
 
 cn::FFLayer::FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_differentiableFunction, Network &_network) :
-        differentiableFunction(_differentiableFunction),
         biases(_neuronsCount),
-        Learnable(_id, _network, _neuronsCount) {
+        Learnable(_id, _network, _neuronsCount, _differentiableFunction) {
     if(id == 0){
         throw std::logic_error("FFLayer must not be the first layer in the network!");
     }else{
@@ -32,7 +31,7 @@ void cn::FFLayer::run(const Bitmap<float> &bitmap) {
         for(int i = 0; i < input->w; i ++){
             sum += getWeight(n, i) * input->getCell(i, 0, 0);
         }
-        output->setCell(n, 0, 0, differentiableFunction.func(sum));
+        output->setCell(n, 0, 0, activationFunction.func(sum));
     }
 }
 
@@ -51,5 +50,5 @@ float cn::FFLayer::getWeight(int neuron, int weightID) {
 }
 
 float cn::FFLayer::getChain(int neuronID) {
-    return 0;
+    return 1;
 }
