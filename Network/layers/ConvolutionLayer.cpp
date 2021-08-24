@@ -9,7 +9,7 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSi
                                        int _paddingX, int _paddingY, int _strideX, int _strideY) :
         kernelSizeX(_kernelSizeX),
         kernelSizeY(_kernelSizeY),
-        kernelSizeZ(_id == 0 ? _network.inputDataDepth : network->layers[id - 1]->output->d),
+        kernelSizeZ(_id == 0 ? _network.inputDataDepth : network->layers[id - 1]->output->d()),
         kernelsCount(_kernelsCount),
         activationFunction(_activationFunction),
         paddingX(_paddingX),
@@ -25,8 +25,8 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSi
         inputX = network->inputDataWidth;
         inputY = network->inputDataHeight;
     }else{
-        inputX = network->layers[id - 1]->output->w;
-        inputY = network->layers[id - 1]->output->h;
+        inputX = network->layers[id - 1]->output->w();
+        inputY = network->layers[id - 1]->output->h();
     }
 
     kernels.reserve(_kernelsCount);
@@ -43,8 +43,8 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSi
 
 void cn::ConvolutionLayer::run(const Bitmap<float> &bitmap) {
     //convolve bitmap - must have correct sizes etc. Garbage in garbage out.
-    int outW = Utils::afterConvolutionSize(kernelSizeX, bitmap.w, paddingX, strideX);
-    int outH = Utils::afterConvolutionSize(kernelSizeY, bitmap.h, paddingY, strideY);
+    int outW = Utils::afterConvolutionSize(kernelSizeX, bitmap.w(), paddingX, strideX);
+    int outH = Utils::afterConvolutionSize(kernelSizeY, bitmap.h(), paddingY, strideY);
 
     for(int i = 0; i < kernelsCount; i ++){
         Bitmap<float> layer = Utils::sumBitmapLayers(Utils::convolve(kernels[i], bitmap, paddingX, paddingY, strideX, strideY));
@@ -57,7 +57,7 @@ void cn::ConvolutionLayer::run(const Bitmap<float> &bitmap) {
 
 void cn::ConvolutionLayer::randomInit() {
     for(auto &k : kernels){
-        for(auto it = k.data(); it != k.data() + k.w * k.h * k.d; ++it){
+        for(auto it = k.data(); it != k.data() + k.w() * k.h() * k.d(); ++it){
             *it = network->getRandom(-1, 1);
         }
     }
