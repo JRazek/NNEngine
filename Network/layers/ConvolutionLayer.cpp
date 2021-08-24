@@ -67,7 +67,7 @@ void cn::ConvolutionLayer::randomInit() {
 }
 
 float cn::ConvolutionLayer::getChain(int neuronID) {
-    return 0;
+    return 1;
 }
 
 float cn::ConvolutionLayer::diffWeight(int neuronID, int weightID) {

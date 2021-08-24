@@ -58,7 +58,7 @@ void cn::Network::feed(const cn::Bitmap<float> &bitmap) {
         outputLayerAppended = true;
     }
     for(int i = 0; i < layers.size(); i ++){
-        auto layer = layers[i];
+        Layer *layer = layers[i];
         layer->run(*_input);
         _input = &layer->output.value();
     }
@@ -80,38 +80,22 @@ void cn::Network::initRandom() {
 }
 
 void cn::Network::appendFFLayer(int neuronsCount, const DifferentiableFunction &differentiableFunction) {
-    if(outputLayerAppended){
-        delete layers.back();
-        layers.pop_back();
-    }
     FFLayer *f = new FFLayer(layers.size(), neuronsCount, differentiableFunction, *this);
     learnableLayers.push_back(f);
     layers.push_back(f);
 }
 
 void cn::Network::appendFlatteningLayer() {
-    if(outputLayerAppended){
-        delete layers.back();
-        layers.pop_back();
-    }
     FlatteningLayer *f = new FlatteningLayer(layers.size(), *this);
     layers.push_back(f);
 }
 
 void cn::Network::appendBatchNormalizationLayer() {
-    if(outputLayerAppended){
-        delete layers.back();
-        layers.pop_back();
-    }
     BatchNormalizationLayer *b = new BatchNormalizationLayer(layers.size(), *this);
     layers.push_back(b);
 }
 
 void cn::Network::appendMaxPoolingLayer(int kernelSizeX, int kernelSizeY) {
-    if(outputLayerAppended){
-        delete layers.back();
-        layers.pop_back();
-    }
     MaxPoolingLayer *m = new MaxPoolingLayer(layers.size(), *this, kernelSizeX, kernelSizeY);
     layers.push_back(m);
 }

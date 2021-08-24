@@ -54,20 +54,9 @@ float &cn::FFLayer::getWeight(int neuron, int weightID) {
 }
 
 float cn::FFLayer::getChain(int neuronID) {
-    return activationFunction.derive(netValues->getCell(neuronID, 0, 0)) * [this](){
-      float res = 1;
-      if(id != network->layers.size() - 1){
-          float tmp = 0;
-          for(int i = 0; i < output->w; i ++){
-              tmp += network->layers[id + 1]->getChain(i);
-          }
-      }
-      return res;
-    }();
+    return 1;
 }
 
 float cn::FFLayer::diffWeight(int neuronID, int weightID) {
-    Bitmap<float> *prevInput = (id != 0) ? &network->layers[id - 1]->output.value() : &network->input.value();
-    weightID = neuronID * (neuronsCount/weights.size()) + weightID;
-    return output->getCell(weightID, 0, 0) * getChain(neuronID);
+    return 1;
 }

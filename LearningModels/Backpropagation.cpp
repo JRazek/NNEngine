@@ -24,10 +24,11 @@ void cn::Backpropagation::propagate(const cn::Bitmap<float> &target) {
         for(int i = 0; i < p->neuronsCount; i ++){
             int weightsPerNeuron = p->netValues->w * p->netValues->h * p->netValues->d / p->neuronsCount;
             for(int j = 0; j < weightsPerNeuron; j ++) {
-                float gradient = p->diffWeight(i, j);
+                float gradient = learningRate * p->diffWeight(i, j);
                 float &weight = p->getWeight(i, j);
-                weight += gradient;
+                weight -= gradient;
             }
         }
     }
+    iteration ++;
 }
