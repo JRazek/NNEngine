@@ -6,7 +6,7 @@
 #include "../Network.h"
 
 cn::FFLayer::FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_differentiableFunction, Network &_network) :
-        cn::Layer(_id, _network),
+        Learnable(_id, _network),
         neuronsCount(_neuronsCount),
         differentiableFunction(_differentiableFunction),
         biases(_neuronsCount){

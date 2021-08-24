@@ -13,7 +13,7 @@ int main(){
     cn::Network network(100, 100, 3, 1);
 
     cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
-
+    bitmap = cn::Utils::resize<cn::byte>(bitmap, 100, 1);
     ReLU reLu;
     Sigmoid sigmoid;
 

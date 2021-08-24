@@ -12,14 +12,14 @@
 namespace cn {
     class Network;
 
-    class FFLayer : public cn::Layer, public Learnable{
+    class FFLayer : public Learnable{
         std::vector<float> biases;
         std::vector<float> weights;
         const DifferentiableFunction &differentiableFunction;
 
         const int neuronsCount;
     public:
-        void randomInit() override ;
+        void randomInit() override;
         /**
          *
          * @param _id id of layer in network

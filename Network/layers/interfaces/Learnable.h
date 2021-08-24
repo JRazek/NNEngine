@@ -1,12 +1,17 @@
 //
-// Created by user on 18.08.2021.
+// Created by jrazek on 24.08.2021.
 //
+
 #ifndef NEURALNETLIBRARY_LEARNABLE_H
 #define NEURALNETLIBRARY_LEARNABLE_H
+#include "Layer.h"
 
 namespace cn {
-    struct Learnable {
+    class Network;
+    class Learnable : public Layer{
+    public:
         virtual void randomInit() = 0;
+        Learnable(int id, Network &network);
     };
 }
 

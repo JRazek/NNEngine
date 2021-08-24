@@ -17,7 +17,7 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSi
         strideX(_strideX),
         strideY(_strideY),
         biases(kernelsCount),
-        cn::Layer(_id, _network) {
+        cn::Learnable(_id, _network) {
 
     int inputX, inputY;
     int sizeX, sizeY, sizeZ;

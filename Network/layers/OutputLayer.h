@@ -1,0 +1,17 @@
+//
+// Created by jrazek on 24.08.2021.
+//
+
+#ifndef NEURALNETLIBRARY_OUTPUTLAYER_H
+#define NEURALNETLIBRARY_OUTPUTLAYER_H
+#include "FlatteningLayer.h"
+
+
+namespace cn {
+    class OutputLayer : public FlatteningLayer {
+    public:
+        OutputLayer(int id, cn::Network &network);
+    };
+}
+
+#endif //NEURALNETLIBRARY_OUTPUTLAYER_H

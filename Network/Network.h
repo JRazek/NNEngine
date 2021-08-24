@@ -9,6 +9,7 @@
 #include <random>
 #include "../Utils/Utils.h"
 #include "layers/interfaces/Learnable.h"
+#include "layers/OutputLayer.h"
 
 namespace cn {
     class Layer;
@@ -17,6 +18,7 @@ namespace cn {
     class FlatteningLayer;
     class BatchNormalizationLayer;
     class MaxPoolingLayer;
+    class OutputLayer;
 
     class Network {
         std::default_random_engine randomEngine;
@@ -24,12 +26,15 @@ namespace cn {
     protected:
         std::vector<Learnable *> randomInitLayers;
         std::vector<Layer *> layers;
+        //OutputLayer outputLayer;
+
         friend class Layer;
         friend class FFLayer;
         friend class FlatteningLayer;
         friend class ConvolutionLayer;
         friend class BatchNormalizationLayer;
         friend class MaxPoolingLayer;
+        friend class OutputLayer;
 
     public:
 

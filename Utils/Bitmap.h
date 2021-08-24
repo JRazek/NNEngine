@@ -31,7 +31,7 @@ namespace cn {
         void setLayer(int layerID, T *input);
         [[nodiscard]] int getDataIndex(int col, int row, int depth) const;
 
-        Bitmap<T> operator=(const Bitmap<T> &other);
+        Bitmap<T> &operator=(const Bitmap<T> &other);
         T * data() const;
         int w() const;
         int h() const;
@@ -86,8 +86,13 @@ int cn::Bitmap<T>::getDataIndex(int col, int row, int depth) const{
 }
 
 template<typename T>
-cn::Bitmap<T> cn::Bitmap<T>::operator=(const cn::Bitmap<T> &other) {
-    return cn::Bitmap<T>(other.w, other.h, other.d, other.data());
+cn::Bitmap<T> &cn::Bitmap<T>::operator=(const cn::Bitmap<T> &other) {
+    delete [] dataP;
+    _w = other.w();
+    _h = other.h();
+    _d = other.d();
+    dataP = new T [_w * _h * _d];
+    return *this;
 }
 
 template<typename T>
