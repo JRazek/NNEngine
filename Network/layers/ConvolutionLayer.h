@@ -32,6 +32,12 @@ namespace cn {
         void randomInit() override;
         void run(const Bitmap<float> &bitmap) override;
         virtual float diffWeight(int neuronID, int weightID) override;
+
+
+        /**
+         * returns ith weight belonging to the neuron
+         */
+        float &getWeight(int kernel, int weightID) override;
         float getChain(int neuronID) override;
     };
 }

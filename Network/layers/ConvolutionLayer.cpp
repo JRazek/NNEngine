@@ -74,3 +74,7 @@ float cn::ConvolutionLayer::diffWeight(int neuronID, int weightID) {
     return 1;
 }
 
+float &cn::ConvolutionLayer::getWeight(int kernel, int weightID) {
+    return *(kernels[kernel].data() + weightID);
+}
+

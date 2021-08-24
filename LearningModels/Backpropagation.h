@@ -15,8 +15,9 @@ namespace cn {
         Network &network;
         int iteration;
 
+        float learningRate;
     public:
-        Backpropagation(Network &_network);
+        Backpropagation(float _learningRate, cn::Network &_network);
 
         void propagate(const Bitmap<float> &target);
     };

@@ -14,7 +14,7 @@ int main(){
     cn::Network network(100, 1, 3, 1);
 
     cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
-    cn::Backpropagation backpropagation(network);
+    cn::Backpropagation backpropagation(0, network);
 
     ReLU reLu;
     Sigmoid sigmoid;
@@ -31,8 +31,8 @@ int main(){
     for(int i = 0; i < 10; i ++){
         target.setCell(i, 0, 0, 1);
     }
-
-    backpropagation.propagate(target);
+    for(int i = 0; i < 1000; i ++)
+        backpropagation.propagate(target);
     /*
     cn::Bitmap<float> result = network.getOutput();
     for(int i = 0; i < 10; i ++){

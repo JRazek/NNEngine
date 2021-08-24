@@ -18,6 +18,7 @@ namespace cn {
     class BatchNormalizationLayer;
     class MaxPoolingLayer;
     class Backpropagation;
+    class OutputLayer;
 
     class Network {
         std::default_random_engine randomEngine;
@@ -32,6 +33,7 @@ namespace cn {
         friend class BatchNormalizationLayer;
         friend class MaxPoolingLayer;
         friend class Backpropagation;
+        friend class OutputLayer;
 
 
     public:
@@ -57,6 +59,8 @@ namespace cn {
         const int inputDataDepth;
 
         std::optional<Bitmap<float>> input;
+
+        bool outputLayerAppended;
 
         /**
          *

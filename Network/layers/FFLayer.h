@@ -32,7 +32,7 @@ namespace cn {
         /**
          * returns ith weight belonging to the neuron
          */
-        float getWeight(int neuron, int weightID);
+        float &getWeight(int neuron, int weightID) override;
 
         virtual float diffWeight(int neuronID, int weightID) override ;
 

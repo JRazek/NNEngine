@@ -48,7 +48,7 @@ void cn::FFLayer::randomInit() {
     }
 }
 
-float cn::FFLayer::getWeight(int neuron, int weightID) {
+float &cn::FFLayer::getWeight(int neuron, int weightID) {
     int perNeuron = weights.size() / neuronsCount;
     return weights[perNeuron * neuron + weightID];
 }

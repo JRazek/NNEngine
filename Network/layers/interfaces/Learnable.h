@@ -33,6 +33,8 @@ namespace cn {
 
         virtual float diffWeight(int neuronID, int weightID) = 0;
 
+        virtual float &getWeight(int neuronID, int weightID) = 0;
+
         virtual void randomInit() = 0;
     };
 }
