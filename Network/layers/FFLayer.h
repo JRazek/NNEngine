@@ -29,7 +29,7 @@ namespace cn {
          */
         FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_differentiableFunction, Network &_network);
 
-        void run(const Bitmap<float> &bitmap) override;
+        void run(const Bitmap<float> &input) override;
         /*
          * returns ith weight belonging to the neuron
          */

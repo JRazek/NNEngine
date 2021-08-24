@@ -45,14 +45,15 @@ cn::Network::Network(int w, int h, int d, int seed):
         {}
 
 void cn::Network::feed(const cn::Bitmap<float> &bitmap) {
-    cn::Bitmap<float> resized = cn::Utils::resize<float>(bitmap, inputDataWidth, inputDataHeight);
     if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
-    const Bitmap<float> *input = &resized;
+    input.emplace(cn::Utils::resize<float>(bitmap, inputDataWidth, inputDataHeight));
+
+    const Bitmap<float> *_input = &input.value();
     for(int i = 0; i < layers.size(); i ++){
         auto layer = layers[i];
-        layer->run(*input);
-        input = &layer->output.value();
+        layer->run(*_input);
+        _input = &layer->output.value();
     }
 }
 

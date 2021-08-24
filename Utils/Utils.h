@@ -162,7 +162,7 @@ cn::Bitmap<T> cn::Utils::resize(const cn::Bitmap<T> &input, int destSizeX, int d
     };
 
     cn::Bitmap<T> sampled = upsample<T>(input, max(input.w(), destSizeX), max(input.h(), destSizeY), 0);
-    return downsample<T>(sampled, min(input.w(), destSizeX), min(input.h(), destSizeY), 0);
+    return downsample<T>(sampled, min(sampled.w(), destSizeX), min(sampled.h(), destSizeY), 0);
 }
 
 

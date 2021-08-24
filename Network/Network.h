@@ -12,12 +12,6 @@
 #include "layers/OutputLayer.h"
 
 namespace cn {
-    class Layer;
-    class FFLayer;
-    class ConvolutionLayer;
-    class FlatteningLayer;
-    class BatchNormalizationLayer;
-    class MaxPoolingLayer;
     class OutputLayer;
 
     class Network {
@@ -26,14 +20,8 @@ namespace cn {
     protected:
         std::vector<Learnable *> randomInitLayers;
         std::vector<Layer *> layers;
+        std::optional<Bitmap<float>> input;
         //OutputLayer outputLayer;
-
-        friend class Layer;
-        friend class FFLayer;
-        friend class FlatteningLayer;
-        friend class ConvolutionLayer;
-        friend class BatchNormalizationLayer;
-        friend class MaxPoolingLayer;
         friend class OutputLayer;
 
     public:
@@ -73,7 +61,7 @@ namespace cn {
          *
          * @return layers
          */
-        const std::vector<Layer *> * getLayers();
+        const std::vector<Layer *> *getLayers();
 
 
         /**

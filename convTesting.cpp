@@ -10,23 +10,21 @@
 #include <opencv2/opencv.hpp>
 int main(){
     cv::Mat mat = cv::imread("resources/aPhoto.jpg");
-    cn::Network network(100, 100, 3, 1);
+    cn::Network network(33, 1, 3, 1);
 
     cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
     bitmap = cn::Utils::resize<cn::byte>(bitmap, 100, 1);
     ReLU reLu;
     Sigmoid sigmoid;
 
-    network.appendConvolutionLayer(3, 3, 1, reLu);
-    network.appendConvolutionLayer(3, 3, 1, reLu);
-    network.appendBatchNormalizationLayer();
-    network.appendMaxPoolingLayer(2, 2);
     network.appendFlatteningLayer();
-    network.appendFFLayer(100, sigmoid);
+    network.appendFFLayer(6, sigmoid);
+    network.appendFFLayer(6, sigmoid);
     network.appendFFLayer(10, sigmoid);
     network.initRandom();
 
-    network.feed(bitmap);
+    for(int i = 0; i < 1000; i ++)
+        network.feed(bitmap);
 
     cn::Bitmap<float> result = network.getOutput();
     for(int i = 0; i < 10; i ++){
