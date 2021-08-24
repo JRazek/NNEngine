@@ -6,10 +6,12 @@
 #define NEURALNETLIBRARY_CONVOLUTIONLAYER_H
 
 #include "interfaces/Layer.h"
-#include "interfaces/RandomInitiable.h"
+#include "interfaces/Learnable.h"
 
+template<typename T>
+struct Vector3;
 namespace cn {
-    class ConvolutionLayer : public cn::Layer, public RandomInitiable{
+    class ConvolutionLayer : public cn::Layer, public Learnable{
     private:
         const int kernelSizeX;
         const int kernelSizeY;
@@ -26,9 +28,9 @@ namespace cn {
         std::vector<float> biases;//ith corresponds to ith kernel
 
     public:
-        ConvolutionLayer(int _id, cn::Network *_network, int _kernelSizeX, int _kernelSizeY, int _kernelSizeZ,
-                         int _kernelsCount, const DifferentiableFunction &_activationFunction, int _paddingX, int _paddingY,
-                         int _strideX, int _strideY);
+        ConvolutionLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY,
+                         int _kernelsCount, const DifferentiableFunction &_activationFunction,
+                         int _paddingX, int _paddingY, int _strideX, int _strideY);
         void randomInit() override;
         void run(const Bitmap<float> &bitmap) override;
     };

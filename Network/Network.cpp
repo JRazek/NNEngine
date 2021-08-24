@@ -7,11 +7,8 @@
 #include "layers/ConvolutionLayer.h"
 #include "layers/FFLayer.h"
 #include "layers/FlatteningLayer.h"
-
-void cn::Network::appendLayer(cn::Layer * layer) {
-    //todo validation!
-    layers.push_back(layer);
-}
+#include "layers/BatchNormalizationLayer.h"
+#include "layers/MaxPoolingLayer.h"
 
 void cn::Network::feed(const byte *input) {
     cn::Bitmap<byte> bitmap(inputDataWidth, inputDataHeight, inputDataDepth, input, 0);
@@ -26,10 +23,10 @@ cn::Network::~Network() {
     }
 }
 
-void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount, const DifferentiableFunction &differentiableFunction, int paddingX,
+void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelsCount, const DifferentiableFunction &differentiableFunction, int paddingX,
                                          int paddingY, int strideX, int strideY) {
 
-    ConvolutionLayer *c = new ConvolutionLayer(this->layers.size(), this, kernelX, kernelY, kernelZ, kernelsCount,
+    ConvolutionLayer *c = new ConvolutionLayer(this->layers.size(), *this, kernelX, kernelY, kernelsCount,
                                                differentiableFunction, paddingX, paddingY, strideX, strideY);
     randomInitLayers.push_back(c);
     layers.push_back(c);
@@ -47,11 +44,11 @@ void cn::Network::feed(const cn::Bitmap<float> &bitmap) {
 
     if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
-    const Bitmap<float> * input = &resized;
+    const Bitmap<float> *input = &resized;
     for(int i = 0; i < layers.size(); i ++){
         auto layer = layers[i];
         layer->run(*input);
-        input = layer->output;
+        input = &layer->output.value();
     }
 }
 
@@ -71,12 +68,26 @@ void cn::Network::initRandom() {
 }
 
 void cn::Network::appendFFLayer(int neuronsCount, const DifferentiableFunction &differentiableFunction) {
-    FFLayer *f = new FFLayer(layers.size(), neuronsCount, differentiableFunction, this);
+    FFLayer *f = new FFLayer(layers.size(), neuronsCount, differentiableFunction, *this);
     randomInitLayers.push_back(f);
     layers.push_back(f);
 }
 
 void cn::Network::appendFlatteningLayer() {
-    FlatteningLayer *f = new FlatteningLayer(layers.size(), this);
+    FlatteningLayer *f = new FlatteningLayer(layers.size(), *this);
     layers.push_back(f);
+}
+
+void cn::Network::appendBatchNormalizationLayer() {
+    BatchNormalizationLayer *b = new BatchNormalizationLayer(layers.size(), *this);
+    layers.push_back(b);
+}
+
+void cn::Network::appendMaxPoolingLayer(int kernelSizeX, int kernelSizeY) {
+    MaxPoolingLayer *m = new MaxPoolingLayer(layers.size(), *this, kernelSizeX, kernelSizeY);
+    layers.push_back(m);
+}
+
+cn::Bitmap<float> &cn::Network::getOutput() {
+    return layers.back()->output.value();
 }

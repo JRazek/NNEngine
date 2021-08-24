@@ -4,11 +4,47 @@
 #include "ConvolutionLayer.h"
 #include "../Network.h"
 
+cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY,
+                                       int _kernelsCount, const DifferentiableFunction &_activationFunction,
+                                       int _paddingX, int _paddingY, int _strideX, int _strideY) :
+        kernelSizeX(_kernelSizeX),
+        kernelSizeY(_kernelSizeY),
+        kernelSizeZ(_id == 0 ? _network.inputDataDepth : network->layers[id - 1]->output->d),
+        kernelsCount(_kernelsCount),
+        activationFunction(_activationFunction),
+        paddingX(_paddingX),
+        paddingY(_paddingY),
+        strideX(_strideX),
+        strideY(_strideY),
+        biases(kernelsCount),
+        cn::Layer(_id, _network) {
+
+    int inputX, inputY;
+    int sizeX, sizeY, sizeZ;
+    if(id == 0){
+        inputX = network->inputDataWidth;
+        inputY = network->inputDataHeight;
+    }else{
+        inputX = network->layers[id - 1]->output->w;
+        inputY = network->layers[id - 1]->output->h;
+    }
+
+    kernels.reserve(_kernelsCount);
+
+    for(int i = 0; i < _kernelsCount; i ++){
+        kernels.emplace_back(kernelSizeX, kernelSizeY, kernelSizeZ);
+    }
+
+    sizeX = Utils::afterConvolutionSize(kernelSizeX, inputX, paddingX, strideX);
+    sizeY = Utils::afterConvolutionSize(kernelSizeY, inputY, paddingY, strideY);
+    sizeZ = kernelsCount;
+    output.emplace(Bitmap<float>(sizeX, sizeY, sizeZ));
+}
+
 void cn::ConvolutionLayer::run(const Bitmap<float> &bitmap) {
     //convolve bitmap - must have correct sizes etc. Garbage in garbage out.
     int outW = Utils::afterConvolutionSize(kernelSizeX, bitmap.w, paddingX, strideX);
     int outH = Utils::afterConvolutionSize(kernelSizeY, bitmap.h, paddingY, strideY);
-    output = new Bitmap<float>(outW, outH, kernelsCount);
 
     for(int i = 0; i < kernelsCount; i ++){
         Bitmap<float> layer = Utils::sumBitmapLayers(Utils::convolve(kernels[i], bitmap, paddingX, paddingY, strideX, strideY));
@@ -27,28 +63,6 @@ void cn::ConvolutionLayer::randomInit() {
     }
     for(auto &b : biases){
         b = network->getRandom(-5, 5);
-    }
-}
-
-cn::ConvolutionLayer::ConvolutionLayer(int _id, cn::Network *_network, int _kernelSizeX, int _kernelSizeY,
-                                       int _kernelSizeZ,
-                                       int _kernelsCount, const DifferentiableFunction &_activationFunction, int _paddingX,
-                                       int _paddingY,
-                                       int _strideX, int _strideY) :
-                                       kernelSizeX(_kernelSizeX),
-                                       kernelSizeY(_kernelSizeY),
-                                       kernelSizeZ(_kernelSizeZ),
-                                       kernelsCount(_kernelsCount),
-                                       activationFunction(_activationFunction),
-                                       paddingX(_paddingX),
-                                       paddingY(_paddingY),
-                                       strideX(_strideX),
-                                       strideY(_strideY),
-                                       biases(kernelsCount),
-                                       cn::Layer(_id, _network) {
-    kernels.reserve(_kernelsCount);
-    for(int i = 0; i < _kernelsCount; i ++){
-        kernels.emplace_back(_kernelSizeX, _kernelSizeY, _kernelSizeZ);
     }
 }
 

@@ -6,6 +6,7 @@
 #define NEURALNETLIBRARY_LAYER_H
 
 #include <vector>
+#include <optional>
 #include "../../../Utils/Bitmap.h"
 namespace cn {
 
@@ -15,14 +16,13 @@ namespace cn {
     protected:
         Network * network;
     public:
-        Bitmap<float> * output = nullptr;
-        const int id;
-        Layer(int _id, Network * network);
+        std::optional<Bitmap<float>> output;
 
-        Layer(Layer &layer) = delete;
+        const int id;
+        Layer(int _id, Network &_network);
 
         virtual void run(const Bitmap<float> &bitmap) = 0;
-        virtual ~Layer();
+        virtual ~Layer() = default;
     };
 }
 

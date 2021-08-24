@@ -8,33 +8,41 @@
 #include <vector>
 #include <random>
 #include "../Utils/Utils.h"
-#include "layers/interfaces/RandomInitiable.h"
+#include "layers/interfaces/Learnable.h"
 
 namespace cn {
     class Layer;
     class FFLayer;
     class ConvolutionLayer;
+    class FlatteningLayer;
+    class BatchNormalizationLayer;
+    class MaxPoolingLayer;
 
     class Network {
         std::default_random_engine randomEngine;
 
     protected:
-        std::vector<RandomInitiable *> randomInitLayers;
+        std::vector<Learnable *> randomInitLayers;
         std::vector<Layer *> layers;
         friend class Layer;
-
-        friend ConvolutionLayer;
-
-        void appendLayer(Layer * layer);
+        friend class FFLayer;
+        friend class FlatteningLayer;
+        friend class ConvolutionLayer;
+        friend class BatchNormalizationLayer;
+        friend class MaxPoolingLayer;
 
     public:
 
-        void appendConvolutionLayer(int kernelX, int kernelY, int kernelZ, int kernelsCount, const DifferentiableFunction &differentiableFunction, int paddingX = 0,
+        void appendConvolutionLayer(int kernelX, int kernelY, int kernelsCount, const DifferentiableFunction &differentiableFunction, int paddingX = 0,
                                     int paddingY = 0, int strideX = 1, int strideY = 1);
 
         void appendFFLayer(int neuronsCount, const DifferentiableFunction &differentiableFunction);
 
         void appendFlatteningLayer();
+
+        void appendBatchNormalizationLayer();
+
+        void appendMaxPoolingLayer(int kernelSizeX, int kernelSizeY);
 
 
         /**
@@ -73,7 +81,7 @@ namespace cn {
          * In case of using only FFLayers - set height and depth to 1.
          */
 
-        Network(int w, int h, int d, int seed = 0);
+        Network(int w, int h, int d, int seed = 1);
 
 
         /**
@@ -81,8 +89,24 @@ namespace cn {
          */
         Network(const Network&) = delete;
 
+        /**
+         * randomly initialized all the weights and biases of the network
+         */
         void initRandom();
 
+
+        /**
+         *
+         * @return the output from the last layer of the network
+         */
+        Bitmap<float> & getOutput();
+
+        /**
+         *
+         * @param low lower bound for number
+         * @param high higher bound for number
+         * @return pseudorandom number with seed given in constructor
+         */
         float getRandom(float low, float high);
 
         ~Network();

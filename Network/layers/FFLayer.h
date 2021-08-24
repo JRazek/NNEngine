@@ -7,15 +7,14 @@
 
 #include "interfaces/Layer.h"
 #include "../../Utils/Differentiables/DifferentiableFunction.h"
-#include "interfaces/RandomInitiable.h"
+#include "interfaces/Learnable.h"
 
 namespace cn {
     class Network;
 
-    class FFLayer : public cn::Layer, public RandomInitiable{
+    class FFLayer : public cn::Layer, public Learnable{
         std::vector<float> biases;
         std::vector<float> weights;
-        std::vector<float> outputs;
         const DifferentiableFunction &differentiableFunction;
 
         const int neuronsCount;
@@ -28,9 +27,13 @@ namespace cn {
          * @param _differentiableFunction function with its derivative
          * @param _neuronsCount input size (neuron count)
          */
-        FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_differentiableFunction, Network *_network);
+        FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_differentiableFunction, Network &_network);
 
         void run(const Bitmap<float> &bitmap) override;
+        /*
+         * returns ith weight belonging to the neuron
+         */
+        float getWeight(int neuron, int weightID);
     };
 }
 
