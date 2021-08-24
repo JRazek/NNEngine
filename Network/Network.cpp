@@ -36,12 +36,16 @@ const std::vector<cn::Layer *> *cn::Network::getLayers() {
     return &layers;
 }
 
-cn::Network::Network(int w, int h, int d, int seed)
-        : inputDataWidth(w), inputDataHeight(h), inputDataDepth(d), randomEngine(seed) {}
+cn::Network::Network(int w, int h, int d, int seed):
+        //outputLayer(-1, *this),
+        inputDataWidth(w),
+        inputDataHeight(h),
+        inputDataDepth(d),
+        randomEngine(seed)
+        {}
 
 void cn::Network::feed(const cn::Bitmap<float> &bitmap) {
     cn::Bitmap<float> resized = cn::Utils::resize<float>(bitmap, inputDataWidth, inputDataHeight);
-
     if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
     const Bitmap<float> *input = &resized;

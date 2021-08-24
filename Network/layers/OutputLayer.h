@@ -11,6 +11,7 @@ namespace cn {
     class OutputLayer : public FlatteningLayer {
     public:
         OutputLayer(int id, cn::Network &network);
+        void run(const Bitmap<float> &input) override;
     };
 }
 
