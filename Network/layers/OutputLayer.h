@@ -11,10 +11,11 @@ namespace cn {
         class Backpropagation;
     protected:
         friend Backpropagation;
-        std::optional<Bitmap<float>> target;
     public:
+        std::optional<Bitmap<float>> target;
         OutputLayer(int id, cn::Network &network);
         virtual float getChain(int neuronID) override;
+        float getError();
     };
 }
 

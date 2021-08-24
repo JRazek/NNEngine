@@ -60,6 +60,7 @@ namespace cn {
 
         std::optional<Bitmap<float>> input;
 
+        OutputLayer *outputLayer;
         bool outputLayerAppended;
 
         /**

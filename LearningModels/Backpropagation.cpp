@@ -5,6 +5,7 @@
 #include "Backpropagation.h"
 #include "../Network/Network.h"
 #include "../Utils/Bitmap.h"
+#include "../Network/layers/OutputLayer.h"
 
 cn::Backpropagation::Backpropagation(float _learningRate, cn::Network &_network) : learningRate(_learningRate), network(_network) {
 
@@ -16,12 +17,14 @@ void cn::Backpropagation::propagate(const cn::Bitmap<float> &target) {
         throw std::logic_error("Backpropagation, invalid target!");
     }
     //E wrt out = a - T
+    network.outputLayer->target.emplace(target);
+    std::cout<<network.outputLayer->getError()<<"\n";
     for(auto p : network.learnableLayers){
         std::vector<float> gradients(p->neuronsCount);
         for(int i = 0; i < p->neuronsCount; i ++){
             int weightsPerNeuron = p->netValues->w * p->netValues->h * p->netValues->d / p->neuronsCount;
             for(int j = 0; j < weightsPerNeuron; j ++) {
-                float gradient = -0.1 * p->diffWeight(i, j);
+                float gradient = p->diffWeight(i, j);
                 float &weight = p->getWeight(i, j);
                 weight += gradient;
             }

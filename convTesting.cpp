@@ -24,15 +24,16 @@ int main(){
     network.appendFFLayer(10, sigmoid);
     network.initRandom();
 
-    network.feed(bitmap);
 
     cn::Bitmap<float> target(10, 1, 1);
 
     for(int i = 0; i < 10; i ++){
         target.setCell(i, 0, 0, 1);
     }
-    for(int i = 0; i < 1000; i ++)
+    for(int i = 0; i < 1000; i ++) {
+        network.feed(bitmap);
         backpropagation.propagate(target);
+    }
     /*
     cn::Bitmap<float> result = network.getOutput();
     for(int i = 0; i < 10; i ++){

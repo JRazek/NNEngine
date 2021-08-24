@@ -34,7 +34,7 @@ namespace cn {
          */
         float &getWeight(int neuron, int weightID) override;
 
-        virtual float diffWeight(int neuronID, int weightID) override ;
+        virtual float diffWeight(int neuronID, int weightID) override;
 
         float getChain(int neuronID) override;
     };

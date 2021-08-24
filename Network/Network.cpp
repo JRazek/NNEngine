@@ -16,11 +16,6 @@ void cn::Network::feed(const byte *_input) {
     if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
 
-    if(!outputLayerAppended) {
-        layers.push_back(new OutputLayer(layers.size(), *this));
-        outputLayerAppended = true;
-    }
-
     input.value() = cn::Utils::normalize(bitmap);
     feed(input.value());
 }
@@ -56,6 +51,12 @@ void cn::Network::feed(const cn::Bitmap<float> &bitmap) {
     if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
     const Bitmap<float> *_input = &resized;
+
+    if(!outputLayerAppended) {
+        outputLayer = new OutputLayer(layers.size(), *this);
+        layers.push_back(outputLayer);
+        outputLayerAppended = true;
+    }
     for(int i = 0; i < layers.size(); i ++){
         auto layer = layers[i];
         layer->run(*_input);
