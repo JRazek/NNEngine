@@ -45,6 +45,8 @@ cn::Network::Network(int w, int h, int d, int seed):
         {}
 
 void cn::Network::feed(const cn::Bitmap<float> &bitmap) {
+    outputLayer.emplace(layers.size(), *this);
+    layers.push_back(&outputLayer.value());
     if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
     input.emplace(cn::Utils::resize<float>(bitmap, inputDataWidth, inputDataHeight));
@@ -53,8 +55,10 @@ void cn::Network::feed(const cn::Bitmap<float> &bitmap) {
     for(int i = 0; i < layers.size(); i ++){
         auto layer = layers[i];
         layer->run(*_input);
-        _input = &layer->output.value();
+        _input = layer->getOutput();
     }
+    outputLayer.reset();
+    layers.pop_back();
 }
 
 void cn::Network::feed(const cn::Bitmap<cn::byte> &bitmap) {
@@ -93,6 +97,6 @@ void cn::Network::appendMaxPoolingLayer(int kernelSizeX, int kernelSizeY) {
     layers.push_back(m);
 }
 
-cn::Bitmap<float> &cn::Network::getOutput() {
-    return layers.back()->output.value();
+const cn::Bitmap<float> * cn::Network::getOutput() {
+    return layers.back()->getOutput();
 }

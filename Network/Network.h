@@ -21,7 +21,7 @@ namespace cn {
         std::vector<Learnable *> randomInitLayers;
         std::vector<Layer *> layers;
         std::optional<Bitmap<float>> input;
-        //OutputLayer outputLayer;
+        std::optional<OutputLayer> outputLayer;
         friend class OutputLayer;
 
     public:
@@ -92,7 +92,7 @@ namespace cn {
          *
          * @return the output from the last layer of the network
          */
-        Bitmap<float> & getOutput();
+        const Bitmap<float> * getOutput();
 
         /**
          *

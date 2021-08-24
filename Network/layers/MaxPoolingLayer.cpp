@@ -15,7 +15,7 @@ cn::MaxPoolingLayer::MaxPoolingLayer(int _id, Network &_network, int _kernelSize
         sizeY = Utils::afterMaxPoolSize(kernelSizeY, network->inputDataHeight);
         sizeZ = network->inputDataDepth;
     }else{
-        Bitmap<float> *prev = &network->getLayers()->at(id - 1)->output.value();;
+        const Bitmap<float> *prev = network->getLayers()->at(id - 1)->getOutput();
         sizeX = Utils::afterMaxPoolSize(kernelSizeX, prev->w());
         sizeY = Utils::afterMaxPoolSize(kernelSizeY, prev->h());
         sizeZ = prev->d();

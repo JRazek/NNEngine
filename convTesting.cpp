@@ -26,9 +26,9 @@ int main(){
     for(int i = 0; i < 1000; i ++)
         network.feed(bitmap);
 
-    cn::Bitmap<float> result = network.getOutput();
+    const cn::Bitmap<float> *result = network.getOutput();
     for(int i = 0; i < 10; i ++){
-        std::cout<<result.getCell(i, 0, 0)<<"\n";
+        std::cout<<result->getCell(i, 0, 0)<<"\n";
     }
 
   //  cn::Bitmap<cn::byte> resampled = cn::Utils::resize(bitmap, 600, 600);

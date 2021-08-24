@@ -9,7 +9,7 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSi
                                        int _paddingX, int _paddingY, int _strideX, int _strideY) :
         kernelSizeX(_kernelSizeX),
         kernelSizeY(_kernelSizeY),
-        kernelSizeZ(_id == 0 ? _network.inputDataDepth :network->getLayers()->at(id - 1)->output->d()),
+        kernelSizeZ(_id == 0 ? _network.inputDataDepth :network->getLayers()->at(id - 1)->getOutput()->d()),
         kernelsCount(_kernelsCount),
         activationFunction(_activationFunction),
         paddingX(_paddingX),
@@ -25,8 +25,8 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSi
         inputX = network->inputDataWidth;
         inputY = network->inputDataHeight;
     }else{
-        inputX = network->getLayers()->at(id - 1)->output->w();
-        inputY = network->getLayers()->at(id - 1)->output->h();
+        inputX = network->getLayers()->at(id - 1)->getOutput()->w();
+        inputY = network->getLayers()->at(id - 1)->getOutput()->h();
     }
 
     kernels.reserve(_kernelsCount);

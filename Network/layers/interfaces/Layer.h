@@ -15,12 +15,12 @@ namespace cn {
     class Layer {
     protected:
         Network * network;
-    public:
         std::optional<Bitmap<float>> output;
-
+    public:
         const int id;
         Layer(int _id, Network &_network);
 
+        const Bitmap<float> *getOutput();
         virtual void run(const Bitmap<float> &bitmap) = 0;
         virtual ~Layer() = default;
     };

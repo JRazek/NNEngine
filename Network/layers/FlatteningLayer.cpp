@@ -10,7 +10,7 @@ cn::FlatteningLayer::FlatteningLayer(int _id, Network &_network) : Layer(_id, _n
     if(id == 0){
         size = network->inputDataWidth * network->inputDataHeight * network->inputDataDepth;
     }else{
-        Bitmap<float> *prev = &network->getLayers()->at(id - 1)->output.value();
+        const Bitmap<float> *prev = network->getLayers()->at(id - 1)->getOutput();
         size = prev->w() * prev->h() * prev->d();
     }
     output.emplace(Bitmap<float>(size, 1, 1));

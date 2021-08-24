@@ -13,7 +13,7 @@ cn::FFLayer::FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_
     if(id == 0){
         throw std::logic_error("FFLayer must not be the first layer in the network!");
     }else{
-        Bitmap<float> *prev = &network->getLayers()->at(id - 1)->output.value();
+        const Bitmap<float> *prev = network->getLayers()->at(id - 1)->getOutput();
         if(prev->w() < 1 || prev->h() != 1 || prev->d() != 1){
             throw std::logic_error("There must be a vector output layer before FFLayer!");
         }
