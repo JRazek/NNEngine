@@ -18,12 +18,12 @@ int main(){
     ReLU reLu;
     Sigmoid sigmoid;
 
-    cn::Backpropagation backpropagation(network);
+    cn::Backpropagation backpropagation(network, 0.001);
 
     const int outputSize = 10;
     network.appendFlatteningLayer();
-    network.appendFFLayer(6, sigmoid);
-    network.appendFFLayer(6, sigmoid);
+    network.appendFFLayer(10, sigmoid);
+    network.appendFFLayer(10, reLu);
     network.appendFFLayer(outputSize, sigmoid);
     network.initRandom();
 
@@ -34,7 +34,7 @@ int main(){
         target.setCell(i, 0, 0, 0.5);
     }
 
-    for(int i = 0; i < 1000; i ++) {
+    for(int i = 0; i < 100000; i ++) {
         network.feed(bitmap);
         backpropagation.propagate(target);
     }

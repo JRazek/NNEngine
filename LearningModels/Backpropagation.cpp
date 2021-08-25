@@ -5,9 +5,10 @@
 #include "Backpropagation.h"
 #include "../Utils/Bitmap.h"
 #include "../Network/Network.h"
-cn::Backpropagation::Backpropagation(cn::Network &_network): network(_network) {
-
-}
+cn::Backpropagation::Backpropagation(Network &_network, float _learningRate) :
+        network(_network),
+        learningRate(_learningRate)
+        {}
 
 void cn::Backpropagation::propagate(const cn::Bitmap<float> &target) {
     OutputLayer *layer = network.getOutputLayer();
@@ -24,7 +25,7 @@ void cn::Backpropagation::propagate(const cn::Bitmap<float> &target) {
         for(int n = 0; n < learnable->getNeuronsCount();  n++){
             for(int w = 0; w < learnable->weightsCount() / learnable->getNeuronsCount(); w ++){
                 float oldWeight = learnable->getWeight(n, w);
-                float delta = -0.5 * learnable->diffWeight(n, w);
+                float delta = -0.01 * learnable->diffWeight(n, w);
                 learnable->setWeight(n, w, oldWeight + delta);
             }
         }
