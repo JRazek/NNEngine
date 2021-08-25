@@ -22,7 +22,7 @@ namespace cn {
         void randomInit() override;
         /**
          *
-         * @param _id id of layer in network
+         * @param _id __id of layer in network
          * @param _network network to which layer belongs
          * @param _differentiableFunction function with its derivative
          * @param _neuronsCount input size (neuron count)

@@ -10,10 +10,10 @@ cn::FFLayer::FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_
         neuronsCount(_neuronsCount),
         differentiableFunction(_differentiableFunction),
         biases(_neuronsCount){
-    if(id == 0){
+    if(__id == 0){
         throw std::logic_error("FFLayer must not be the first layer in the network!");
     }else{
-        const Bitmap<float> *prev = network->getLayers()->at(id - 1)->getOutput();
+        const Bitmap<float> *prev = network->getLayers()->at(__id - 1)->getOutput();
         if(prev->w() < 1 || prev->h() != 1 || prev->d() != 1){
             throw std::logic_error("There must be a vector output layer before FFLayer!");
         }

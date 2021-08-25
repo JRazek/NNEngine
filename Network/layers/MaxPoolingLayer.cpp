@@ -10,12 +10,12 @@ cn::MaxPoolingLayer::MaxPoolingLayer(int _id, Network &_network, int _kernelSize
         kernelSizeX(_kernelSizeX),
         kernelSizeY(_kernelSizeY){
     int sizeX, sizeY, sizeZ;
-    if(id == 0){
+    if(__id == 0){
         sizeX = Utils::afterMaxPoolSize(kernelSizeX, network->inputDataWidth);
         sizeY = Utils::afterMaxPoolSize(kernelSizeY, network->inputDataHeight);
         sizeZ = network->inputDataDepth;
     }else{
-        const Bitmap<float> *prev = network->getLayers()->at(id - 1)->getOutput();
+        const Bitmap<float> *prev = network->getLayers()->at(__id - 1)->getOutput();
         sizeX = Utils::afterMaxPoolSize(kernelSizeX, prev->w());
         sizeY = Utils::afterMaxPoolSize(kernelSizeY, prev->h());
         sizeZ = prev->d();

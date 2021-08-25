@@ -16,13 +16,17 @@ namespace cn {
     protected:
         Network * network;
         std::optional<Bitmap<float>> output;
+        int __id;
     public:
-        const int id;
         Layer(int _id, Network &_network);
 
         const Bitmap<float> *getOutput();
         virtual void run(const Bitmap<float> &bitmap) = 0;
+
+        Layer(const Layer &other) = delete;
+
         virtual ~Layer() = default;
+        int id() const;
     };
 }
 

@@ -4,8 +4,12 @@
 
 #include "Layer.h"
 
-cn::Layer::Layer(int _id, Network &_network): id(_id), network(&_network){}
+cn::Layer::Layer(int _id, Network &_network): __id(_id), network(&_network){}
 
 const cn::Bitmap<float> *cn::Layer::getOutput() {
     return &output.value();
+}
+
+int cn::Layer::id() const {
+    return __id;
 }
