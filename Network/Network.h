@@ -49,9 +49,9 @@ namespace cn {
 
         /**
          *
-         * @param takes input in 1 format type
+         * @param takes _input in 1 format type
          */
-        void feed(const byte *input);
+        void feed(const byte *_input);
 
         void feed(const Bitmap<float> &bitmap);
         void feed(const Bitmap<cn::byte> &bitmap);
