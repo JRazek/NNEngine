@@ -53,6 +53,7 @@ void cn::ConvolutionLayer::run(const Bitmap<float> &bitmap) {
     for(auto it = output->data(); it != output->data() + outW * outH; ++it){
         *it = activationFunction.func(*it);
     }
+    Layer::run(bitmap);
 }
 
 void cn::ConvolutionLayer::randomInit() {

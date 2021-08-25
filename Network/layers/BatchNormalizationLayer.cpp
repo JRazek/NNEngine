@@ -34,4 +34,5 @@ void cn::BatchNormalizationLayer::run(const cn::Bitmap<float> &bitmap) {
         *it = (*it)/max;
     }
     normalizationFactor = max;
+    Layer::run(bitmap);
 }

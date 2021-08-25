@@ -3,8 +3,9 @@
 //
 
 #include "Layer.h"
+#include "../../../Utils/dataStructures/Vector3.h"
 
-cn::Layer::Layer(int _id, Network &_network): __id(_id), network(&_network){}
+cn::Layer::Layer(int _id, Network &_network): __id(_id), network(&_network), chainMemoized(false){}
 
 const cn::Bitmap<float> *cn::Layer::getOutput() {
     return &output.value();
@@ -12,4 +13,8 @@ const cn::Bitmap<float> *cn::Layer::getOutput() {
 
 int cn::Layer::id() const {
     return __id;
+}
+
+void cn::Layer::run(const cn::Bitmap<float> &bitmap) {
+    _input = &bitmap;
 }

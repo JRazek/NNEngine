@@ -30,7 +30,10 @@ namespace cn {
         FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_differentiableFunction, Network &_network);
 
         void run(const Bitmap<float> &input) override;
-        /*
+
+        virtual float getChain(const Vector3<float> &input) override;
+
+        /**
          * returns ith weight belonging to the neuron
          */
         float getWeight(int neuron, int weightID);

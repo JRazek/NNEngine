@@ -29,4 +29,5 @@ void cn::MaxPoolingLayer::run(const cn::Bitmap<float> &bitmap) {
         throw std::logic_error("invalid output size in max pool!");
     }
     std::copy(res.data(), res.data() + res.w() * res.h() * res.d(), output->data());
+    Layer::run(bitmap);
 }
