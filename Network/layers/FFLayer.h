@@ -31,7 +31,7 @@ namespace cn {
 
         void run(const Bitmap<float> &input) override;
 
-        virtual float getChain(const Vector3<float> &input) override;
+        virtual float getChain(const Vector3<int> &input) override;
 
         /**
          * returns ith weight belonging to the neuron

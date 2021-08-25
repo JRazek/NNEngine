@@ -23,6 +23,6 @@ void cn::FlatteningLayer::run(const cn::Bitmap<float> &bitmap) {
     Layer::run(bitmap);
 }
 
-float cn::FlatteningLayer::getChain(const Vector3<float> &input) {
+float cn::FlatteningLayer::getChain(const Vector3<int> &input) {
     return 0;
 }

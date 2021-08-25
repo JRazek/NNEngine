@@ -26,6 +26,7 @@ namespace cn {
         Bitmap() = delete;
         ~Bitmap();
         T getCell(int col, int row, int depth) const;
+        T getCell(const Vector3<T> &c) const;
         void setCell(int col, int row, int depth, T b);
         void setData(const T * data, int inputType = 0);
         void setLayer(int layerID, T *input);
@@ -123,6 +124,11 @@ int cn::Bitmap<T>::h() const {
 template<typename T>
 int cn::Bitmap<T>::d() const {
     return _d;
+}
+
+template<typename T>
+T cn::Bitmap<T>::getCell(const Vector3<T> &c) const {
+    return getCell(c.x, c.y, c.z);
 }
 //
 

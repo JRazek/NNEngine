@@ -67,7 +67,7 @@ void cn::ConvolutionLayer::randomInit() {
     }
 }
 
-float cn::ConvolutionLayer::getChain(const Vector3<float> &input) {
+float cn::ConvolutionLayer::getChain(const Vector3<int> &input) {
     return 0;
 }
 

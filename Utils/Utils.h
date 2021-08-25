@@ -8,6 +8,7 @@
 
 #include <bits/stdint-uintn.h>
 #include "dataStructures/PointData.h"
+#include "dataStructures/Vector3.h"
 #include <iostream>
 #include <queue>
 #include <unordered_set>

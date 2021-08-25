@@ -21,8 +21,8 @@ namespace cn {
         const Bitmap<float> *_input;
         int __id;
 
-        bool chainMemoized;
-        float chainValue;
+        //Bitmap<bool> memoizedChainsStates;
+        //Bitmap<float> memoizedChains;
     public:
         Layer(int _id, Network &_network);
 
@@ -31,7 +31,7 @@ namespace cn {
 
         Layer(const Layer &other) = delete;
 
-        virtual float getChain(const Vector3<float> &input) = 0;
+        virtual float getChain(const Vector3<int> &input) = 0;
 
         virtual ~Layer() = default;
         int id() const;

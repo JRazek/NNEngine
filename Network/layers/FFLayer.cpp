@@ -4,6 +4,7 @@
 
 #include "FFLayer.h"
 #include "../Network.h"
+#include "../../Utils/dataStructures/Vector3.h"
 
 cn::FFLayer::FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_differentiableFunction, Network &_network) :
         Learnable(_id, _network),
@@ -50,6 +51,15 @@ float cn::FFLayer::getWeight(int neuron, int weightID) {
     return weights[perNeuron * neuron + weightID];
 }
 
-float cn::FFLayer::getChain(const Vector3<float> &input) {
-
+float cn::FFLayer::getChain(const Vector3<int> &input) {
+    if(input.x < 0 || input.y != 0 || input.z != 0){
+        throw std::logic_error("wrong chain request!");
+    }
+    int weightsPerNeuron = weights.size() / neuronsCount;
+    float sum = 0;
+    for(int i = 0; i < neuronsCount; i ++){
+        int weightID = weightsPerNeuron * i + input.x;
+        sum += weights[weightID] * differentiableFunction.derive(_input->getCell(input)) * network->getLayers()->at(__id + 1)->getChain({i, 0, 0});
+    }
+    return sum;
 }

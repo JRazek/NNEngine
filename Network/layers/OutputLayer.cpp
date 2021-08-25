@@ -11,6 +11,6 @@ void cn::OutputLayer::run(const cn::Bitmap<float> &input) {
     Layer::run(input);
 }
 
-float cn::OutputLayer::getChain(const Vector3<float> &input) {
+float cn::OutputLayer::getChain(const Vector3<int> &input) {
     return 0;
 }
