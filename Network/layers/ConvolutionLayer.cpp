@@ -17,7 +17,7 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSi
         strideX(_strideX),
         strideY(_strideY),
         biases(kernelsCount),
-        cn::Learnable(_id, _network) {
+        cn::Learnable(_id, _network, _kernelsCount) {
 
     int inputX, inputY;
     int sizeX, sizeY, sizeZ;
@@ -72,5 +72,21 @@ float cn::ConvolutionLayer::getChain(const Vector3<int> &input) {
 
 float cn::ConvolutionLayer::diffWeight(int neuronID, int weightID) {
     return 0;
+}
+
+int cn::ConvolutionLayer::weightsCount() const {
+    return kernelSizeX * kernelSizeY * kernelSizeZ * kernelsCount;
+}
+
+float cn::ConvolutionLayer::getWeight(int neuron, int weightID) const {
+    return *kernels[neuron].data() + getWeightAbsoluteID(neuron, weightID);
+}
+
+int cn::ConvolutionLayer::getWeightAbsoluteID(int neuron, int weightID) const {
+    return kernelSizeX * kernelSizeY * kernelSizeZ * neuronsCount + weightID;
+}
+
+void cn::ConvolutionLayer::setWeight(int neuron, int weightID, float value) {
+    *(kernels[neuron].data() + getWeightAbsoluteID(neuron, weightID)) = value;
 }
 

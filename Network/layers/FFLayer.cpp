@@ -7,8 +7,7 @@
 #include "../../Utils/dataStructures/Vector3.h"
 
 cn::FFLayer::FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_differentiableFunction, Network &_network) :
-        Learnable(_id, _network),
-        neuronsCount(_neuronsCount),
+        Learnable(_id, _network, _neuronsCount),
         differentiableFunction(_differentiableFunction),
         biases(_neuronsCount){
     if(__id == 0){
@@ -34,7 +33,7 @@ void cn::FFLayer::run(const Bitmap<float> &input) {
         for(int i = 0; i < input.w(); i ++){
             sum += getWeight(n, i) * input.getCell(i, 0, 0);
         }
-        netSums.value().setCell(n, 1, 1, sum);
+        netSums.value().setCell(n, 0, 0, sum);
         output->setCell(n, 0, 0, differentiableFunction.func(sum));
     }
 }
@@ -46,11 +45,6 @@ void cn::FFLayer::randomInit() {
     for(auto &b : biases){
         b = network->getRandom(-5, 5);
     }
-}
-
-float cn::FFLayer::getWeight(int neuron, int weightID) {
-    int perNeuron = weights.size() / neuronsCount;
-    return weights[perNeuron * neuron + weightID];
 }
 
 float cn::FFLayer::getChain(const Vector3<int> &input) {
@@ -70,4 +64,21 @@ float cn::FFLayer::diffWeight(int neuronID, int weightID) {
     return network->getLayers()->at(__id - 1)->getOutput()->getCell(weightID, 0, 0)
             * differentiableFunction.derive(netSums->getCell(neuronID, 0, 0))
             * network->getLayers()->at(__id + 1)->getChain({neuronID, 0, 0});
+}
+
+int cn::FFLayer::weightsCount() const {
+    return weights.size();
+}
+
+float cn::FFLayer::getWeight(int neuron, int weightID) const {
+    return weights[getWeightAbsoluteID(neuron, weightID)];
+}
+
+int cn::FFLayer::getWeightAbsoluteID(int neuron, int weightID) const {
+    int perNeuron = weights.size() / neuronsCount;
+    return perNeuron * neuron + weightID;
+}
+
+void cn::FFLayer::setWeight(int neuron, int weightID, float value) {
+    weights[getWeightAbsoluteID(neuron, weightID)] = value;
 }

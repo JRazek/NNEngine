@@ -11,9 +11,15 @@ namespace cn {
     class Learnable : public Layer{
     protected:
         const Bitmap<float> *_input;
+        int neuronsCount;
     public:
+        int getNeuronsCount() const;
+        virtual int weightsCount() const = 0;
+        virtual float getWeight(int neuron, int weightID) const = 0;
+        virtual void setWeight(int neuron, int weightID, float value) = 0;
+        virtual int getWeightAbsoluteID(int neuron, int weightID) const = 0;
         virtual void randomInit() = 0;
-        Learnable(int id, Network &network);
+        Learnable(int id, Network &network, int neuronsCount);
         virtual float diffWeight(int neuronID, int weightID) = 0;
     };
 }
