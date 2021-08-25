@@ -7,6 +7,7 @@
 #include "Network/Network.h"
 #include "Network/layers/ConvolutionLayer.h"
 #include "Network/layers/FlatteningLayer.h"
+#include "LearningModels/Backpropagation.h"
 #include <opencv2/opencv.hpp>
 int main(){
     cv::Mat mat = cv::imread("resources/aPhoto.jpg");
@@ -17,37 +18,27 @@ int main(){
     ReLU reLu;
     Sigmoid sigmoid;
 
+    cn::Backpropagation backpropagation(network);
+
+    const int outputSize = 10;
     network.appendFlatteningLayer();
     network.appendFFLayer(6, sigmoid);
     network.appendFFLayer(6, sigmoid);
-    network.appendFFLayer(10, sigmoid);
+    network.appendFFLayer(outputSize, sigmoid);
     network.initRandom();
 
-    for(int i = 0; i < 1000; i ++)
-        network.feed(bitmap);
+    network.ready();
 
-    const cn::Bitmap<float> *result = network.getOutput();
-    for(int i = 0; i < 10; i ++){
-        std::cout<<result->getCell(i, 0, 0)<<"\n";
+    cn::Bitmap<float> target (outputSize, 1, 1);
+    for(int i = 0; i < outputSize; i ++){
+        target.setCell(i, 0, 0, 0.5);
     }
 
-  //  cn::Bitmap<cn::byte> resampled = cn::Utils::resize(bitmap, 600, 600);
-
-  //  cn::Bitmap<cn::byte> rotated = cn::Utils::rotate(resampled, M_PI/2.f);
-
-   // auto * dataStorage = new cn::byte [rotated.w * rotated.h * rotated.d];
-
-   // cn::Utils::convert(rotated.data(), dataStorage, rotated.w, rotated.h, rotated.d, 0, 1);
-
-   // cv::Mat transformedImg(rotated.h, rotated.w, CV_8UC(rotated.d), dataStorage);
-
-  //  cv::imshow("img", transformedImg);
+    for(int i = 0; i < 1000; i ++) {
+        network.feed(bitmap);
+        backpropagation.propagate(target);
+    }
 
 
-//    while(cv::waitKey() != 48);
-
-    //std::pair<int, int> neighbor = quadTree.getNearestNeighbour({4, 4});
-
-   // delete [] dataStorage;
     return 0;
 }

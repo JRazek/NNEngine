@@ -15,7 +15,9 @@ namespace cn {
     class OutputLayer;
 
     class Network {
+    private:
         std::default_random_engine randomEngine;
+        std::vector<Layer *> allocated;
 
     protected:
         std::vector<Learnable *> randomInitLayers;
@@ -56,6 +58,10 @@ namespace cn {
         void feed(const Bitmap<float> &bitmap);
         void feed(const Bitmap<cn::byte> &bitmap);
 
+        /**
+         * when network structure is ready - run this function.
+         */
+        void ready();
 
         /**
          *
@@ -63,6 +69,8 @@ namespace cn {
          */
         const std::vector<Layer *> *getLayers();
 
+
+        OutputLayer *getOutputLayer();
 
         /**
          * input size for feed
@@ -86,13 +94,6 @@ namespace cn {
          * randomly initialized all the weights and biases of the network
          */
         void initRandom();
-
-
-        /**
-         *
-         * @return the output from the last layer of the network
-         */
-        const Bitmap<float> * getOutput();
 
         /**
          *

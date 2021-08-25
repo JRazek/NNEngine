@@ -26,7 +26,7 @@ namespace cn {
     public:
         Layer(int _id, Network &_network);
 
-        const Bitmap<float> *getOutput();
+        const Bitmap<float> *getOutput() const;
         virtual void run(const Bitmap<float> &bitmap);
 
         Layer(const Layer &other) = delete;

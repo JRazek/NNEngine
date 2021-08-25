@@ -7,7 +7,7 @@
 
 cn::Layer::Layer(int _id, Network &_network): __id(_id), network(&_network){}
 
-const cn::Bitmap<float> *cn::Layer::getOutput() {
+const cn::Bitmap<float> *cn::Layer::getOutput() const {
     return &output.value();
 }
 

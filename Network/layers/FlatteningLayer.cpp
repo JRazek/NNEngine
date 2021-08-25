@@ -24,5 +24,6 @@ void cn::FlatteningLayer::run(const cn::Bitmap<float> &bitmap) {
 }
 
 float cn::FlatteningLayer::getChain(const Vector3<int> &input) {
-    return 0;
+    int outputIndex = output->getDataIndex(input);
+    return network->getLayers()->at(__id + 1)->getChain({outputIndex, 0, 0});
 }

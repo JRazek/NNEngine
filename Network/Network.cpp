@@ -18,7 +18,7 @@ void cn::Network::feed(const byte *_input) {
 }
 
 cn::Network::~Network() {
-    for(auto l : this->layers){
+    for(auto l : allocated){
         delete l;
     }
 }
@@ -30,6 +30,7 @@ void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelsCo
                                                differentiableFunction, paddingX, paddingY, strideX, strideY);
     randomInitLayers.push_back(c);
     layers.push_back(c);
+    allocated.push_back(c);
 }
 
 const std::vector<cn::Layer *> *cn::Network::getLayers() {
@@ -45,8 +46,6 @@ cn::Network::Network(int w, int h, int d, int seed):
         {}
 
 void cn::Network::feed(const cn::Bitmap<float> &bitmap) {
-    outputLayer.emplace(layers.size(), *this);
-    layers.push_back(&outputLayer.value());
     if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
     input.emplace(cn::Utils::resize<float>(bitmap, inputDataWidth, inputDataHeight));
@@ -57,8 +56,6 @@ void cn::Network::feed(const cn::Bitmap<float> &bitmap) {
         layer->run(*_input);
         _input = layer->getOutput();
     }
-    outputLayer.reset();
-    layers.pop_back();
 }
 
 void cn::Network::feed(const cn::Bitmap<cn::byte> &bitmap) {
@@ -80,23 +77,35 @@ void cn::Network::appendFFLayer(int neuronsCount, const DifferentiableFunction &
     FFLayer *f = new FFLayer(layers.size(), neuronsCount, differentiableFunction, *this);
     randomInitLayers.push_back(f);
     layers.push_back(f);
+    allocated.push_back(f);
 }
 
 void cn::Network::appendFlatteningLayer() {
     FlatteningLayer *f = new FlatteningLayer(layers.size(), *this);
     layers.push_back(f);
+    allocated.push_back(f);
 }
 
 void cn::Network::appendBatchNormalizationLayer() {
     BatchNormalizationLayer *b = new BatchNormalizationLayer(layers.size(), *this);
     layers.push_back(b);
+    allocated.push_back(b);
 }
 
 void cn::Network::appendMaxPoolingLayer(int kernelSizeX, int kernelSizeY) {
     MaxPoolingLayer *m = new MaxPoolingLayer(layers.size(), *this, kernelSizeX, kernelSizeY);
     layers.push_back(m);
+    allocated.push_back(m);
 }
 
-const cn::Bitmap<float> * cn::Network::getOutput() {
-    return layers.back()->getOutput();
+void cn::Network::ready() {
+    if(!outputLayer.has_value()) {
+        outputLayer.emplace(layers.size(), *this);
+        layers.push_back(&outputLayer.value());
+    }
 }
+
+cn::OutputLayer *cn::Network::getOutputLayer() {
+    return &outputLayer.value();
+}
+
