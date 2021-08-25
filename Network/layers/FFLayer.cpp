@@ -23,7 +23,7 @@ cn::FFLayer::FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_
 }
 
 void cn::FFLayer::run(const Bitmap<float> &input) {
-    if(input.h() != 1 || input.d() != 1 || input.w() < 1){
+    if(input.w() < 1 || input.h() != 1 || input.d() != 1){
         throw std::logic_error("input bitmap to ff layer must be a normalized vector type!");
     }
     for(int n = 0; n < neuronsCount; n ++){
