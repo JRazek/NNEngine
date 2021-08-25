@@ -15,5 +15,7 @@ void cn::Backpropagation::propagate(const cn::Bitmap<float> &target) {
     if(output.w() != target.w() || output.h() != target.h() || output.d() != target.d()){
         throw std::logic_error("Backpropagation, invalid target!");
     }
+    for(Learnable *learnable : *network.getLearnables()){
 
+    }
 }

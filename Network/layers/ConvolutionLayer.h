@@ -33,6 +33,7 @@ namespace cn {
         void randomInit() override;
         void run(const Bitmap<float> &bitmap) override;
         float getChain(const Vector3<int> &input) override;
+        float diffWeight(int neuronID, int weightID) override;
     };
 }
 

@@ -15,6 +15,3 @@ int cn::Layer::id() const {
     return __id;
 }
 
-void cn::Layer::run(const cn::Bitmap<float> &bitmap) {
-    _input = &bitmap;
-}

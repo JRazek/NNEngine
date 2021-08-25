@@ -20,7 +20,7 @@ namespace cn {
         std::vector<Layer *> allocated;
 
     protected:
-        std::vector<Learnable *> randomInitLayers;
+        std::vector<Learnable *> learnableLayers;
         std::vector<Layer *> layers;
         std::optional<Bitmap<float>> input;
         std::optional<OutputLayer> outputLayer;
@@ -68,6 +68,12 @@ namespace cn {
          * @return layers
          */
         const std::vector<Layer *> *getLayers();
+
+        /**
+         *
+         * @return learnables
+         */
+        const std::vector<Learnable *> *getLearnables();
 
 
         OutputLayer *getOutputLayer();

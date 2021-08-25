@@ -34,7 +34,6 @@ void cn::BatchNormalizationLayer::run(const cn::Bitmap<float> &bitmap) {
         *it = (*it)/max;
     }
     normalizationFactor = max;
-    Layer::run(bitmap);
 }
 
 float cn::BatchNormalizationLayer::getChain(const Vector3<int> &input) {

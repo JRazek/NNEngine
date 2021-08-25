@@ -53,7 +53,6 @@ void cn::ConvolutionLayer::run(const Bitmap<float> &bitmap) {
     for(auto it = output->data(); it != output->data() + outW * outH; ++it){
         *it = activationFunction.func(*it);
     }
-    Layer::run(bitmap);
 }
 
 void cn::ConvolutionLayer::randomInit() {
@@ -68,6 +67,10 @@ void cn::ConvolutionLayer::randomInit() {
 }
 
 float cn::ConvolutionLayer::getChain(const Vector3<int> &input) {
+    return 0;
+}
+
+float cn::ConvolutionLayer::diffWeight(int neuronID, int weightID) {
     return 0;
 }
 

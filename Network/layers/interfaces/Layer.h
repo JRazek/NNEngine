@@ -18,7 +18,6 @@ namespace cn {
     protected:
         Network *network;
         std::optional<Bitmap<float>> output;
-        const Bitmap<float> *_input;
         int __id;
 
         //Bitmap<bool> memoizedChainsStates;
@@ -27,7 +26,7 @@ namespace cn {
         Layer(int _id, Network &_network);
 
         const Bitmap<float> *getOutput() const;
-        virtual void run(const Bitmap<float> &bitmap);
+        virtual void run(const Bitmap<float> &bitmap) = 0;
 
         Layer(const Layer &other) = delete;
 

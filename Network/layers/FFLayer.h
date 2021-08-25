@@ -16,8 +16,9 @@ namespace cn {
         std::vector<float> biases;
         std::vector<float> weights;
         const DifferentiableFunction &differentiableFunction;
-
+        std::optional<Bitmap<float>> netSums;
         const int neuronsCount;
+
     public:
         void randomInit() override;
         /**
@@ -32,6 +33,9 @@ namespace cn {
         void run(const Bitmap<float> &input) override;
 
         virtual float getChain(const Vector3<int> &input) override;
+
+        float diffWeight(int neuronID, int weightID) override;
+
 
         /**
          * returns ith weight belonging to the neuron

@@ -28,7 +28,7 @@ void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelsCo
 
     ConvolutionLayer *c = new ConvolutionLayer(this->layers.size(), *this, kernelX, kernelY, kernelsCount,
                                                differentiableFunction, paddingX, paddingY, strideX, strideY);
-    randomInitLayers.push_back(c);
+    learnableLayers.push_back(c);
     layers.push_back(c);
     allocated.push_back(c);
 }
@@ -68,14 +68,14 @@ float cn::Network::getRandom(float low, float high) {
 }
 
 void cn::Network::initRandom() {
-    for(auto l : randomInitLayers){
+    for(auto l : learnableLayers){
         l->randomInit();
     }
 }
 
 void cn::Network::appendFFLayer(int neuronsCount, const DifferentiableFunction &differentiableFunction) {
     FFLayer *f = new FFLayer(layers.size(), neuronsCount, differentiableFunction, *this);
-    randomInitLayers.push_back(f);
+    learnableLayers.push_back(f);
     layers.push_back(f);
     allocated.push_back(f);
 }
@@ -107,5 +107,9 @@ void cn::Network::ready() {
 
 cn::OutputLayer *cn::Network::getOutputLayer() {
     return &outputLayer.value();
+}
+
+const std::vector<cn::Learnable *> *cn::Network::getLearnables() {
+    return &learnableLayers;
 }
 
