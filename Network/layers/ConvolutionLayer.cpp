@@ -71,6 +71,8 @@ float cn::ConvolutionLayer::getChain(const Vector3<int> &input) {
 }
 
 float cn::ConvolutionLayer::diffWeight(int neuronID, int weightID) {
+    Vector3<int> pos = kernels[neuronID].indexToVector(weightID);
+    //todo here
     return 0;
 }
 

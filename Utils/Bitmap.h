@@ -32,6 +32,7 @@ namespace cn {
         void setLayer(int layerID, T *input);
         [[nodiscard]] int getDataIndex(int col, int row, int depth) const;
         [[nodiscard]] int getDataIndex(const Vector3<T> &v) const;
+        Vector3<T> indexToVector(int index) const;
 
         Bitmap<T> &operator=(const Bitmap<T> &other);
         T * data() const;
@@ -135,6 +136,11 @@ T cn::Bitmap<T>::getCell(const Vector3<T> &c) const {
 template<typename T>
 int cn::Bitmap<T>::getDataIndex(const Vector3<T> &v) const {
     return getDataIndex(v.x, v.y, v.z);
+}
+
+template<typename T>
+Vector3<T> cn::Bitmap<T>::indexToVector(int index) const{
+    return {index % _w, index / _w, index / _w * _h};
 }
 //
 
