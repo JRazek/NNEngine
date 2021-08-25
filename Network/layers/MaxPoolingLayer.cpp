@@ -31,3 +31,7 @@ void cn::MaxPoolingLayer::run(const cn::Bitmap<float> &bitmap) {
     std::copy(res.data(), res.data() + res.w() * res.h() * res.d(), output->data());
     Layer::run(bitmap);
 }
+
+float cn::MaxPoolingLayer::getChain(const Vector3<float> &input) {
+    return 0;
+}

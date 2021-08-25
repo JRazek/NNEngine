@@ -22,3 +22,7 @@ void cn::FlatteningLayer::run(const cn::Bitmap<float> &bitmap) {
     std::copy(bitmap.data(), bitmap.data() + bitmap.w() * bitmap.h() * bitmap.d(), output->data());
     Layer::run(bitmap);
 }
+
+float cn::FlatteningLayer::getChain(const Vector3<float> &input) {
+    return 0;
+}

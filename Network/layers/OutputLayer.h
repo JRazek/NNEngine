@@ -12,6 +12,8 @@ namespace cn {
     public:
         OutputLayer(int id, cn::Network &network);
         void run(const Bitmap<float> &input) override;
+        float getChain(const Vector3<float> &input) override;
+
     };
 }
 
