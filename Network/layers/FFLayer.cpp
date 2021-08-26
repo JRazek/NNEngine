@@ -60,7 +60,8 @@ float cn::FFLayer::getChain(const Vector3<int> &input) {
     return sum;
 }
 
-float cn::FFLayer::diffWeight(int neuronID, int weightID) {
+float cn::FFLayer::diffWeight(int weightID) {
+    int neuronID = weightID / (weightsCount()/neuronsCount);
     return network->getLayers()->at(__id - 1)->getOutput()->getCell(weightID, 0, 0)
             * differentiableFunction.derive(netSums->getCell(neuronID, 0, 0))
             * network->getLayers()->at(__id + 1)->getChain({neuronID, 0, 0});
@@ -81,4 +82,20 @@ int cn::FFLayer::getWeightAbsoluteID(int neuron, int weightID) const {
 
 void cn::FFLayer::setWeight(int neuron, int weightID, float value) {
     weights[getWeightAbsoluteID(neuron, weightID)] = value;
+}
+
+std::vector<float> cn::FFLayer::getGradient() {
+    std::vector<float> gradient(weightsCount());
+    for(int i = 0; i < weightsCount(); i ++){
+        gradient[i] = diffWeight(i);
+    }
+    return gradient;
+}
+
+void cn::FFLayer::setWeight(int absoluteWeightID, float value) {
+    weights[absoluteWeightID] = value;
+}
+
+float cn::FFLayer::getWeight(int absoluteWeightID) const {
+    return weights[absoluteWeightID];
 }

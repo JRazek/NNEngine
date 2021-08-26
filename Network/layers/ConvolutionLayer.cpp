@@ -70,8 +70,8 @@ float cn::ConvolutionLayer::getChain(const Vector3<int> &input) {
     return 0;
 }
 
-float cn::ConvolutionLayer::diffWeight(int kernelID, int weightID) {
-    Vector3<int> weightPos = kernels[kernelID].indexToVector(weightID);
+float cn::ConvolutionLayer::diffWeight(int weightID) {
+    //Vector3<int> weightPos = kernels[kernelID].indexToVector(weightID);
     //todo here
 
     return 0;
@@ -91,5 +91,9 @@ int cn::ConvolutionLayer::getWeightAbsoluteID(int neuron, int weightID) const {
 
 void cn::ConvolutionLayer::setWeight(int neuron, int weightID, float value) {
     *(kernels[neuron].data() + getWeightAbsoluteID(neuron, weightID)) = value;
+}
+
+std::vector<float> cn::ConvolutionLayer::getGradient() {
+    return std::vector<float>();
 }
 

@@ -26,6 +26,8 @@ namespace cn {
         std::vector<Bitmap<float>> kernels;
         std::vector<float> biases;//ith corresponds to ith kernel
 
+        float diffWeight(int weightID);
+
     public:
         ConvolutionLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY,
                          int _kernelsCount, const DifferentiableFunction &_activationFunction,
@@ -33,11 +35,11 @@ namespace cn {
         void randomInit() override;
         void run(const Bitmap<float> &bitmap) override;
         float getChain(const Vector3<int> &input) override;
-        float diffWeight(int kernelID, int weightID) override;
         int weightsCount() const override;
         float getWeight(int neuron, int weightID) const override;
         void setWeight(int neuron, int weightID, float value) override;
         int getWeightAbsoluteID(int neuron, int weightID) const override;
+        virtual std::vector<float> getGradient() override;
     };
 }
 

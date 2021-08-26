@@ -22,12 +22,9 @@ void cn::Backpropagation::propagate(const cn::Bitmap<float> &target) {
         error += std::pow(target.getCell(i, 0, 0) - output.getCell(i, 0, 0), 2);
     }
     for(Learnable *learnable : *network.getLearnables()){
-        for(int n = 0; n < learnable->getNeuronsCount();  n++){
-            for(int w = 0; w < learnable->weightsCount() / learnable->getNeuronsCount(); w ++){
-                float oldWeight = learnable->getWeight(n, w);
-                float delta = -0.01 * learnable->diffWeight(n, w);
-                learnable->setWeight(n, w, oldWeight + delta);
-            }
+        std::vector<float> layerGradient = learnable->getGradient();
+        for(int i = 0; i < layerGradient.size(); i ++){
+            learnable->setWeight(i, learnable->getWeight(i) - learningRate * layerGradient[i]);
         }
     }
     std::cout<<error<<"\n";

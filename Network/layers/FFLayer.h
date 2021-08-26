@@ -33,12 +33,15 @@ namespace cn {
 
         virtual float getChain(const Vector3<int> &input) override;
 
-        float diffWeight(int neuronID, int weightID) override;
+        float diffWeight(int weightID);
+        std::vector<float> getGradient() override;
 
         int weightsCount() const override;
 
         float getWeight(int neuron, int weightID) const override;
         void setWeight(int neuron, int weightID, float value) override;
+        void setWeight(int absoluteWeightID, float value) override;
+        float getWeight(int absoluteWeightID) const override;
         int getWeightAbsoluteID(int neuron, int weightID) const override;
 
     };
