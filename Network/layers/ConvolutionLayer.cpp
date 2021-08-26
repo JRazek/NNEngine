@@ -81,19 +81,15 @@ int cn::ConvolutionLayer::weightsCount() const {
     return kernelSizeX * kernelSizeY * kernelSizeZ * kernelsCount;
 }
 
-float cn::ConvolutionLayer::getWeight(int neuron, int weightID) const {
-    return *kernels[neuron].data() + getWeightAbsoluteID(neuron, weightID);
-}
-
-int cn::ConvolutionLayer::getWeightAbsoluteID(int neuron, int weightID) const {
-    return kernelSizeX * kernelSizeY * kernelSizeZ * neuronsCount + weightID;
-}
-
-void cn::ConvolutionLayer::setWeight(int neuron, int weightID, float value) {
-    *(kernels[neuron].data() + getWeightAbsoluteID(neuron, weightID)) = value;
-}
-
 std::vector<float> cn::ConvolutionLayer::getGradient() {
     return std::vector<float>();
+}
+
+void cn::ConvolutionLayer::setWeight(int absoluteWeightID, float value) {
+
+}
+
+float cn::ConvolutionLayer::getWeight(int absoluteWeightID) const {
+    return 0;
 }
 

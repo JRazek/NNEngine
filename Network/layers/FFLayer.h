@@ -38,11 +38,8 @@ namespace cn {
 
         int weightsCount() const override;
 
-        float getWeight(int neuron, int weightID) const override;
-        void setWeight(int neuron, int weightID, float value) override;
         void setWeight(int absoluteWeightID, float value) override;
         float getWeight(int absoluteWeightID) const override;
-        int getWeightAbsoluteID(int neuron, int weightID) const override;
 
     };
 }

@@ -15,11 +15,9 @@ namespace cn {
     public:
         int getNeuronsCount() const;
         virtual int weightsCount() const = 0;
-        virtual float getWeight(int neuron, int weightID) const = 0;
-        virtual void setWeight(int neuron, int weightID, float value) = 0;
         virtual void setWeight(int absoluteWeightID, float value) = 0;
         virtual float getWeight(int absoluteWeightID) const = 0;
-        virtual int getWeightAbsoluteID(int neuron, int weightID) const = 0;
+
         virtual void randomInit() = 0;
         Learnable(int id, Network &network, int neuronsCount);
         virtual std::vector<float> getGradient() = 0;

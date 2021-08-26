@@ -18,12 +18,12 @@ int main(){
     ReLU reLu;
     Sigmoid sigmoid;
 
-    cn::Backpropagation backpropagation(network, 0.001);
+    cn::Backpropagation backpropagation(network, 0.01);
 
     const int outputSize = 10;
     network.appendFlatteningLayer();
     network.appendFFLayer(10, sigmoid);
-    network.appendFFLayer(10, reLu);
+    network.appendFFLayer(10, sigmoid);
     network.appendFFLayer(outputSize, sigmoid);
     network.initRandom();
 

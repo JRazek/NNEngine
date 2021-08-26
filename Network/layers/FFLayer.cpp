@@ -28,10 +28,11 @@ void cn::FFLayer::run(const Bitmap<float> &input) {
         throw std::logic_error("input bitmap to ff layer must be a normalized vector type!");
     }
     netSums.emplace(Bitmap<float>(neuronsCount, 1, 1));
+    int weightsPerNeuron = weightsCount() / neuronsCount;
     for(int n = 0; n < neuronsCount; n ++){
         float sum = biases[n];
         for(int i = 0; i < input.w(); i ++){
-            sum += getWeight(n, i) * input.getCell(i, 0, 0);
+            sum += getWeight(n * weightsPerNeuron + i) * input.getCell(i, 0, 0);
         }
         netSums.value().setCell(n, 0, 0, sum);
         output->setCell(n, 0, 0, differentiableFunction.func(sum));
@@ -62,26 +63,14 @@ float cn::FFLayer::getChain(const Vector3<int> &input) {
 
 float cn::FFLayer::diffWeight(int weightID) {
     int neuronID = weightID / (weightsCount()/neuronsCount);
-    return network->getLayers()->at(__id - 1)->getOutput()->getCell(weightID, 0, 0)
+    int weightsPerNeuron = weightsCount() / neuronsCount;
+    return _input->getCell(weightID % weightsPerNeuron, 0, 0)
             * differentiableFunction.derive(netSums->getCell(neuronID, 0, 0))
             * network->getLayers()->at(__id + 1)->getChain({neuronID, 0, 0});
 }
 
 int cn::FFLayer::weightsCount() const {
     return weights.size();
-}
-
-float cn::FFLayer::getWeight(int neuron, int weightID) const {
-    return weights[getWeightAbsoluteID(neuron, weightID)];
-}
-
-int cn::FFLayer::getWeightAbsoluteID(int neuron, int weightID) const {
-    int perNeuron = weights.size() / neuronsCount;
-    return perNeuron * neuron + weightID;
-}
-
-void cn::FFLayer::setWeight(int neuron, int weightID, float value) {
-    weights[getWeightAbsoluteID(neuron, weightID)] = value;
 }
 
 std::vector<float> cn::FFLayer::getGradient() {
