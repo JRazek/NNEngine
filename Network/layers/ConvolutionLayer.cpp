@@ -71,7 +71,8 @@ float cn::ConvolutionLayer::getChain(const Vector3<int> &input) {
 }
 
 float cn::ConvolutionLayer::diffWeight(int weightID) {
-    //Vector3<int> weightPos = kernels[kernelID].indexToVector(weightID);
+    int kSize = kernelSizeX * kernelSizeY * kernelSizeZ;
+    Vector3<int> weightPos = kernels[weightID / kSize].indexToVector(weightID % kSize);
     //todo here
 
     return 0;
@@ -85,11 +86,12 @@ std::vector<float> cn::ConvolutionLayer::getGradient() {
     return std::vector<float>();
 }
 
-void cn::ConvolutionLayer::setWeight(int absoluteWeightID, float value) {
+void cn::ConvolutionLayer::setWeight(int weightID, float value) {
 
 }
 
-float cn::ConvolutionLayer::getWeight(int absoluteWeightID) const {
-    return 0;
+float cn::ConvolutionLayer::getWeight(int weightID) const {
+    int kSize = kernelSizeX * kernelSizeY * kernelSizeZ;
+    return *kernels[weightID / (kSize)].data() + (weightID % kSize);
 }
 

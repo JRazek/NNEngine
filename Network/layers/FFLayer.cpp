@@ -81,10 +81,10 @@ std::vector<float> cn::FFLayer::getGradient() {
     return gradient;
 }
 
-void cn::FFLayer::setWeight(int absoluteWeightID, float value) {
-    weights[absoluteWeightID] = value;
+void cn::FFLayer::setWeight(int weightID, float value) {
+    weights[weightID] = value;
 }
 
-float cn::FFLayer::getWeight(int absoluteWeightID) const {
-    return weights[absoluteWeightID];
+float cn::FFLayer::getWeight(int weightID) const {
+    return weights[weightID];
 }

@@ -11,7 +11,7 @@
 #include <opencv2/opencv.hpp>
 int main(){
     cv::Mat mat = cv::imread("resources/aPhoto.jpg");
-    cn::Network network(33, 1, 3, 1);
+    cn::Network network(33, 33, 3, 1);
 
     cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
     bitmap = cn::Utils::resize<cn::byte>(bitmap, 100, 1);

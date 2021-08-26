@@ -39,8 +39,8 @@ namespace cn {
 
         virtual std::vector<float> getGradient() override;
 
-        void setWeight(int absoluteWeightID, float value) override;
-        float getWeight(int absoluteWeightID) const override;
+        void setWeight(int weightID, float value) override;
+        float getWeight(int weightID) const override;
     };
 }
 
