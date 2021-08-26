@@ -70,9 +70,10 @@ float cn::ConvolutionLayer::getChain(const Vector3<int> &input) {
     return 0;
 }
 
-float cn::ConvolutionLayer::diffWeight(int neuronID, int weightID) {
-    Vector3<int> weightPos = kernels[neuronID].indexToVector(weightID);
+float cn::ConvolutionLayer::diffWeight(int kernelID, int weightID) {
+    Vector3<int> weightPos = kernels[kernelID].indexToVector(weightID);
     //todo here
+
     return 0;
 }
 

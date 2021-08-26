@@ -38,7 +38,6 @@ const std::vector<cn::Layer *> *cn::Network::getLayers() {
 }
 
 cn::Network::Network(int w, int h, int d, int seed):
-        //outputLayer(-1, *this),
         inputDataWidth(w),
         inputDataHeight(h),
         inputDataDepth(d),
