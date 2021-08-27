@@ -33,6 +33,8 @@ void cn::FFLayer::run(const Bitmap<float> &input) {
         float sum = biases[n];
         for(int i = 0; i < input.w(); i ++){
             sum += getWeight(n * weightsPerNeuron + i) * input.getCell(i, 0, 0);
+            if(std::isnan(sum))
+                int test = 0;
         }
         netSums.value().setCell(n, 0, 0, sum);
         output->setCell(n, 0, 0, differentiableFunction.func(sum));

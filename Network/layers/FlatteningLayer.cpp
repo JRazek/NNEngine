@@ -16,13 +16,14 @@ cn::FlatteningLayer::FlatteningLayer(int _id, Network &_network) : Layer(_id, _n
     output.emplace(Bitmap<float>(size, 1, 1));
 }
 
-void cn::FlatteningLayer::run(const cn::Bitmap<float> &bitmap) {
-    if(output->w() != bitmap.w() * bitmap.h() * bitmap.d())
-        throw std::logic_error("invalid bitmap input for flattening layer!");
-    std::copy(bitmap.data(), bitmap.data() + bitmap.w() * bitmap.h() * bitmap.d(), output->data());
+void cn::FlatteningLayer::run(const cn::Bitmap<float> &input) {
+    _input = &input;
+    if(output->w() != input.w() * input.h() * input.d())
+        throw std::logic_error("invalid input input for flattening layer!");
+    std::copy(input.data(), input.data() + input.w() * input.h() * input.d(), output->data());
 }
 
-float cn::FlatteningLayer::getChain(const Vector3<int> &input) {
-    int outputIndex = output->getDataIndex(input);
+float cn::FlatteningLayer::getChain(const Vector3<int> &inputPos) {
+    int outputIndex = _input->getDataIndex(inputPos);
     return network->getLayers()->at(__id + 1)->getChain({outputIndex, 0, 0});
 }

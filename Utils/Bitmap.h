@@ -158,7 +158,7 @@ int cn::Bitmap<T>::getDataIndex(const Vector3<T> &v) const {
 
 template<typename T>
 Vector3<int> cn::Bitmap<T>::indexToVector(int index) const{
-    return {index % _w, index / _w, index / _w * _h};
+    return {index % _w, (index / _w) % _w, index / (_w * _h)};
 }
 
 //

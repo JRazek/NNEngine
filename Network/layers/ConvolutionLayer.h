@@ -26,6 +26,8 @@ namespace cn {
         std::vector<Bitmap<float>> kernels;
         std::vector<float> biases;//ith corresponds to ith kernel
 
+        std::optional<cn::Bitmap<float>> beforeActivation;
+
         float diffWeight(int weightID);
 
     public:
@@ -33,8 +35,8 @@ namespace cn {
                          int _kernelsCount, const DifferentiableFunction &_activationFunction,
                          int _paddingX, int _paddingY, int _strideX, int _strideY);
         void randomInit() override;
-        void run(const Bitmap<float> &bitmap) override;
-        float getChain(const Vector3<int> &input) override;
+        void run(const Bitmap<float> &input) override;
+        float getChain(const Vector3<int> &inputPos) override;
         int weightsCount() const override;
 
         virtual std::vector<float> getGradient() override;

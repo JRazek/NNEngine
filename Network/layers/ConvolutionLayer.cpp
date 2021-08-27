@@ -38,20 +38,24 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSi
     sizeX = Utils::afterConvolutionSize(kernelSizeX, inputX, paddingX, strideX);
     sizeY = Utils::afterConvolutionSize(kernelSizeY, inputY, paddingY, strideY);
     sizeZ = kernelsCount;
+
+    beforeActivation.emplace(Bitmap<float>(sizeX, sizeY, sizeZ));
     output.emplace(Bitmap<float>(sizeX, sizeY, sizeZ));
 }
 
-void cn::ConvolutionLayer::run(const Bitmap<float> &bitmap) {
-    //convolve bitmap - must have correct sizes etc. Garbage in garbage out.
-    int outW = Utils::afterConvolutionSize(kernelSizeX, bitmap.w(), paddingX, strideX);
-    int outH = Utils::afterConvolutionSize(kernelSizeY, bitmap.h(), paddingY, strideY);
+void cn::ConvolutionLayer::run(const Bitmap<float> &input) {
+    _input = &input;
+    //convolve input - must have correct sizes etc. Garbage in garbage out.
+    int outW = Utils::afterConvolutionSize(kernelSizeX, input.w(), paddingX, strideX);
+    int outH = Utils::afterConvolutionSize(kernelSizeY, input.h(), paddingY, strideY);
 
     for(int i = 0; i < kernelsCount; i ++){
-        Bitmap<float> layer = Utils::sumBitmapLayers(Utils::convolve(kernels[i], bitmap, paddingX, paddingY, strideX, strideY));
-        output->setLayer(i, layer.data());
+        Bitmap<float> layer = Utils::sumBitmapLayers(Utils::convolve(kernels[i], input, paddingX, paddingY, strideX, strideY));
+        beforeActivation->setLayer(i, layer.data());
     }
-    for(auto it = output->data(); it != output->data() + outW * outH; ++it){
-        *it = activationFunction.func(*it);
+    for(auto it = beforeActivation->data(); it != beforeActivation->data() + beforeActivation->w() * beforeActivation->h() * beforeActivation->d(); ++it){
+        int index = it - beforeActivation->data();
+        *(output->data() + index) = activationFunction.func(*it);
     }
 }
 
@@ -66,21 +70,29 @@ void cn::ConvolutionLayer::randomInit() {
     }
 }
 
-float cn::ConvolutionLayer::getChain(const Vector3<int> &input) {
+float cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
     return 0;
 }
 
 float cn::ConvolutionLayer::diffWeight(int weightID) {
     int kSize = kernelSizeX * kernelSizeY * kernelSizeZ;
+    Bitmap<float> paddedInput = Utils::addPadding(*_input, paddingX, paddingY);
     Vector3<int> weightPos = kernels[weightID / kSize].indexToVector(weightID % kSize);
-    for(int y = 0; y < output->h(); y++){
-        for(int x = 0; x < output->w(); x++){
-            int inputX = 1;
+    int kID = weightID / kSize;
+
+    float result = 0;
+    for(int y = 0; y < output->h() - kernelSizeY; y++){
+        for(int x = 0; x < output->w() - kernelSizeX; x++){
+            int inputX = x * strideX + weightPos.x;
+            int inputY = y * strideY + weightPos.y;
+            float inputValue = _input->getCell(inputX, inputY, weightPos.z);
+            Vector3<int> nextPos (x, y, kID);
+            result += inputValue * activationFunction.derive(beforeActivation->getCell(nextPos)) * network->getLayers()->at(__id + 1)->getChain(nextPos);
         }
     }
     //todo here
 
-    return 0;
+    return result;
 }
 
 int cn::ConvolutionLayer::weightsCount() const {
@@ -88,7 +100,11 @@ int cn::ConvolutionLayer::weightsCount() const {
 }
 
 std::vector<float> cn::ConvolutionLayer::getGradient() {
-    return std::vector<float>();
+    std::vector<float> gradient(weightsCount());
+    for(int i = 0; i < weightsCount(); i ++){
+        gradient[i] = diffWeight(i);
+    }
+    return gradient;
 }
 
 void cn::ConvolutionLayer::setWeight(int weightID, float value) {

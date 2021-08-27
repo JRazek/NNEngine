@@ -10,7 +10,6 @@ namespace cn {
     class Network;
     class Learnable : public Layer{
     protected:
-        const Bitmap<float> *_input;
         int neuronsCount;
     public:
         int getNeuronsCount() const;

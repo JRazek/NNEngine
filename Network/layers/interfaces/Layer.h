@@ -17,6 +17,7 @@ namespace cn {
     class Layer {
     protected:
         Network *network;
+        const Bitmap<float> *_input;
         std::optional<Bitmap<float>> output;
         int __id;
 
@@ -30,7 +31,7 @@ namespace cn {
 
         Layer(const Layer &other) = delete;
 
-        virtual float getChain(const Vector3<int> &input) = 0;
+        virtual float getChain(const Vector3<int> &inputPos) = 0;
 
         virtual ~Layer() = default;
         int id() const;
