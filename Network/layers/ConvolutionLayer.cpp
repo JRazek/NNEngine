@@ -72,7 +72,28 @@ void cn::ConvolutionLayer::randomInit() {
 
 float cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
 
-    return 0;
+    Bitmap<float> paddedInput = Utils::addPadding(*_input, paddingX, paddingY);
+
+    auto validPos = [this](const Vector2<int> &kernelPos, const Bitmap<float> &bitmap){
+        return kernelPos.x >= 0 && kernelPos.y >= 0 && kernelPos.x + kernelSizeX -1 < bitmap.w() && kernelPos.y + kernelSizeY -1 < bitmap.h();
+    };
+
+    float result = 0;
+
+    Vector3<int> inputPosPadded(inputPos.x - paddingX, inputPos.y - paddingY, inputPos.z);
+    for(int c = 0; c < kernelsCount; c++){
+        for(int y = 0; y < kernelSizeY; y++){
+            for(int x = 0; x < kernelSizeX; x++){
+                Vector2<int> kernelPos(inputPosPadded.x - x, inputPosPadded.y - y);
+                if(validPos(kernelPos, paddedInput)){
+                    Vector2<int> shift = Vector2<int>(inputPosPadded.x, inputPosPadded.y) - kernelPos;
+                    float weight = kernels[c].getCell(shift.x, shift.y, inputPosPadded.z);
+                    result += weight * network->getLayers()->at(__id + 1)->getChain(inputPosPadded);
+                }
+            }
+        }
+    }
+    return result;
 }
 
 float cn::ConvolutionLayer::diffWeight(int weightID) {
