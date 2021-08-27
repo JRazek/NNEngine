@@ -77,7 +77,7 @@ float cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
     Bitmap<float> paddedInput = Utils::addPadding(*_input, paddingX, paddingY);
 
     auto validPos = [this](const Vector2<int> &kernelPos, const Bitmap<float> &bitmap){
-        return kernelPos.x >= 0 && kernelPos.y >= 0 && kernelPos.x + kernelSizeX -1 < bitmap.w() && kernelPos.y + kernelSizeY -1 < bitmap.h();
+        return kernelPos.x >= 0 && kernelPos.y >= 0 && kernelPos.x + kernelSizeX - 1 < bitmap.w() && kernelPos.y + kernelSizeY - 1 < bitmap.h();
     };
 
     float result = 0;
@@ -90,7 +90,8 @@ float cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
                 if(validPos(kernelPos, paddedInput)){
                     Vector2<int> shift = Vector2<int>(inputPosPadded.x, inputPosPadded.y) - kernelPos;
                     float weight = kernels[c].getCell(shift.x, shift.y, inputPosPadded.z);
-                    result += weight * network->getLayers()->at(__id + 1)->getChain(inputPosPadded);
+                    Vector3<int> outputPos (kernelPos.x / strideX, kernelPos.y / strideY, inputPosPadded.z);
+                    result += weight * network->getLayers()->at(__id + 1)->getChain(outputPos);
                 }
             }
         }

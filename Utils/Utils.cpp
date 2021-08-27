@@ -35,8 +35,8 @@ cn::Bitmap<float> cn::Utils::convolve(const Bitmap<float> &kernel, const Bitmap<
 
     for(int originY = kernel.h() / 2; originY < paddedInput.h() - kernel.h() / 2; originY += strideY){
         for(int originX = kernel.w() / 2; originX < paddedInput.w() - kernel.w() / 2; originX += strideX){
-            int outputX = originX - kernel.w() / 2;
-            int outputY = originY - kernel.h() / 2;
+            int outputX = (originX - kernel.w() / 2) / strideX;
+            int outputY = (originY - kernel.h() / 2) / strideY;
             for(int channel = 0; channel < paddedInput.d(); channel++){
                 float sum = 0;
                 for(int ky = 0; ky < kernel.h(); ky++){

@@ -21,6 +21,7 @@ struct Vector3 {
     Vector3<T>(const Vector3<Y> &other);
 
     Vector3<T> operator*(const T &scalar);
+    Vector3<T> operator/(const T &scalar);
 
     Vector3<T> operator+(const Vector3<T> &other);
     Vector3<T> operator-(const Vector3<T> &other);
@@ -56,6 +57,11 @@ Vector3<T>::Vector3(const Vector3<Y> &other): Vector3<T>((T) other.x, (T) other.
 
 template<typename T> bool Vector3<T>::operator==(const Vector3<T> &other) const{
     return x == other.x && y == other.y && z == other.z;
+}
+
+template<typename T>
+Vector3<T> Vector3<T>::operator/(const T &scalar) {
+    return Vector3<T>(x / scalar, y / scalar, z / scalar);
 }
 
 #endif //NEURALNETLIBRARY_VECTOR3_H
