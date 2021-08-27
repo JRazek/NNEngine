@@ -33,8 +33,8 @@ cn::Bitmap<float> cn::Utils::convolve(const Bitmap<float> &kernel, const Bitmap<
 
     cn::Bitmap<float> paddedInput = addPadding(input, paddingX, paddingY);
 
-    for(int y = 0; y < paddedInput.h() - kernel.h() + 1; y++){
-        for(int x = 0; x < paddedInput.w() - kernel.w() + 1; x++){
+    for(int y = 0; y < paddedInput.h() - kernel.h() + 1; y+=strideY){
+        for(int x = 0; x < paddedInput.w() - kernel.w() + 1; x+=strideX){
             for(int c = 0; c < paddedInput.d(); c++){
                 Vector2<int> kernelPos(x, y);
                 float sum = 0;
