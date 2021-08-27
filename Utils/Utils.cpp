@@ -28,18 +28,10 @@ cn::Bitmap<float> cn::Utils::convolve(const Bitmap<float> &kernel, const Bitmap<
     if(sizeX <= 0 || sizeY <= 0){
         throw std::invalid_argument("kernel bigger than input!");
     }
-    cn::Bitmap<float> paddedInput (input.w() + paddingX * 2, input.h() + paddingY * 2, input.d());
 
-    std::fill(paddedInput.data(), paddedInput.data() + paddedInput.w() * paddedInput.h() * paddedInput.d(), 0);
-
-    for(int c = 0; c < input.d(); c ++){
-        for(int y = 0; y < input.h(); y += strideY){
-            for(int x = 0; x < input.w(); x += strideX){
-                paddedInput.setCell(x + paddingX, y + paddingY, c, input.getCell(x, y, c));
-            }
-        }
-    }
     cn::Bitmap<float> output (sizeX, sizeY, input.d());
+
+    cn::Bitmap<float> paddedInput = addPadding(input, paddingX, paddingY);
 
     for(int originY = kernel.h() / 2; originY < paddedInput.h() - kernel.h() / 2; originY += strideY){
         for(int originX = kernel.w() / 2; originX < paddedInput.w() - kernel.w() / 2; originX += strideX){
@@ -88,4 +80,20 @@ cn::Bitmap<float> cn::Utils::maxPool(const cn::Bitmap<float> &input, int kernelS
         }
     }
     return output;
+}
+
+template<typename T>
+cn::Bitmap<T> cn::Utils::addPadding(const cn::Bitmap<T> &input, int paddingX, int paddingY) {
+    cn::Bitmap<float> paddedInput (input.w() + paddingX * 2, input.h() + paddingY * 2, input.d());
+
+    std::fill(paddedInput.data(), paddedInput.data() + paddedInput.w() * paddedInput.h() * paddedInput.d(), 0);
+
+    for(int c = 0; c < input.d(); c ++){
+        for(int y = 0; y < input.h(); y ++){
+            for(int x = 0; x < input.w(); x ++){
+                paddedInput.setCell(x + paddingX, y + paddingY, c, input.getCell(x, y, c));
+            }
+        }
+    }
+    return paddedInput;
 }

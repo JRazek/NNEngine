@@ -117,6 +117,9 @@ namespace cn {
         template<typename T>
         static Bitmap<T> rotate(const Bitmap<T> &input, float rad);
 
+        template<typename T>
+        static Bitmap<T> addPadding(const Bitmap<T> &input, int paddingX, int paddingY);
+
 
         static int afterConvolutionSize(int kernelSize, int inputSize, int padding, int stride);
         static Bitmap<float> convolve(const Bitmap<float> &kernel, const Bitmap<float> &input, int paddingX = 0, int paddingY = 0, int strideX = 1, int strideY = 1);

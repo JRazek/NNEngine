@@ -73,6 +73,11 @@ float cn::ConvolutionLayer::getChain(const Vector3<int> &input) {
 float cn::ConvolutionLayer::diffWeight(int weightID) {
     int kSize = kernelSizeX * kernelSizeY * kernelSizeZ;
     Vector3<int> weightPos = kernels[weightID / kSize].indexToVector(weightID % kSize);
+    for(int y = 0; y < output->h(); y++){
+        for(int x = 0; x < output->w(); x++){
+            int inputX = 1;
+        }
+    }
     //todo here
 
     return 0;
