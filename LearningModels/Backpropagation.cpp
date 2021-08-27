@@ -11,6 +11,7 @@ cn::Backpropagation::Backpropagation(Network &_network, float _learningRate) :
         {}
 
 void cn::Backpropagation::propagate(const cn::Bitmap<float> &target) {
+    network.resetMemoization();
     OutputLayer *layer = network.getOutputLayer();
     layer->setTarget(&target);
     const Bitmap<float> &output = *layer->getOutput();

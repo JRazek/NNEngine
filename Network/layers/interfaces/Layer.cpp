@@ -7,9 +7,9 @@
 #include "../../Network.h"
 
 cn::Layer::Layer(int _id, Network &_network): __id(_id), network(&_network){
-    const Bitmap<float> *prev = __id == 0 ? network->getInput() : network->getLayers()->at(__id - 1)->getOutput();
-    memoizationStates.emplace(prev->w(), prev->h(), prev->d());
-    memoizationTable.emplace(prev->w(), prev->h(), prev->d());
+    const Vector3<int> inputSize = __id == 0 ? Vector3<int>(network->inputDataWidth, network->inputDataWidth, network->inputDataDepth) : network->getLayers()->at(__id - 1)->getOutput()->size();
+    memoizationStates.emplace(inputSize);
+    memoizationTable.emplace(inputSize);
 }
 
 const cn::Bitmap<float> *cn::Layer::getOutput() const {

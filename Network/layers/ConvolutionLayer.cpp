@@ -71,6 +71,9 @@ void cn::ConvolutionLayer::randomInit() {
 }
 
 float cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
+    if(memoizationStates->getCell(inputPos)){
+        return memoizationTable->getCell(inputPos);
+    }
 
     Bitmap<float> paddedInput = Utils::addPadding(*_input, paddingX, paddingY);
 
@@ -93,6 +96,7 @@ float cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
             }
         }
     }
+    setMemo(inputPos, result);
     return result;
 }
 

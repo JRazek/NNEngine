@@ -20,7 +20,9 @@ namespace cn {
         int _w, _h, _d;
     public:
         Bitmap(int w, int h, int d);
+        Bitmap(const Vector3<int> &s);
         Bitmap(int w, int h, int d, const T *data, int inputType = 0);
+        Bitmap(const Vector3<int> &s, const T *data, int inputType = 0);
         Bitmap(const Bitmap &bitmap);
         Bitmap(Bitmap &&bitmap);
         Bitmap() = delete;
@@ -41,6 +43,7 @@ namespace cn {
         int w() const;
         int h() const;
         int d() const;
+        Vector3<int> size() const;
     };
 }
 
@@ -166,6 +169,17 @@ template<typename T>
 void cn::Bitmap<T>::setCell(const Vector3<T> &c, T b) {
     setCell(c.x, c.y, c.z, b);
 }
+
+template<typename T>
+Vector3<int> cn::Bitmap<T>::size() const {
+    return Vector3<int>(_w, _h, _d);
+}
+
+template<typename T>
+cn::Bitmap<T>::Bitmap(const Vector3<int> &s):Bitmap(s.x, s.y, s.z) {}
+
+template<typename T>
+cn::Bitmap<T>::Bitmap(const Vector3<int> &s, const T *data, int inputType):Bitmap(s.x, s.y, s.z, data, inputType) {}
 
 //
 

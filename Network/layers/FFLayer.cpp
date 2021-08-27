@@ -54,12 +54,16 @@ float cn::FFLayer::getChain(const Vector3<int> &input) {
     if(input.x < 0 || input.y != 0 || input.z != 0){
         throw std::logic_error("wrong chain request!");
     }
+    if(memoizationStates->getCell(input)){
+        return memoizationTable->getCell(input);
+    }
     int weightsPerNeuron = weights.size() / neuronsCount;
     float sum = 0;
     for(int i = 0; i < neuronsCount; i ++){
         int weightID = weightsPerNeuron * i + input.x;
         sum += weights[weightID] * differentiableFunction.derive(_input->getCell(input)) * network->getLayers()->at(__id + 1)->getChain({i, 0, 0});
     }
+    setMemo(input, sum);
     return sum;
 }
 
