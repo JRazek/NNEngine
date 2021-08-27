@@ -112,3 +112,12 @@ const std::vector<cn::Learnable *> *cn::Network::getLearnables() {
     return &learnableLayers;
 }
 
+const cn::Bitmap<float> *cn::Network::getInput() const {
+    return &input.value();
+}
+
+void cn::Network::resetMemoization() {
+    for(auto l : layers){
+        l->resetMemoization();
+    }
+}

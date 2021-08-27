@@ -17,8 +17,13 @@ namespace cn {
     class Layer {
     protected:
         Network *network;
-        const Bitmap<float> *_input;
+
         std::optional<Bitmap<float>> output;
+
+        const Bitmap<float> *_input;
+        std::optional<Bitmap<bool>> memoizationStates;
+        std::optional<Bitmap<float>> memoizationTable;
+
         int __id;
 
         //Bitmap<bool> memoizedChainsStates;
@@ -34,6 +39,12 @@ namespace cn {
         virtual float getChain(const Vector3<int> &inputPos) = 0;
 
         virtual ~Layer() = default;
+
+        void resetMemoization();
+        void setMemo(const Vector3<int> &pos, float val);
+        bool getMemoState(const Vector3<int> &pos) const;
+        float getMemo(const Vector3<int> &pos) const;
+
         int id() const;
     };
 }

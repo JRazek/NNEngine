@@ -109,7 +109,11 @@ namespace cn {
          */
         float getRandom(float low, float high);
 
+        void resetMemoization();
+
         ~Network();
+
+        const Bitmap<float> *getInput() const;
     };
 }
 
