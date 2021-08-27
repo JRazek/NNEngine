@@ -18,10 +18,11 @@ int main(){
 
     cn::Backpropagation backpropagation(network, 0.01);
 
-    const int outputSize = 10;
+    const int outputSize = 1;
     network.appendConvolutionLayer(3, 3, 1, reLu);
     network.appendFlatteningLayer();
-    network.appendFFLayer(10, sigmoid);
+    network.appendFFLayer(2, sigmoid);
+    network.appendFFLayer(2, sigmoid);
     network.appendFFLayer(outputSize, sigmoid);
     network.initRandom();
 

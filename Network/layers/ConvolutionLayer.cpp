@@ -71,6 +71,7 @@ void cn::ConvolutionLayer::randomInit() {
 }
 
 float cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
+
     return 0;
 }
 
@@ -90,8 +91,6 @@ float cn::ConvolutionLayer::diffWeight(int weightID) {
             result += inputValue * activationFunction.derive(beforeActivation->getCell(nextPos)) * network->getLayers()->at(__id + 1)->getChain(nextPos);
         }
     }
-    //todo here
-
     return result;
 }
 
