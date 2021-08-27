@@ -35,6 +35,7 @@ namespace cn {
         Vector3<int> indexToVector(int index) const;
 
         Bitmap<T> &operator=(const Bitmap<T> &other);
+        Bitmap<T> &operator=(const Bitmap<T> &&other);
         T * data() const;
         int w() const;
         int h() const;
@@ -90,11 +91,25 @@ int cn::Bitmap<T>::getDataIndex(int col, int row, int depth) const{
 
 template<typename T>
 cn::Bitmap<T> &cn::Bitmap<T>::operator=(const cn::Bitmap<T> &other) {
-    delete [] dataP;
-    _w = other.w();
-    _h = other.h();
-    _d = other.d();
-    dataP = new T [_w * _h * _d];
+    if(&other != this) {
+        delete[] dataP;
+        _w = other.w();
+        _h = other.h();
+        _d = other.d();
+        dataP = new T[_w * _h * _d];
+        std::copy(other.data(), other.data() + _w * _h * _d, dataP);
+    }
+    return *this;
+}
+
+template<typename T>
+cn::Bitmap<T> &cn::Bitmap<T>::operator=(const cn::Bitmap<T> &&other){
+    if(&other != this) {
+        _w = other.w();
+        _h = other.h();
+        _d = other.d();
+        std::move(other.data(), other.data() + _w * _h * _d, dataP);
+    }
     return *this;
 }
 
@@ -142,6 +157,7 @@ template<typename T>
 Vector3<int> cn::Bitmap<T>::indexToVector(int index) const{
     return {index % _w, index / _w, index / _w * _h};
 }
+
 //
 
 
