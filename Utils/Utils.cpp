@@ -33,14 +33,14 @@ cn::Bitmap<float> cn::Utils::convolve(const Bitmap<float> &kernel, const Bitmap<
 
     cn::Bitmap<float> paddedInput = addPadding(input, paddingX, paddingY);
 
-    for(int y = 0; y < paddedInput.h() - kernel.h(); y++){
-        for(int x = 0; x < paddedInput.w() - kernel.w(); x++){
+    for(int y = 0; y < paddedInput.h() - kernel.h() + 1; y++){
+        for(int x = 0; x < paddedInput.w() - kernel.w() + 1; x++){
             for(int c = 0; c < paddedInput.d(); c++){
                 Vector2<int> kernelPos(x, y);
                 float sum = 0;
                 for(int ky = 0; ky < kernel.h(); ky++){
                     for(int kx = 0; kx < kernel.w(); kx++){
-                        sum += paddedInput.getCell(kernelPos.x + kx, kernelPos.y + ky, c) / kernel.getCell(kx, ky, c);
+                        sum += paddedInput.getCell(kernelPos.x + kx, kernelPos.y + ky, c) * kernel.getCell(kx, ky, c);
                     }
                 }
                 int outputX = kernelPos.x / strideX;
@@ -49,7 +49,6 @@ cn::Bitmap<float> cn::Utils::convolve(const Bitmap<float> &kernel, const Bitmap<
             }
         }
     }
-
     return output;
 }
 
