@@ -35,7 +35,7 @@ namespace cn {
         Vector3<int> indexToVector(int index) const;
 
         Bitmap<T> &operator=(const Bitmap<T> &other);
-        Bitmap<T> &operator=(const Bitmap<T> &&other);
+        Bitmap<T> &operator=(Bitmap<T> &&other);
         T * data() const;
         int w() const;
         int h() const;
@@ -103,19 +103,22 @@ cn::Bitmap<T> &cn::Bitmap<T>::operator=(const cn::Bitmap<T> &other) {
 }
 
 template<typename T>
-cn::Bitmap<T> &cn::Bitmap<T>::operator=(const cn::Bitmap<T> &&other){
+cn::Bitmap<T> &cn::Bitmap<T>::operator=(cn::Bitmap<T> &&other){
     if(&other != this) {
+        delete [] dataP;
         _w = other.w();
         _h = other.h();
         _d = other.d();
-        std::move(other.data(), other.data() + _w * _h * _d, dataP);
+        dataP = other.dataP;
+        other.dataP = nullptr;
     }
     return *this;
 }
 
 template<typename T>
-cn::Bitmap<T>::Bitmap(cn::Bitmap<T> &&bitmap):Bitmap<T>(bitmap.w(), bitmap.h(), bitmap.d()) {
-    std::move(bitmap.data(), bitmap.data() + _w * _h * _d, dataP);
+cn::Bitmap<T>::Bitmap(cn::Bitmap<T> &&bitmap):_w(bitmap.w()), _h(bitmap.h()), _d(bitmap.d()){
+    dataP = bitmap.dataP;
+    bitmap.dataP = nullptr;
 }
 
 template<typename T>
