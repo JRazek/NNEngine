@@ -31,7 +31,7 @@ namespace cn {
 
         void run(const Bitmap<float> &input) override;
 
-        virtual float getChain(const Vector3<int> &input) override;
+        virtual float getChain(const Vector3<int> &inputPos) override;
 
         float diffWeight(int weightID);
         std::vector<float> getGradient() override;

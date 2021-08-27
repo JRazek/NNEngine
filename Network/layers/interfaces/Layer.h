@@ -45,7 +45,7 @@ namespace cn {
         bool getMemoState(const Vector3<int> &pos) const;
         float getMemo(const Vector3<int> &pos) const;
 
-        int id() const;
+        [[maybe_unused]] int id() const;
     };
 }
 

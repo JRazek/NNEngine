@@ -71,10 +71,9 @@ void cn::ConvolutionLayer::randomInit() {
 }
 
 float cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
-    if(memoizationStates->getCell(inputPos)){
-        return memoizationTable->getCell(inputPos);
+    if(getMemoState(inputPos)){
+        return getMemo(inputPos);
     }
-
     Bitmap<float> paddedInput = Utils::addPadding(*_input, paddingX, paddingY);
 
     auto validPos = [this](const Vector2<int> &kernelPos, const Bitmap<float> &bitmap){

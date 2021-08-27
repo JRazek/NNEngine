@@ -33,8 +33,6 @@ void cn::FFLayer::run(const Bitmap<float> &input) {
         float sum = biases[n];
         for(int i = 0; i < input.w(); i ++){
             sum += getWeight(n * weightsPerNeuron + i) * input.getCell(i, 0, 0);
-            if(std::isnan(sum))
-                int test = 0;
         }
         netSums.value().setCell(n, 0, 0, sum);
         output->setCell(n, 0, 0, differentiableFunction.func(sum));
@@ -50,20 +48,20 @@ void cn::FFLayer::randomInit() {
     }
 }
 
-float cn::FFLayer::getChain(const Vector3<int> &input) {
-    if(input.x < 0 || input.y != 0 || input.z != 0){
+float cn::FFLayer::getChain(const Vector3<int> &inputPos) {
+    if(inputPos.x < 0 || inputPos.y != 0 || inputPos.z != 0){
         throw std::logic_error("wrong chain request!");
     }
-    if(memoizationStates->getCell(input)){
-        return memoizationTable->getCell(input);
+    if(getMemoState(inputPos)){
+        return getMemo(inputPos);
     }
     int weightsPerNeuron = weights.size() / neuronsCount;
     float sum = 0;
     for(int i = 0; i < neuronsCount; i ++){
-        int weightID = weightsPerNeuron * i + input.x;
-        sum += weights[weightID] * differentiableFunction.derive(_input->getCell(input)) * network->getLayers()->at(__id + 1)->getChain({i, 0, 0});
+        int weightID = weightsPerNeuron * i + inputPos.x;
+        sum += weights[weightID] * differentiableFunction.derive(_input->getCell(inputPos)) * network->getLayers()->at(__id + 1)->getChain({i, 0, 0});
     }
-    setMemo(input, sum);
+    setMemo(inputPos, sum);
     return sum;
 }
 

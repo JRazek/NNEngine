@@ -24,8 +24,8 @@ void cn::FlatteningLayer::run(const cn::Bitmap<float> &input) {
 }
 
 float cn::FlatteningLayer::getChain(const Vector3<int> &inputPos) {
-    if(memoizationStates->getCell(inputPos)){
-        return memoizationTable->getCell(inputPos);
+    if(getMemoState(inputPos)){
+        return getMemo(inputPos);
     }
     int outputIndex = _input->getDataIndex(inputPos);
     float res = network->getLayers()->at(__id + 1)->getChain({outputIndex, 0, 0});
