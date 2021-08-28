@@ -9,7 +9,7 @@
 #include <opencv2/opencv.hpp>
 int main(){
     cv::Mat mat = cv::imread("resources/aPhoto.jpg");
-    cn::Network network(33, 33, 3, 1);
+    cn::Network network(100, 100, 3, 1);
 
     cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
     bitmap = cn::Utils::resize<cn::byte>(bitmap, 100, 1);
@@ -19,11 +19,13 @@ int main(){
     cn::Backpropagation backpropagation(network, 0.01);
 
     const int outputSize = 10;
-    network.appendConvolutionLayer(3, 3, 2, reLu, 0, 0, 2, 8);
-    network.appendConvolutionLayer(3, 3, 2, reLu, 0, 0, 2, 8);
+    network.appendConvolutionLayer(3, 3, 2, reLu, 0, 0, 4, 4);
+    network.appendConvolutionLayer(3, 3, 2, reLu);
+    network.appendBatchNormalizationLayer();
+    network.appendConvolutionLayer(3, 3, 2, reLu);
+    network.appendBatchNormalizationLayer();
+    network.appendConvolutionLayer(3, 3, 2, reLu);
     network.appendFlatteningLayer();
-    network.appendFFLayer(10, sigmoid);
-    network.appendFFLayer(10, sigmoid);
     network.appendFFLayer(outputSize, sigmoid);
     network.initRandom();
 
@@ -34,7 +36,7 @@ int main(){
         target.setCell(i, 0, 0, 0.5);
     }
 
-    for(int i = 0; i < 1; i ++) {
+    for(int i = 0; i < 1000000; i ++) {
         network.feed(bitmap);
         backpropagation.propagate(target);
     }

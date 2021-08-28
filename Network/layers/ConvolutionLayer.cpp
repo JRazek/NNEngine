@@ -29,6 +29,9 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSi
         inputY = network->getLayers()->at(__id - 1)->getOutput()->h();
     }
 
+    if(inputX < kernelSizeX || inputY < kernelSizeY){
+        throw std::logic_error("kernel must not be larger than input!");
+    }
     kernels.reserve(_kernelsCount);
 
     for(int i = 0; i < _kernelsCount; i ++){
@@ -38,7 +41,6 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSi
     sizeX = Utils::afterConvolutionSize(kernelSizeX, inputX, paddingX, strideX);
     sizeY = Utils::afterConvolutionSize(kernelSizeY, inputY, paddingY, strideY);
     sizeZ = kernelsCount;
-
     beforeActivation.emplace(Bitmap<float>(sizeX, sizeY, sizeZ));
     output.emplace(Bitmap<float>(sizeX, sizeY, sizeZ));
 }
