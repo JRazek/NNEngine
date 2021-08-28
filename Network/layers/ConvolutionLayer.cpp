@@ -17,8 +17,6 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSi
         biases(kernelsCount),
         cn::Learnable(_id, _network, _kernelsCount) {
 
-    Vector3<int> inputSize = network->getInputSize(_id);
-
     if(inputSize.x < kernelSize.x || inputSize.y < kernelSize.y){
         throw std::logic_error("kernel must not be larger than input!");
     }
@@ -32,6 +30,7 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSi
     int oY = Utils::afterConvolutionSize(kernelSize.y, inputSize.y, paddingY, strideY);
     int oZ = kernelsCount;
     outputSize = Vector3<int>(oX, oY, oZ);
+    beforeActivation.emplace(outputSize);
 }
 
 cn::Bitmap<float> cn::ConvolutionLayer::run(const Bitmap<float> &input) {
@@ -39,7 +38,6 @@ cn::Bitmap<float> cn::ConvolutionLayer::run(const Bitmap<float> &input) {
     if(input.size() != network->getInputSize(__id)){
         throw std::logic_error("CLayer fed with wrong input size!");
     }
-
     for(int i = 0; i < kernelsCount; i ++){
         Bitmap<float> layer = Utils::sumBitmapLayers(Utils::convolve(kernels[i], input, paddingX, paddingY, strideX, strideY));
         beforeActivation->setLayer(i, layer.data());
@@ -70,15 +68,15 @@ float cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
     Bitmap<float> paddedInput = Utils::addPadding(*_input, paddingX, paddingY);
 
     auto validPos = [this](const Vector2<int> &kernelPos, const Bitmap<float> &bitmap){
-        return kernelPos.x >= 0 && kernelPos.y >= 0 && kernelPos.x + kernelSizeX - 1 < bitmap.w() && kernelPos.y + kernelSizeY - 1 < bitmap.h();
+        return kernelPos.x >= 0 && kernelPos.y >= 0 && kernelPos.x + kernelSize.x - 1 < bitmap.w() && kernelPos.y + kernelSize.y - 1 < bitmap.h();
     };
 
     float result = 0;
 
     Vector3<int> inputPosPadded(inputPos.x - paddingX, inputPos.y - paddingY, inputPos.z);
     for(int c = 0; c < kernelsCount; c++){
-        for(int y = 0; y < kernelSizeY; y++){
-            for(int x = 0; x < kernelSizeX; x++){
+        for(int y = 0; y < kernelSize.y; y++){
+            for(int x = 0; x < kernelSize.x; x++){
                 Vector2<int> kernelPos(inputPosPadded.x - x, inputPosPadded.y - y);
                 if(validPos(kernelPos, paddedInput)){
                     Vector2<int> shift = Vector2<int>(inputPosPadded.x, inputPosPadded.y) - kernelPos;
@@ -94,14 +92,14 @@ float cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
 }
 
 float cn::ConvolutionLayer::diffWeight(int weightID) {
-    int kSize = kernelSizeX * kernelSizeY * kernelSizeZ;
+    int kSize = kernelSize.multiplyContent();
     Bitmap<float> paddedInput = Utils::addPadding(*_input, paddingX, paddingY);
     Vector3<int> weightPos = kernels[weightID / kSize].indexToVector(weightID % kSize);
     int kID = weightID / kSize;
 
     float result = 0;
-    for(int y = 0; y < output->h() - kernelSizeY; y++){
-        for(int x = 0; x < output->w() - kernelSizeX; x++){
+    for(int y = 0; y < outputSize.y - kernelSize.y; y++){
+        for(int x = 0; x < outputSize.x - kernelSize.x; x++){
             int inputX = x * strideX + weightPos.x;
             int inputY = y * strideY + weightPos.y;
             float inputValue = _input->getCell(inputX, inputY, weightPos.z);
@@ -113,7 +111,7 @@ float cn::ConvolutionLayer::diffWeight(int weightID) {
 }
 
 int cn::ConvolutionLayer::weightsCount() const {
-    return kernelSizeX * kernelSizeY * kernelSizeZ * kernelsCount;
+    return kernelSize.multiplyContent() * kernelsCount;
 }
 
 std::vector<float> cn::ConvolutionLayer::getGradient() {
@@ -125,11 +123,12 @@ std::vector<float> cn::ConvolutionLayer::getGradient() {
 }
 
 void cn::ConvolutionLayer::setWeight(int weightID, float value) {
-
+    int kSize = kernelSize.multiplyContent();
+    *(kernels[weightID / (kSize)].data() + (weightID % kSize)) = value;
 }
 
 float cn::ConvolutionLayer::getWeight(int weightID) const {
-    int kSize = kernelSizeX * kernelSizeY * kernelSizeZ;
-    return *kernels[weightID / (kSize)].data() + (weightID % kSize);
+    int kSize = kernelSize.multiplyContent();
+    return *(kernels[weightID / (kSize)].data() + (weightID % kSize));
 }
 

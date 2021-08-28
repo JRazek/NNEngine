@@ -27,6 +27,9 @@ struct Vector3 {
     Vector3<T> operator-(const Vector3<T> &other);
 
     bool operator==(const Vector3<T> &other) const;
+    bool operator!=(const Vector3<T> &other) const;
+
+    T multiplyContent() const;
 };
 
 template<typename T>
@@ -62,6 +65,16 @@ template<typename T> bool Vector3<T>::operator==(const Vector3<T> &other) const{
 template<typename T>
 Vector3<T> Vector3<T>::operator/(const T &scalar) {
     return Vector3<T>(x / scalar, y / scalar, z / scalar);
+}
+
+template<typename T>
+T Vector3<T>::multiplyContent() const {
+    return x * y * z;
+}
+
+template<typename T>
+bool Vector3<T>::operator!=(const Vector3<T> &other) const {
+    return !(*this == other);
 }
 
 #endif //NEURALNETLIBRARY_VECTOR3_H

@@ -6,34 +6,25 @@
 #include "../Network.h"
 
 cn::BatchNormalizationLayer::BatchNormalizationLayer(int _id, Network &_network) : Layer(_id, _network) {
-    int sizeX, sizeY, sizeZ;
-    if(__id == 0){
-        sizeX = network->inputDataWidth;
-        sizeY = network->inputDataHeight;
-        sizeZ = network->inputDataDepth;
-    }else{
-        const Bitmap<float> &prev = network->getInput(__id);
-        sizeX = prev.w();
-        sizeY = prev.h();
-        sizeZ = prev.d();
-    }
-    output.emplace(Bitmap<float>(sizeX, sizeY, sizeZ));
+    outputSize = inputSize;
 }
 
-cn::Bitmap<float> cn::BatchNormalizationLayer::run(const cn::Bitmap<float> &bitmap) {
-    if(bitmap.w() != output->w() || bitmap.h() != output->h() || bitmap.d() != output->d())
+cn::Bitmap<float> cn::BatchNormalizationLayer::run(const cn::Bitmap<float> &input) {
+    if(input.size() != inputSize)
         throw std::logic_error("invalid bitmap input for normalization layer!");
-    std::copy(bitmap.data(), bitmap.data() + bitmap.w() * bitmap.h() * bitmap.d(), output->data());
+    Bitmap<float> result(outputSize, input.data());
 
     float max = 0;
-    auto outputR = &output.value();
-    for(auto it = outputR->data(); it != outputR->data() + outputR->w() * outputR->h() * outputR->d(); ++it){
+
+    for(auto it = input.data(); it != input.data() + input.size().multiplyContent(); ++it){
         max = std::max(*it, max);
     }
-    for(auto it = outputR->data(); it != outputR->data() + outputR->w() * outputR->h() * outputR->d(); ++it){
+    for(auto it = result.data(); it != result.data() + result.size().multiplyContent(); ++it){
         *it = (*it)/max;
     }
     normalizationFactor = max;
+
+    return result;
 }
 
 float cn::BatchNormalizationLayer::getChain(const Vector3<int> &inputPos) {

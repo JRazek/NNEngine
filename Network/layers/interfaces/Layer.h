@@ -18,6 +18,7 @@ namespace cn {
     protected:
         Network *network;
 
+        Vector3<int> inputSize;
         Vector3<int> outputSize;
 
         const Bitmap<float> *_input;

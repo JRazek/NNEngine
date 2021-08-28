@@ -11,22 +11,22 @@ cn::Backpropagation::Backpropagation(Network &_network, float _learningRate) :
         {}
 
 void cn::Backpropagation::propagate(const cn::Bitmap<float> &target) {
-    network.resetMemoization();
-    OutputLayer *layer = network.getOutputLayer();
-    layer->setTarget(&target);
-    const Bitmap<float> &output = *layer->getOutput();
-    if(output.w() != target.w() || output.h() != target.h() || output.d() != target.d()){
-        throw std::logic_error("Backpropagation, invalid target!");
-    }
-    float error = 0;
-    for(int i = 0; i < target.w(); i ++){
-        error += std::pow(target.getCell(i, 0, 0) - output.getCell(i, 0, 0), 2);
-    }
-    for(Learnable *learnable : *network.getLearnables()){
-        std::vector<float> layerGradient = learnable->getGradient();
-        for(int i = 0; i < layerGradient.size(); i ++){
-            learnable->setWeight(i, learnable->getWeight(i) - learningRate * layerGradient[i]);
-        }
-    }
-    std::cout<<error<<"\n";
+//    network.resetMemoization();
+//    OutputLayer *layer = network.getOutputLayer();
+//    layer->setTarget(&target);
+//    const Bitmap<float> &output = *layer();
+//    if(output.w() != target.w() || output.h() != target.h() || output.d() != target.d()){
+//        throw std::logic_error("Backpropagation, invalid target!");
+//    }
+//    float error = 0;
+//    for(int i = 0; i < target.w(); i ++){
+//        error += std::pow(target.getCell(i, 0, 0) - output.getCell(i, 0, 0), 2);
+//    }
+//    for(Learnable *learnable : *network.getLearnables()){
+//        std::vector<float> layerGradient = learnable->getGradient();
+//        for(int i = 0; i < layerGradient.size(); i ++){
+//            learnable->setWeight(i, learnable->getWeight(i) - learningRate * layerGradient[i]);
+//        }
+//    }
+//    std::cout<<error<<"\n";
 }

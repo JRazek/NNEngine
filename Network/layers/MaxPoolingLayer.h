@@ -9,7 +9,7 @@
 namespace cn {
     class MaxPoolingLayer : public Layer{
     public:
-        const int kernelSizeX, kernelSizeY;
+        Vector2<int> kernelSize;
 
         std::optional<Bitmap<Vector2<int>>> mapping;
 

@@ -6,7 +6,7 @@
 #include "../../Network.h"
 
 cn::Layer::Layer(int _id, Network &_network): __id(_id), network(&_network){
-    const Vector3<int> inputSize = network->getInput(__id).size();
+    inputSize = network->getInputSize(_id);
     memoizationStates.emplace(Bitmap<bool>(inputSize));
     memoizationTable.emplace(Bitmap<float>(inputSize));
     resetMemoization();

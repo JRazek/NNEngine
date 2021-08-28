@@ -11,7 +11,7 @@
 #include "layers/MaxPoolingLayer.h"
 
 void cn::Network::feed(const byte *_input) {
-    cn::Bitmap<byte> bitmap(inputDataWidth, inputDataHeight, inputDataDepth, _input, 0);
+    cn::Bitmap<byte> bitmap(inputSize, _input, 0);
     if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
     feed(cn::Utils::normalize(bitmap));

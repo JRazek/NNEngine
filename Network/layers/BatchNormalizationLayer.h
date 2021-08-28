@@ -12,7 +12,7 @@ namespace cn {
         float normalizationFactor;
     public:
         BatchNormalizationLayer(int _id, Network &_network);
-        Bitmap<float> run(const Bitmap<float> &bitmap) override;
+        Bitmap<float> run(const Bitmap<float> &input) override;
         float getChain(const Vector3<int> &inputPos) override;
     };
 }

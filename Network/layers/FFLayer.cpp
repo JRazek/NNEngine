@@ -13,11 +13,10 @@ cn::FFLayer::FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_
     if(__id == 0){
         throw std::logic_error("FFLayer must not be the first layer in the network!");
     }else{
-        Vector3<int> inputSize = network.get
-        if(prev.w() < 1 || prev.h() != 1 || prev.d() != 1){
+        if(inputSize.x < 1 || inputSize.y != 1 || inputSize.z != 1){
             throw std::logic_error("There must be a vector output layer before FFLayer!");
         }
-        weights = std::vector<float>(neuronsCount * prev.w());
+        weights = std::vector<float>(neuronsCount * inputSize.x);
     }
     outputSize = Vector3<int> (neuronsCount, 1, 1);
 }
@@ -29,14 +28,17 @@ cn::Bitmap<float> cn::FFLayer::run(const Bitmap<float> &input) {
     }
     netSums.emplace(Bitmap<float>(neuronsCount, 1, 1));
     int weightsPerNeuron = weightsCount() / neuronsCount;
+
+    Bitmap<float> result(outputSize);
     for(int n = 0; n < neuronsCount; n ++){
         float sum = biases[n];
         for(int i = 0; i < input.w(); i ++){
             sum += getWeight(n * weightsPerNeuron + i) * input.getCell(i, 0, 0);
         }
         netSums.value().setCell(n, 0, 0, sum);
-        output->setCell(n, 0, 0, differentiableFunction.func(sum));
+        result.setCell(n, 0, 0, differentiableFunction.func(sum));
     }
+    return result;
 }
 
 void cn::FFLayer::randomInit() {

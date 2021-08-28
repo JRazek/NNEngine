@@ -5,20 +5,14 @@
 #include "OutputLayer.h"
 #include "../Network.h"
 
-cn::OutputLayer::OutputLayer(int id, cn::Network &network) : FlatteningLayer(id, network) {
-    const Bitmap<float> &prev = network.getInput(__id);
-    int _w = prev.w();
-    int _h = prev.h();
-    int _d = prev.d();
-    output.emplace(_w, _h, _d);
-}
+cn::OutputLayer::OutputLayer(int id, cn::Network &network) : FlatteningLayer(id, network) {}
 
 cn::Bitmap<float> cn::OutputLayer::run(const cn::Bitmap<float> &input) {
     FlatteningLayer::run(input);
 }
 
 float cn::OutputLayer::getChain(const Vector3<int> &input) {
-    return output->getCell(input) - target->getCell(input);
+    //return output->getCell(input) - target->getCell(input);
 }
 
 void cn::OutputLayer::setTarget(const cn::Bitmap<float> *_target) {
