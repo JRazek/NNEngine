@@ -18,12 +18,12 @@ cn::Bitmap<float> cn::MaxPoolingLayer::run(const cn::Bitmap<float> &input) {
     }
 
     std::fill(mapping->data(), mapping->data() + mapping->size().multiplyContent(), Vector2<int>(-1, -1));
-    Bitmap<float> res(inputSize);
 
+    Bitmap<float> res(outputSize);
 
     for(int c = 0; c < input.d(); c++){
-        for(int y = 0; y < input.h() - kernelSize.y; y += kernelSize.y){
-            for(int x = 0; x < input.w() - kernelSize.x; x += kernelSize.x){
+        for(int y = 0; y < input.h() - kernelSize.y + 1; y += kernelSize.y){
+            for(int x = 0; x < input.w() - kernelSize.x + 1; x += kernelSize.x){
                 float max = 0;
                 Vector2<int> bestPoint;
                 for(int kY = 0; kY < kernelSize.y; kY++){

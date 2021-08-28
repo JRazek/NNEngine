@@ -34,7 +34,6 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSi
 }
 
 cn::Bitmap<float> cn::ConvolutionLayer::run(const Bitmap<float> &input) {
-    _input = &input;
     if(input.size() != network->getInputSize(__id)){
         throw std::logic_error("CLayer fed with wrong input size!");
     }
@@ -65,7 +64,7 @@ float cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
     if(getMemoState(inputPos)){
         return getMemo(inputPos);
     }
-    Bitmap<float> paddedInput = Utils::addPadding(*_input, paddingX, paddingY);
+    Bitmap<float> paddedInput = Utils::addPadding(*network->getInput(__id), paddingX, paddingY);
 
     auto validPos = [this](const Vector2<int> &kernelPos, const Bitmap<float> &bitmap){
         return kernelPos.x >= 0 && kernelPos.y >= 0 && kernelPos.x + kernelSize.x - 1 < bitmap.w() && kernelPos.y + kernelSize.y - 1 < bitmap.h();
@@ -81,7 +80,7 @@ float cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
                 if(validPos(kernelPos, paddedInput)){
                     Vector2<int> shift = Vector2<int>(inputPosPadded.x, inputPosPadded.y) - kernelPos;
                     float weight = kernels[c].getCell(shift.x, shift.y, inputPosPadded.z);
-                    Vector3<int> outputPos (kernelPos.x / strideX, kernelPos.y / strideY, inputPosPadded.z);
+                    Vector3<int> outputPos (kernelPos.x / strideX, kernelPos.y / strideY, c);
                     result += weight * network->getChain(__id + 1, outputPos);
                 }
             }
@@ -93,7 +92,7 @@ float cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
 
 float cn::ConvolutionLayer::diffWeight(int weightID) {
     int kSize = kernelSize.multiplyContent();
-    Bitmap<float> paddedInput = Utils::addPadding(*_input, paddingX, paddingY);
+    Bitmap<float> paddedInput = Utils::addPadding(*network->getInput(__id), paddingX, paddingY);
     Vector3<int> weightPos = kernels[weightID / kSize].indexToVector(weightID % kSize);
     int kID = weightID / kSize;
 
@@ -102,7 +101,7 @@ float cn::ConvolutionLayer::diffWeight(int weightID) {
         for(int x = 0; x < outputSize.x - kernelSize.x; x++){
             int inputX = x * strideX + weightPos.x;
             int inputY = y * strideY + weightPos.y;
-            float inputValue = _input->getCell(inputX, inputY, weightPos.z);
+            float inputValue = network->getInput(__id)->getCell(inputX, inputY, weightPos.z);
             Vector3<int> nextPos (x, y, kID);
             result += inputValue * activationFunction.derive(beforeActivation->getCell(nextPos)) * network->getChain(__id + 1, nextPos);
         }

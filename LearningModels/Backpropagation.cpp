@@ -22,11 +22,11 @@ void cn::Backpropagation::propagate(const cn::Bitmap<float> &target) {
     for(int i = 0; i < target.w(); i ++){
         error += std::pow(target.getCell(i, 0, 0) - output.getCell(i, 0, 0), 2);
     }
-//    for(Learnable *learnable : *network.getLearnables()){
-//        std::vector<float> layerGradient = learnable->getGradient();
-//        for(int i = 0; i < layerGradient.size(); i ++){
-//            learnable->setWeight(i, learnable->getWeight(i) - learningRate * layerGradient[i]);
-//        }
-//    }
+    for(Learnable *learnable : *network.getLearnables()){
+        std::vector<float> layerGradient = learnable->getGradient();
+        for(int i = 0; i < layerGradient.size(); i ++){
+            learnable->setWeight(i, learnable->getWeight(i) - learningRate * layerGradient[i]);
+        }
+    }
     std::cout<<error<<"\n";
 }

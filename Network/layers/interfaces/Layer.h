@@ -21,7 +21,6 @@ namespace cn {
         Vector3<int> inputSize;
         Vector3<int> outputSize;
 
-        const Bitmap<float> *_input;
         std::optional<Bitmap<bool>> memoizationStates;
         std::optional<Bitmap<float>> memoizationTable;
 

@@ -25,7 +25,7 @@ namespace cn {
         Bitmap(const Vector3<int> &s, const T *data, int inputType = 0);
         Bitmap(const Bitmap &bitmap);
         Bitmap(Bitmap &&bitmap);
-        Bitmap() = delete;
+        Bitmap();
         ~Bitmap();
         T getCell(int col, int row, int depth) const;
         T getCell(const Vector3<int> &c) const;
@@ -39,6 +39,7 @@ namespace cn {
 
         Bitmap<T> &operator=(const Bitmap<T> &other);
         Bitmap<T> &operator=(Bitmap<T> &&other);
+        bool belongs(const Vector3<int> &point) const;
         T * data() const;
         int w() const;
         int h() const;
@@ -87,7 +88,7 @@ cn::Bitmap<T>::Bitmap(int _w, int _h, int _d, const T *data, int inputType): Bit
 
 template<typename T>
 int cn::Bitmap<T>::getDataIndex(int col, int row, int depth) const{
-    if(col >= _w or col < 0 or row >= _h or row < 0 or depth >= _d or depth < 0){
+    if(!belongs({col, row, depth})){
         throw std::invalid_argument("cell does not belong to bitmap!");
     }
     return depth * _w * _h + row * _w + col;
@@ -180,6 +181,16 @@ cn::Bitmap<T>::Bitmap(const Vector3<int> &s):Bitmap(s.x, s.y, s.z) {}
 
 template<typename T>
 cn::Bitmap<T>::Bitmap(const Vector3<int> &s, const T *data, int inputType):Bitmap(s.x, s.y, s.z, data, inputType) {}
+
+template<typename T>
+cn::Bitmap<T>::Bitmap():Bitmap(0, 0, 0) {
+    dataP = nullptr;
+}
+
+template<typename T>
+bool cn::Bitmap<T>::belongs(const Vector3<int> &p) const {
+    return p.x >= 0 && p.x < _w && p.y >= 0 && p.y < _h && p.z >= 0 && p.z < _d;
+}
 
 //
 

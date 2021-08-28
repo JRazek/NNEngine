@@ -52,6 +52,9 @@ void cn::Network::feed(Bitmap<float> bitmap) {
         auto layer = layers[i];
         outputs.push_back(layer->run(*_input));
         _input = &outputs.back();
+        if(_input->size() != layer->getOutputSize()){
+            int here = 1;
+        }
     }
 }
 

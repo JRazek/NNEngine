@@ -173,7 +173,7 @@ cn::Bitmap<T> cn::Utils::resize(const cn::Bitmap<T> &input, int destSizeX, int d
 
 template<typename T>
 cn::Bitmap<T> cn::Utils::downsample(const cn::Bitmap<T> &input, int destSizeX, int destSizeY, int method) {
-    float factorX = (float)destSizeX / (float)input.w();
+    float factorX = ((float)destSizeX) / (float)input.w();
     float factorY = (float)destSizeY / (float)input.h();
 
     if(factorX == 1 && factorY == 1)

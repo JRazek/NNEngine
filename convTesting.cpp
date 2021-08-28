@@ -12,16 +12,18 @@ int main(){
     cn::Network network(100, 100, 3, 1);
 
     cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
-    bitmap = cn::Utils::resize<cn::byte>(bitmap, 100, 1);
     ReLU reLu;
     Sigmoid sigmoid;
 
-    cn::Backpropagation backpropagation(network, 0.001);
+    cn::Backpropagation backpropagation(network, 0.1);
 
     const int outputSize = 10;
-    network.appendConvolutionLayer(3, 3, 1, reLu);
+    network.appendConvolutionLayer(3, 3, 2, reLu, 0, 0, 4, 4);
+    network.appendMaxPoolingLayer(2, 2);
+    network.appendConvolutionLayer(3, 3, 1, reLu, 0, 0, 2, 2);
+    network.appendConvolutionLayer(3, 3, 1, reLu, 0, 0, 2, 2);
+    network.appendBatchNormalizationLayer();
     network.appendFlatteningLayer();
-    network.appendFFLayer(300, sigmoid);
     network.appendFFLayer(outputSize, sigmoid);
     network.initRandom();
 
@@ -32,7 +34,7 @@ int main(){
         target.setCell(i, 0, 0, 0.5);
     }
 
-    for(int i = 0; i < 1; i ++) {
+    for(int i = 0; i < 1000000; i ++) {
         network.feed(bitmap);
         backpropagation.propagate(target);
     }

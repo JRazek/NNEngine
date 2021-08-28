@@ -16,7 +16,7 @@ namespace cn {
         std::vector<float> biases;
         std::vector<float> weights;
         const DifferentiableFunction &differentiableFunction;
-        std::optional<Bitmap<float>> netSums;
+        std::vector<float> netSums;
 
     public:
         void randomInit() override;
