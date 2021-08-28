@@ -13,7 +13,7 @@ cn::OutputLayer::OutputLayer(int id, cn::Network &network) : FlatteningLayer(id,
     output.emplace(_w, _h, _d);
 }
 
-void cn::OutputLayer::run(const cn::Bitmap<float> &input) {
+cn::Bitmap<float> cn::OutputLayer::run(const cn::Bitmap<float> &input) {
     FlatteningLayer::run(input);
 }
 

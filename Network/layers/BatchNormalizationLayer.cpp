@@ -20,7 +20,7 @@ cn::BatchNormalizationLayer::BatchNormalizationLayer(int _id, Network &_network)
     output.emplace(Bitmap<float>(sizeX, sizeY, sizeZ));
 }
 
-void cn::BatchNormalizationLayer::run(const cn::Bitmap<float> &bitmap) {
+cn::Bitmap<float> cn::BatchNormalizationLayer::run(const cn::Bitmap<float> &bitmap) {
     if(bitmap.w() != output->w() || bitmap.h() != output->h() || bitmap.d() != output->d())
         throw std::logic_error("invalid bitmap input for normalization layer!");
     std::copy(bitmap.data(), bitmap.data() + bitmap.w() * bitmap.h() * bitmap.d(), output->data());

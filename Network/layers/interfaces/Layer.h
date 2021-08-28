@@ -18,7 +18,7 @@ namespace cn {
     protected:
         Network *network;
 
-        std::optional<Bitmap<float>> output;
+        Vector3<int> outputSize;
 
         const Bitmap<float> *_input;
         std::optional<Bitmap<bool>> memoizationStates;
@@ -26,13 +26,15 @@ namespace cn {
 
         int __id;
 
-        //Bitmap<bool> memoizedChainsStates;
-        //Bitmap<float> memoizedChains;
     public:
         Layer(int _id, Network &_network);
 
-        const Bitmap<float> *getOutput() const;
-        virtual void run(const Bitmap<float> &bitmap) = 0;
+        /**
+         *
+         * @param bitmap input to process
+         * @return output result bitmap of size specified in getOutputSize()
+         */
+        virtual Bitmap<float> run(const Bitmap<float> &bitmap) = 0;
 
         Layer(const Layer &other) = delete;
 
@@ -44,6 +46,7 @@ namespace cn {
         void setMemo(const Vector3<int> &pos, float val);
         bool getMemoState(const Vector3<int> &pos) const;
         float getMemo(const Vector3<int> &pos) const;
+        Vector3<int> getOutputSize() const;
 
         [[maybe_unused]] int id() const;
     };

@@ -29,7 +29,7 @@ namespace cn {
          */
         FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_differentiableFunction, Network &_network);
 
-        void run(const Bitmap<float> &input) override;
+        Bitmap<float> run(const Bitmap<float> &input) override;
 
         virtual float getChain(const Vector3<int> &inputPos) override;
 

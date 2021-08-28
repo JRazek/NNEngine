@@ -7,9 +7,7 @@
 cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY,
                                        int _kernelsCount, const DifferentiableFunction &_activationFunction,
                                        int _paddingX, int _paddingY, int _strideX, int _strideY) :
-        kernelSizeX(_kernelSizeX),
-        kernelSizeY(_kernelSizeY),
-        kernelSizeZ(network->getInput(__id).d()),
+        kernelSize(_kernelSizeX, _kernelSizeY, network->getInputSize(_id).z),
         kernelsCount(_kernelsCount),
         activationFunction(_activationFunction),
         paddingX(_paddingX),
@@ -19,39 +17,39 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSi
         biases(kernelsCount),
         cn::Learnable(_id, _network, _kernelsCount) {
 
-    int inputX = network->getInput(__id).w(), inputY = network->getInput(__id).h();
-    int sizeX, sizeY, sizeZ;
+    Vector3<int> inputSize = network->getInputSize(_id);
 
-    if(inputX < kernelSizeX || inputY < kernelSizeY){
+    if(inputSize.x < kernelSize.x || inputSize.y < kernelSize.y){
         throw std::logic_error("kernel must not be larger than input!");
     }
     kernels.reserve(_kernelsCount);
 
     for(int i = 0; i < _kernelsCount; i ++){
-        kernels.emplace_back(kernelSizeX, kernelSizeY, kernelSizeZ);
+        kernels.emplace_back(kernelSize);
     }
 
-    sizeX = Utils::afterConvolutionSize(kernelSizeX, inputX, paddingX, strideX);
-    sizeY = Utils::afterConvolutionSize(kernelSizeY, inputY, paddingY, strideY);
-    sizeZ = kernelsCount;
-    beforeActivation.emplace(Bitmap<float>(sizeX, sizeY, sizeZ));
-    output.emplace(Bitmap<float>(sizeX, sizeY, sizeZ));
+    int oX = Utils::afterConvolutionSize(kernelSize.x, inputSize.x, paddingX, strideX);
+    int oY = Utils::afterConvolutionSize(kernelSize.y, inputSize.y, paddingY, strideY);
+    int oZ = kernelsCount;
+    outputSize = Vector3<int>(oX, oY, oZ);
 }
 
-void cn::ConvolutionLayer::run(const Bitmap<float> &input) {
+cn::Bitmap<float> cn::ConvolutionLayer::run(const Bitmap<float> &input) {
     _input = &input;
-    //convolve input - must have correct sizes etc. Garbage in garbage out.
-    int outW = Utils::afterConvolutionSize(kernelSizeX, input.w(), paddingX, strideX);
-    int outH = Utils::afterConvolutionSize(kernelSizeY, input.h(), paddingY, strideY);
+    if(input.size() != network->getInputSize(__id)){
+        throw std::logic_error("CLayer fed with wrong input size!");
+    }
 
     for(int i = 0; i < kernelsCount; i ++){
         Bitmap<float> layer = Utils::sumBitmapLayers(Utils::convolve(kernels[i], input, paddingX, paddingY, strideX, strideY));
         beforeActivation->setLayer(i, layer.data());
     }
+    Bitmap<float> result = beforeActivation.value();
     for(auto it = beforeActivation->data(); it != beforeActivation->data() + beforeActivation->w() * beforeActivation->h() * beforeActivation->d(); ++it){
         int index = it - beforeActivation->data();
-        *(output->data() + index) = activationFunction.func(*it);
+        *(result.data() + index) = activationFunction.func(*it);
     }
+    return result;
 }
 
 void cn::ConvolutionLayer::randomInit() {

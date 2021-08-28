@@ -12,10 +12,6 @@ cn::Layer::Layer(int _id, Network &_network): __id(_id), network(&_network){
     resetMemoization();
 }
 
-const cn::Bitmap<float> *cn::Layer::getOutput() const {
-    return &output.value();
-}
-
 [[maybe_unused]] int cn::Layer::id() const {
     return __id;
 }
@@ -35,5 +31,9 @@ float cn::Layer::getMemo(const Vector3<int> &pos) const {
 
 bool cn::Layer::getMemoState(const Vector3<int> &pos) const {
     return memoizationStates->getCell(pos);
+}
+
+Vector3<int> cn::Layer::getOutputSize() const {
+    return outputSize;
 }
 

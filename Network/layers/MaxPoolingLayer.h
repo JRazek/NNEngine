@@ -14,7 +14,7 @@ namespace cn {
         std::optional<Bitmap<Vector2<int>>> mapping;
 
         MaxPoolingLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY);
-        void run(const Bitmap<float> &input) override;
+        Bitmap<float> run(const Bitmap<float> &input) override;
         float getChain(const Vector3<int> &inputPos) override;
     };
 }

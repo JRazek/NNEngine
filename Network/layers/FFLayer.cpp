@@ -13,16 +13,16 @@ cn::FFLayer::FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_
     if(__id == 0){
         throw std::logic_error("FFLayer must not be the first layer in the network!");
     }else{
-        const Bitmap<float> &prev = network->getInput(__id);
+        Vector3<int> inputSize = network.get
         if(prev.w() < 1 || prev.h() != 1 || prev.d() != 1){
             throw std::logic_error("There must be a vector output layer before FFLayer!");
         }
         weights = std::vector<float>(neuronsCount * prev.w());
     }
-    output.emplace(Bitmap<float>(neuronsCount, 1, 1));
+    outputSize = Vector3<int> (neuronsCount, 1, 1);
 }
 
-void cn::FFLayer::run(const Bitmap<float> &input) {
+cn::Bitmap<float> cn::FFLayer::run(const Bitmap<float> &input) {
     _input = &input;
     if(input.w() < 1 || input.h() != 1 || input.d() != 1){
         throw std::logic_error("input bitmap to ff layer must be a normalized vector type!");

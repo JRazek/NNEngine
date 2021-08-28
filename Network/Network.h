@@ -43,10 +43,7 @@ namespace cn {
         /**
          * what the dimensions of the byte array is after being normalized and sampled
          */
-
-        const int inputDataWidth;
-        const int inputDataHeight;
-        const int inputDataDepth;
+        Vector3<int> inputSize;
 
 
         /**
@@ -104,12 +101,20 @@ namespace cn {
          */
         float getRandom(float low, float high);
 
+
         /**
          *
-         * @param layerID - layer for which we want the input
-         * @return input for nth layer
+         * @param layerID
+         * @return the size vector of nth layer's output
          */
-        const Bitmap<float> &getInput(int layerID) const;
+        Vector3<int> getOutputSize(int layerID) const;
+
+        /**
+         *
+         * @param layerID
+         * @return returns input size for each layer
+         */
+        Vector3<int> getInputSize(int layerID) const;
 
         /**
          *

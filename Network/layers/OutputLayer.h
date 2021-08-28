@@ -12,7 +12,7 @@ namespace cn {
         const Bitmap<float> *target;
     public:
         OutputLayer(int id, cn::Network &network);
-        void run(const Bitmap<float> &input) override;
+        Bitmap<float> run(const Bitmap<float> &input) override;
         float getChain(const Vector3<int> &input) override;
         void setTarget(const Bitmap<float> *_target);
     };

@@ -28,7 +28,7 @@ cn::MaxPoolingLayer::MaxPoolingLayer(int _id, Network &_network, int _kernelSize
     mapping.emplace(Bitmap<Vector2<int>>(inputX, inputY, sizeZ));
 }
 
-void cn::MaxPoolingLayer::run(const cn::Bitmap<float> &input) {
+cn::Bitmap<float> cn::MaxPoolingLayer::run(const cn::Bitmap<float> &input) {
     _input = &input;
     std::fill(mapping->data(), mapping->data() + mapping->w() * mapping->h() * mapping->d(), Vector2<int>(-1, -1));
     Bitmap<float> res(Utils::afterMaxPoolSize(kernelSizeX, input.w()), Utils::afterMaxPoolSize(kernelSizeY, input.h()), input.d());

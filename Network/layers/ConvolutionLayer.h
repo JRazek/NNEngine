@@ -12,14 +12,12 @@ struct Vector3;
 namespace cn {
     class ConvolutionLayer : public Learnable{
     private:
-        const int kernelSizeX;
-        const int kernelSizeY;
-        const int kernelSizeZ;
-        const int kernelsCount;
-        const int paddingX;
-        const int paddingY;
-        const int strideX;
-        const int strideY;
+        Vector3<int> kernelSize;
+        int kernelsCount;
+        int paddingX;
+        int paddingY;
+        int strideX;
+        int strideY;
 
         const DifferentiableFunction &activationFunction;
 
@@ -35,7 +33,7 @@ namespace cn {
                          int _kernelsCount, const DifferentiableFunction &_activationFunction,
                          int _paddingX, int _paddingY, int _strideX, int _strideY);
         void randomInit() override;
-        void run(const Bitmap<float> &input) override;
+        Bitmap<float> run(const Bitmap<float> &input) override;
         float getChain(const Vector3<int> &inputPos) override;
         int weightsCount() const override;
 
