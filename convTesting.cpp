@@ -16,7 +16,7 @@ int main(){
     ReLU reLu;
     Sigmoid sigmoid;
 
-    cn::Backpropagation backpropagation(network, 0.01);
+    cn::Backpropagation backpropagation(network, 0.001);
 
     const int outputSize = 10;
     network.appendConvolutionLayer(3, 3, 2, reLu, 0, 0, 4, 4);
