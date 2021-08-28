@@ -9,7 +9,7 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSi
                                        int _paddingX, int _paddingY, int _strideX, int _strideY) :
         kernelSizeX(_kernelSizeX),
         kernelSizeY(_kernelSizeY),
-        kernelSizeZ(_id == 0 ? _network.inputDataDepth :network->getLayers()->at(__id - 1)->getOutput()->d()),
+        kernelSizeZ(network->getInput(__id).d()),
         kernelsCount(_kernelsCount),
         activationFunction(_activationFunction),
         paddingX(_paddingX),
@@ -19,15 +19,8 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSi
         biases(kernelsCount),
         cn::Learnable(_id, _network, _kernelsCount) {
 
-    int inputX, inputY;
+    int inputX = network->getInput(__id).w(), inputY = network->getInput(__id).h();
     int sizeX, sizeY, sizeZ;
-    if(__id == 0){
-        inputX = network->inputDataWidth;
-        inputY = network->inputDataHeight;
-    }else{
-        inputX = network->getLayers()->at(__id - 1)->getOutput()->w();
-        inputY = network->getLayers()->at(__id - 1)->getOutput()->h();
-    }
 
     if(inputX < kernelSizeX || inputY < kernelSizeY){
         throw std::logic_error("kernel must not be larger than input!");
@@ -93,7 +86,7 @@ float cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
                     Vector2<int> shift = Vector2<int>(inputPosPadded.x, inputPosPadded.y) - kernelPos;
                     float weight = kernels[c].getCell(shift.x, shift.y, inputPosPadded.z);
                     Vector3<int> outputPos (kernelPos.x / strideX, kernelPos.y / strideY, inputPosPadded.z);
-                    result += weight * network->getLayers()->at(__id + 1)->getChain(outputPos);
+                    result += weight * network->getChain(__id + 1, outputPos);
                 }
             }
         }
@@ -115,7 +108,7 @@ float cn::ConvolutionLayer::diffWeight(int weightID) {
             int inputY = y * strideY + weightPos.y;
             float inputValue = _input->getCell(inputX, inputY, weightPos.z);
             Vector3<int> nextPos (x, y, kID);
-            result += inputValue * activationFunction.derive(beforeActivation->getCell(nextPos)) * network->getLayers()->at(__id + 1)->getChain(nextPos);
+            result += inputValue * activationFunction.derive(beforeActivation->getCell(nextPos)) * network->getChain(__id + 1, nextPos);
         }
     }
     return result;

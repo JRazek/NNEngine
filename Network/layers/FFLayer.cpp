@@ -13,11 +13,11 @@ cn::FFLayer::FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_
     if(__id == 0){
         throw std::logic_error("FFLayer must not be the first layer in the network!");
     }else{
-        const Bitmap<float> *prev = network->getLayers()->at(__id - 1)->getOutput();
-        if(prev->w() < 1 || prev->h() != 1 || prev->d() != 1){
+        const Bitmap<float> &prev = network->getInput(__id);
+        if(prev.w() < 1 || prev.h() != 1 || prev.d() != 1){
             throw std::logic_error("There must be a vector output layer before FFLayer!");
         }
-        weights = std::vector<float>(neuronsCount * prev->w());
+        weights = std::vector<float>(neuronsCount * prev.w());
     }
     output.emplace(Bitmap<float>(neuronsCount, 1, 1));
 }
@@ -59,7 +59,7 @@ float cn::FFLayer::getChain(const Vector3<int> &inputPos) {
     float sum = 0;
     for(int i = 0; i < neuronsCount; i ++){
         int weightID = weightsPerNeuron * i + inputPos.x;
-        sum += weights[weightID] * differentiableFunction.derive(_input->getCell(inputPos)) * network->getLayers()->at(__id + 1)->getChain({i, 0, 0});
+        sum += weights[weightID] * differentiableFunction.derive(_input->getCell(inputPos)) * network->getChain(__id + 1, {i, 0, 0});
     }
     setMemo(inputPos, sum);
     return sum;
@@ -70,7 +70,7 @@ float cn::FFLayer::diffWeight(int weightID) {
     int weightsPerNeuron = weightsCount() / neuronsCount;
     return _input->getCell(weightID % weightsPerNeuron, 0, 0)
             * differentiableFunction.derive(netSums->getCell(neuronID, 0, 0))
-            * network->getLayers()->at(__id + 1)->getChain({neuronID, 0, 0});
+            * network->getChain(__id + 1, {neuronID, 0, 0});
 }
 
 int cn::FFLayer::weightsCount() const {

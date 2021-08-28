@@ -63,11 +63,6 @@ namespace cn {
          */
         void ready();
 
-        /**
-         *
-         * @return layers
-         */
-        const std::vector<Layer *> *getLayers();
 
         /**
          *
@@ -108,6 +103,21 @@ namespace cn {
          * @return pseudorandom number with seed given in constructor
          */
         float getRandom(float low, float high);
+
+        /**
+         *
+         * @param layerID - layer for which we want the input
+         * @return input for nth layer
+         */
+        const Bitmap<float> &getInput(int layerID) const;
+
+        /**
+         *
+         * @param layerID layer we want to get the chain from
+         * @param inputPos
+         * @return chain from requested layer
+         */
+        float getChain(int layerID, const Vector3<int> &inputPos);
 
         void resetMemoization();
 

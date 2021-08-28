@@ -17,12 +17,12 @@ cn::MaxPoolingLayer::MaxPoolingLayer(int _id, Network &_network, int _kernelSize
         sizeY = Utils::afterMaxPoolSize(kernelSizeY, inputY);
         sizeZ = network->inputDataDepth;
     }else{
-        const Bitmap<float> *prev = network->getLayers()->at(__id - 1)->getOutput();
-        inputX = prev->w();
-        inputY = prev->h();
+        const Bitmap<float> &prev = network->getInput(__id);
+        inputX = prev.w();
+        inputY = prev.h();
         sizeX = Utils::afterMaxPoolSize(kernelSizeX, inputX);
         sizeY = Utils::afterMaxPoolSize(kernelSizeY, inputY);
-        sizeZ = prev->d();
+        sizeZ = prev.d();
     }
     output.emplace(Bitmap<float>(sizeX, sizeY, sizeZ));
     mapping.emplace(Bitmap<Vector2<int>>(inputX, inputY, sizeZ));
@@ -64,7 +64,7 @@ float cn::MaxPoolingLayer::getChain(const Vector3<int> &inputPos) {
     if(mapped == Vector2<int>(-1, -1))
         res = 0;
     else
-        res = network->getLayers()->at(__id + 1)->getChain({mapped.x, mapped.y, inputPos.z});
+        res = network->getChain(__id + 1, {mapped.x, mapped.y, inputPos.z});
     setMemo(inputPos, res);
     return res;
 }

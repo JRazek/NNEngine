@@ -21,7 +21,6 @@ int main(){
     const int outputSize = 10;
     network.appendConvolutionLayer(3, 3, 2, reLu, 0, 0, 4, 4);
     network.appendConvolutionLayer(3, 3, 2, reLu);
-    network.appendBatchNormalizationLayer();
     network.appendConvolutionLayer(3, 3, 2, reLu);
     network.appendMaxPoolingLayer(2, 2);
     network.appendFlatteningLayer();

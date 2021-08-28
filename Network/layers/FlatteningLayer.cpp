@@ -10,8 +10,8 @@ cn::FlatteningLayer::FlatteningLayer(int _id, Network &_network) : Layer(_id, _n
     if(__id == 0){
         size = network->inputDataWidth * network->inputDataHeight * network->inputDataDepth;
     }else{
-        const Bitmap<float> *prev = network->getLayers()->at(__id - 1)->getOutput();
-        size = prev->w() * prev->h() * prev->d();
+        const Bitmap<float> &prev = network->getInput(__id);
+        size = prev.w() * prev.h() * prev.d();
     }
     output.emplace(Bitmap<float>(size, 1, 1));
 }
@@ -28,7 +28,7 @@ float cn::FlatteningLayer::getChain(const Vector3<int> &inputPos) {
         return getMemo(inputPos);
     }
     int outputIndex = _input->getDataIndex(inputPos);
-    float res = network->getLayers()->at(__id + 1)->getChain({outputIndex, 0, 0});
+    float res = network->getChain(__id + 1, {outputIndex, 0, 0});
     setMemo(inputPos, res);
     return res;
 }

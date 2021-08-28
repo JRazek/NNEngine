@@ -12,10 +12,10 @@ cn::BatchNormalizationLayer::BatchNormalizationLayer(int _id, Network &_network)
         sizeY = network->inputDataHeight;
         sizeZ = network->inputDataDepth;
     }else{
-        const Bitmap<float> *prev = network->getLayers()->at(__id - 1)->getOutput();
-        sizeX = prev->w();
-        sizeY = prev->h();
-        sizeZ = prev->d();
+        const Bitmap<float> &prev = network->getInput(__id);
+        sizeX = prev.w();
+        sizeY = prev.h();
+        sizeZ = prev.d();
     }
     output.emplace(Bitmap<float>(sizeX, sizeY, sizeZ));
 }
@@ -37,5 +37,5 @@ void cn::BatchNormalizationLayer::run(const cn::Bitmap<float> &bitmap) {
 }
 
 float cn::BatchNormalizationLayer::getChain(const Vector3<int> &inputPos) {
-    return (1.f/normalizationFactor) * network->getLayers()->at(__id + 1)->getChain(inputPos);
+    return (1.f/normalizationFactor) * network->getChain(__id + 1, inputPos);
 }

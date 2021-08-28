@@ -6,9 +6,10 @@
 #include "../Network.h"
 
 cn::OutputLayer::OutputLayer(int id, cn::Network &network) : FlatteningLayer(id, network) {
-    int _w = network.getLayers()->at(id -1)->getOutput()->w();
-    int _h = network.getLayers()->at(id -1)->getOutput()->h();
-    int _d = network.getLayers()->at(id -1)->getOutput()->d();
+    const Bitmap<float> &prev = network.getInput(__id);
+    int _w = prev.w();
+    int _h = prev.h();
+    int _d = prev.d();
     output.emplace(_w, _h, _d);
 }
 

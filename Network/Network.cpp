@@ -32,22 +32,24 @@ void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelsCo
     layers.push_back(c);
     allocated.push_back(c);
 }
-
-const std::vector<cn::Layer *> *cn::Network::getLayers() {
-    return &layers;
-}
+//
+//const std::vector<cn::Layer *> *cn::Network::getLayers() {
+//    return &layers;
+//}
 
 cn::Network::Network(int w, int h, int d, int seed):
         inputDataWidth(w),
         inputDataHeight(h),
         inputDataDepth(d),
-        randomEngine(seed)
-        {}
+        randomEngine(seed){
+    input.emplace(inputDataWidth, inputDataHeight, inputDataDepth);
+}
 
 void cn::Network::feed(const cn::Bitmap<float> &bitmap) {
     if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
-    input.emplace(cn::Utils::resize<float>(bitmap, inputDataWidth, inputDataHeight));
+    Bitmap<float> res = Utils::resize(bitmap, inputDataWidth, inputDataHeight);
+    std::copy(input->data(), input->data() + input->w() * input->h() * input->d(), res.data());
 
     const Bitmap<float> *_input = &input.value();
     for(int i = 0; i < layers.size(); i ++){
@@ -120,4 +122,14 @@ void cn::Network::resetMemoization() {
     for(auto l : layers){
         l->resetMemoization();
     }
+}
+
+const cn::Bitmap<float> &cn::Network::getInput(int layerID) const{
+    if(layerID == 0)
+        return input.value();
+    return *layers[layerID - 1]->getOutput();
+}
+
+float cn::Network::getChain(int layerID, const Vector3<int> &inputPos) {
+    return layers[layerID]->getChain(inputPos);
 }
