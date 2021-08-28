@@ -16,6 +16,7 @@
 #include <cmath>
 #include "Differentiables/Sigmoid.h"
 #include "Differentiables/ReLU.h"
+#include "Differentiables/Identity.h"
 
 
 namespace cn {
