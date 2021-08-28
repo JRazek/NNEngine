@@ -19,12 +19,9 @@ int main(){
     cn::Backpropagation backpropagation(network, 0.001);
 
     const int outputSize = 10;
-    network.appendConvolutionLayer(3, 3, 2, reLu, 0, 0, 4, 4);
-    network.appendConvolutionLayer(3, 3, 2, reLu);
-    network.appendConvolutionLayer(3, 3, 2, reLu);
-    network.appendMaxPoolingLayer(2, 2);
+    network.appendConvolutionLayer(3, 3, 1, reLu);
     network.appendFlatteningLayer();
-    network.appendBatchNormalizationLayer();
+    network.appendFFLayer(300, sigmoid);
     network.appendFFLayer(outputSize, sigmoid);
     network.initRandom();
 

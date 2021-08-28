@@ -8,7 +8,7 @@
 cn::OutputLayer::OutputLayer(int id, cn::Network &network) : FlatteningLayer(id, network) {}
 
 cn::Bitmap<float> cn::OutputLayer::run(const cn::Bitmap<float> &input) {
-    FlatteningLayer::run(input);
+    return FlatteningLayer::run(input);
 }
 
 float cn::OutputLayer::getChain(const Vector3<int> &input) {

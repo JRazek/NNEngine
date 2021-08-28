@@ -12,7 +12,6 @@
 #include "layers/OutputLayer.h"
 
 namespace cn {
-    class OutputLayer;
 
     class Network {
     private:
@@ -22,9 +21,11 @@ namespace cn {
     protected:
         std::vector<Learnable *> learnableLayers;
         std::vector<Layer *> layers;
+
         std::optional<Bitmap<float>> input;
+        std::vector<Bitmap<float>> outputs;
+
         std::optional<OutputLayer> outputLayer;
-        friend class OutputLayer;
 
     public:
 
@@ -52,7 +53,7 @@ namespace cn {
          */
         void feed(const byte *_input);
 
-        void feed(const Bitmap<float> &bitmap);
+        void feed(Bitmap<float> bitmap);
         void feed(const Bitmap<cn::byte> &bitmap);
 
         /**
@@ -67,8 +68,6 @@ namespace cn {
          */
         const std::vector<Learnable *> *getLearnables();
 
-
-        OutputLayer *getOutputLayer();
 
         /**
          * input size for feed
@@ -128,7 +127,12 @@ namespace cn {
 
         ~Network();
 
-        const Bitmap<float> *getInput() const;
+        const Bitmap<float> *getNetworkInput() const;
+        const Bitmap<float> *getInput(int layerID) const;
+        const Bitmap<float> *getNetworkOutput() const;
+        const Bitmap<float> *getOutput(int layerID) const;
+
+        OutputLayer *getOutputLayer();
     };
 }
 

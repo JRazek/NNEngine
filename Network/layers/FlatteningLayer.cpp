@@ -14,7 +14,7 @@ cn::FlatteningLayer::FlatteningLayer(int _id, Network &_network) : Layer(_id, _n
 cn::Bitmap<float> cn::FlatteningLayer::run(const cn::Bitmap<float> &input) {
     if(input.size().multiplyContent() != inputSize.multiplyContent())
         throw std::logic_error("invalid input input for flattening layer!");
-    return Bitmap<float>(inputSize, input.data());
+    return Bitmap<float>({inputSize.multiplyContent(), 1, 1}, input.data());
 }
 
 float cn::FlatteningLayer::getChain(const Vector3<int> &inputPos) {
