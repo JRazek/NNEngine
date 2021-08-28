@@ -24,6 +24,7 @@ struct Vector2 {
     Vector2<T> operator*(const TMatrix<Y> &tMatrix);
     Vector2<T> operator+(const Vector2<T> &other);
     Vector2<T> operator-(const Vector2<T> &other);
+    bool operator==(const Vector2<T> &other) const;
 };
 
 template<typename T>
@@ -60,6 +61,11 @@ Vector2<T> Vector2<T>::operator*(const TMatrix<Y> &tMatrix) {
 template<typename T>
 template<typename Y>
 Vector2<T>::Vector2(const Vector2<Y> &other): Vector2<T>((T)other.x, (T)other.y) {}
+
+template<typename T>
+bool Vector2<T>::operator==(const Vector2<T> &other) const {
+    return x == other.x && y == other.y;
+}
 
 
 #endif //NEURALNETLIBRARY_VECTOR2_H

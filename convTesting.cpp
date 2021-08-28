@@ -23,9 +23,9 @@ int main(){
     network.appendConvolutionLayer(3, 3, 2, reLu);
     network.appendBatchNormalizationLayer();
     network.appendConvolutionLayer(3, 3, 2, reLu);
-    network.appendBatchNormalizationLayer();
-    network.appendConvolutionLayer(3, 3, 2, reLu);
+    network.appendMaxPoolingLayer(2, 2);
     network.appendFlatteningLayer();
+    network.appendBatchNormalizationLayer();
     network.appendFFLayer(outputSize, sigmoid);
     network.initRandom();
 
@@ -36,7 +36,7 @@ int main(){
         target.setCell(i, 0, 0, 0.5);
     }
 
-    for(int i = 0; i < 1000000; i ++) {
+    for(int i = 0; i < 1; i ++) {
         network.feed(bitmap);
         backpropagation.propagate(target);
     }

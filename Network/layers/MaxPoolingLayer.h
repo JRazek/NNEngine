@@ -10,9 +10,12 @@ namespace cn {
     class MaxPoolingLayer : public Layer{
     public:
         const int kernelSizeX, kernelSizeY;
+
+        std::optional<Bitmap<Vector2<int>>> mapping;
+
         MaxPoolingLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY);
-        void run(const Bitmap<float> &bitmap) override;
-        float getChain(const Vector3<int> &input) override;
+        void run(const Bitmap<float> &input) override;
+        float getChain(const Vector3<int> &inputPos) override;
     };
 }
 
