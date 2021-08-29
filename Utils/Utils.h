@@ -25,6 +25,9 @@ namespace cn {
     template<typename T>
     class Bitmap;
 
+    template<typename T>
+    class PrefixSum2D;
+
     class Utils{
     public:
 

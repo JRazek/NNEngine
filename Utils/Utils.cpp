@@ -4,6 +4,7 @@
 #include <stack>
 #include <cmath>
 #include "dataStructures/KDTree.h"
+#include "dataStructures/PrefixSum2D.h"
 //
 // Created by jrazek on 05.08.2021.
 //
@@ -32,6 +33,8 @@ cn::Bitmap<float> cn::Utils::convolve(const Bitmap<float> &kernel, const Bitmap<
     cn::Bitmap<float> output (sizeX, sizeY, input.d());
 
     cn::Bitmap<float> paddedInput = addPadding(input, paddingX, paddingY);
+
+    cn::PrefixSum2D<long double> prefixSum2D(paddedInput);
 
     for(int y = 0; y < paddedInput.h() - kernel.h() + 1; y+=strideY){
         for(int x = 0; x < paddedInput.w() - kernel.w() + 1; x+=strideX){

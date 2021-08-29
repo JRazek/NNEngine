@@ -7,7 +7,6 @@
 #include "Network/Network.h"
 #include "LearningModels/Backpropagation.h"
 #include <opencv2/opencv.hpp>
-#include "Utils/dataStructures/PrefixSum2DArr.h"
 
 int main(){
     cv::Mat mat = cv::imread("resources/aPhoto.jpg");
@@ -42,6 +41,6 @@ int main(){
         backpropagation.propagate(target);
     }
 
-    PrefixSum2D<long long> prefixSum2D(bitmap);
+    //PrefixSum2D<long long> prefixSum2D(bitmap);
     return 0;
 }
