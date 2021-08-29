@@ -35,7 +35,7 @@ int main(){
         target.setCell(i, 0, 0, 0.5);
     }
 
-    for(int i = 0; i < 1; i ++) {
+    for(int i = 0; i < 1000000; i ++) {
         network.feed(bitmap);
         std::cout<<i<<": "<<backpropagation.getError(target)<<"\n";
         backpropagation.propagate(target);

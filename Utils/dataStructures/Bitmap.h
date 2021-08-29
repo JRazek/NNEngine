@@ -136,6 +136,7 @@ void cn::Bitmap<T>::setLayer(int layerID, T *input) {
     std::copy(input, input + _w * _h, dataP + _w * _h * layerID);
 }
 
+
 template<typename T>
 int cn::Bitmap<T>::w() const {
     return _w;

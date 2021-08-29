@@ -3,7 +3,7 @@
 //
 #include "ConvolutionLayer.h"
 #include "../Network.h"
-
+#include <future>
 cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY,
                                        int _kernelsCount, const DifferentiableFunction &_activationFunction,
                                        int _paddingX, int _paddingY, int _strideX, int _strideY) :
@@ -37,9 +37,15 @@ cn::Bitmap<float> cn::ConvolutionLayer::run(const Bitmap<float> &input) {
     if(input.size() != network->getInputSize(__id)){
         throw std::logic_error("CLayer fed with wrong input size!");
     }
+    std::vector<std::future<Bitmap<float>>> kernelThreads;
+    auto getConvolved = [this](const Bitmap<float> &input, const cn::Bitmap<float> &kernel){
+        return Utils::sumBitmapLayers(Utils::convolve(kernel, input, paddingX, paddingY, strideX, strideY));
+    };
     for(int i = 0; i < kernelsCount; i ++){
-        Bitmap<float> layer = Utils::sumBitmapLayers(Utils::convolve(kernels[i], input, paddingX, paddingY, strideX, strideY));
-        beforeActivation->setLayer(i, layer.data());
+        kernelThreads.push_back(std::async(getConvolved, input, kernels[i]));
+    }
+    for(int i = 0; i < kernelsCount; i ++){
+        beforeActivation->setLayer(i, kernelThreads[i].get().data());
     }
     Bitmap<float> result = beforeActivation.value();
     for(auto it = beforeActivation->data(); it != beforeActivation->data() + beforeActivation->w() * beforeActivation->h() * beforeActivation->d(); ++it){
