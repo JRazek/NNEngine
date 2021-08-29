@@ -19,15 +19,15 @@ int main(){
     cn::Backpropagation backpropagation(network, 0.1);
 
     const int outputSize = 10;
-    network.appendConvolutionLayer(3, 3, 1, reLu, 0, 0, 4, 4);
-    network.appendMaxPoolingLayer(2, 2);
-    network.appendConvolutionLayer(3, 3, 1, reLu, 0, 0, 2, 2);
-    network.appendConvolutionLayer(3, 3, 1, reLu, 0, 0, 2, 2);
+    network.appendConvolutionLayer(3, 3, 6, reLu, 0, 0, 1, 1);
+    network.appendMaxPoolingLayer(4, 4);
+    network.appendBatchNormalizationLayer();
+    network.appendConvolutionLayer(3, 3, 10, reLu, 0, 0, 2, 2);
+    network.appendConvolutionLayer(3, 3, 20, reLu, 0, 0, 2, 2);
     network.appendBatchNormalizationLayer();
     network.appendFlatteningLayer();
     network.appendFFLayer(outputSize, sigmoid);
     network.initRandom();
-
     network.ready();
 
     cn::Bitmap<float> target (outputSize, 1, 1);
