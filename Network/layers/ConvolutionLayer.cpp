@@ -72,35 +72,25 @@ float cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
     }
     Bitmap<float> paddedInput = Utils::addPadding(*network->getInput(__id), paddingX, paddingY);
 
+    auto validPos = [this](const Vector2<int> &kernelPos, const Bitmap<float> &bitmap){
+        return kernelPos.x >= 0 && kernelPos.y >= 0 && kernelPos.x + kernelSize.x - 1 < bitmap.w() && kernelPos.y + kernelSize.y - 1 < bitmap.h();
+    };
+
+    float result = 0;
 
     Vector3<int> inputPosPadded(inputPos.x - paddingX, inputPos.y - paddingY, inputPos.z);
-
-    auto chainDiff = [this](int z, const Bitmap<float> &paddedInput, const Vector3<int> &inputPosPadded){
-        float result = 0;
-        auto validPos = [this](const Vector2<int> &kernelPos, const Bitmap<float> &bitmap){
-            return kernelPos.x >= 0 && kernelPos.y >= 0 && kernelPos.x + kernelSize.x - 1 < bitmap.w() && kernelPos.y + kernelSize.y - 1 < bitmap.h();
-        };
+    for(int c = 0; c < kernelsCount; c++){
         for(int y = 0; y < kernelSize.y; y++){
             for(int x = 0; x < kernelSize.x; x++){
                 Vector2<int> kernelPos(inputPosPadded.x - x, inputPosPadded.y - y);
                 if(validPos(kernelPos, paddedInput)){
                     Vector2<int> shift = Vector2<int>(inputPosPadded.x, inputPosPadded.y) - kernelPos;
-                    float weight = kernels[z].getCell(shift.x, shift.y, inputPosPadded.z);
-                    Vector3<int> outputPos (kernelPos.x / strideX, kernelPos.y / strideY, z);
+                    float weight = kernels[c].getCell(shift.x, shift.y, inputPosPadded.z);
+                    Vector3<int> outputPos (kernelPos.x / strideX, kernelPos.y / strideY, c);
                     result += weight * network->getChain(__id + 1, outputPos);
                 }
             }
         }
-        return result;
-    };
-
-    float result = 0;
-    std::vector<std::future<float>> kernelThreads;
-    for(int z = 0; z < kernelsCount; z++){
-        kernelThreads.push_back(std::async(chainDiff, z, paddedInput, inputPosPadded));
-    }
-    for(int z = 0; z < kernelsCount; z ++){
-        result += kernelThreads[z].get();
     }
     setMemo(inputPos, result);
     return result;
