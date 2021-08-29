@@ -9,23 +9,23 @@
 #include <opencv2/opencv.hpp>
 
 int main(){
-    cv::Mat mat = cv::imread("resources/aPhoto.jpg");
-    cn::Network network(100, 100, 3, 1);
+    cn::Network network(100, 100, 3, 2);
 
-    cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
     ReLU reLu;
     Sigmoid sigmoid;
 
     cn::Backpropagation backpropagation(network, 0.1);
 
     const int outputSize = 10;
-    network.appendConvolutionLayer(3, 3, 6, reLu, 0, 0, 1, 1);
+    network.appendConvolutionLayer(3, 3, 2, reLu, 0, 0, 1, 1);
     network.appendMaxPoolingLayer(4, 4);
     network.appendBatchNormalizationLayer();
     network.appendConvolutionLayer(3, 3, 10, reLu, 0, 0, 2, 2);
-    network.appendConvolutionLayer(3, 3, 20, reLu, 0, 0, 2, 2);
+    network.appendMaxPoolingLayer(2, 2);
+    network.appendConvolutionLayer(3, 3, 20, reLu, 0, 0, 1, 1);
     network.appendBatchNormalizationLayer();
     network.appendFlatteningLayer();
+    network.appendFFLayer(20, sigmoid);
     network.appendFFLayer(outputSize, sigmoid);
     network.initRandom();
     network.ready();
@@ -35,6 +35,10 @@ int main(){
         target.setCell(i, 0, 0, 0.5);
     }
 
+
+    cv::Mat mat = cv::imread("resources/aPhoto.jpg");
+    cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
+    bitmap = cn::Utils::resize(bitmap, 100, 100);
     for(int i = 0; i < 1000000; i ++) {
         network.feed(bitmap);
         std::cout<<i<<": "<<backpropagation.getError(target)<<"\n";
