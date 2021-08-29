@@ -3,7 +3,7 @@
 //
 
 #include <algorithm>
-#include "Utils.h"
+#include "../Utils.h"
 #ifndef NEURALNETLIBRARY_BITMAP_H
 #define NEURALNETLIBRARY_BITMAP_H
 
@@ -11,7 +11,7 @@
 namespace cn {
     template<typename T>
     class Bitmap {
-    private:
+    protected:
 
         /**
          * data should be stored in 0th format described in Utils.h file

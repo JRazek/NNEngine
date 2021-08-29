@@ -2,7 +2,7 @@
 // Created by user on 31.07.2021.
 //
 #include <iostream>
-#include "Utils/Bitmap.h"
+#include "Utils/dataStructures/Bitmap.h"
 #include "Utils/Utils.h"
 #include "Utils/dataStructures/QuadTree.h"
 #include "Utils/dataStructures/KDTree.h"

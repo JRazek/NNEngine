@@ -1,4 +1,4 @@
-#include "Bitmap.h"
+#include "dataStructures/Bitmap.h"
 #include "Utils.h"
 #include <unordered_set>
 #include <stack>

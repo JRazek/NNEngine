@@ -7,7 +7,7 @@
 
 #include <vector>
 #include <optional>
-#include "../../../Utils/Bitmap.h"
+#include "../../../Utils/dataStructures/Bitmap.h"
 
 template<typename T>
 struct Vector3;

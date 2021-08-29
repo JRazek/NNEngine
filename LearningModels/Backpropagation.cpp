@@ -3,7 +3,7 @@
 //
 
 #include "Backpropagation.h"
-#include "../Utils/Bitmap.h"
+#include "../Utils/dataStructures/Bitmap.h"
 #include "../Network/Network.h"
 cn::Backpropagation::Backpropagation(Network &_network, float _learningRate) :
         network(_network),
