@@ -3,7 +3,7 @@
 //
 #include "ConvolutionLayer.h"
 #include "../Network.h"
-
+#include <future>
 cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY,
                                        int _kernelsCount, const DifferentiableFunction &_activationFunction,
                                        int _paddingX, int _paddingY, int _strideX, int _strideY) :
@@ -37,9 +37,15 @@ cn::Bitmap<float> cn::ConvolutionLayer::run(const Bitmap<float> &input) {
     if(input.size() != network->getInputSize(__id)){
         throw std::logic_error("CLayer fed with wrong input size!");
     }
+    std::vector<std::future<Bitmap<float>>> kernelThreads;
+    auto getConvolved = [this](const Bitmap<float> &input, const cn::Bitmap<float> &kernel){
+        return Utils::sumBitmapLayers(Utils::convolve(kernel, input, paddingX, paddingY, strideX, strideY));
+    };
     for(int i = 0; i < kernelsCount; i ++){
-        Bitmap<float> layer = Utils::sumBitmapLayers(Utils::convolve(kernels[i], input, paddingX, paddingY, strideX, strideY));
-        beforeActivation->setLayer(i, layer.data());
+        kernelThreads.push_back(std::async(getConvolved, input, kernels[i]));
+    }
+    for(int i = 0; i < kernelsCount; i ++){
+        beforeActivation->setLayer(i, kernelThreads[i].get().data());
     }
     Bitmap<float> result = beforeActivation.value();
     for(auto it = beforeActivation->data(); it != beforeActivation->data() + beforeActivation->w() * beforeActivation->h() * beforeActivation->d(); ++it){
@@ -66,25 +72,35 @@ float cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
     }
     Bitmap<float> paddedInput = Utils::addPadding(*network->getInput(__id), paddingX, paddingY);
 
-    auto validPos = [this](const Vector2<int> &kernelPos, const Bitmap<float> &bitmap){
-        return kernelPos.x >= 0 && kernelPos.y >= 0 && kernelPos.x + kernelSize.x - 1 < bitmap.w() && kernelPos.y + kernelSize.y - 1 < bitmap.h();
-    };
-
-    float result = 0;
 
     Vector3<int> inputPosPadded(inputPos.x - paddingX, inputPos.y - paddingY, inputPos.z);
-    for(int c = 0; c < kernelsCount; c++){
+
+    auto chainDiff = [this](int z, const Bitmap<float> &paddedInput, const Vector3<int> &inputPosPadded){
+        float result = 0;
+        auto validPos = [this](const Vector2<int> &kernelPos, const Bitmap<float> &bitmap){
+            return kernelPos.x >= 0 && kernelPos.y >= 0 && kernelPos.x + kernelSize.x - 1 < bitmap.w() && kernelPos.y + kernelSize.y - 1 < bitmap.h();
+        };
         for(int y = 0; y < kernelSize.y; y++){
             for(int x = 0; x < kernelSize.x; x++){
                 Vector2<int> kernelPos(inputPosPadded.x - x, inputPosPadded.y - y);
                 if(validPos(kernelPos, paddedInput)){
                     Vector2<int> shift = Vector2<int>(inputPosPadded.x, inputPosPadded.y) - kernelPos;
-                    float weight = kernels[c].getCell(shift.x, shift.y, inputPosPadded.z);
-                    Vector3<int> outputPos (kernelPos.x / strideX, kernelPos.y / strideY, c);
+                    float weight = kernels[z].getCell(shift.x, shift.y, inputPosPadded.z);
+                    Vector3<int> outputPos (kernelPos.x / strideX, kernelPos.y / strideY, z);
                     result += weight * network->getChain(__id + 1, outputPos);
                 }
             }
         }
+        return result;
+    };
+
+    float result = 0;
+    std::vector<std::future<float>> kernelThreads;
+    for(int z = 0; z < kernelsCount; z++){
+        kernelThreads.push_back(std::async(chainDiff, z, paddedInput, inputPosPadded));
+    }
+    for(int z = 0; z < kernelsCount; z ++){
+        result += kernelThreads[z].get();
     }
     setMemo(inputPos, result);
     return result;
