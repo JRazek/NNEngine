@@ -18,7 +18,7 @@ int main(){
     cn::Backpropagation backpropagation(network, 0.1);
 
     const int outputSize = 10;
-    network.appendConvolutionLayer(3, 3, 2, reLu, 0, 0, 4, 4);
+    network.appendConvolutionLayer(3, 3, 1, reLu, 0, 0, 4, 4);
     network.appendMaxPoolingLayer(2, 2);
     network.appendConvolutionLayer(3, 3, 1, reLu, 0, 0, 2, 2);
     network.appendConvolutionLayer(3, 3, 1, reLu, 0, 0, 2, 2);
@@ -34,8 +34,9 @@ int main(){
         target.setCell(i, 0, 0, 0.5);
     }
 
-    for(int i = 0; i < 1; i ++) {
+    for(int i = 0; i < 1000000; i ++) {
         network.feed(bitmap);
+        std::cout<<i<<": "<<backpropagation.getError(target)<<"\n";
         backpropagation.propagate(target);
     }
 

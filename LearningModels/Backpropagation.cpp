@@ -18,15 +18,20 @@ void cn::Backpropagation::propagate(const cn::Bitmap<float> &target) {
     if(output.size() != target.size()){
         throw std::logic_error("Backpropagation, invalid target!");
     }
-    float error = 0;
-    for(int i = 0; i < target.w(); i ++){
-        error += std::pow(target.getCell(i, 0, 0) - output.getCell(i, 0, 0), 2);
-    }
     for(Learnable *learnable : *network.getLearnables()){
         std::vector<float> layerGradient = learnable->getGradient();
         for(int i = 0; i < layerGradient.size(); i ++){
             learnable->setWeight(i, learnable->getWeight(i) - learningRate * layerGradient[i]);
         }
     }
-    std::cout<<error<<"\n";
+}
+
+float cn::Backpropagation::getError(const cn::Bitmap<float> &target) const {
+    float error = 0;
+    OutputLayer *layer = network.getOutputLayer();
+    const Bitmap<float> &output = *network.getOutput(layer->id());
+    for(int i = 0; i < target.w(); i ++){
+        error += std::pow(target.getCell(i, 0, 0) - output.getCell(i, 0, 0), 2);
+    }
+    return error;
 }
