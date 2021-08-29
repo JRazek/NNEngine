@@ -17,25 +17,15 @@ void cn::Network::feed(const byte *_input) {
     feed(cn::Utils::normalize(bitmap));
 }
 
-cn::Network::~Network() {
-    for(auto l : allocated){
-        delete l;
-    }
-}
-
 void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelsCount, const DifferentiableFunction &differentiableFunction, int paddingX,
                                          int paddingY, int strideX, int strideY) {
 
-    ConvolutionLayer *c = new ConvolutionLayer(this->layers.size(), *this, kernelX, kernelY, kernelsCount,
+    std::unique_ptr<ConvolutionLayer> c = std::make_unique<ConvolutionLayer>(this->layers.size(), *this, kernelX, kernelY, kernelsCount,
                                                differentiableFunction, paddingX, paddingY, strideX, strideY);
-    learnableLayers.push_back(c);
-    layers.push_back(c);
-    allocated.push_back(c);
+    learnableLayers.push_back(c.get());
+    layers.push_back(c.get());
+    allocated.push_back(std::move(c));
 }
-//
-//const std::vector<cn::Layer *> *cn::Network::getLayers() {
-//    return &layers;
-//}
 
 cn::Network::Network(int w, int h, int d, int seed):
         inputSize(w, h, d),
@@ -52,9 +42,6 @@ void cn::Network::feed(Bitmap<float> bitmap) {
         auto layer = layers[i];
         outputs.push_back(layer->run(*_input));
         _input = &outputs.back();
-        if(_input->size() != layer->getOutputSize()){
-            int here = 1;
-        }
     }
 }
 
@@ -74,28 +61,28 @@ void cn::Network::initRandom() {
 }
 
 void cn::Network::appendFFLayer(int neuronsCount, const DifferentiableFunction &differentiableFunction) {
-    FFLayer *f = new FFLayer(layers.size(), neuronsCount, differentiableFunction, *this);
-    learnableLayers.push_back(f);
-    layers.push_back(f);
-    allocated.push_back(f);
+    std::unique_ptr<FFLayer> f = std::make_unique<FFLayer>(layers.size(), neuronsCount, differentiableFunction, *this);
+    learnableLayers.push_back(f.get());
+    layers.push_back(f.get());
+    allocated.push_back(std::move(f));
 }
 
 void cn::Network::appendFlatteningLayer() {
-    FlatteningLayer *f = new FlatteningLayer(layers.size(), *this);
-    layers.push_back(f);
-    allocated.push_back(f);
+    std::unique_ptr<FlatteningLayer> f = std::make_unique<FlatteningLayer>(layers.size(), *this);
+    layers.push_back(f.get());
+    allocated.push_back(std::move(f));
 }
 
 void cn::Network::appendBatchNormalizationLayer() {
-    BatchNormalizationLayer *b = new BatchNormalizationLayer(layers.size(), *this);
-    layers.push_back(b);
-    allocated.push_back(b);
+    std::unique_ptr<BatchNormalizationLayer> b = std::make_unique<BatchNormalizationLayer>(layers.size(), *this);
+    layers.push_back(b.get());
+    allocated.push_back(std::move(b));
 }
 
 void cn::Network::appendMaxPoolingLayer(int kernelSizeX, int kernelSizeY) {
-    MaxPoolingLayer *m = new MaxPoolingLayer(layers.size(), *this, kernelSizeX, kernelSizeY);
-    layers.push_back(m);
-    allocated.push_back(m);
+    std::unique_ptr<MaxPoolingLayer> m = std::make_unique<MaxPoolingLayer>(layers.size(), *this, kernelSizeX, kernelSizeY);
+    layers.push_back(m.get());
+    allocated.push_back(std::move(m));
 }
 
 void cn::Network::ready() {

@@ -10,13 +10,14 @@
 #include "../Utils/Utils.h"
 #include "layers/interfaces/Learnable.h"
 #include "layers/OutputLayer.h"
+#include <memory>
 
 namespace cn {
 
     class Network {
     private:
         std::default_random_engine randomEngine;
-        std::vector<Layer *> allocated;
+        std::vector<std::unique_ptr<Layer>> allocated;
 
     protected:
         std::vector<Learnable *> learnableLayers;
@@ -124,8 +125,6 @@ namespace cn {
         float getChain(int layerID, const Vector3<int> &inputPos);
 
         void resetMemoization();
-
-        ~Network();
 
         const Bitmap<float> *getNetworkInput() const;
         const Bitmap<float> *getInput(int layerID) const;

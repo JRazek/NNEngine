@@ -191,9 +191,6 @@ cn::Bitmap<T> cn::Utils::downsample(const cn::Bitmap<T> &input, int destSizeX, i
                     avgCount[output.getDataIndex(x, y, c)] += 1;
                     int corrX = (int)((float)x / factorX);
                     int corrY = (int)((float)y / factorY);
-                    if(corrX >= input.w() || corrY >= input.h()){
-                        int test = 0;
-                    }
                     output.setCell(x, y, c, output.getCell(x, y, c) + input.getCell(corrX, corrY, c));
                 }
             }
