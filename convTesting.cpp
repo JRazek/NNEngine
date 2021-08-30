@@ -11,7 +11,7 @@
 #include "Utils/Files/ImageRepresentation.h"
 
 int main(){
-    cn::Network network(100, 100, 1, 2);
+    cn::Network network(18, 18, 3, 2);
 
     ReLU reLu;
     Sigmoid sigmoid;
@@ -20,7 +20,6 @@ int main(){
 
     const int outputSize = 10;
     network.appendConvolutionLayer(3, 3, 2, reLu, 0, 0, 1, 1);
-    network.appendMaxPoolingLayer(4, 4);
     network.appendBatchNormalizationLayer();
     network.appendConvolutionLayer(3, 3, 10, reLu, 0, 0, 2, 2);
     network.appendMaxPoolingLayer(2, 2);
@@ -36,14 +35,14 @@ int main(){
 
 
 
-    CSVReader csvReader("/home/user/CLionProjects/dataSets/training-b.csv", ',');
+    CSVReader csvReader("/home/user/CLionProjects/dataSets/metadata.csv", ';');
     csvReader.readContents();
     auto &contents = csvReader.getContents();
     std::vector<ImageRepresentation> imageRepresentations;
     imageRepresentations.reserve(contents.size());
     for(auto &c : contents){
-        std::string path = c[6] + "/" + c[0];
-        std::string value = c[3];
+        std::string path = c[0];
+        std::string value = c[1];
         imageRepresentations.emplace_back(path, value);
     }
 
@@ -55,13 +54,12 @@ int main(){
     for(int i = 0; i < imageRepresentations.size(); i ++) {
         cv::Mat mat = cv::imread(imageRepresentations[i].path);
         cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
-        bitmap = cn::Utils::resize(bitmap, 100, 100);
         network.feed(bitmap);
         int numVal = std::stoi(imageRepresentations[i].value);
-        target.setCell(numVal - 1, 0, 0, 1);
+        target.setCell(numVal, 0, 0, 1);
         std::cout<<i<<": "<<backpropagation.getError(target)<<"\n";
         backpropagation.propagate(target);
-        target.setCell(numVal - 1, 0, 0, 0);
+        target.setCell(numVal, 0, 0, 0);
     }
 
     //PrefixSum2D<long long> prefixSum2D(bitmap);

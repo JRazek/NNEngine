@@ -28,5 +28,7 @@ cn::Bitmap<float> cn::BatchNormalizationLayer::run(const cn::Bitmap<float> &inpu
 }
 
 float cn::BatchNormalizationLayer::getChain(const Vector3<int> &inputPos) {
+    if(normalizationFactor == 0)
+        return 0;
     return (1.f/normalizationFactor) * network->getChain(__id + 1, inputPos);
 }
