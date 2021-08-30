@@ -31,7 +31,7 @@ float cn::Backpropagation::getError(const cn::Bitmap<float> &target) const {
     OutputLayer *layer = network.getOutputLayer();
     const Bitmap<float> &output = *network.getOutput(layer->id());
     for(int i = 0; i < target.w(); i ++){
-        error += std::pow(target.getCell(i, 0, 0) - output.getCell(i, 0, 0), 2);
+        error += 0.5*std::pow(target.getCell(i, 0, 0) - output.getCell(i, 0, 0), 2);
     }
     return error;
 }
