@@ -16,7 +16,7 @@ int main(){
     ReLU reLu;
     Sigmoid sigmoid;
 
-    cn::Backpropagation backpropagation(network, 0.1);
+    cn::Backpropagation backpropagation(network, 1);
 
     const int outputSize = 10;
     network.appendConvolutionLayer(3, 3, 2, reLu, 0, 0, 1, 1);
@@ -50,15 +50,39 @@ int main(){
     for(int i = 0; i < outputSize; i ++){
         target.setCell(i, 0, 0, 0);
     }
+    auto getBest = [](const cn::Bitmap<float> &output){
+        int best = 0;
+        for (int j = 0; j < output.w(); ++j) {
+            if(output.getCell(j, 0, 0) > output.getCell(best, 0, 0)){
+                best = j;
+            }
+        }
+        return best;
+    };
 
+    std::shuffle(imageRepresentations.begin(), imageRepresentations.end(), std::default_random_engine(1));
+
+    int correctCount = 0;
+    int resetRate = 100;
     for(int i = 0; i < imageRepresentations.size(); i ++) {
-        cv::Mat mat = cv::imread(imageRepresentations[i].path);
+        ImageRepresentation &imageRepresentation = imageRepresentations[i];
+        cv::Mat mat = cv::imread(imageRepresentation.path);
         cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
         network.feed(bitmap);
-        int numVal = std::stoi(imageRepresentations[i].value);
+        int numVal = std::stoi(imageRepresentation.value);
         target.setCell(numVal, 0, 0, 1);
         std::cout<<i<<": "<<backpropagation.getError(target)<<"\n";
         backpropagation.propagate(target);
+        int best = getBest(network.getNetworkOutput());
+        if(best == numVal){
+            correctCount ++;
+        }
+
+        if(!((i + 1) % resetRate)){
+            std::cout<<"ACCURACY: "<<(float)correctCount / float(resetRate) * 100<<"%\n";
+            correctCount = 0;
+        }
+
         target.setCell(numVal, 0, 0, 0);
     }
 

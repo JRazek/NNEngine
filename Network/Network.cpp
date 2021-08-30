@@ -119,8 +119,8 @@ Vector3<int> cn::Network::getInputSize(int layerID) const {
     return getOutputSize(layerID - 1);
 }
 
-const cn::Bitmap<float> *cn::Network::getNetworkOutput() const {
-    return &outputs.back();
+const cn::Bitmap<float> &cn::Network::getNetworkOutput() const {
+    return outputs.back();
 }
 
 cn::OutputLayer *cn::Network::getOutputLayer() {

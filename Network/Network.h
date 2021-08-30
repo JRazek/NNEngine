@@ -128,7 +128,7 @@ namespace cn {
 
         const Bitmap<float> *getNetworkInput() const;
         const Bitmap<float> *getInput(int layerID) const;
-        const Bitmap<float> *getNetworkOutput() const;
+        const Bitmap<float> &getNetworkOutput() const;
         const Bitmap<float> *getOutput(int layerID) const;
 
         OutputLayer *getOutputLayer();
