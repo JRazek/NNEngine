@@ -11,7 +11,7 @@
 #include "Utils/Files/ImageRepresentation.h"
 
 int main(){
-    cn::Network network(18, 18, 3, 2);
+    cn::Network network(18, 18, 3, 243);
 
     ReLU reLu;
     Sigmoid sigmoid;
@@ -21,9 +21,8 @@ int main(){
     const int outputSize = 10;
     network.appendConvolutionLayer(3, 3, 2, reLu, 0, 0, 1, 1);
     network.appendBatchNormalizationLayer();
-    network.appendConvolutionLayer(3, 3, 10, reLu, 0, 0, 2, 2);
-    network.appendMaxPoolingLayer(2, 2);
-    network.appendConvolutionLayer(3, 3, 20, reLu, 0, 0, 1, 1);
+    network.appendConvolutionLayer(3, 3, 10, reLu, 0, 0, 1, 1);
+    network.appendConvolutionLayer(3, 3, 10, reLu, 0, 0, 1, 1);
     network.appendBatchNormalizationLayer();
     network.appendFlatteningLayer();
     network.appendFFLayer(20, sigmoid);

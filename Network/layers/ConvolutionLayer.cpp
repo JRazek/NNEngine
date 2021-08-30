@@ -105,9 +105,8 @@ float cn::ConvolutionLayer::diffWeight(int weightID) {
     float result = 0;
     for(int y = 0; y < outputSize.y - kernelSize.y; y++){
         for(int x = 0; x < outputSize.x - kernelSize.x; x++){
-            int inputX = x * strideX + weightPos.x;
-            int inputY = y * strideY + weightPos.y;
-            float inputValue = network->getInput(__id)->getCell(inputX, inputY, weightPos.z);
+            Vector3<int> inputPos = Vector3<int>(x * strideX, y * strideY, 0) + weightPos;
+            float inputValue = paddedInput.getCell(inputPos);
             Vector3<int> nextPos (x, y, kID);
             result += inputValue * activationFunction.derive(beforeActivation->getCell(nextPos)) * network->getChain(__id + 1, nextPos);
         }
