@@ -22,10 +22,10 @@ int main(){
     network.appendConvolutionLayer(3, 3, 2, reLu, 0, 0, 1, 1);
     network.appendBatchNormalizationLayer();
     network.appendConvolutionLayer(3, 3, 10, reLu, 0, 0, 1, 1);
-    network.appendConvolutionLayer(3, 3, 10, reLu, 0, 0, 1, 1);
     network.appendBatchNormalizationLayer();
     network.appendFlatteningLayer();
-    network.appendFFLayer(20, sigmoid);
+    network.appendFFLayer(10, sigmoid);
+    network.appendFFLayer(10, sigmoid);
     network.appendFFLayer(outputSize, sigmoid);
     network.initRandom();
     network.ready();

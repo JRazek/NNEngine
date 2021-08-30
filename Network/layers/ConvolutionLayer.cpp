@@ -58,11 +58,11 @@ cn::Bitmap<float> cn::ConvolutionLayer::run(const Bitmap<float> &input) {
 void cn::ConvolutionLayer::randomInit() {
     for(auto &k : kernels){
         for(auto it = k.data(); it != k.data() + k.w() * k.h() * k.d(); ++it){
-            *it = network->getRandom(-1, 1);
+            *it = network->getRandom(0, 1);
         }
     }
     for(auto &b : biases){
-        b = network->getRandom(-5, 5);
+        b = network->getRandom(0, 5);
     }
 }
 
@@ -87,7 +87,7 @@ float cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
                     Vector2<int> shift = Vector2<int>(inputPosPadded.x, inputPosPadded.y) - kernelPos;
                     float weight = kernels[c].getCell(shift.x, shift.y, inputPosPadded.z);
                     Vector3<int> outputPos (kernelPos.x / strideX, kernelPos.y / strideY, c);
-                    result += weight * network->getChain(__id + 1, outputPos);
+                    result += weight * activationFunction.derive(beforeActivation->getCell(outputPos)) * network->getChain(__id + 1, outputPos);
                 }
             }
         }
