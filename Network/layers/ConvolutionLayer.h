@@ -36,8 +36,15 @@ namespace cn {
         Bitmap<float> run(const Bitmap<float> &input) override;
         float getChain(const Vector3<int> &inputPos) override;
         int weightsCount() const override;
+        int biasesCount() const override;
 
-        virtual std::vector<float> getGradient() override;
+
+        virtual std::vector<float> getWeightsGradient() override;
+        std::vector<float> getBiasesGradient() override;
+
+        void setBias(int kernelID, float value) override;
+        float getBias(int kernelID) const override;
+
 
         void setWeight(int weightID, float value) override;
         float getWeight(int weightID) const override;

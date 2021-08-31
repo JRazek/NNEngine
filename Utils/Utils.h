@@ -128,6 +128,8 @@ namespace cn {
         static int afterConvolutionSize(int kernelSize, int inputSize, int padding, int stride);
         static Bitmap<float> convolve(const Bitmap<float> &kernel, const Bitmap<float> &input, int paddingX = 0, int paddingY = 0, int strideX = 1, int strideY = 1);
 
+        [[deprecated]]
+        static Bitmap<cn::byte> toGrayScale(const Bitmap<cn::byte> &input);
 
         static int afterMaxPoolSize(int kernelSize, int inputSize);
         static Bitmap<float> maxPool(const Bitmap<float> &input, int kernelSizeX, int kernelSizeY);
