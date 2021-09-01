@@ -254,9 +254,9 @@ cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, const TMatrix<dou
     int maxX = 0, minX = INT32_MAX, maxY = 0, minY = INT32_MAX;
     std::vector<Vector2<int>> edges(4);
     edges[0] = {0,0};
-    edges[1] = {input.w - 1, 0};
-    edges[2] = {input.w - 1, input.h - 1};
-    edges[3] = {0, input.h - 1};
+    edges[1] = {input.w() - 1, 0};
+    edges[2] = {input.w() - 1, input.h() - 1};
+    edges[3] = {0, input.h() - 1};
     for(auto &e : edges){
         e = tMatrix * e;
         int x = e.x, y = e.y;
@@ -267,17 +267,17 @@ cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, const TMatrix<dou
     }
     int w = (int)(maxX - minX) + 1;
     int h = (int)(maxY - minY) + 1;
-    cn::Bitmap<T> result(w, h, input.d);
-    std::fill(result.data(), result.data() + w * h * result.d, 0);
+    cn::Bitmap<T> result(w, h, input.d());
+    std::fill(result.data(), result.data() + w * h * result.d(), 0);
 
     Vector2<int> shift = {minX, minY};
     shift = shift * -1;
 
-    for(int y = 0; y < input.h; y++){
-        for(int x = 0; x < input.w; x++){
+    for(int y = 0; y < input.h(); y++){
+        for(int x = 0; x < input.w(); x++){
             Vector2<int> v(x,y);
             v = v * tMatrix + shift;
-            for(int c = 0; c < input.d; c++){
+            for(int c = 0; c < input.d(); c++){
                 T cell = input.getCell(x, y, c);
                 result.setCell(v.x, v.y, c, cell);
             }

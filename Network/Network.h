@@ -16,6 +16,10 @@ namespace cn {
 
     class Network {
     private:
+        /**
+         * what the dimensions of the byte array is after being normalized and sampled
+         */
+        Vector3<int> inputSize;
         std::default_random_engine randomEngine;
         std::vector<std::unique_ptr<Layer>> allocated;
 
@@ -42,10 +46,6 @@ namespace cn {
         void appendMaxPoolingLayer(int kernelSizeX, int kernelSizeY);
 
 
-        /**
-         * what the dimensions of the byte array is after being normalized and sampled
-         */
-        Vector3<int> inputSize;
 
 
         /**

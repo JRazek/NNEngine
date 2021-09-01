@@ -32,13 +32,15 @@ cn::Network::Network(int w, int h, int d, int seed):
         randomEngine(seed){}
 
 void cn::Network::feed(Bitmap<double> bitmap) {
+    if(bitmap.size() != inputSize){
+        throw std::logic_error("invalid input size!");
+    }
     if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
-    bitmap = Utils::resize(bitmap, inputSize.x, inputSize.y);
     const Bitmap<double> *_input = &bitmap;
     input.emplace(*_input);
     outputs.clear();
-    for(int i = 0; i < layers.size(); i ++){
+    for(u_int i = 0; i < layers.size(); i ++){
         auto layer = layers[i];
         outputs.push_back(layer->run(*_input));
         _input = getOutput(i);

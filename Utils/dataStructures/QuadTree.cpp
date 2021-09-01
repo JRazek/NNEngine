@@ -53,7 +53,10 @@ bool QuadTree::belongs(const std::pair<int, int> &point) const {
 }
 
 PointData * QuadTree::getNearestNeighbour(const std::pair<int, int> &point) {
-    return nullptr;
+    if(point.first)
+        return nullptr;
+    else
+        return NULL;
 }
 
 QuadTree::QuadTree(double posX, double posY, double sizeX, double sizeY, int level, QuadTree *parent):

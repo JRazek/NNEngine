@@ -88,9 +88,6 @@ cn::Bitmap<T>::Bitmap(int _w, int _h, int _d, const T *data, int inputType): Bit
 
 template<typename T>
 int cn::Bitmap<T>::getDataIndex(int col, int row, int depth) const{
-    if(!belongs({col, row, depth})){
-        throw std::invalid_argument("cell does not belong to bitmap!");
-    }
     return depth * _w * _h + row * _w + col;
 }
 

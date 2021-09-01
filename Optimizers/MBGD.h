@@ -2,15 +2,15 @@
 // Created by user on 21.08.2021.
 //
 
-#ifndef NEURALNETLIBRARY_BACKPROPAGATION_H
-#define NEURALNETLIBRARY_BACKPROPAGATION_H
+#ifndef NEURALNETLIBRARY_MBGD_H
+#define NEURALNETLIBRARY_MBGD_H
 #include <vector>
 namespace cn {
     template<typename T>
-    struct Bitmap;
+    class Bitmap;
     class Network;
 
-    class Backpropagation {
+    class MBGD {
 
         Network &network;
         int iteration;
@@ -19,10 +19,10 @@ namespace cn {
         std::vector<std::vector<double>> memorizedWeights;
         std::vector<std::vector<double>> memorizedBiases;
     public:
-        Backpropagation(Network &_network, double _learningRate, int _miniBatchSize);
+        MBGD(Network &_network, double _learningRate, int _miniBatchSize);
         void propagate(const Bitmap<double> &target);
         double getError(const cn::Bitmap<double> &target) const;
     };
 
 }
-#endif //NEURALNETLIBRARY_BACKPROPAGATION_H
+#endif //NEURALNETLIBRARY_MBGD_H

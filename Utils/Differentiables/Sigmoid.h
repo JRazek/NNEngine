@@ -6,8 +6,9 @@
 #define NEURALNETLIBRARY_SIGMOID_H
 
 #include "DifferentiableFunction.h"
-
+#include <cmath>
 struct Sigmoid : public DifferentiableFunction{
+    const double e = std::exp(1.0);
     double func(double x) const override;
     double derive(double x) const override;
 };

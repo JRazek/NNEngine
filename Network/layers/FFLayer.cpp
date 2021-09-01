@@ -7,17 +7,14 @@
 
 cn::FFLayer::FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_differentiableFunction, Network &_network) :
         Learnable(_id, _network, _neuronsCount),
-        differentiableFunction(_differentiableFunction),
         biases(_neuronsCount),
+        differentiableFunction(_differentiableFunction),
         beforeActivation(_neuronsCount){
-    if(__id == 0){
-        throw std::logic_error("FFLayer must not be the first layer in the network!");
-    }else{
-        if(inputSize.x < 1 || inputSize.y != 1 || inputSize.z != 1){
-            throw std::logic_error("There must be a vector output layer before FFLayer!");
-        }
-        weights = std::vector<double>(neuronsCount * inputSize.x);
+
+    if(inputSize.x < 1 || inputSize.y != 1 || inputSize.z != 1){
+        throw std::logic_error("There must be a vector output layer before FFLayer!");
     }
+    weights = std::vector<double>(neuronsCount * inputSize.x);
     outputSize = Vector3<int> (neuronsCount, 1, 1);
 }
 
@@ -34,7 +31,8 @@ cn::Bitmap<double> cn::FFLayer::run(const Bitmap<double> &input) {
             sum += input.getCell(j, 0, 0) * weights.at(i * weightsPerNeuron + j);
         }
         beforeActivation[i] = sum;
-        result.setCell(i, 0, 0, differentiableFunction.func(sum));
+        double activated = differentiableFunction.func(sum);
+        result.setCell(i, 0, 0, activated);
     }
     return result;
 }
@@ -44,7 +42,7 @@ void cn::FFLayer::randomInit() {
         w = network->getRandom(-10, 10)* std::sqrt(2.f/inputSize.x);
     }
     for(auto &b : biases){
-        b = network->getRandom(-5, 5);
+        b = network->getRandom(0, 0);
     }
 }
 
@@ -55,22 +53,21 @@ double cn::FFLayer::getChain(const Vector3<int> &inputPos) {
     if(getMemoState(inputPos)){
         return getMemo(inputPos);
     }
-    int weightsPerNeuron = weights.size() / neuronsCount;
-    double sum = 0;
+    int weightsPerNeuron = inputSize.x;
+
+    double res = 0;
     for(int i = 0; i < neuronsCount; i ++){
-        int weightID = weightsPerNeuron * i + inputPos.x;
-        sum += weights.at(weightID) * differentiableFunction.derive(beforeActivation.at(i)) * network->getChain(__id + 1, {i, 0, 0});
+        res += weights.at(i * weightsPerNeuron  + inputPos.x) * differentiableFunction.derive(beforeActivation.at(i)) * network->getChain(__id + 1, {i, 0, 0});
     }
-    setMemo(inputPos, sum);
-    return sum;
+
+    setMemo(inputPos, res);
+    return res;
 }
 
 double cn::FFLayer::diffWeight(int weightID) {
-    int weightsPerNeuron = weightsCount() / neuronsCount;
-    int neuronID = weightID / weightsPerNeuron;
-    double res = network->getInput(__id)->getCell(weightID % weightsPerNeuron, 0, 0)
-            * differentiableFunction.derive(beforeActivation.at(neuronID));
-    return res * network->getChain(__id + 1, {neuronID, 0, 0});
+    int neuron = weightID / inputSize.x;
+    const Bitmap<double> *input = network->getInput(__id);
+    return input->getCell(weightID % inputSize.x, 0, 0) * differentiableFunction.derive(beforeActivation.at(neuron)) * network->getChain(__id + 1, {neuron, 0, 0});
 }
 
 int cn::FFLayer::weightsCount() const {
