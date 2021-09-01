@@ -9,10 +9,14 @@ cn::Backpropagation::Backpropagation(Network &_network, float _learningRate, int
         network(_network),
         learningRate(_learningRate),
         miniBatchSize(_miniBatchSize),
-        iteration(0)
-        {}
+        iteration(0){
+    if(miniBatchSize <= 0){
+        throw std::logic_error("mini-batch size must be a positive integer!");
+    }
+}
 
 void cn::Backpropagation::propagate(const cn::Bitmap<float> &target) {
+    network.resetMemoization();
     if(!(iteration % miniBatchSize)){
         memorizedWeights.clear();
         memorizedBiases.clear();
@@ -25,7 +29,6 @@ void cn::Backpropagation::propagate(const cn::Bitmap<float> &target) {
             memorizedBiases[i].resize(network.getLearnables()->at(i)->biasesCount(), 0);
         }
     }
-    network.resetMemoization();
     OutputLayer *layer = network.getOutputLayer();
     layer->setTarget(&target);
     const Bitmap<float> &output = *network.getOutput(layer->id());
@@ -47,14 +50,16 @@ void cn::Backpropagation::propagate(const cn::Bitmap<float> &target) {
     if(!((iteration + 1) % miniBatchSize)){
         for(int k = 0; k < network.getLearnables()->size(); k ++) {
             Learnable *learnable = network.getLearnables()->at(k);
-            std::vector<float> &layerWeightGradients = memorizedWeights[k];
-            std::vector<float> &layerBiasesGradients = memorizedBiases[k];
+            std::vector<float> &layerWeightsSum = memorizedWeights[k];
+            std::vector<float> &layerBiasesSum = memorizedBiases[k];
 
-            for(int i = 0; i < layerWeightGradients.size(); i ++) {
-                learnable->setWeight(i, layerWeightGradients[i] / miniBatchSize);
+            for(int i = 0; i < layerWeightsSum.size(); i ++) {
+                float resultGradient = layerWeightsSum[i] / miniBatchSize;
+                learnable->setWeight(i, resultGradient);
             }
-            for(int i = 0; i < layerBiasesGradients.size(); i ++) {
-                learnable->setBias(i, layerBiasesGradients[i] / miniBatchSize);
+            for(int i = 0; i < layerBiasesSum.size(); i ++) {
+                float resultGradient = layerBiasesSum[i] / miniBatchSize;
+                learnable->setBias(i, resultGradient);
             }
         }
     }

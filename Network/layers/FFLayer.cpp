@@ -59,18 +59,18 @@ float cn::FFLayer::getChain(const Vector3<int> &inputPos) {
     float sum = 0;
     for(int i = 0; i < neuronsCount; i ++){
         int weightID = weightsPerNeuron * i + inputPos.x;
-        sum += weights[weightID] * differentiableFunction.derive(beforeActivation[inputPos.x]) * network->getChain(__id + 1, {i, 0, 0});
+        sum += weights.at(weightID) * differentiableFunction.derive(beforeActivation.at(i)) * network->getChain(__id + 1, {i, 0, 0});
     }
     setMemo(inputPos, sum);
     return sum;
 }
 
 float cn::FFLayer::diffWeight(int weightID) {
-    int neuronID = weightID / (weightsCount()/neuronsCount);
     int weightsPerNeuron = weightsCount() / neuronsCount;
-    return network->getInput(__id)->getCell(weightID % weightsPerNeuron, 0, 0)
-            * differentiableFunction.derive(beforeActivation[neuronID])
-            * network->getChain(__id + 1, {neuronID, 0, 0});
+    int neuronID = weightID / weightsPerNeuron;
+    float res = network->getInput(__id)->getCell(weightID % weightsPerNeuron, 0, 0)
+            * differentiableFunction.derive(beforeActivation.at(neuronID));
+    return res * network->getChain(__id + 1, {neuronID, 0, 0});
 }
 
 int cn::FFLayer::weightsCount() const {

@@ -11,26 +11,24 @@
 #include "Utils/Files/ImageRepresentation.h"
 
 int main(){
-    cn::Network network(18, 18, 3, 1);
+    cn::Network network(28, 28, 3, 2);
 
     ReLU reLu;
     Sigmoid sigmoid;
 
-    cn::Backpropagation backpropagation(network, 1, 10);
+    cn::Backpropagation backpropagation(network,  0.0001, 100);
 
     const int outputSize = 10;
     network.appendFlatteningLayer();
-    network.appendBatchNormalizationLayer();
-    network.appendFFLayer(100, sigmoid);
-    network.appendFFLayer(10, sigmoid);
-    network.appendFFLayer(10, sigmoid);
+    network.appendFFLayer(16, sigmoid);
+    network.appendFFLayer(16, sigmoid);
     network.appendFFLayer(outputSize, sigmoid);
     network.initRandom();
     network.ready();
 
 
 
-    CSVReader csvReader("/home/user/CLionProjects/dataSets/metadata.csv", ';');
+    CSVReader csvReader("/home/jrazek/CLionProjects/ConvolutionalNetLib/metadata.csv", ';');
     csvReader.readContents();
     auto &contents = csvReader.getContents();
     std::vector<ImageRepresentation> imageRepresentations;
@@ -75,13 +73,12 @@ int main(){
             }
 
             if(!((i + 1) % resetRate)){
-                std::cout<<"ACCURACY: "<<(float)correctCount / float(resetRate) * 100<<"%\n";
+                std::cout<<"ACCURACY: "<< (float)correctCount / float(resetRate) * 100<<"%\n";
                 correctCount = 0;
             }
 
             target.setCell(numVal, 0, 0, 0);
         }
 
-    //PrefixSum2D<long long> prefixSum2D(bitmap);
     return 0;
 }
