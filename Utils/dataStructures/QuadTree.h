@@ -11,18 +11,18 @@
 
 class QuadTree {
 public:
-    const float posX, posY;
-    const float sizeX, sizeY;
+    const double posX, posY;
+    const double sizeX, sizeY;
     const int level;
 
-    QuadTree(float sizeX, float sizeY);
+    QuadTree(double sizeX, double sizeY);
 
     void insertPoint(PointData &pointD);
 
 
 
     ~QuadTree();
-    [[nodiscard]] bool belongs(float x, float y) const;
+    [[nodiscard]] bool belongs(double x, double y) const;
     [[nodiscard]] bool belongs(const std::pair<int, int> &point) const;
 
     PointData * getNearestNeighbour(const std::pair<int, int> &point);
@@ -43,7 +43,7 @@ private:
     QuadTree * SW;
     QuadTree * SE;
 
-    QuadTree(float posX, float posY, float sizeX, float sizeY, int level,
+    QuadTree(double posX, double posY, double sizeX, double sizeY, int level,
              QuadTree *parent);
 
 };

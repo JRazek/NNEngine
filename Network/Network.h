@@ -23,8 +23,8 @@ namespace cn {
         std::vector<Learnable *> learnableLayers;
         std::vector<Layer *> layers;
 
-        std::optional<Bitmap<float>> input;
-        std::vector<Bitmap<float>> outputs;
+        std::optional<Bitmap<double>> input;
+        std::vector<Bitmap<double>> outputs;
 
         std::optional<OutputLayer> outputLayer;
 
@@ -54,7 +54,7 @@ namespace cn {
          */
         void feed(const byte *_input);
 
-        void feed(Bitmap<float> bitmap);
+        void feed(Bitmap<double> bitmap);
         void feed(const Bitmap<cn::byte> &bitmap);
 
         /**
@@ -99,7 +99,7 @@ namespace cn {
          * @param high higher bound for number
          * @return pseudorandom number with seed given in constructor
          */
-        float getRandom(float low, float high);
+        double getRandom(double low, double high);
 
 
         /**
@@ -122,14 +122,14 @@ namespace cn {
          * @param inputPos
          * @return chain from requested layer
          */
-        float getChain(int layerID, const Vector3<int> &inputPos);
+        double getChain(int layerID, const Vector3<int> &inputPos);
 
         void resetMemoization();
 
-        const Bitmap<float> *getNetworkInput() const;
-        const Bitmap<float> *getInput(int layerID) const;
-        const Bitmap<float> &getNetworkOutput() const;
-        const Bitmap<float> *getOutput(int layerID) const;
+        const Bitmap<double> *getNetworkInput() const;
+        const Bitmap<double> *getInput(int layerID) const;
+        const Bitmap<double> &getNetworkOutput() const;
+        const Bitmap<double> *getOutput(int layerID) const;
 
         OutputLayer *getOutputLayer();
     };

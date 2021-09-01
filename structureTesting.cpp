@@ -33,15 +33,15 @@ int main(){
     std::vector<PointData *> points;
     points.reserve(pointsCount);
 
-    std::vector<std::pair<std::pair<float, float>, std::pair<float, float>>> tests;//test, answer
+    std::vector<std::pair<std::pair<double, double>, std::pair<double, double>>> tests;//test, answer
     tests.reserve(pointsCount);
     for(int i = 0; i < pointsCount; i ++){
-        float x,y;
+        double x,y;
         std::cin >> x >> y;
         points.push_back(new PointData({x, y}));
     }
     for(int i = 0; i < testsCount; i ++){
-        float xt,yt,xa,ya;
+        double xt,yt,xa,ya;
         std::cin >> xt >> yt >> xa >> ya;
         tests.push_back({{xt, yt}, {xa, ya}});
     }
@@ -50,7 +50,7 @@ int main(){
     for(int i = 0; i < testsCount; i ++){
         auto p = tests[i];
         auto res = kdTree.findNearestNeighbour(p.first);
-        float distSquaredTest = pow(p.first.first - p.second.first, 2) +  pow(p.first.second - p.second.second, 2);
+        double distSquaredTest = pow(p.first.first - p.second.first, 2) +  pow(p.first.second - p.second.second, 2);
         if(res.second == distSquaredTest){
             //std::cout<<"OK \n";
         }else if (res.second < distSquaredTest){

@@ -21,33 +21,33 @@ namespace cn {
 
         const DifferentiableFunction &activationFunction;
 
-        std::vector<Bitmap<float>> kernels;
-        std::vector<float> biases;//ith corresponds to ith kernel
+        std::vector<Bitmap<double>> kernels;
+        std::vector<double> biases;//ith corresponds to ith kernel
 
-        std::optional<cn::Bitmap<float>> beforeActivation;
+        std::optional<cn::Bitmap<double>> beforeActivation;
 
-        float diffWeight(int weightID);
+        double diffWeight(int weightID);
 
     public:
         ConvolutionLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY,
                          int _kernelsCount, const DifferentiableFunction &_activationFunction,
                          int _paddingX, int _paddingY, int _strideX, int _strideY);
         void randomInit() override;
-        Bitmap<float> run(const Bitmap<float> &input) override;
-        float getChain(const Vector3<int> &inputPos) override;
+        Bitmap<double> run(const Bitmap<double> &input) override;
+        double getChain(const Vector3<int> &inputPos) override;
         int weightsCount() const override;
         int biasesCount() const override;
 
 
-        virtual std::vector<float> getWeightsGradient() override;
-        std::vector<float> getBiasesGradient() override;
+        virtual std::vector<double> getWeightsGradient() override;
+        std::vector<double> getBiasesGradient() override;
 
-        void setBias(int kernelID, float value) override;
-        float getBias(int kernelID) const override;
+        void setBias(int kernelID, double value) override;
+        double getBias(int kernelID) const override;
 
 
-        void setWeight(int weightID, float value) override;
-        float getWeight(int weightID) const override;
+        void setWeight(int weightID, double value) override;
+        double getWeight(int weightID) const override;
     };
 }
 

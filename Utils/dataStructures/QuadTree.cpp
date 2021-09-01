@@ -45,7 +45,7 @@ QuadTree::~QuadTree() {
     }
 }
 
-bool QuadTree::belongs(float x, float y) const {
+bool QuadTree::belongs(double x, double y) const {
     return this->posX <= x && this->posX + this->sizeX > x && this->posY <= y && this->posY + this->sizeY > y;
 }
 bool QuadTree::belongs(const std::pair<int, int> &point) const {
@@ -56,7 +56,7 @@ PointData * QuadTree::getNearestNeighbour(const std::pair<int, int> &point) {
     return nullptr;
 }
 
-QuadTree::QuadTree(float posX, float posY, float sizeX, float sizeY, int level, QuadTree *parent):
+QuadTree::QuadTree(double posX, double posY, double sizeX, double sizeY, int level, QuadTree *parent):
         posX(posX),
         posY(posY),
         sizeX(sizeX),
@@ -66,7 +66,7 @@ QuadTree::QuadTree(float posX, float posY, float sizeX, float sizeY, int level, 
         type(0)
         {}
 
-QuadTree::QuadTree(float sizeX, float sizeY):
+QuadTree::QuadTree(double sizeX, double sizeY):
         QuadTree(0, 0, sizeX, sizeY, 0, nullptr)
         {}
 

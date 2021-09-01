@@ -62,8 +62,8 @@ KDTree::~KDTree() {
     delete rightChild;
 }
 
-std::pair<PointData *, float> KDTree::findNearestNeighbour(const std::pair<float, float> &pointSearch) {
-    std::vector <std::pair<PointData *, float>> nearest(3);
+std::pair<PointData *, double> KDTree::findNearestNeighbour(const std::pair<double, double> &pointSearch) {
+    std::vector <std::pair<PointData *, double>> nearest(3);
     nearest[0] = {this->pointData, cn::Utils::distanceSquared(pointSearch, this->pointData->point)};
     nearest[1] = {nullptr, INFINITY};
     nearest[2] = {nullptr, INFINITY};

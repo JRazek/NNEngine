@@ -13,14 +13,14 @@
  */
 template<typename T>
 struct TMatrix {
-    using func = std::function<float(float)> ;
+    using func = std::function<double(double)> ;
     /**
      * matrix for space transformation
      * | a, b |
      * | c, d |
      */
-    float a, b, c, d;
-    TMatrix(float _a, float _b, float _c, float _d);
+    double a, b, c, d;
+    TMatrix(double _a, double _b, double _c, double _d);
     [[nodiscard]] Vector2<T> getIHat() const;
     [[nodiscard]] Vector2<T> getJHat() const;
 
@@ -35,7 +35,7 @@ struct TMatrix {
 
 
 template<typename T>
-TMatrix<T>::TMatrix(float _a, float _b, float _c, float _d)
+TMatrix<T>::TMatrix(double _a, double _b, double _c, double _d)
         :
         a(_a),
         b(_b),

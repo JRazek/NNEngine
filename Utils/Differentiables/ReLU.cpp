@@ -5,13 +5,13 @@
 #include "ReLU.h"
 
 
-float ReLU::func(float x) const {
+double ReLU::func(double x) const {
     if(x > 0)
         return x;
     return 0;
 }
 
-float ReLU::derive(float x) const {
+double ReLU::derive(double x) const {
     if(x > 0)
         return 1;
     return 0;

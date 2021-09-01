@@ -5,7 +5,7 @@
 #include "Backpropagation.h"
 #include "../Utils/dataStructures/Bitmap.h"
 #include "../Network/Network.h"
-cn::Backpropagation::Backpropagation(Network &_network, float _learningRate, int _miniBatchSize) :
+cn::Backpropagation::Backpropagation(Network &_network, double _learningRate, int _miniBatchSize) :
         network(_network),
         learningRate(_learningRate),
         miniBatchSize(_miniBatchSize),
@@ -15,13 +15,13 @@ cn::Backpropagation::Backpropagation(Network &_network, float _learningRate, int
     }
 }
 
-void cn::Backpropagation::propagate(const cn::Bitmap<float> &target) {
+void cn::Backpropagation::propagate(const cn::Bitmap<double> &target) {
     network.resetMemoization();
     if(!(iteration % miniBatchSize)){
         memorizedWeights.clear();
         memorizedBiases.clear();
-        memorizedWeights.resize(network.getLearnables()->size(), std::vector<float>());
-        memorizedBiases.resize(network.getLearnables()->size(), std::vector<float>());
+        memorizedWeights.resize(network.getLearnables()->size(), std::vector<double>());
+        memorizedBiases.resize(network.getLearnables()->size(), std::vector<double>());
         for(int i = 0; i < memorizedWeights.size(); i ++){
             memorizedWeights[i].resize(network.getLearnables()->at(i)->weightsCount(), 0);
         }
@@ -31,14 +31,14 @@ void cn::Backpropagation::propagate(const cn::Bitmap<float> &target) {
     }
     OutputLayer *layer = network.getOutputLayer();
     layer->setTarget(&target);
-    const Bitmap<float> &output = *network.getOutput(layer->id());
+    const Bitmap<double> &output = *network.getOutput(layer->id());
     if(output.size() != target.size()){
         throw std::logic_error("Backpropagation, invalid target!");
     }
     for(int k = 0; k < network.getLearnables()->size(); k ++){
         Learnable *learnable = network.getLearnables()->at(k);
-        std::vector<float> weightsGradient = learnable->getWeightsGradient();
-        std::vector<float> biasesGradient = learnable->getBiasesGradient();
+        std::vector<double> weightsGradient = learnable->getWeightsGradient();
+        std::vector<double> biasesGradient = learnable->getBiasesGradient();
         for(int i = 0; i < weightsGradient.size(); i ++){
             memorizedWeights[k][i] += learnable->getWeight(i) - learningRate * weightsGradient[i];
         }
@@ -50,15 +50,15 @@ void cn::Backpropagation::propagate(const cn::Bitmap<float> &target) {
     if(!((iteration + 1) % miniBatchSize)){
         for(int k = 0; k < network.getLearnables()->size(); k ++) {
             Learnable *learnable = network.getLearnables()->at(k);
-            std::vector<float> &layerWeightsSum = memorizedWeights[k];
-            std::vector<float> &layerBiasesSum = memorizedBiases[k];
+            std::vector<double> &layerWeightsSum = memorizedWeights[k];
+            std::vector<double> &layerBiasesSum = memorizedBiases[k];
 
             for(int i = 0; i < layerWeightsSum.size(); i ++) {
-                float resultGradient = layerWeightsSum[i] / miniBatchSize;
+                double resultGradient = layerWeightsSum[i] / miniBatchSize;
                 learnable->setWeight(i, resultGradient);
             }
             for(int i = 0; i < layerBiasesSum.size(); i ++) {
-                float resultGradient = layerBiasesSum[i] / miniBatchSize;
+                double resultGradient = layerBiasesSum[i] / miniBatchSize;
                 learnable->setBias(i, resultGradient);
             }
         }
@@ -67,10 +67,10 @@ void cn::Backpropagation::propagate(const cn::Bitmap<float> &target) {
     iteration++;
 }
 
-float cn::Backpropagation::getError(const cn::Bitmap<float> &target) const {
-    float error = 0;
+double cn::Backpropagation::getError(const cn::Bitmap<double> &target) const {
+    double error = 0;
     OutputLayer *layer = network.getOutputLayer();
-    const Bitmap<float> &output = *network.getOutput(layer->id());
+    const Bitmap<double> &output = *network.getOutput(layer->id());
     for(int i = 0; i < target.w(); i ++){
         error += 0.5*std::pow(target.getCell(i, 0, 0) - output.getCell(i, 0, 0), 2);
     }

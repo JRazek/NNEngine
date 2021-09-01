@@ -9,12 +9,12 @@
 
 namespace cn {
     class OutputLayer : public FlatteningLayer {
-        const Bitmap<float> *target;
+        const Bitmap<double> *target;
     public:
         OutputLayer(int id, cn::Network &network);
-        Bitmap<float> run(const Bitmap<float> &input) override;
-        float getChain(const Vector3<int> &input) override;
-        void setTarget(const Bitmap<float> *_target);
+        Bitmap<double> run(const Bitmap<double> &input) override;
+        double getChain(const Vector3<int> &input) override;
+        void setTarget(const Bitmap<double> *_target);
     };
 }
 

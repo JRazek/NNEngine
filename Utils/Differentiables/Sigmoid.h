@@ -8,8 +8,8 @@
 #include "DifferentiableFunction.h"
 
 struct Sigmoid : public DifferentiableFunction{
-    float func(float x) const override;
-    float derive(float x) const override;
+    double func(double x) const override;
+    double derive(double x) const override;
 };
 
 

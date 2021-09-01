@@ -15,13 +15,13 @@ namespace cn {
         Network &network;
         int iteration;
         int miniBatchSize;
-        float learningRate;
-        std::vector<std::vector<float>> memorizedWeights;
-        std::vector<std::vector<float>> memorizedBiases;
+        double learningRate;
+        std::vector<std::vector<double>> memorizedWeights;
+        std::vector<std::vector<double>> memorizedBiases;
     public:
-        Backpropagation(Network &_network, float _learningRate, int _miniBatchSize);
-        void propagate(const Bitmap<float> &target);
-        float getError(const cn::Bitmap<float> &target) const;
+        Backpropagation(Network &_network, double _learningRate, int _miniBatchSize);
+        void propagate(const Bitmap<double> &target);
+        double getError(const cn::Bitmap<double> &target) const;
     };
 
 }

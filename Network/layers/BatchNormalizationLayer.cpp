@@ -9,12 +9,12 @@ cn::BatchNormalizationLayer::BatchNormalizationLayer(int _id, Network &_network)
     outputSize = inputSize;
 }
 
-cn::Bitmap<float> cn::BatchNormalizationLayer::run(const cn::Bitmap<float> &input) {
+cn::Bitmap<double> cn::BatchNormalizationLayer::run(const cn::Bitmap<double> &input) {
     if(input.size() != inputSize)
         throw std::logic_error("invalid bitmap input for normalization layer!");
-    Bitmap<float> result(outputSize, input.data());
+    Bitmap<double> result(outputSize, input.data());
 
-    float max = 0;
+    double max = 0;
 
     for(auto it = input.data(); it != input.data() + input.size().multiplyContent(); ++it){
         max = std::max(*it, max);
@@ -30,7 +30,7 @@ cn::Bitmap<float> cn::BatchNormalizationLayer::run(const cn::Bitmap<float> &inpu
     return result;
 }
 
-float cn::BatchNormalizationLayer::getChain(const Vector3<int> &inputPos) {
+double cn::BatchNormalizationLayer::getChain(const Vector3<int> &inputPos) {
     if(normalizationFactor == 0)
         return 0;
     return (1.f/normalizationFactor) * network->getChain(__id + 1, inputPos);

@@ -7,7 +7,7 @@
 #include <vector>
 
 struct PointData {
-    std::pair<float, float> point;
+    std::pair<double, double> point;
     void * data;
     /**
      *
@@ -16,8 +16,8 @@ struct PointData {
      * @note that no data is copied. This way its more efficient.
      * You should deallocate data by yourself if necessary.
      */
-    PointData(const std::pair<float, float> &_point, void * _data);
-    PointData(const std::pair<float, float> &_point);
+    PointData(const std::pair<double, double> &_point, void * _data);
+    PointData(const std::pair<double, double> &_point);
 };
 
 

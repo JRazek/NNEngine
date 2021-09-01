@@ -9,11 +9,11 @@
 namespace cn {
     class BatchNormalizationLayer : public Layer {
 
-        float normalizationFactor;
+        double normalizationFactor;
     public:
         BatchNormalizationLayer(int _id, Network &_network);
-        Bitmap<float> run(const Bitmap<float> &input) override;
-        float getChain(const Vector3<int> &inputPos) override;
+        Bitmap<double> run(const Bitmap<double> &input) override;
+        double getChain(const Vector3<int> &inputPos) override;
     };
 }
 #endif //NEURALNETLIBRARY_BATCHNORMALIZATIONLAYER_H

@@ -22,7 +22,7 @@ namespace cn {
         Vector3<int> outputSize;
 
         std::optional<Bitmap<bool>> memoizationStates;
-        std::optional<Bitmap<float>> memoizationTable;
+        std::optional<Bitmap<double>> memoizationTable;
 
         int __id;
 
@@ -34,18 +34,18 @@ namespace cn {
          * @param bitmap input to process
          * @return output result bitmap of size specified in getOutputSize()
          */
-        virtual Bitmap<float> run(const Bitmap<float> &bitmap) = 0;
+        virtual Bitmap<double> run(const Bitmap<double> &bitmap) = 0;
 
         Layer(const Layer &other) = delete;
 
-        virtual float getChain(const Vector3<int> &inputPos) = 0;
+        virtual double getChain(const Vector3<int> &inputPos) = 0;
 
         virtual ~Layer() = default;
 
         void resetMemoization();
-        void setMemo(const Vector3<int> &pos, float val);
+        void setMemo(const Vector3<int> &pos, double val);
         bool getMemoState(const Vector3<int> &pos) const;
-        float getMemo(const Vector3<int> &pos) const;
+        double getMemo(const Vector3<int> &pos) const;
         Vector3<int> getOutputSize() const;
 
         [[maybe_unused]] int id() const;

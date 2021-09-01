@@ -4,10 +4,10 @@
 
 #include "Identity.h"
 
-float Identity::func(float x) const {
+double Identity::func(double x) const {
     return x;
 }
 
-float Identity::derive(float x) const {
+double Identity::derive(double x) const {
     return 1;
 }

@@ -12,19 +12,19 @@ cn::MaxPoolingLayer::MaxPoolingLayer(int _id, Network &_network, int _kernelSize
     mapping.emplace(Bitmap<Vector2<int>>(inputSize));
 }
 
-cn::Bitmap<float> cn::MaxPoolingLayer::run(const cn::Bitmap<float> &input) {
+cn::Bitmap<double> cn::MaxPoolingLayer::run(const cn::Bitmap<double> &input) {
     if(input.size() != inputSize){
         throw std::logic_error("invalid output size in max pool!");
     }
 
     std::fill(mapping->data(), mapping->data() + mapping->size().multiplyContent(), Vector2<int>(-1, -1));
 
-    Bitmap<float> res(outputSize);
+    Bitmap<double> res(outputSize);
 
     for(int c = 0; c < input.d(); c++){
         for(int y = 0; y < input.h() - kernelSize.y + 1; y += kernelSize.y){
             for(int x = 0; x < input.w() - kernelSize.x + 1; x += kernelSize.x){
-                float max = 0;
+                double max = 0;
                 Vector2<int> bestPoint;
                 for(int kY = 0; kY < kernelSize.y; kY++){
                     for(int kX = 0; kX < kernelSize.x; kX++){
@@ -40,12 +40,12 @@ cn::Bitmap<float> cn::MaxPoolingLayer::run(const cn::Bitmap<float> &input) {
     return res;
 }
 
-float cn::MaxPoolingLayer::getChain(const Vector3<int> &inputPos) {
+double cn::MaxPoolingLayer::getChain(const Vector3<int> &inputPos) {
     if(getMemoState(inputPos)){
         return getMemo(inputPos);
     }
     Vector2<int> mapped = mapping->getCell(inputPos);
-    float res;
+    double res;
     if(mapped == Vector2<int>(-1, -1))
         res = 0;
     else

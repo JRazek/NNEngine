@@ -31,11 +31,11 @@ cn::Network::Network(int w, int h, int d, int seed):
         inputSize(w, h, d),
         randomEngine(seed){}
 
-void cn::Network::feed(Bitmap<float> bitmap) {
+void cn::Network::feed(Bitmap<double> bitmap) {
     if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
     bitmap = Utils::resize(bitmap, inputSize.x, inputSize.y);
-    const Bitmap<float> *_input = &bitmap;
+    const Bitmap<double> *_input = &bitmap;
     input.emplace(*_input);
     outputs.clear();
     for(int i = 0; i < layers.size(); i ++){
@@ -49,7 +49,7 @@ void cn::Network::feed(const cn::Bitmap<cn::byte> &bitmap) {
     feed(Utils::normalize(bitmap));
 }
 
-float cn::Network::getRandom(float low, float high) {
+double cn::Network::getRandom(double low, double high) {
     std::uniform_real_distribution<> dis(low, high);
     return dis(randomEngine);
 }
@@ -94,7 +94,7 @@ const std::vector<cn::Learnable *> *cn::Network::getLearnables() {
     return &learnableLayers;
 }
 
-const cn::Bitmap<float> *cn::Network::getNetworkInput() const {
+const cn::Bitmap<double> *cn::Network::getNetworkInput() const {
     return &input.value();
 }
 
@@ -104,7 +104,7 @@ void cn::Network::resetMemoization() {
     }
 }
 
-float cn::Network::getChain(int layerID, const Vector3<int> &inputPos) {
+double cn::Network::getChain(int layerID, const Vector3<int> &inputPos) {
     return layers[layerID]->getChain(inputPos);
 }
 
@@ -119,7 +119,7 @@ Vector3<int> cn::Network::getInputSize(int layerID) const {
     return getOutputSize(layerID - 1);
 }
 
-const cn::Bitmap<float> &cn::Network::getNetworkOutput() const {
+const cn::Bitmap<double> &cn::Network::getNetworkOutput() const {
     return outputs.back();
 }
 
@@ -127,12 +127,12 @@ cn::OutputLayer *cn::Network::getOutputLayer() {
     return &outputLayer.value();
 }
 
-const cn::Bitmap<float> *cn::Network::getInput(int layerID) const{
+const cn::Bitmap<double> *cn::Network::getInput(int layerID) const{
     if(layerID == 0)
         return &input.value();
     return getOutput(layerID -1);
 }
 
-const cn::Bitmap<float> *cn::Network::getOutput(int layerID) const {
+const cn::Bitmap<double> *cn::Network::getOutput(int layerID) const {
     return &outputs[layerID];
 }

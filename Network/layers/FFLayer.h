@@ -13,10 +13,10 @@ namespace cn {
     class Network;
 
     class FFLayer : public Learnable{
-        std::vector<float> biases;
-        std::vector<float> weights;
+        std::vector<double> biases;
+        std::vector<double> weights;
         const DifferentiableFunction &differentiableFunction;
-        std::vector<float> beforeActivation;
+        std::vector<double> beforeActivation;
 
     public:
         void randomInit() override;
@@ -29,24 +29,24 @@ namespace cn {
          */
         FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_differentiableFunction, Network &_network);
 
-        Bitmap<float> run(const Bitmap<float> &input) override;
+        Bitmap<double> run(const Bitmap<double> &input) override;
 
-        virtual float getChain(const Vector3<int> &inputPos) override;
+        virtual double getChain(const Vector3<int> &inputPos) override;
 
-        float diffWeight(int weightID);
-        float diffBias(int neuronID);
-        std::vector<float> getWeightsGradient() override;
-        std::vector<float> getBiasesGradient() override;
+        double diffWeight(int weightID);
+        double diffBias(int neuronID);
+        std::vector<double> getWeightsGradient() override;
+        std::vector<double> getBiasesGradient() override;
 
 
-        void setBias(int neuronID, float value) override;
-        float getBias(int neuronID) const override;
+        void setBias(int neuronID, double value) override;
+        double getBias(int neuronID) const override;
 
         int weightsCount() const override;
         int biasesCount() const override;
 
-        void setWeight(int weightID, float value) override;
-        float getWeight(int weightID) const override;
+        void setWeight(int weightID, double value) override;
+        double getWeight(int weightID) const override;
 
     };
 }

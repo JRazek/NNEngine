@@ -8,7 +8,7 @@
 cn::Layer::Layer(int _id, Network &_network): __id(_id), network(&_network){
     inputSize = network->getInputSize(_id);
     memoizationStates.emplace(Bitmap<bool>(inputSize));
-    memoizationTable.emplace(Bitmap<float>(inputSize));
+    memoizationTable.emplace(Bitmap<double>(inputSize));
     resetMemoization();
 }
 
@@ -16,7 +16,7 @@ cn::Layer::Layer(int _id, Network &_network): __id(_id), network(&_network){
     return __id;
 }
 
-void cn::Layer::setMemo(const Vector3<int> &pos, float val) {
+void cn::Layer::setMemo(const Vector3<int> &pos, double val) {
     memoizationStates->setCell(pos, true);
     memoizationTable->setCell(pos, val);
 }
@@ -25,7 +25,7 @@ void cn::Layer::resetMemoization() {
     std::fill(memoizationStates->data(), memoizationStates->data() + memoizationStates->size().multiplyContent(), false);
 }
 
-float cn::Layer::getMemo(const Vector3<int> &pos) const {
+double cn::Layer::getMemo(const Vector3<int> &pos) const {
     return memoizationTable->getCell(pos);
 }
 

@@ -37,7 +37,7 @@ namespace cn {
          * @param input
          * @return normalized input. Each byte is now value equal to [ x / 255 ].
          */
-        static Bitmap<float> normalize(const Bitmap<unsigned char> &input);
+        static Bitmap<double> normalize(const Bitmap<unsigned char> &input);
 
         /**
          *
@@ -109,7 +109,7 @@ namespace cn {
          * @return transformed image
          */
         template<typename T>
-        static Bitmap<T> transform(const Bitmap<T> &input, const TMatrix<float> &tMatrix);
+        static Bitmap<T> transform(const Bitmap<T> &input, const TMatrix<double> &tMatrix);
 
         /**
          *
@@ -119,22 +119,21 @@ namespace cn {
          * @return rotated bitmap
          */
         template<typename T>
-        static Bitmap<T> rotate(const Bitmap<T> &input, float rad);
+        static Bitmap<T> rotate(const Bitmap<T> &input, double rad);
 
         template<typename T>
         static Bitmap<T> addPadding(const Bitmap<T> &input, int paddingX, int paddingY);
 
 
         static int afterConvolutionSize(int kernelSize, int inputSize, int padding, int stride);
-        static Bitmap<float> convolve(const Bitmap<float> &kernel, const Bitmap<float> &input, int paddingX = 0, int paddingY = 0, int strideX = 1, int strideY = 1);
+        static Bitmap<double> convolve(const Bitmap<double> &kernel, const Bitmap<double> &input, int paddingX = 0, int paddingY = 0, int strideX = 1, int strideY = 1);
 
-        [[deprecated]]
-        static Bitmap<cn::byte> toGrayScale(const Bitmap<cn::byte> &input);
+        static Bitmap<cn::byte> average3Layers(const Bitmap<cn::byte> &input);
 
         static int afterMaxPoolSize(int kernelSize, int inputSize);
-        static Bitmap<float> maxPool(const Bitmap<float> &input, int kernelSizeX, int kernelSizeY);
+        static Bitmap<double> maxPool(const Bitmap<double> &input, int kernelSizeX, int kernelSizeY);
 
-        static float distanceSquared(const std::pair<float, float> &p1, const std::pair<float, float> &p2);
+        static double distanceSquared(const std::pair<double, double> &p1, const std::pair<double, double> &p2);
 
         template<typename T>
         static Bitmap<T>sumBitmapLayers(const Bitmap <T> &input);
@@ -163,11 +162,11 @@ void cn::Utils::convert(const T *input, T *output, int w, int h, int d, int inpu
 
 template<typename T>
 cn::Bitmap<T> cn::Utils::resize(const cn::Bitmap<T> &input, int destSizeX, int destSizeY) {
-    auto max = [](float x, float y){
+    auto max = [](double x, double y){
         return x > y ? x : y;
     };
 
-    auto min = [](float x, float y){
+    auto min = [](double x, double y){
         return x < y ? x : y;
     };
 
@@ -178,8 +177,8 @@ cn::Bitmap<T> cn::Utils::resize(const cn::Bitmap<T> &input, int destSizeX, int d
 
 template<typename T>
 cn::Bitmap<T> cn::Utils::downsample(const cn::Bitmap<T> &input, int destSizeX, int destSizeY, int method) {
-    float factorX = ((float)destSizeX) / (float)input.w();
-    float factorY = (float)destSizeY / (float)input.h();
+    double factorX = ((double)destSizeX) / (double)input.w();
+    double factorY = (double)destSizeY / (double)input.h();
 
     if(factorX == 1 && factorY == 1)
         return input;
@@ -194,8 +193,8 @@ cn::Bitmap<T> cn::Utils::downsample(const cn::Bitmap<T> &input, int destSizeX, i
             for(int y = 0; y < output.h(); y++){
                 for(int x = 0; x < output.w(); x++){
                     avgCount[output.getDataIndex(x, y, c)] += 1;
-                    int corrX = (int)((float)x / factorX);
-                    int corrY = (int)((float)y / factorY);
+                    int corrX = (int)((double)x / factorX);
+                    int corrY = (int)((double)y / factorY);
                     output.setCell(x, y, c, output.getCell(x, y, c) + input.getCell(corrX, corrY, c));
                 }
             }
@@ -214,8 +213,8 @@ cn::Bitmap<T> cn::Utils::downsample(const cn::Bitmap<T> &input, int destSizeX, i
 
 template<typename T>
 cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int destSizeY, int method) {
-    float factorX = (float)destSizeX / (float)input.w();
-    float factorY = (float)destSizeY / (float)input.h();
+    double factorX = (double)destSizeX / (double)input.w();
+    double factorY = (double)destSizeY / (double)input.h();
 
     if(factorX == 1 && factorY == 1)
         return input;
@@ -225,9 +224,9 @@ cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int
     if(method == 0){
         for(int c = 0; c < result.d();  c++){
             for(int y = 0; y < result.h(); y++){
-                int corrY = (int)((float)y / factorY);
+                int corrY = (int)((double)y / factorY);
                 for(int x = 0; x < result.w(); x++){
-                    int corrX = (int)((float)x / factorX);
+                    int corrX = (int)((double)x / factorX);
                     result.setCell(x, y, c, input.getCell(corrX, corrY, c));
                 }
             }
@@ -251,7 +250,7 @@ cn::Bitmap<T> cn::Utils::sumBitmapLayers(const cn::Bitmap<T> &input){
 }
 
 template<typename T>
-cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, const TMatrix<float> &tMatrix) {
+cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, const TMatrix<double> &tMatrix) {
     int maxX = 0, minX = INT32_MAX, maxY = 0, minY = INT32_MAX;
     std::vector<Vector2<int>> edges(4);
     edges[0] = {0,0};
@@ -290,10 +289,10 @@ cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, const TMatrix<flo
 }
 
 template<typename T>
-cn::Bitmap<T> cn::Utils::rotate(const cn::Bitmap<T> &input, float rad) {
-    float sin = std::sin(rad);
-    float cos = std::cos(rad);
-    TMatrix<float> rotationMatrix(cos, -sin, sin, cos);
+cn::Bitmap<T> cn::Utils::rotate(const cn::Bitmap<T> &input, double rad) {
+    double sin = std::sin(rad);
+    double cos = std::cos(rad);
+    TMatrix<double> rotationMatrix(cos, -sin, sin, cos);
     return transform<T>(input, rotationMatrix);
 }
 

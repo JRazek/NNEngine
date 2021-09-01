@@ -1,11 +1,11 @@
 #include <bits/stdc++.h>
 using namespace  std;
 
-pair<float, float> nearestNeighbor(const pair<float, float> &point, vector<pair<float, float>> &points){
-    float best = INFINITY;
-    pair<float, float> bestPair;
+pair<double, double> nearestNeighbor(const pair<double, double> &point, vector<pair<double, double>> &points){
+    double best = INFINITY;
+    pair<double, double> bestPair;
     for(auto p : points){
-        float res = pow(point.first - p.first, 2) + pow(point.second - p.second, 2);
+        double res = pow(point.first - p.first, 2) + pow(point.second - p.second, 2);
         if(res < best){
             best = res;
             bestPair = p;
@@ -24,21 +24,21 @@ int main() {
 
     const int maxX = 1000, maxY = 1000;
 
-    vector<pair<float, float>> points(pointsCount);
+    vector<pair<double, double>> points(pointsCount);
 
     for(int i = 0; i < pointsCount; i ++){
         points[i] = {rand() % maxX, rand() % maxY};
     }
 
-    vector<pair<float, float>> tests(testsCount);
+    vector<pair<double, double>> tests(testsCount);
     for(int i = 0; i < testsCount; i ++){
         tests[i] = {rand() % maxX, rand() % maxY};
     }
 
-    vector<pair<float, float>> answers(testsCount);
+    vector<pair<double, double>> answers(testsCount);
 
     for(int i = 0; i < testsCount; i ++){
-        pair<float, float> ans = nearestNeighbor(tests[i], points);
+        pair<double, double> ans = nearestNeighbor(tests[i], points);
         answers[i] = ans;
     }
 
