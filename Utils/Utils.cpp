@@ -98,3 +98,13 @@ cn::Bitmap<T> cn::Utils::addPadding(const cn::Bitmap<T> &input, int paddingX, in
     }
     return paddedInput;
 }
+
+cn::Bitmap<cn::byte> cn::Utils::toGrayScale(const cn::Bitmap<cn::byte> &input) {
+    if(input.d() != 3)
+        throw std::logic_error("image must be rgb!");
+    for(int y = 0; y < input.h(); y ++){
+        for(int x = 0; x < input.w(); x++){
+        }
+    }
+    return cn::Bitmap<cn::byte>();
+}

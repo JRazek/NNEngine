@@ -35,13 +35,13 @@ void cn::Network::feed(Bitmap<float> bitmap) {
     if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
     bitmap = Utils::resize(bitmap, inputSize.x, inputSize.y);
-    Bitmap<float> *_input = &bitmap;
+    const Bitmap<float> *_input = &bitmap;
     input.emplace(*_input);
     outputs.clear();
     for(int i = 0; i < layers.size(); i ++){
         auto layer = layers[i];
         outputs.push_back(layer->run(*_input));
-        _input = &outputs.back();
+        _input = getOutput(i);
     }
 }
 

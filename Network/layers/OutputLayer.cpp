@@ -17,4 +17,7 @@ float cn::OutputLayer::getChain(const Vector3<int> &input) {
 
 void cn::OutputLayer::setTarget(const cn::Bitmap<float> *_target) {
     target = _target;
+    if(outputSize != target->size()){
+        throw std::logic_error("");
+    }
 }

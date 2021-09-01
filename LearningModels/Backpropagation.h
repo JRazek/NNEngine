@@ -4,7 +4,7 @@
 
 #ifndef NEURALNETLIBRARY_BACKPROPAGATION_H
 #define NEURALNETLIBRARY_BACKPROPAGATION_H
-
+#include <vector>
 namespace cn {
     template<typename T>
     struct Bitmap;
@@ -14,9 +14,12 @@ namespace cn {
 
         Network &network;
         int iteration;
+        int miniBatchSize;
         float learningRate;
+        std::vector<std::vector<float>> memorizedWeights;
+        std::vector<std::vector<float>> memorizedBiases;
     public:
-        Backpropagation(Network &_network, float _learningRate);
+        Backpropagation(Network &_network, float _learningRate, int _miniBatchSize);
         void propagate(const Bitmap<float> &target);
         float getError(const cn::Bitmap<float> &target) const;
     };

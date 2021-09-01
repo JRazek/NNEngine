@@ -16,7 +16,7 @@ namespace cn {
         std::vector<float> biases;
         std::vector<float> weights;
         const DifferentiableFunction &differentiableFunction;
-        std::vector<float> netSums;
+        std::vector<float> beforeActivation;
 
     public:
         void randomInit() override;
@@ -34,9 +34,16 @@ namespace cn {
         virtual float getChain(const Vector3<int> &inputPos) override;
 
         float diffWeight(int weightID);
-        std::vector<float> getGradient() override;
+        float diffBias(int neuronID);
+        std::vector<float> getWeightsGradient() override;
+        std::vector<float> getBiasesGradient() override;
+
+
+        void setBias(int neuronID, float value) override;
+        float getBias(int neuronID) const override;
 
         int weightsCount() const override;
+        int biasesCount() const override;
 
         void setWeight(int weightID, float value) override;
         float getWeight(int weightID) const override;

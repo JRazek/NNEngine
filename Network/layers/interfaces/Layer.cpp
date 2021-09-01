@@ -22,7 +22,7 @@ void cn::Layer::setMemo(const Vector3<int> &pos, float val) {
 }
 
 void cn::Layer::resetMemoization() {
-    std::fill(memoizationStates->data(), memoizationStates->data() + memoizationStates->w() * memoizationStates->h() * memoizationStates->d(), false);
+    std::fill(memoizationStates->data(), memoizationStates->data() + memoizationStates->size().multiplyContent(), false);
 }
 
 float cn::Layer::getMemo(const Vector3<int> &pos) const {

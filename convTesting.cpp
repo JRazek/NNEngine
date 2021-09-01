@@ -11,30 +11,24 @@
 #include "Utils/Files/ImageRepresentation.h"
 
 int main(){
-    cn::Network network(18, 18, 3, 243);
+    cn::Network network(28, 28, 3, 2);
 
     ReLU reLu;
     Sigmoid sigmoid;
 
-    cn::Backpropagation backpropagation(network, 1);
+    cn::Backpropagation backpropagation(network,  0.0001, 100);
 
     const int outputSize = 10;
-    network.appendConvolutionLayer(3, 3, 2, reLu, 0, 0, 1, 1);
-    network.appendBatchNormalizationLayer();
-    network.appendConvolutionLayer(3, 3, 10, reLu, 0, 0, 1, 1);
-    network.appendBatchNormalizationLayer();
     network.appendFlatteningLayer();
-    network.appendFFLayer(10, sigmoid);
-    network.appendFFLayer(10, sigmoid);
+    network.appendFFLayer(16, sigmoid);
+    network.appendFFLayer(16, sigmoid);
     network.appendFFLayer(outputSize, sigmoid);
     network.initRandom();
     network.ready();
 
 
 
-
-
-    CSVReader csvReader("/home/user/CLionProjects/dataSets/metadata.csv", ';');
+    CSVReader csvReader("/home/jrazek/CLionProjects/ConvolutionalNetLib/metadata.csv", ';');
     csvReader.readContents();
     auto &contents = csvReader.getContents();
     std::vector<ImageRepresentation> imageRepresentations;
@@ -63,28 +57,28 @@ int main(){
 
     int correctCount = 0;
     int resetRate = 100;
-    for(int i = 0; i < imageRepresentations.size(); i ++) {
-        ImageRepresentation &imageRepresentation = imageRepresentations[i];
-        cv::Mat mat = cv::imread(imageRepresentation.path);
-        cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
-        network.feed(bitmap);
-        int numVal = std::stoi(imageRepresentation.value);
-        target.setCell(numVal, 0, 0, 1);
-        std::cout<<i<<": "<<backpropagation.getError(target)<<"\n";
-        backpropagation.propagate(target);
-        int best = getBest(network.getNetworkOutput());
-        if(best == numVal){
-            correctCount ++;
+    for(int k = 0; k < 1000; k ++)
+        for(int i = 0; i < imageRepresentations.size(); i ++) {
+            ImageRepresentation &imageRepresentation = imageRepresentations[i];
+            cv::Mat mat = cv::imread(imageRepresentation.path);
+            cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
+            network.feed(bitmap);
+            int numVal = std::stoi(imageRepresentation.value);
+            target.setCell(numVal, 0, 0, 1);
+            std::cout<<i<<": "<<backpropagation.getError(target)<<"\n";
+            backpropagation.propagate(target);
+            int best = getBest(network.getNetworkOutput());
+            if(best == numVal){
+                correctCount ++;
+            }
+
+            if(!((i + 1) % resetRate)){
+                std::cout<<"ACCURACY: "<< (float)correctCount / float(resetRate) * 100<<"%\n";
+                correctCount = 0;
+            }
+
+            target.setCell(numVal, 0, 0, 0);
         }
 
-        if(!((i + 1) % resetRate)){
-            std::cout<<"ACCURACY: "<<(float)correctCount / float(resetRate) * 100<<"%\n";
-            correctCount = 0;
-        }
-
-        target.setCell(numVal, 0, 0, 0);
-    }
-
-    //PrefixSum2D<long long> prefixSum2D(bitmap);
     return 0;
 }

@@ -19,11 +19,14 @@ cn::Bitmap<float> cn::BatchNormalizationLayer::run(const cn::Bitmap<float> &inpu
     for(auto it = input.data(); it != input.data() + input.size().multiplyContent(); ++it){
         max = std::max(*it, max);
     }
-    for(auto it = result.data(); it != result.data() + result.size().multiplyContent(); ++it){
-        *it = (*it)/max;
+    if(std::abs(max) > 1) {
+        for (auto it = result.data(); it != result.data() + result.size().multiplyContent(); ++it) {
+            *it = (*it) / max;
+        }
+        normalizationFactor = max;
+    }else{
+        normalizationFactor = 1;
     }
-    normalizationFactor = max;
-
     return result;
 }
 

@@ -62,7 +62,7 @@ void cn::ConvolutionLayer::randomInit() {
         }
     }
     for(auto &b : biases){
-        b = network->getRandom(0, 5);
+        b = network->getRandom(0, 0);
     }
 }
 
@@ -118,7 +118,7 @@ int cn::ConvolutionLayer::weightsCount() const {
     return kernelSize.multiplyContent() * kernelsCount;
 }
 
-std::vector<float> cn::ConvolutionLayer::getGradient() {
+std::vector<float> cn::ConvolutionLayer::getWeightsGradient() {
     std::vector<float> gradient(weightsCount());
     for(int i = 0; i < weightsCount(); i ++){
         gradient[i] = diffWeight(i);
@@ -134,5 +134,21 @@ void cn::ConvolutionLayer::setWeight(int weightID, float value) {
 float cn::ConvolutionLayer::getWeight(int weightID) const {
     int kSize = kernelSize.multiplyContent();
     return *(kernels[weightID / (kSize)].data() + (weightID % kSize));
+}
+
+std::vector<float> cn::ConvolutionLayer::getBiasesGradient() {
+    return std::vector<float>(kernelsCount, 0);
+}
+
+void cn::ConvolutionLayer::setBias(int kernelID, float value) {
+    biases[kernelID] = value;
+}
+
+float cn::ConvolutionLayer::getBias(int kernelID) const {
+    return biases[kernelID];
+}
+
+int cn::ConvolutionLayer::biasesCount() const {
+    return kernelsCount;
 }
 
