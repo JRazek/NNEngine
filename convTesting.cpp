@@ -10,17 +10,18 @@
 #include "Utils/Files/CSVReader.h"
 #include "Utils/Files/ImageRepresentation.h"
 int main(){
-    cn::Network network(28, 28, 1, 6754);
+    cn::Network network(28, 28, 1, 34453);
 
     ReLU reLu;
     Sigmoid sigmoid;
 
-    cn::MBGD mbgd(network, 0.001, 1);
+    cn::MBGD mbgd(network, 0.01, 1);
 
     const int outputSize = 10;
     network.appendConvolutionLayer(3, 3, 2, reLu);
     network.appendConvolutionLayer(3, 3, 6, reLu);
     network.appendBatchNormalizationLayer();
+    network.appendMaxPoolingLayer(2, 2);
     network.appendConvolutionLayer(3, 3, 10, reLu);
     network.appendFlatteningLayer();
     network.appendBatchNormalizationLayer();
@@ -29,7 +30,6 @@ int main(){
     network.appendFFLayer(outputSize, sigmoid);
     network.initRandom();
     network.ready();
-
 
 
 //
@@ -41,7 +41,7 @@ int main(){
 
 
 
-    CSVReader csvReader("/home/user/IdeaProjects/digitRecogniser/dataSet/metadata.csv", ';');
+    CSVReader csvReader("/home/jrazek/IdeaProjects/digitRecogniser/dataSet/metadata.csv", ';');
     csvReader.readContents();
     auto &contents = csvReader.getContents();
     std::vector<ImageRepresentation> imageRepresentations;

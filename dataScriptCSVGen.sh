@@ -1,7 +1,7 @@
 #!/bin/bash
 
-dataSetsPath=/home/user/IdeaProjects/digitRecogniser/dataSet
-csvOutputFile=/home/user/IdeaProjects/digitRecogniser/dataSet/metadata.csv
+dataSetsPath=/home/jrazek/IdeaProjects/digitRecogniser/dataSet
+csvOutputFile=/home/jrazek/IdeaProjects/digitRecogniser/dataSet/metadata.csv
 
 touch metadata.csv
 cat /dev/null > $csvOutputFile

@@ -1,0 +1,14 @@
+//
+// Created by jrazek on 02.09.2021.
+//
+
+#ifndef NEURALNETLIBRARY_NETFILEMANAGER_H
+#define NEURALNETLIBRARY_NETFILEMANAGER_H
+
+
+class NetFileManager {
+
+};
+
+
+#endif //NEURALNETLIBRARY_NETFILEMANAGER_H
