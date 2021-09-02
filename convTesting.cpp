@@ -9,13 +9,15 @@
 #include <opencv2/opencv.hpp>
 #include "Utils/Files/CSVReader.h"
 #include "Utils/Files/ImageRepresentation.h"
+#pragma GCC diagnostic warning "-Wreorder"
+
 int main(){
     cn::Network network(28, 28, 1, 34453);
 
     ReLU reLu;
     Sigmoid sigmoid;
 
-    cn::MBGD mbgd(network, 0.01, 1);
+    cn::MBGD mbgd(network, 0.0001, 1);
 
     const int outputSize = 10;
     network.appendConvolutionLayer(3, 3, 2, reLu);

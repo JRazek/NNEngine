@@ -8,6 +8,6 @@ double Identity::func(double x) const {
     return x;
 }
 
-double Identity::derive(double x) const {
+double Identity::derive([[maybe_unused]]double x) const {
     return 1;
 }
