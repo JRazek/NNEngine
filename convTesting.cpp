@@ -20,11 +20,11 @@ int main(){
     cn::MBGD mbgd(network, 0.0001, 1);
 
     const int outputSize = 10;
+    network.appendConvolutionLayer(3, 3, 1, reLu);
     network.appendConvolutionLayer(3, 3, 2, reLu);
-    network.appendConvolutionLayer(3, 3, 6, reLu);
     network.appendBatchNormalizationLayer();
     network.appendMaxPoolingLayer(2, 2);
-    network.appendConvolutionLayer(3, 3, 10, reLu);
+    network.appendConvolutionLayer(3, 3, 8, reLu);
     network.appendFlatteningLayer();
     network.appendBatchNormalizationLayer();
     network.appendFFLayer(16, sigmoid);
