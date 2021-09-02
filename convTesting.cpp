@@ -31,8 +31,11 @@ int main(){
     network.appendFFLayer(outputSize, sigmoid);
     network.initRandom();
     network.ready();
-
-
+    /**
+     * edit, najprawniej skoro byla konwolucja,
+     * to max pool na tyle zmniejszal input ze dalo sie ogarnac go z flattening layers i przez to miala po 70%.
+     * Natomiast w konwolucji jest gdzie s bug :)
+    */
 //
 //    cn::Bitmap<cn::byte> testInput(100, 1, 1);
 //    for(int i = 0; i < testInput.w(); i ++){
