@@ -7,15 +7,15 @@
 cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY,
                                        int _kernelsCount, const DifferentiableFunction &_activationFunction,
                                        int _paddingX, int _paddingY, int _strideX, int _strideY) :
+        cn::Learnable(_id, _network, _kernelsCount),
         kernelSize(_kernelSizeX, _kernelSizeY, network->getInputSize(_id).z),
         kernelsCount(_kernelsCount),
-        activationFunction(_activationFunction),
         paddingX(_paddingX),
         paddingY(_paddingY),
         strideX(_strideX),
         strideY(_strideY),
-        biases(kernelsCount),
-        cn::Learnable(_id, _network, _kernelsCount) {
+        activationFunction(_activationFunction),
+        biases(kernelsCount) {
 
     if(inputSize.x < kernelSize.x || inputSize.y < kernelSize.y){
         throw std::logic_error("kernel must not be larger than input!");
@@ -77,16 +77,14 @@ double cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
     };
 
     double result = 0;
-
-    Vector3<int> inputPosPadded(inputPos.x - paddingX, inputPos.y - paddingY, inputPos.z);
-    for(int c = 0; c < kernelsCount; c++){
-        for(int y = 0; y < kernelSize.y; y++){
-            for(int x = 0; x < kernelSize.x; x++){
-                Vector2<int> kernelPos(inputPosPadded.x - x, inputPosPadded.y - y);
-                if(validPos(kernelPos, paddedInput)){
-                    Vector2<int> shift = Vector2<int>(inputPosPadded.x, inputPosPadded.y) - kernelPos;
-                    double weight = kernels[c].getCell(shift.x, shift.y, inputPosPadded.z);
-                    Vector3<int> outputPos (kernelPos.x / strideX, kernelPos.y / strideY, c);
+    Vector2<int> paddedInputPos(paddingX + inputPos.x, paddingY + inputPos.y);
+    for(int z = 0; z < kernelsCount; z++) {
+        for (int y = 0; y < kernelSize.y; y++) {
+            for (int x = 0; x < kernelSize.x; x++) {
+                Vector2<int> kernelPos(paddedInputPos.x - x, paddedInputPos.y - y);
+                if (validPos(kernelPos, paddedInput)) {
+                    float weight = kernels[z].getCell(paddedInputPos.x - x, paddedInputPos.y - y, z);
+                    Vector3<int> outputPos(kernelPos.x / strideX, kernelPos.y /strideX, z);
                     result += weight * activationFunction.derive(beforeActivation->getCell(outputPos)) * network->getChain(__id + 1, outputPos);
                 }
             }
@@ -107,8 +105,8 @@ double cn::ConvolutionLayer::diffWeight(int weightID) {
         for(int x = 0; x < outputSize.x - kernelSize.x; x++){
             Vector3<int> inputPos = Vector3<int>(x * strideX, y * strideY, 0) + weightPos;
             double inputValue = paddedInput.getCell(inputPos);
-            Vector3<int> nextPos (x, y, kID);
-            result += inputValue * activationFunction.derive(beforeActivation->getCell(nextPos)) * network->getChain(__id + 1, nextPos);
+            Vector3<int> outputPos (x, y, kID);
+            result += inputValue * activationFunction.derive(beforeActivation->getCell(outputPos)) * network->getChain(__id + 1, outputPos);
         }
     }
     return result;

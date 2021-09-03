@@ -11,13 +11,14 @@ namespace cn {
     class Network;
 
     class MBGD {
-
         Network &network;
         int iteration;
         int miniBatchSize;
         double learningRate;
         std::vector<std::vector<double>> memorizedWeights;
         std::vector<std::vector<double>> memorizedBiases;
+        //todo
+        int threadsUsage;
     public:
         MBGD(Network &_network, double _learningRate, int _miniBatchSize);
         void propagate(const Bitmap<double> &target);
