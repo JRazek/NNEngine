@@ -6,4 +6,6 @@
 
 cn::MomentumGD::MomentumGD(cn::Network &_network, int _samplesCount, double _learningRate):
 Optimizer(_network, _learningRate),
-samplesCount(_samplesCount){}
+samplesCount(_samplesCount),
+theta(1.f - (1.f/(float)samplesCount))
+{}

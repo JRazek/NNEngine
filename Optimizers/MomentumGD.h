@@ -9,6 +9,7 @@
 namespace cn {
     class MomentumGD : public Optimizer{
         int samplesCount;
+        float theta;
         MomentumGD(Network &_network, int _samplesCount, double _learningRate);
     };
 }
