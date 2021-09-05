@@ -4,4 +4,6 @@
 
 #include "MomentumGD.h"
 
-cn::MomentumGD::MomentumGD(cn::Network &_network, int _samplesCount, double _learningRate):network(_network), samplesCount(_samplesCount), learningRate(_learningRate) {}
+cn::MomentumGD::MomentumGD(cn::Network &_network, int _samplesCount, double _learningRate):
+Optimizer(_network, _learningRate),
+samplesCount(_samplesCount){}

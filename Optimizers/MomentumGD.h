@@ -5,13 +5,10 @@
 #ifndef NEURALNETLIBRARY_MOMENTUMGD_H
 #define NEURALNETLIBRARY_MOMENTUMGD_H
 
-#include "../Network/Network.h"
-
+#include "interfaces/Optimizer.h"
 namespace cn {
-    class MomentumGD {
-        Network &network;
+    class MomentumGD : public Optimizer{
         int samplesCount;
-        double learningRate;
         MomentumGD(Network &_network, int _samplesCount, double _learningRate);
     };
 }

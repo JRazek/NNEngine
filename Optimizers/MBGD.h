@@ -5,24 +5,19 @@
 #ifndef NEURALNETLIBRARY_MBGD_H
 #define NEURALNETLIBRARY_MBGD_H
 #include <vector>
+#include "interfaces/Optimizer.h"
 namespace cn {
     template<typename T>
     class Bitmap;
     class Network;
 
-    class MBGD {
-        Network &network;
-        int iteration;
+    class MBGD : public Optimizer{
         int miniBatchSize;
-        double learningRate;
         std::vector<std::vector<double>> memorizedWeights;
         std::vector<std::vector<double>> memorizedBiases;
-        //todo
-        int threadsUsage;
     public:
         MBGD(Network &_network, double _learningRate, int _miniBatchSize);
-        void propagate(const Bitmap<double> &target);
-        double getError(const cn::Bitmap<double> &target) const;
+        void propagate(const Bitmap<double> &target) override;
     };
 
 }
