@@ -17,8 +17,9 @@ void cn::Network::feed(const byte *_input) {
     feed(cn::Utils::normalize(bitmap));
 }
 
-void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelsCount, const DifferentiableFunction &differentiableFunction, int paddingX,
-                                         int paddingY, int strideX, int strideY) {
+void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelsCount,
+                                         const DifferentiableFunction &differentiableFunction,
+                                         int strideX, int strideY, int paddingX, int paddingY) {
 
     std::unique_ptr<ConvolutionLayer> c = std::make_unique<ConvolutionLayer>(this->layers.size(), *this, kernelX, kernelY, kernelsCount,
                                                differentiableFunction, paddingX, paddingY, strideX, strideY);

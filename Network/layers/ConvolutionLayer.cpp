@@ -5,8 +5,10 @@
 #include "../Network.h"
 #include <future>
 cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY,
-                                       int _kernelsCount, const DifferentiableFunction &_activationFunction,
-                                       int _paddingX, int _paddingY, int _strideX, int _strideY) :
+                                       int _kernelsCount,
+                                       const DifferentiableFunction &_activationFunction, int _strideX, int _strideY,
+                                       int _paddingX,
+                                       int _paddingY) :
         cn::Learnable(_id, _network, _kernelsCount),
         kernelSize(_kernelSizeX, _kernelSizeY, network->getInputSize(_id).z),
         kernelsCount(_kernelsCount),

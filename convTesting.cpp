@@ -6,7 +6,6 @@
 #include "Utils/Utils.h"
 #include "Network/Network.h"
 #include "Optimizers/MBGD.h"
-#include "Optimizers/MomentumGD.h"
 #include <opencv2/opencv.hpp>
 #include "Utils/Files/CSVReader.h"
 #include "Utils/Files/ImageRepresentation.h"
