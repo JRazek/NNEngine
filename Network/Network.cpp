@@ -9,6 +9,8 @@
 #include "layers/FlatteningLayer.h"
 #include "layers/BatchNormalizationLayer.h"
 #include "layers/MaxPoolingLayer.h"
+#include "layers/ActivationLayers/Sigmoid.h"
+#include "layers/ActivationLayers/ReLU.h"
 
 void cn::Network::feed(const byte *_input) {
     cn::Bitmap<byte> bitmap(inputSize, _input, 0);
@@ -17,12 +19,10 @@ void cn::Network::feed(const byte *_input) {
     feed(cn::Utils::normalize(bitmap));
 }
 
-void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelsCount,
-                                         const DifferentiableFunction &differentiableFunction,
-                                         int strideX, int strideY, int paddingX, int paddingY) {
+void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelsCount, int strideX, int strideY, int paddingX,
+                                    int paddingY) {
 
-    std::unique_ptr<ConvolutionLayer> c = std::make_unique<ConvolutionLayer>(this->layers.size(), *this, kernelX, kernelY, kernelsCount,
-                                               differentiableFunction, strideX, strideY, paddingX, paddingY);
+    std::unique_ptr<ConvolutionLayer> c = std::make_unique<ConvolutionLayer>(this->layers.size(), *this, kernelX, kernelY, kernelsCount, strideX, strideY, paddingX, paddingY);
     learnableLayers.push_back(c.get());
     layers.push_back(c.get());
     allocated.push_back(std::move(c));
@@ -64,8 +64,8 @@ void cn::Network::initRandom() {
     }
 }
 
-void cn::Network::appendFFLayer(int neuronsCount, const DifferentiableFunction &differentiableFunction) {
-    std::unique_ptr<FFLayer> f = std::make_unique<FFLayer>(layers.size(), neuronsCount, differentiableFunction, *this);
+void cn::Network::appendFFLayer(int neuronsCount) {
+    std::unique_ptr<FFLayer> f = std::make_unique<FFLayer>(layers.size(), neuronsCount, *this);
     learnableLayers.push_back(f.get());
     layers.push_back(f.get());
     allocated.push_back(std::move(f));
@@ -88,6 +88,19 @@ void cn::Network::appendMaxPoolingLayer(int kernelSizeX, int kernelSizeY) {
     layers.push_back(m.get());
     allocated.push_back(std::move(m));
 }
+
+void cn::Network::appendReluLayer() {
+    std::unique_ptr<ReLU> r = std::make_unique<ReLU>(layers.size(), *this);
+    layers.push_back(r.get());
+    allocated.push_back(std::move(r));
+}
+
+void cn::Network::appendSigmoidLayer() {
+    std::unique_ptr<Sigmoid> s = std::make_unique<Sigmoid>(layers.size(), *this);
+    layers.push_back(s.get());
+    allocated.push_back(std::move(s));
+}
+
 
 void cn::Network::ready() {
     outputLayer.emplace(layers.size(), *this);

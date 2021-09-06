@@ -17,20 +17,22 @@
 int main(){
     cn::Network network(28, 28, 1, 34453);
 
-    ReLU reLu;
-    Sigmoid sigmoid;
-
     cn::MBGD momentumGd(network, 0.01, 1);
 
     const int outputSize = 10;
-    network.appendConvolutionLayer(3, 3, 2, reLu);
+    network.appendConvolutionLayer(3, 3, 2);
+    network.appendReluLayer();
     network.appendBatchNormalizationLayer();
-    network.appendConvolutionLayer(3, 3, 8, reLu);
+    network.appendConvolutionLayer(3, 3, 8);
+    network.appendReluLayer();
     network.appendFlatteningLayer();
     network.appendBatchNormalizationLayer();
-    network.appendFFLayer(16, sigmoid);
-    network.appendFFLayer(16, sigmoid);
-    network.appendFFLayer(outputSize, sigmoid);
+    network.appendFFLayer(16);
+    network.appendSigmoidLayer();
+    network.appendFFLayer(16);
+    network.appendSigmoidLayer();
+    network.appendFFLayer(outputSize);
+    network.appendSigmoidLayer();
     network.initRandom();
     network.ready();
 

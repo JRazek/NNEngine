@@ -8,7 +8,7 @@
 
 namespace cn {
     class Network;
-    class Learnable : public Layer{
+    class Learnable : public Layer {
     protected:
         int neuronsCount;
     public:

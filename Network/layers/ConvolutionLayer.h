@@ -19,19 +19,14 @@ namespace cn {
         int strideX;
         int strideY;
 
-        const DifferentiableFunction &activationFunction;
-
         std::vector<Bitmap<double>> kernels;
         std::vector<double> biases;//ith corresponds to ith kernel
-
-        std::optional<cn::Bitmap<double>> beforeActivation;
 
         double diffWeight(int weightID);
 
     public:
-        ConvolutionLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY, int _kernelsCount,
-                         const DifferentiableFunction &_activationFunction, int _strideX, int _strideY, int _paddingX,
-                         int _paddingY);
+        ConvolutionLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY,
+                         int _kernelsCount, int _strideX, int _strideY, int _paddingX, int _paddingY);
         void randomInit() override;
         Bitmap<double> run(const Bitmap<double> &input) override;
         double getChain(const Vector3<int> &inputPos) override;

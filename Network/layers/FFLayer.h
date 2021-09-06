@@ -6,7 +6,6 @@
 #define NEURALNETLIBRARY_FFLAYER_H
 
 #include "interfaces/Layer.h"
-#include "../../Utils/Differentiables/DifferentiableFunction.h"
 #include "interfaces/Learnable.h"
 
 namespace cn {
@@ -15,8 +14,6 @@ namespace cn {
     class FFLayer : public Learnable{
         std::vector<double> biases;
         std::vector<double> weights;
-        const DifferentiableFunction &differentiableFunction;
-        std::vector<double> beforeActivation;
 
     public:
         void randomInit() override;
@@ -27,7 +24,7 @@ namespace cn {
          * @param _differentiableFunction function with its derivative
          * @param _neuronsCount input size (neuron count)
          */
-        FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_differentiableFunction, Network &_network);
+        FFLayer(int _id, int _neuronsCount, Network &_network);
 
         Bitmap<double> run(const Bitmap<double> &input) override;
 

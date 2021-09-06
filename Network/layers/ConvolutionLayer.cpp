@@ -5,10 +5,7 @@
 #include "../Network.h"
 #include <future>
 cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY,
-                                       int _kernelsCount,
-                                       const DifferentiableFunction &_activationFunction, int _strideX, int _strideY,
-                                       int _paddingX,
-                                       int _paddingY) :
+                                       int _kernelsCount, int _strideX, int _strideY, int _paddingX, int _paddingY) :
         cn::Learnable(_id, _network, _kernelsCount),
         kernelSize(_kernelSizeX, _kernelSizeY, network->getInputSize(_id).z),
         kernelsCount(_kernelsCount),
@@ -16,7 +13,6 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSi
         paddingY(_paddingY),
         strideX(_strideX),
         strideY(_strideY),
-        activationFunction(_activationFunction),
         biases(kernelsCount) {
 
     if(inputSize.x < kernelSize.x || inputSize.y < kernelSize.y){
@@ -32,7 +28,6 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSi
     int oY = Utils::afterConvolutionSize(kernelSize.y, inputSize.y, paddingY, strideY);
     int oZ = kernelsCount;
     outputSize = Vector3<int>(oX, oY, oZ);
-    beforeActivation.emplace(outputSize);
 }
 
 cn::Bitmap<double> cn::ConvolutionLayer::run(const Bitmap<double> &input) {
@@ -46,13 +41,9 @@ cn::Bitmap<double> cn::ConvolutionLayer::run(const Bitmap<double> &input) {
     for(int i = 0; i < kernelsCount; i ++){
         kernelThreads.push_back(std::async(getConvolved, input, kernels[i]));
     }
+    Bitmap<double> result(outputSize);
     for(int i = 0; i < kernelsCount; i ++){
-        beforeActivation->setLayer(i, kernelThreads[i].get().data());
-    }
-    Bitmap<double> result = beforeActivation.value();
-    for(auto it = beforeActivation->data(); it != beforeActivation->data() + beforeActivation->w() * beforeActivation->h() * beforeActivation->d(); ++it){
-        int index = it - beforeActivation->data();
-        *(result.data() + index) = activationFunction.func(*it);
+        result.setLayer(i, kernelThreads[i].get().data());
     }
     return result;
 }
@@ -88,7 +79,7 @@ double cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
                     Vector3<int> weightPos(paddedInputPos.x - kernelPos.x, paddedInputPos.y - kernelPos.y, inputPos.z);
                     float weight = kernels[z].getCell(weightPos);
                     Vector3<int> outputPos(kernelPos.x / strideX, kernelPos.y /strideX, z);
-                    result += weight * activationFunction.derive(beforeActivation->getCell(outputPos)) * network->getChain(__id + 1, outputPos);
+                    result += weight * network->getChain(__id + 1, outputPos);
                 }
             }
         }
@@ -109,7 +100,7 @@ double cn::ConvolutionLayer::diffWeight(int weightID) {
             Vector3<int> inputPos = Vector3<int>(x * strideX, y * strideY, 0) + weightPos;
             double inputValue = paddedInput.getCell(inputPos);
             Vector3<int> outputPos (x, y, kID);
-            result += inputValue * activationFunction.derive(beforeActivation->getCell(outputPos)) * network->getChain(__id + 1, outputPos);
+            result += inputValue * network->getChain(__id + 1, outputPos);
         }
     }
     return result;

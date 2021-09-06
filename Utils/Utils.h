@@ -14,10 +14,6 @@
 #include <unordered_set>
 #include "dataStructures/TMatrix.h"
 #include <cmath>
-#include "Differentiables/Sigmoid.h"
-#include "Differentiables/ReLU.h"
-#include "Differentiables/Identity.h"
-
 
 namespace cn {
     using byte = uint8_t;

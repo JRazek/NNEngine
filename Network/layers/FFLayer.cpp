@@ -5,11 +5,9 @@
 #include "FFLayer.h"
 #include "../Network.h"
 
-cn::FFLayer::FFLayer(int _id, int _neuronsCount, const DifferentiableFunction &_differentiableFunction, Network &_network) :
+cn::FFLayer::FFLayer(int _id, int _neuronsCount, Network &_network) :
         Learnable(_id, _network, _neuronsCount),
-        biases(_neuronsCount),
-        differentiableFunction(_differentiableFunction),
-        beforeActivation(_neuronsCount){
+        biases(_neuronsCount){
 
     if(inputSize.x < 1 || inputSize.y != 1 || inputSize.z != 1){
         throw std::logic_error("There must be a vector output layer before FFLayer!");
@@ -30,9 +28,7 @@ cn::Bitmap<double> cn::FFLayer::run(const Bitmap<double> &input) {
         for(int j = 0; j < weightsPerNeuron; j ++){
             sum += input.getCell(j, 0, 0) * weights.at(i * weightsPerNeuron + j);
         }
-        beforeActivation[i] = sum;
-        double activated = differentiableFunction.func(sum);
-        result.setCell(i, 0, 0, activated);
+        result.setCell(i, 0, 0, sum);
     }
     return result;
 }
@@ -57,7 +53,7 @@ double cn::FFLayer::getChain(const Vector3<int> &inputPos) {
 
     double res = 0;
     for(int i = 0; i < neuronsCount; i ++){
-        res += weights.at(i * weightsPerNeuron  + inputPos.x) * differentiableFunction.derive(beforeActivation.at(i)) * network->getChain(__id + 1, {i, 0, 0});
+        res += weights.at(i * weightsPerNeuron  + inputPos.x) * network->getChain(__id + 1, {i, 0, 0});
     }
 
     setMemo(inputPos, res);
@@ -67,7 +63,7 @@ double cn::FFLayer::getChain(const Vector3<int> &inputPos) {
 double cn::FFLayer::diffWeight(int weightID) {
     int neuron = weightID / inputSize.x;
     const Bitmap<double> &input = network->getInput(__id);
-    return input.getCell(weightID % inputSize.x, 0, 0) * differentiableFunction.derive(beforeActivation.at(neuron)) * network->getChain(__id + 1, {neuron, 0, 0});
+    return input.getCell(weightID % inputSize.x, 0, 0) * network->getChain(__id + 1, {neuron, 0, 0});
 }
 
 int cn::FFLayer::weightsCount() const {
@@ -99,7 +95,7 @@ std::vector<double> cn::FFLayer::getBiasesGradient() {
 }
 
 double cn::FFLayer::diffBias(int neuronID) {
-    return differentiableFunction.derive(beforeActivation[neuronID]) * network->getChain(__id + 1, {neuronID, 0, 0});
+    return network->getChain(__id + 1, {neuronID, 0, 0});
 }
 
 void cn::FFLayer::setBias(int neuronID, double value) {

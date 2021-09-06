@@ -36,17 +36,13 @@ namespace cn {
 
     public:
 
-        void appendConvolutionLayer(int kernelX, int kernelY, int kernelsCount,
-                                    const DifferentiableFunction &differentiableFunction,
-                                    int strideX = 1, int strideY = 1, int paddingX = 0, int paddingY = 0);
-
-        void appendFFLayer(int neuronsCount, const DifferentiableFunction &differentiableFunction);
-
+        void appendConvolutionLayer(int kernelX, int kernelY, int kernelsCount, int strideX = 1, int strideY = 1, int paddingX = 0, int paddingY = 0);
+        void appendFFLayer(int neuronsCount);
         void appendFlatteningLayer();
-
         void appendBatchNormalizationLayer();
-
         void appendMaxPoolingLayer(int kernelSizeX, int kernelSizeY);
+        void appendReluLayer();
+        void appendSigmoidLayer();
 
 
 
