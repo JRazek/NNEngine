@@ -56,6 +56,7 @@ void cn::ConvolutionLayer::randomInit() {
         }
     }
     for(auto &b : biases){
+        //todo differentiation
         b = network->getRandom(0, 0);
     }
 }
