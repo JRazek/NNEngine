@@ -130,14 +130,13 @@ namespace cn {
 
         void resetMemoization();
 
-        const Bitmap<double> *getNetworkInput() const;
-        const Bitmap<double> *getInput(int layerID) const;
+        const Bitmap<double> &getInput(int layerID) const;
         const Bitmap<double> &getNetworkOutput() const;
-        const Bitmap<double> *getOutput(int layerID) const;
+        const Bitmap<double> &getOutput(int layerID) const;
 
         JSON jsonEncode() override;
 
-        OutputLayer *getOutputLayer();
+        OutputLayer &getOutputLayer();
     };
 }
 

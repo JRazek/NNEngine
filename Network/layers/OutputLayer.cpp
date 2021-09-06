@@ -12,7 +12,7 @@ cn::Bitmap<double> cn::OutputLayer::run(const cn::Bitmap<double> &input) {
 }
 
 double cn::OutputLayer::getChain(const Vector3<int> &input) {
-    return network->getOutput(__id)->getCell(input) - target->getCell(input);
+    return network->getOutput(__id).getCell(input) - target->getCell(input);
 }
 
 void cn::OutputLayer::setTarget(const cn::Bitmap<double> *_target) {

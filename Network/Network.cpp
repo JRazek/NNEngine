@@ -43,7 +43,7 @@ void cn::Network::feed(Bitmap<double> bitmap) {
     for(u_int i = 0; i < layers.size(); i ++){
         auto layer = layers[i];
         outputs.push_back(layer->run(*_input));
-        _input = getOutput(i);
+        _input = &getOutput(i);
     }
 }
 
@@ -96,10 +96,6 @@ const std::vector<cn::Learnable *> &cn::Network::getLearnables() const{
     return learnableLayers;
 }
 
-const cn::Bitmap<double> *cn::Network::getNetworkInput() const {
-    return &input.value();
-}
-
 void cn::Network::resetMemoization() {
     for(auto l : layers){
         l->resetMemoization();
@@ -125,18 +121,18 @@ const cn::Bitmap<double> &cn::Network::getNetworkOutput() const {
     return outputs.back();
 }
 
-cn::OutputLayer *cn::Network::getOutputLayer() {
-    return &outputLayer.value();
+cn::OutputLayer &cn::Network::getOutputLayer() {
+    return outputLayer.value();
 }
 
-const cn::Bitmap<double> *cn::Network::getInput(int layerID) const{
+const cn::Bitmap<double> &cn::Network::getInput(int layerID) const{
     if(layerID == 0)
-        return &input.value();
+        return input.value();
     return getOutput(layerID -1);
 }
 
-const cn::Bitmap<double> *cn::Network::getOutput(int layerID) const {
-    return &outputs[layerID];
+const cn::Bitmap<double> &cn::Network::getOutput(int layerID) const {
+    return outputs[layerID];
 }
 
 const std::vector<cn::Layer *> &cn::Network::getLayers() const{

@@ -66,8 +66,8 @@ double cn::FFLayer::getChain(const Vector3<int> &inputPos) {
 
 double cn::FFLayer::diffWeight(int weightID) {
     int neuron = weightID / inputSize.x;
-    const Bitmap<double> *input = network->getInput(__id);
-    return input->getCell(weightID % inputSize.x, 0, 0) * differentiableFunction.derive(beforeActivation.at(neuron)) * network->getChain(__id + 1, {neuron, 0, 0});
+    const Bitmap<double> &input = network->getInput(__id);
+    return input.getCell(weightID % inputSize.x, 0, 0) * differentiableFunction.derive(beforeActivation.at(neuron)) * network->getChain(__id + 1, {neuron, 0, 0});
 }
 
 int cn::FFLayer::weightsCount() const {

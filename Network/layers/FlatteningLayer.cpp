@@ -21,7 +21,7 @@ double cn::FlatteningLayer::getChain(const Vector3<int> &inputPos) {
     if(getMemoState(inputPos)){
         return getMemo(inputPos);
     }
-    int outputIndex = network->getInput(__id)->getDataIndex(inputPos);
+    int outputIndex = network->getInput(__id).getDataIndex(inputPos);
     double res = network->getChain(__id + 1, {outputIndex, 0, 0});
     setMemo(inputPos, res);
     return res;

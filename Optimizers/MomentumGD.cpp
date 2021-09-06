@@ -19,9 +19,9 @@ void cn::MomentumGD::propagate(const cn::Bitmap<double> &target) {
             emaBiasesMemo[i] = std::vector<float>(network.getLearnables().at(i)->biasesCount(), 0);
         }
     }
-    OutputLayer *layer = network.getOutputLayer();
-    layer->setTarget(&target);
-    const Bitmap<double> &output = *network.getOutput(layer->id());
+    OutputLayer &layer = network.getOutputLayer();
+    layer.setTarget(&target);
+    const Bitmap<double> &output = network.getOutput(layer.id());
     if(output.size() != target.size()){
         throw std::logic_error("MBGD, invalid target!");
     }

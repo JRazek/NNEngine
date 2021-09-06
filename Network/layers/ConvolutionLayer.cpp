@@ -70,7 +70,7 @@ double cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
     if(getMemoState(inputPos)){
         return getMemo(inputPos);
     }
-    Bitmap<double> paddedInput = Utils::addPadding(*network->getInput(__id), paddingX, paddingY);
+    Bitmap<double> paddedInput = Utils::addPadding(network->getInput(__id), paddingX, paddingY);
 
     auto validPos = [this](const Vector2<int> &kernelPos, const Bitmap<double> &bitmap){
         return kernelPos.x >= 0 && kernelPos.y >= 0 && kernelPos.x + kernelSize.x - 1 < bitmap.w() && kernelPos.y + kernelSize.y - 1 < bitmap.h();
@@ -97,7 +97,7 @@ double cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
 
 double cn::ConvolutionLayer::diffWeight(int weightID) {
     int kSize = kernelSize.multiplyContent();
-    Bitmap<double> paddedInput = Utils::addPadding(*network->getInput(__id), paddingX, paddingY);
+    Bitmap<double> paddedInput = Utils::addPadding(network->getInput(__id), paddingX, paddingY);
     Vector3<int> weightPos = kernels[weightID / kSize].indexToVector(weightID % kSize);
     int kID = weightID / kSize;
 
