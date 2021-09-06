@@ -18,13 +18,13 @@ void cn::MBGD::propagate(const cn::Bitmap<double> &target) {
     if(!(iteration % miniBatchSize)){
         memorizedWeights.clear();
         memorizedBiases.clear();
-        memorizedWeights.resize(network.getLearnables()->size(), std::vector<double>());
-        memorizedBiases.resize(network.getLearnables()->size(), std::vector<double>());
+        memorizedWeights.resize(network.getLearnables().size(), std::vector<double>());
+        memorizedBiases.resize(network.getLearnables().size(), std::vector<double>());
         for(u_int i = 0; i < memorizedWeights.size(); i ++){
-            memorizedWeights[i].resize(network.getLearnables()->at(i)->weightsCount(), 0);
+            memorizedWeights[i].resize(network.getLearnables().at(i)->weightsCount(), 0);
         }
         for(u_int i = 0; i < memorizedBiases.size(); i ++){
-            memorizedBiases[i].resize(network.getLearnables()->at(i)->biasesCount(), 0);
+            memorizedBiases[i].resize(network.getLearnables().at(i)->biasesCount(), 0);
         }
     }
     OutputLayer *layer = network.getOutputLayer();
@@ -33,8 +33,8 @@ void cn::MBGD::propagate(const cn::Bitmap<double> &target) {
     if(output.size() != target.size()){
         throw std::logic_error("MBGD, invalid target!");
     }
-    for(u_int k = 0; k < network.getLearnables()->size(); k ++){
-        Learnable *learnable = network.getLearnables()->at(k);
+    for(u_int k = 0; k < network.getLearnables().size(); k ++){
+        Learnable *learnable = network.getLearnables().at(k);
         std::vector<double> weightsGradient = learnable->getWeightsGradient();
         std::vector<double> biasesGradient = learnable->getBiasesGradient();
         for(u_int i = 0; i < weightsGradient.size(); i ++){
@@ -46,8 +46,8 @@ void cn::MBGD::propagate(const cn::Bitmap<double> &target) {
     }
 
     if(!((iteration + 1) % miniBatchSize)){
-        for(u_int k = 0; k < network.getLearnables()->size(); k ++) {
-            Learnable *learnable = network.getLearnables()->at(k);
+        for(u_int k = 0; k < network.getLearnables().size(); k ++) {
+            Learnable *learnable = network.getLearnables().at(k);
             std::vector<double> &layerWeightsSum = memorizedWeights[k];
             std::vector<double> &layerBiasesSum = memorizedBiases[k];
 

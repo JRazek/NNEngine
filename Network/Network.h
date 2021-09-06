@@ -10,11 +10,12 @@
 #include "../Utils/Utils.h"
 #include "layers/interfaces/Learnable.h"
 #include "layers/OutputLayer.h"
+#include "../Utils/interfaces/JSONEncodable.h"
 #include <memory>
 
 namespace cn {
 
-    class Network {
+    class Network : public JSONEncodable{
     private:
         /**
          * what the dimensions of the byte array is after being normalized and sampled
@@ -67,7 +68,10 @@ namespace cn {
          *
          * @return learnables
          */
-        const std::vector<Learnable *> *getLearnables();
+        const std::vector<Learnable *> &getLearnables() const;
+
+
+        const std::vector<Layer *> &getLayers() const;
 
 
         /**
@@ -130,6 +134,8 @@ namespace cn {
         const Bitmap<double> *getInput(int layerID) const;
         const Bitmap<double> &getNetworkOutput() const;
         const Bitmap<double> *getOutput(int layerID) const;
+
+        JSON jsonEncode() override;
 
         OutputLayer *getOutputLayer();
     };

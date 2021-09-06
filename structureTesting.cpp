@@ -17,7 +17,6 @@ int main(){
 
 
     //QuadTree quadTree(1024, 1024);
-    int t = 3;
 
 //    PointData pointData1({7,2}, &t);
 //    PointData pointData2({5,4}, &t);
@@ -62,8 +61,6 @@ int main(){
     }
     for(auto p : points){
         delete p;
-    }
-    for(auto p : tests){
     }
     //std::pair<int, int> neighbor = quadTree.getNearestNeighbour({4, 4});
     return 0;

@@ -8,13 +8,14 @@
 #include <vector>
 #include <optional>
 #include "../../../Utils/dataStructures/Bitmap.h"
+#include "../../../Utils/interfaces/JSONEncodable.h"
 
 template<typename T>
 struct Vector3;
 namespace cn {
 
     class Network;
-    class Layer {
+    class Layer : public JSONEncodable{
     protected:
         Network *network;
 
@@ -49,6 +50,7 @@ namespace cn {
         Vector3<int> getOutputSize() const;
 
         [[maybe_unused]] int id() const;
+        JSON jsonEncode() override;
     };
 }
 

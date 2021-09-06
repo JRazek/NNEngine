@@ -5,7 +5,7 @@
 #include "Layer.h"
 #include "../../Network.h"
 
-cn::Layer::Layer(int _id, Network &_network): __id(_id), network(&_network){
+cn::Layer::Layer(int _id, Network &_network): network(&_network), __id(_id){
     inputSize = network->getInputSize(_id);
     memoizationStates.emplace(Bitmap<bool>(inputSize));
     memoizationTable.emplace(Bitmap<double>(inputSize));
@@ -35,5 +35,9 @@ bool cn::Layer::getMemoState(const Vector3<int> &pos) const {
 
 Vector3<int> cn::Layer::getOutputSize() const {
     return outputSize;
+}
+
+cn::JSON cn::Layer::jsonEncode() {
+    return JSON();
 }
 

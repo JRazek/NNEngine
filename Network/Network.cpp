@@ -92,8 +92,8 @@ void cn::Network::ready() {
     layers.push_back(&outputLayer.value());
 }
 
-const std::vector<cn::Learnable *> *cn::Network::getLearnables() {
-    return &learnableLayers;
+const std::vector<cn::Learnable *> &cn::Network::getLearnables() const{
+    return learnableLayers;
 }
 
 const cn::Bitmap<double> *cn::Network::getNetworkInput() const {
@@ -137,4 +137,17 @@ const cn::Bitmap<double> *cn::Network::getInput(int layerID) const{
 
 const cn::Bitmap<double> *cn::Network::getOutput(int layerID) const {
     return &outputs[layerID];
+}
+
+const std::vector<cn::Layer *> &cn::Network::getLayers() const{
+    return layers;
+}
+
+cn::JSON cn::Network::jsonEncode() {
+    JSON jsonObject;
+    jsonObject["layers"] = std::vector<JSON>();
+    for(u_int i = 0; i < layers.size(); i ++){
+        jsonObject["layers"].push_back(layers[i]->jsonEncode());
+    }
+    return jsonObject;
 }
