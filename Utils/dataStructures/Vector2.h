@@ -5,16 +5,19 @@
 #ifndef NEURALNETLIBRARY_VECTOR2_H
 #define NEURALNETLIBRARY_VECTOR2_H
 #include <vector>
+#include "../interfaces/JSONEncodable.h"
 
 template<typename T>
 struct TMatrix;
 
 template<typename T>
-struct Vector2 {
+struct Vector2 : public cn::JSONEncodable{
     T x, y;
     explicit Vector2<T>(const std::pair<T, T> &p);
     Vector2<T>();
     Vector2<T>(T _x, T _y);
+
+    cn::JSON jsonEncode() override;
 
     template<typename Y>
     Vector2<T>(const Vector2<Y> &other);
@@ -65,6 +68,14 @@ Vector2<T>::Vector2(const Vector2<Y> &other): Vector2<T>((T)other.x, (T)other.y)
 template<typename T>
 bool Vector2<T>::operator==(const Vector2<T> &other) const {
     return x == other.x && y == other.y;
+}
+
+template<typename T>
+cn::JSON Vector2<T>::jsonEncode() {
+    cn::JSON json;
+    json["x"] = x;
+    json["y"] = y;
+    return json;
 }
 
 

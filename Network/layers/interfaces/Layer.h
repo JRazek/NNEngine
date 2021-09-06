@@ -50,6 +50,8 @@ namespace cn {
         Vector3<int> getOutputSize() const;
 
         [[maybe_unused]] int id() const;
+
+        //for development purposes only. To delete in future
         virtual JSON jsonEncode() override;
     };
 }

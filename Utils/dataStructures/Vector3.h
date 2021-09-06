@@ -6,12 +6,13 @@
 #define NEURALNETLIBRARY_VECTOR3_H
 
 #include <vector>
+#include "../interfaces/JSONEncodable.h"
 
 template<typename T>
 struct TMatrix;
 
 template<typename T>
-struct Vector3 {
+struct Vector3 : public cn::JSONEncodable{
     T x, y, z;
 
     Vector3<T>();
@@ -19,6 +20,8 @@ struct Vector3 {
 
     template<typename Y>
     Vector3<T>(const Vector3<Y> &other);
+
+    cn::JSON jsonEncode() override;
 
     Vector3<T> operator*(const T &scalar);
     Vector3<T> operator/(const T &scalar);
@@ -75,6 +78,15 @@ T Vector3<T>::multiplyContent() const {
 template<typename T>
 bool Vector3<T>::operator!=(const Vector3<T> &other) const {
     return !(*this == other);
+}
+
+template<typename T>
+cn::JSON Vector3<T>::jsonEncode() {
+    cn::JSON json;
+    json["x"] = x;
+    json["y"] = y;
+    json["z"] = z;
+    return json;
 }
 
 #endif //NEURALNETLIBRARY_VECTOR3_H

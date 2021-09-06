@@ -144,6 +144,7 @@ const std::vector<cn::Layer *> &cn::Network::getLayers() const{
 cn::JSON cn::Network::jsonEncode() {
     JSON jsonObject;
     jsonObject["seed"] = seed;
+    jsonObject["input_size"] = inputSize.jsonEncode();
     jsonObject["layers"] = std::vector<JSON>();
     for(u_int i = 0; i < layers.size(); i ++){
         jsonObject["layers"].push_back(layers[i]->jsonEncode());

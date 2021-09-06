@@ -153,3 +153,14 @@ int cn::ConvolutionLayer::biasesCount() const {
     return kernelsCount;
 }
 
+cn::JSON cn::ConvolutionLayer::jsonEncode() {
+    JSON structure;
+    structure["id"] = __id;
+    structure["type"] = "cl";
+    structure["kernels"] = std::vector<JSON>();
+    for(int i = 0; i < kernelsCount; i ++){
+        structure["kernels"].push_back(kernels[i].jsonEncode());
+    }
+    return Layer::jsonEncode();
+}
+

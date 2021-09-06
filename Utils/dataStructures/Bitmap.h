@@ -10,7 +10,7 @@
 
 namespace cn {
     template<typename T>
-    class Bitmap {
+    class Bitmap : public JSONEncodable{
     protected:
 
         /**
@@ -45,6 +45,9 @@ namespace cn {
         int h() const;
         int d() const;
         Vector3<int> size() const;
+
+        JSON jsonEncode() override;
+
     };
 }
 
@@ -190,6 +193,17 @@ cn::Bitmap<T>::Bitmap():Bitmap(0, 0, 0) {
 template<typename T>
 bool cn::Bitmap<T>::belongs(const Vector3<int> &p) const {
     return p.x >= 0 && p.x < _w && p.y >= 0 && p.y < _h && p.z >= 0 && p.z < _d;
+}
+
+template<typename T>
+cn::JSON cn::Bitmap<T>::jsonEncode() {
+    JSON json;
+    json["size"] = size().jsonEncode();
+    std::vector<T> dataVec(size().multiplyContent());
+    dataVec.insert(dataVec.end(), dataP, dataP + size().multiplyContent());
+    //todo fix!
+    //json["data"] = dataVec;
+    return cn::JSON();
 }
 
 //
