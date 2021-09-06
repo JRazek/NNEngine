@@ -51,7 +51,8 @@ cn::Bitmap<double> cn::ConvolutionLayer::run(const Bitmap<double> &input) {
 void cn::ConvolutionLayer::randomInit() {
     for(auto &k : kernels){
         for(auto it = k.data(); it != k.data() + k.w() * k.h() * k.d(); ++it){
-            *it = network->getRandom(0, 1);
+            double tmp = network->getRandom(0, 1);
+            *it = tmp;
         }
     }
     for(auto &b : biases){
@@ -150,7 +151,10 @@ cn::JSON cn::ConvolutionLayer::jsonEncode() const{
     structure["type"] = "cl";
     structure["kernels"] = std::vector<JSON>();
     for(int i = 0; i < kernelsCount; i ++){
-        structure["kernels"].push_back(kernels[i].jsonEncode());
+        JSON s;
+        s["weights"] = kernels[i].jsonEncode();
+        s["bias"] = biases[i];
+        structure["kernels"].push_back(s);
     }
     return structure;
 }

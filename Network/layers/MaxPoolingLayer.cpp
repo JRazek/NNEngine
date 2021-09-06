@@ -53,3 +53,11 @@ double cn::MaxPoolingLayer::getChain(const Vector3<int> &inputPos) {
     setMemo(inputPos, res);
     return res;
 }
+
+cn::JSON cn::MaxPoolingLayer::jsonEncode() const {
+    JSON structure;
+    structure["id"] = __id;
+    structure["type"] = "mpl";
+    structure["kernel_size"] = kernelSize.jsonEncode();
+    return structure;
+}

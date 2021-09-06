@@ -16,6 +16,7 @@ namespace cn {
         MaxPoolingLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY);
         Bitmap<double> run(const Bitmap<double> &input) override;
         double getChain(const Vector3<int> &inputPos) override;
+        JSON jsonEncode() const override;
     };
 }
 

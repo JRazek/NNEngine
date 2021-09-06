@@ -14,6 +14,7 @@ namespace cn {
         FlatteningLayer(int _id, Network &_network);
         Bitmap<double> run(const Bitmap<double> &input) override;
         virtual double getChain(const Vector3<int> &inputPos) override;
+        virtual JSON jsonEncode() const override;
     };
 }
 #endif //NEURALNETLIBRARY_FLATTENINGLAYER_H

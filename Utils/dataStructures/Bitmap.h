@@ -199,7 +199,7 @@ template<typename T>
 cn::JSON cn::Bitmap<T>::jsonEncode() const{
     JSON json;
     json["size"] = size().jsonEncode();
-    std::vector<T> dataVec(size().multiplyContent());
+    std::vector<T> dataVec;
     dataVec.insert(dataVec.end(), dataP, dataP + size().multiplyContent());
     json["data"] = dataVec;
     return json;

@@ -38,7 +38,7 @@ void cn::FFLayer::randomInit() {
         w = network->getRandom(-10, 10)* std::sqrt(2.f/inputSize.x);
     }
     for(auto &b : biases){
-        b = network->getRandom(0, 0);
+        b = network->getRandom(-10, 10);
     }
 }
 

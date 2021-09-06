@@ -23,7 +23,10 @@ double cn::ReLU::getChain(const Vector3<int> &inputPos) {
 }
 
 cn::JSON cn::ReLU::jsonEncode() const {
-    return Layer::jsonEncode();
+    JSON structure;
+    structure["id"] = __id;
+    structure["type"] = "relu";
+    return structure;
 }
 
 double cn::ReLU::relu(double x) {

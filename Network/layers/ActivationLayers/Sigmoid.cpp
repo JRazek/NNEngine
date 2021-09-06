@@ -23,7 +23,10 @@ double cn::Sigmoid::getChain(const Vector3<int> &inputPos) {
 }
 
 cn::JSON cn::Sigmoid::jsonEncode() const {
-    return Layer::jsonEncode();
+    JSON structure;
+    structure["id"] = __id;
+    structure["type"] = "sig";
+    return structure;
 }
 
 double cn::Sigmoid::sigmoid(double x) {

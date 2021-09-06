@@ -20,21 +20,25 @@ int main(){
     cn::MBGD momentumGd(network, 0.01, 1);
 
     const int outputSize = 10;
-    network.appendConvolutionLayer(3, 3, 2);
+    network.appendConvolutionLayer(3, 3, 1);
     network.appendReluLayer();
     network.appendBatchNormalizationLayer();
-    network.appendConvolutionLayer(3, 3, 8);
+    network.appendConvolutionLayer(3, 3, 1);
     network.appendReluLayer();
     network.appendFlatteningLayer();
     network.appendBatchNormalizationLayer();
-    network.appendFFLayer(16);
+    network.appendFFLayer(2);
     network.appendSigmoidLayer();
-    network.appendFFLayer(16);
+    network.appendFFLayer(2);
     network.appendSigmoidLayer();
     network.appendFFLayer(outputSize);
     network.appendSigmoidLayer();
     network.initRandom();
     network.ready();
+
+    cn::JSON json = network.jsonEncode();
+
+    std::cout<<json.dump(4);
 
     CSVReader csvReader("/home/user/IdeaProjects/digitRecogniser/dataSet/metadata.csv", ';');
     csvReader.readContents();
@@ -46,6 +50,8 @@ int main(){
         std::string value = c[1];
         imageRepresentations.emplace_back(path, value);
     }
+
+
 
     cn::Bitmap<double> target (outputSize, 1, 1);
     for(int i = 0; i < outputSize; i ++){

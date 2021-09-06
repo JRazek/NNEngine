@@ -15,6 +15,7 @@ namespace cn {
         Bitmap<double> run(const Bitmap<double> &input) override;
         double getChain(const Vector3<int> &input) override;
         void setTarget(const Bitmap<double> *_target);
+        JSON jsonEncode() const override;
     };
 }
 

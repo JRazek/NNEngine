@@ -26,3 +26,10 @@ double cn::FlatteningLayer::getChain(const Vector3<int> &inputPos) {
     setMemo(inputPos, res);
     return res;
 }
+
+cn::JSON cn::FlatteningLayer::jsonEncode() const {
+    JSON structure;
+    structure["id"] = __id;
+    structure["type"] = "fl";
+    return structure;
+}

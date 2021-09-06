@@ -21,3 +21,10 @@ void cn::OutputLayer::setTarget(const cn::Bitmap<double> *_target) {
         throw std::logic_error("");
     }
 }
+
+cn::JSON cn::OutputLayer::jsonEncode() const {
+    JSON structure;
+    structure["id"] = __id;
+    structure["type"] = "ol";
+    return structure;
+}
