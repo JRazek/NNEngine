@@ -108,11 +108,11 @@ double cn::Network::getChain(int layerID, const Vector3<int> &inputPos) {
     return layers[layerID]->getChain(inputPos);
 }
 
-Vector3<int> cn::Network::getOutputSize(int layerID) const {
+cn::Vector3<int> cn::Network::getOutputSize(int layerID) const {
     return layers[layerID]->getOutputSize();
 }
 
-Vector3<int> cn::Network::getInputSize(int layerID) const {
+cn::Vector3<int> cn::Network::getInputSize(int layerID) const {
     if(layerID == 0){
         return inputSize;
     }

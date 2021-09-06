@@ -33,7 +33,7 @@ bool cn::Layer::getMemoState(const Vector3<int> &pos) const {
     return memoizationStates->getCell(pos);
 }
 
-Vector3<int> cn::Layer::getOutputSize() const {
+cn::Vector3<int> cn::Layer::getOutputSize() const {
     return outputSize;
 }
 

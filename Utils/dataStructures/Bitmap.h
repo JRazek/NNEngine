@@ -165,7 +165,7 @@ int cn::Bitmap<T>::getDataIndex(const Vector3<T> &v) const {
 }
 
 template<typename T>
-Vector3<int> cn::Bitmap<T>::indexToVector(int index) const{
+cn::Vector3<int> cn::Bitmap<T>::indexToVector(int index) const{
     return {index % _w, (index / _w) % _w, index / (_w * _h)};
 }
 
@@ -175,7 +175,7 @@ void cn::Bitmap<T>::setCell(const Vector3<int> &c, T b) {
 }
 
 template<typename T>
-Vector3<int> cn::Bitmap<T>::size() const {
+cn::Vector3<int> cn::Bitmap<T>::size() const {
     return Vector3<int>(_w, _h, _d);
 }
 
@@ -201,9 +201,8 @@ cn::JSON cn::Bitmap<T>::jsonEncode() {
     json["size"] = size().jsonEncode();
     std::vector<T> dataVec(size().multiplyContent());
     dataVec.insert(dataVec.end(), dataP, dataP + size().multiplyContent());
-    //todo fix!
-    //json["data"] = dataVec;
-    return cn::JSON();
+   // json["data"] = dataVec;
+    return json;
 }
 
 //
