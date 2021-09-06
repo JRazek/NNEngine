@@ -49,7 +49,7 @@ namespace cn {
         void setWeight(int weightID, double value) override;
         double getWeight(int weightID) const override;
 
-        JSON jsonEncode() override;
+        JSON jsonEncode() const override;
 
     };
 }

@@ -22,7 +22,7 @@ namespace cn {
 
         Vector2<T>(T _x, T _y);
 
-        cn::JSON jsonEncode() override;
+        cn::JSON jsonEncode() const override;
 
         template<typename Y>
         Vector2<T>(const Vector2<Y> &other);
@@ -38,6 +38,12 @@ namespace cn {
 
         bool operator==(const Vector2<T> &other) const;
     };
+
+    template<typename T>
+    [[maybe_unused]]
+    static void to_json(JSON &j, const Vector2<T> &value){
+        j = value.jsonEncode();
+    }
 }
 template<typename T>
 cn::Vector2<T>::Vector2(const std::pair<T, T> &p): x(p.first), y(p.second) {}
@@ -80,7 +86,7 @@ bool cn::Vector2<T>::operator==(const Vector2<T> &other) const {
 }
 
 template<typename T>
-cn::JSON cn::Vector2<T>::jsonEncode() {
+cn::JSON cn::Vector2<T>::jsonEncode() const{
     cn::JSON json;
     json["x"] = x;
     json["y"] = y;

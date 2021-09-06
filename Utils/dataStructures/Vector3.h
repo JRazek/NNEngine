@@ -23,7 +23,7 @@ namespace cn {
         template<typename Y>
         Vector3<T>(const Vector3<Y> &other);
 
-        cn::JSON jsonEncode() override;
+        cn::JSON jsonEncode() const override;
 
         Vector3<T> operator*(const T &scalar);
 
@@ -37,8 +37,10 @@ namespace cn {
 
         bool operator!=(const Vector3<T> &other) const;
 
+
         T multiplyContent() const;
     };
+
 }
 template<typename T>
 cn::Vector3<T>::Vector3(T _x, T _y, T _z): x(_x), y(_y), z(_z) {}
@@ -87,7 +89,7 @@ bool cn::Vector3<T>::operator!=(const Vector3<T> &other) const {
 }
 
 template<typename T>
-cn::JSON cn::Vector3<T>::jsonEncode() {
+cn::JSON cn::Vector3<T>::jsonEncode() const{
     cn::JSON json;
     json["x"] = x;
     json["y"] = y;

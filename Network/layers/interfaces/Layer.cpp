@@ -37,7 +37,7 @@ cn::Vector3<int> cn::Layer::getOutputSize() const {
     return outputSize;
 }
 
-cn::JSON cn::Layer::jsonEncode() {
+cn::JSON cn::Layer::jsonEncode() const{
     return JSON();
 }
 

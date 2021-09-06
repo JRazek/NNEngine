@@ -113,3 +113,13 @@ double cn::FFLayer::getBias(int neuronID) const {
 int cn::FFLayer::biasesCount() const {
     return neuronsCount;
 }
+
+cn::JSON cn::FFLayer::jsonEncode() const{
+    JSON structure;
+    structure["id"] = __id;
+    structure["type"] = "ffl";
+    structure["weights"] = weights;
+    structure["biases"] = biases;
+
+    return structure;
+}

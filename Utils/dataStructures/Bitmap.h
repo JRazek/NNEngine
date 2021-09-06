@@ -46,7 +46,7 @@ namespace cn {
         int d() const;
         Vector3<int> size() const;
 
-        JSON jsonEncode() override;
+        JSON jsonEncode() const override;
 
     };
 }
@@ -196,12 +196,12 @@ bool cn::Bitmap<T>::belongs(const Vector3<int> &p) const {
 }
 
 template<typename T>
-cn::JSON cn::Bitmap<T>::jsonEncode() {
+cn::JSON cn::Bitmap<T>::jsonEncode() const{
     JSON json;
     json["size"] = size().jsonEncode();
     std::vector<T> dataVec(size().multiplyContent());
     dataVec.insert(dataVec.end(), dataP, dataP + size().multiplyContent());
-   // json["data"] = dataVec;
+    json["data"] = dataVec;
     return json;
 }
 

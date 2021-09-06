@@ -52,7 +52,7 @@ namespace cn {
         [[maybe_unused]] int id() const;
 
         //for development purposes only. To delete in future
-        virtual JSON jsonEncode() override;
+        virtual JSON jsonEncode() const override;
     };
 }
 

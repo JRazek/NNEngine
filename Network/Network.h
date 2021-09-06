@@ -136,7 +136,7 @@ namespace cn {
         const Bitmap<double> &getNetworkOutput() const;
         const Bitmap<double> &getOutput(int layerID) const;
 
-        JSON jsonEncode() override;
+        JSON jsonEncode() const override;
 
         OutputLayer &getOutputLayer();
     };

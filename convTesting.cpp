@@ -9,7 +9,10 @@
 #include <opencv2/opencv.hpp>
 #include "Utils/Files/CSVReader.h"
 #include "Utils/Files/ImageRepresentation.h"
-#pragma GCC diagnostic warning "-Wreorder"
+
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wreorder"
 
 int main(){
     cn::Network network(28, 28, 1, 34453);
@@ -31,7 +34,7 @@ int main(){
     network.initRandom();
     network.ready();
 
-    CSVReader csvReader("/home/jrazek/IdeaProjects/digitRecogniser/dataSet/metadata.csv", ';');
+    CSVReader csvReader("/home/user/IdeaProjects/digitRecogniser/dataSet/metadata.csv", ';');
     csvReader.readContents();
     auto &contents = csvReader.getContents();
     std::vector<ImageRepresentation> imageRepresentations;

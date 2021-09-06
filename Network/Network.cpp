@@ -22,7 +22,7 @@ void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelsCo
                                          int strideX, int strideY, int paddingX, int paddingY) {
 
     std::unique_ptr<ConvolutionLayer> c = std::make_unique<ConvolutionLayer>(this->layers.size(), *this, kernelX, kernelY, kernelsCount,
-                                               differentiableFunction, paddingX, paddingY, strideX, strideY);
+                                               differentiableFunction, strideX, strideY, paddingX, paddingY);
     learnableLayers.push_back(c.get());
     layers.push_back(c.get());
     allocated.push_back(std::move(c));
@@ -141,7 +141,7 @@ const std::vector<cn::Layer *> &cn::Network::getLayers() const{
     return layers;
 }
 
-cn::JSON cn::Network::jsonEncode() {
+cn::JSON cn::Network::jsonEncode() const {
     JSON jsonObject;
     jsonObject["seed"] = seed;
     jsonObject["input_size"] = inputSize.jsonEncode();
