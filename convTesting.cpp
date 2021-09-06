@@ -6,6 +6,7 @@
 #include "Utils/Utils.h"
 #include "Network/Network.h"
 #include "Optimizers/MBGD.h"
+#include "Optimizers/MomentumGD.h"
 #include <opencv2/opencv.hpp>
 #include "Utils/Files/CSVReader.h"
 #include "Utils/Files/ImageRepresentation.h"
@@ -17,7 +18,7 @@ int main(){
     ReLU reLu;
     Sigmoid sigmoid;
 
-    cn::MBGD mbgd(network, 0.01, 1);
+    cn::MomentumGD momentumGd(network, 0.9, 0.01);
 
     const int outputSize = 10;
     network.appendConvolutionLayer(3, 3, 1, reLu);
@@ -72,7 +73,7 @@ int main(){
         int numVal = std::stoi(imageRepresentation.value);
         target.setCell(numVal, 0, 0, 1);
         network.feed(bitmap);
-        mbgd.propagate(target);
+        momentumGd.propagate(target);
 
         int best = getBest(network.getNetworkOutput());
         if (best == numVal) {
@@ -80,7 +81,7 @@ int main(){
         }
 
         if (!((i + 1) % resetRate)) {
-            std::cout << i << ": " << mbgd.getError(target) << "\n";
+            std::cout << i << ": " << momentumGd.getError(target) << "\n";
             std::cout << "ACCURACY: " << (double) correctCount / double(resetRate) * 100 << "%\n";
             correctCount = 0;
         }

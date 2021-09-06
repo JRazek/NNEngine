@@ -8,9 +8,12 @@
 #include "interfaces/Optimizer.h"
 namespace cn {
     class MomentumGD : public Optimizer{
-        int samplesCount;
         float theta;
-        MomentumGD(Network &_network, int _samplesCount, double _learningRate);
+        std::vector<std::vector<float>> emaWeightsMemo;
+        std::vector<std::vector<float>> emaBiasesMemo;
+    public:
+        MomentumGD(Network &_network, float _theta, double _learningRate);
+        void propagate(const Bitmap<double> &target) override;
     };
 }
 
