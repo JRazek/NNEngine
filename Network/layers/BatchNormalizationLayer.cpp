@@ -35,3 +35,10 @@ double cn::BatchNormalizationLayer::getChain(const Vector3<int> &inputPos) {
         return 0;
     return (1.f/normalizationFactor) * network->getChain(__id + 1, inputPos);
 }
+
+cn::JSON cn::BatchNormalizationLayer::jsonEncode() {
+    JSON structure;
+    structure["id"] = __id;
+    structure["type"] = "bnl";
+    return Layer::jsonEncode();
+}

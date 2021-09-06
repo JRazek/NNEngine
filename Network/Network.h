@@ -17,6 +17,7 @@ namespace cn {
 
     class Network : public JSONEncodable{
     private:
+        int seed;
         /**
          * what the dimensions of the byte array is after being normalized and sampled
          */
@@ -80,12 +81,12 @@ namespace cn {
          * @param w width
          * @param h height
          * @param d depth
-         * @param seed - seed for random engine
+         * @param _seed - seed for random engine
          * if the first layer is image - set all the properties.
          * In case of using only FFLayers - set height and depth to 1.
          */
 
-        Network(int w, int h, int d, int seed = 1);
+        Network(int w, int h, int d, int _seed = 1);
 
 
         /**

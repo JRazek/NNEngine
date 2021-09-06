@@ -14,6 +14,7 @@ namespace cn {
         BatchNormalizationLayer(int _id, Network &_network);
         Bitmap<double> run(const Bitmap<double> &input) override;
         double getChain(const Vector3<int> &inputPos) override;
+        JSON jsonEncode() override;
     };
 }
 #endif //NEURALNETLIBRARY_BATCHNORMALIZATIONLAYER_H
