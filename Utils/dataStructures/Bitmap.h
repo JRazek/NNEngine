@@ -88,6 +88,8 @@ cn::Bitmap<T>::Bitmap(int _w, int _h, int _d, const T *data, int inputType): Bit
 
 template<typename T>
 int cn::Bitmap<T>::getDataIndex(int col, int row, int depth) const{
+    if(col < 0 || col >= _w || row < 0 || row >= _h || depth < 0 || depth >= _d)
+        throw std::logic_error("invalid read!");
     return depth * _w * _h + row * _w + col;
 }
 

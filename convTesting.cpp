@@ -18,13 +18,12 @@ int main(){
     ReLU reLu;
     Sigmoid sigmoid;
 
-    cn::MomentumGD momentumGd(network, 0.9, 0.01);
+    cn::MBGD momentumGd(network, 0.01, 1);
 
     const int outputSize = 10;
-    network.appendConvolutionLayer(3, 3, 1, reLu);
     network.appendConvolutionLayer(3, 3, 2, reLu);
     network.appendBatchNormalizationLayer();
-    network.appendConvolutionLayer(3, 3, 4, reLu);
+    network.appendConvolutionLayer(3, 3, 8, reLu);
     network.appendFlatteningLayer();
     network.appendBatchNormalizationLayer();
     network.appendFFLayer(16, sigmoid);

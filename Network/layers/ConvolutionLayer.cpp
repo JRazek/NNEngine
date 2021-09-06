@@ -83,7 +83,8 @@ double cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
             for (int x = 0; x < kernelSize.x; x++) {
                 Vector2<int> kernelPos(paddedInputPos.x - x, paddedInputPos.y - y);
                 if (validPos(kernelPos, paddedInput)) {
-                    float weight = kernels[z].getCell(paddedInputPos.x - x, paddedInputPos.y - y, z);
+                    Vector3<int> weightPos(paddedInputPos.x - kernelPos.x, paddedInputPos.y - kernelPos.y, inputPos.z);
+                    float weight = kernels[z].getCell(weightPos);
                     Vector3<int> outputPos(kernelPos.x / strideX, kernelPos.y /strideX, z);
                     result += weight * activationFunction.derive(beforeActivation->getCell(outputPos)) * network->getChain(__id + 1, outputPos);
                 }
