@@ -37,11 +37,12 @@ namespace cn {
          */
         virtual Bitmap<double> run(const Bitmap<double> &bitmap) = 0;
 
-        Layer(const Layer &other) = delete;
-
         virtual double getChain(const Vector3<int> &inputPos) = 0;
 
         virtual ~Layer() = default;
+
+
+        Layer(const Layer &other) = delete;
 
         void resetMemoization();
         void setMemo(const Vector3<int> &pos, double val);
