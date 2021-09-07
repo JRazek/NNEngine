@@ -19,16 +19,6 @@ void cn::Network::feed(const byte *_input) {
     feed(cn::Utils::normalize(bitmap));
 }
 
-void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelsCount, int strideX, int strideY, int paddingX,
-                                    int paddingY) {
-
-    std::unique_ptr<ConvolutionLayer> c = std::make_unique<ConvolutionLayer>(this->layers.size(), *this, kernelX, kernelY, kernelsCount, strideX, strideY, paddingX, paddingY);
-    learnableLayers.push_back(c.get());
-    layers.push_back(c.get());
-    allocated.push_back(std::move(c));
-}
-
-
 void cn::Network::feed(Bitmap<double> bitmap) {
     if(bitmap.size() != inputSize){
         throw std::logic_error("invalid input size!");
@@ -58,6 +48,15 @@ void cn::Network::initRandom() {
     for(auto l : learnableLayers){
         l->randomInit();
     }
+}
+
+void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelsCount, int strideX, int strideY, int paddingX,
+                                         int paddingY) {
+
+    std::unique_ptr<ConvolutionLayer> c = std::make_unique<ConvolutionLayer>(this->layers.size(), *this, kernelX, kernelY, kernelsCount, strideX, strideY, paddingX, paddingY);
+    learnableLayers.push_back(c.get());
+    layers.push_back(c.get());
+    allocated.push_back(std::move(c));
 }
 
 void cn::Network::appendFFLayer(int neuronsCount) {
@@ -170,3 +169,14 @@ randomEngine(_seed)
 cn::Network::Network(int w, int h, int d, int _seed):
 Network(cn::Vector3<int>(w, h, d), _seed)
 {}
+
+cn::Network::Network(const cn::JSON &json): Network(json["input_size"], json["seed"]) {
+    JSON _layers = json["layers"];
+    for(auto l : _layers){
+        allocated.push_back(Layer::fromJSON(*this, l));
+        layers.push_back(allocated.back().get());
+        if(l["learnable"]){
+            learnableLayers.push_back(dynamic_cast<Learnable *>(layers.back()));
+        }
+    }
+}

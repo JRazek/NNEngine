@@ -88,6 +88,9 @@ namespace cn {
         Network(cn::Vector3<int> _inputSize, int _seed = 1);
 
 
+        Network(const cn::JSON &json);
+
+
         /**
          * randomly initialized all the weights and biases of the network
          */
