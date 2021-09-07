@@ -89,11 +89,6 @@ namespace cn {
 
 
         /**
-         * not supported yet
-         */
-        Network(const Network&) = delete;
-
-        /**
          * randomly initialized all the weights and biases of the network
          */
         void initRandom();

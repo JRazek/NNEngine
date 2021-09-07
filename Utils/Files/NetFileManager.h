@@ -11,7 +11,11 @@
 namespace cn {
     class NetFileManager {
         static cn::Network networkFromJSON(const JSON &json){
-            //Network network()
+            Network network(json["input_size"], json["seed"]);
+            for(JSON layer : json["layers"]){
+
+            }
+            return network;
         }
     };
 }

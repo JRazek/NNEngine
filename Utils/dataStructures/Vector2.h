@@ -42,6 +42,10 @@ namespace cn {
     template<typename T>
     [[maybe_unused]]
     static void to_json(JSON &j, const Vector2<T> &value);
+
+    template<typename T>
+    [[maybe_unused]]
+    static void from_json(const JSON &j, Vector2<T> &value);
 }
 template<typename T>
 cn::Vector2<T>::Vector2(const std::pair<T, T> &p): x(p.first), y(p.second) {}
@@ -50,6 +54,12 @@ template<typename T>
 [[maybe_unused]]
 static void cn::to_json(JSON &json, const Vector2<T> &v){
     json = v.jsonEncode();
+}
+
+template<typename T>
+[[maybe_unused]]
+static void cn::from_json(const JSON &j, Vector2<T> &value){
+    value = cn::Vector2<int>(j["x"], j["y"]);
 }
 
 template<typename T>

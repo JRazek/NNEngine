@@ -10,10 +10,12 @@
 #include "../../../Utils/dataStructures/Bitmap.h"
 #include "../../../Utils/interfaces/JSONEncodable.h"
 
-template<typename T>
-struct Vector3;
 namespace cn {
 
+    class FFLayer;
+
+    template<typename T>
+    struct Vector3;
     class Network;
     class Layer : public JSONEncodable{
     protected:
@@ -41,9 +43,6 @@ namespace cn {
 
         virtual ~Layer() = default;
 
-
-        Layer(const Layer &other) = delete;
-
         void resetMemoization();
         void setMemo(const Vector3<int> &pos, double val);
         bool getMemoState(const Vector3<int> &pos) const;
@@ -54,6 +53,7 @@ namespace cn {
 
         //for development purposes only. To delete in future
         virtual JSON jsonEncode() const override;
+
     };
 }
 
