@@ -14,15 +14,14 @@ namespace cn {
     private:
         Vector3<int> kernelSize;
         int kernelsCount;
-        int paddingX;
-        int paddingY;
-        int strideX;
-        int strideY;
+        Vector2<int> padding;
+        Vector2<int> stride;
 
         std::vector<Bitmap<double>> kernels;
         std::vector<double> biases;//ith corresponds to ith kernel
 
         double diffWeight(int weightID);
+        double diffBias(int biasID);
 
     public:
         ConvolutionLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY,

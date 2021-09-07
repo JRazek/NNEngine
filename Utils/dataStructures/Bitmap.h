@@ -205,7 +205,5 @@ cn::JSON cn::Bitmap<T>::jsonEncode() const{
     return json;
 }
 
-//
-
 
 #endif //NEURALNETLIBRARY_BITMAP_H
