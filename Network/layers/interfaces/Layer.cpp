@@ -41,3 +41,8 @@ cn::JSON cn::Layer::jsonEncode() const{
     return JSON();
 }
 
+std::unique_ptr<cn::Layer> cn::Layer::fromJSON(const cn::JSON &json) {
+
+    return std::unique_ptr<Layer>();
+}
+

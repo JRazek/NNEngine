@@ -22,16 +22,9 @@ int main(){
     const int outputSize = 10;
     network.appendConvolutionLayer(3, 3, 1);
     network.appendReluLayer();
-    network.appendBatchNormalizationLayer();
-    network.appendConvolutionLayer(3, 3, 1);
-    network.appendReluLayer();
     network.appendFlatteningLayer();
     network.appendBatchNormalizationLayer();
     network.appendFFLayer(2);
-    network.appendSigmoidLayer();
-    network.appendFFLayer(2);
-    network.appendSigmoidLayer();
-    network.appendFFLayer(outputSize);
     network.appendSigmoidLayer();
     network.initRandom();
     network.ready();
