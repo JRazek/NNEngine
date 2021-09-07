@@ -37,13 +37,21 @@ namespace cn {
 
         bool operator!=(const Vector3<T> &other) const;
 
-
         T multiplyContent() const;
     };
 
+    template<typename T>
+    [[maybe_unused]]
+    static void to_json(JSON &j, const Vector3<T> &value);
 }
 template<typename T>
 cn::Vector3<T>::Vector3(T _x, T _y, T _z): x(_x), y(_y), z(_z) {}
+
+template<typename T>
+[[maybe_unused]]
+static void cn::to_json(JSON &json, const Vector3<T> &v){
+    json = v.jsonEncode();
+}
 
 template<typename T>
 cn::Vector3<T>::Vector3(): x(0), y(0), z(0) {}

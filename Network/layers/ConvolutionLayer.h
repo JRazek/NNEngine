@@ -32,20 +32,18 @@ namespace cn {
         int weightsCount() const override;
         int biasesCount() const override;
 
-
         virtual std::vector<double> getWeightsGradient() override;
         std::vector<double> getBiasesGradient() override;
 
         void setBias(int kernelID, double value) override;
         double getBias(int kernelID) const override;
 
-
         void setWeight(int weightID, double value) override;
         double getWeight(int weightID) const override;
 
         JSON jsonEncode() const override;
-
     };
+
 }
 
 

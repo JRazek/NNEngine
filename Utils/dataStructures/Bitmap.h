@@ -47,7 +47,6 @@ namespace cn {
         Vector3<int> size() const;
 
         JSON jsonEncode() const override;
-
     };
 }
 

@@ -54,7 +54,7 @@ void cn::ConvolutionLayer::randomInit() {
         }
     }
     for(auto &b : biases){
-        //todo differentiation
+        //todo test differentiation
         b = network->getRandom(0, 0);
     }
 }
@@ -171,4 +171,3 @@ cn::JSON cn::ConvolutionLayer::jsonEncode() const{
     }
     return structure;
 }
-
