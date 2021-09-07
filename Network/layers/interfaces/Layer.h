@@ -54,7 +54,7 @@ namespace cn {
         //for development purposes only. To delete in future
         virtual JSON jsonEncode() const override;
 
-        static std::unique_ptr<Layer> fromJSON(const JSON &json);
+        static std::unique_ptr<cn::Layer> fromJSON(const cn::JSON &json, Network &network);
     };
 }
 
