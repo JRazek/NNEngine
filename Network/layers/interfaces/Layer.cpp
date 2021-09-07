@@ -7,6 +7,8 @@
 #include "../../layers/ConvolutionLayer.h"
 #include "../../layers/FFLayer.h"
 #include "../../layers/BatchNormalizationLayer.h"
+#include "../../layers/MaxPoolingLayer.h"
+#include "../../layers/OutputLayer.h"
 
 cn::Layer::Layer(int _id, Network &_network): network(&_network), __id(_id){
     inputSize = network->getInputSize(_id);
@@ -46,33 +48,46 @@ cn::JSON cn::Layer::jsonEncode() const{
 
 std::unique_ptr<cn::Layer> cn::Layer::fromJSON(Network &network, const cn::JSON &json) {
 
-    using result_type = std::unique_ptr<Layer>;
-    using sv = std::string_view;
-    using callback_type = std::function<result_type(const sv&)>;
-    auto deserializerCallbacks = std::map<std::string_view, callback_type>();
+    using callback_type = std::function<std::unique_ptr<Layer>(const cn::JSON &json)>;
+
+    std::unordered_map<std::string_view, callback_type> deserializerCallbacks;
 
     deserializerCallbacks["cl"] = [&](const cn::JSON &json) {
-        std::cout << "creating convolutional_layer\nUsing: ";
+        std::cout << "creating convolutional_layer \n";
         return std::make_unique<ConvolutionLayer>(network, json);
     };
 
     deserializerCallbacks["ffl"] = [&](const cn::JSON &json) {
-        std::cout << "creating ff_layer\nUsing: ";
+        std::cout << "creating ff_layer \n";
         return std::make_unique<FFLayer>(network, json);
     };
 
     deserializerCallbacks["bnl"] = [&](const cn::JSON &json) {
-        std::cout << "creating batch normalization layer\nUsing: ";
-        std::cout << '\n';
+        std::cout << "creating batch normalization layer \n";
         return std::make_unique<BatchNormalizationLayer>(network, json);
     };
 
     deserializerCallbacks["fl"] = [&](const cn::JSON &json) {
-        std::cout << "creating batch flattening layer\nUsing: ";
-        std::cout << '\n';
+        std::cout << "creating flattening layer \n";
         return std::make_unique<FlatteningLayer>(network, json);
     };
 
-    return std::unique_ptr<Layer>();
+    deserializerCallbacks["mpl"] = [&](const cn::JSON &json) {
+        std::cout << "creating max pooling layer \n";
+        return std::make_unique<MaxPoolingLayer>(network, json);
+    };
+
+    deserializerCallbacks["ol"] = [&](const cn::JSON &json) {
+        std::cout << "creating output layer \n";
+        return std::make_unique<OutputLayer>(network, json);
+    };
+
+    const auto deserialize = [&](std::string_view type, const cn::JSON &json) {
+        return deserializerCallbacks[type](json);
+    };
+
+    std::string str = json["type"];
+
+    return deserialize(str, json);
 }
 
