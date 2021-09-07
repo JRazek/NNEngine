@@ -7,7 +7,7 @@
 
 
 cn::FFLayer::FFLayer(Network &_network, const JSON &json):
-FFLayer(json["id"], json["neurons_count"], _network)
+FFLayer(json.at("id"), json.at("neurons_count"), _network)
 {}
 
 
@@ -123,6 +123,7 @@ cn::JSON cn::FFLayer::jsonEncode() const{
     structure["weights"] = weights;
     structure["neurons_count"] = neuronsCount;
     structure["biases"] = biases;
+    structure["learnable"] = true;
 
     return structure;
 }

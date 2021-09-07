@@ -8,7 +8,8 @@
 #include "../../layers/FFLayer.h"
 #include "../../layers/BatchNormalizationLayer.h"
 #include "../../layers/MaxPoolingLayer.h"
-#include "../../layers/OutputLayer.h"
+#include "../../layers/ActivationLayers/ReLU.h"
+#include "../../layers/ActivationLayers/Sigmoid.h"
 
 cn::Layer::Layer(int _id, Network &_network): network(&_network), __id(_id){
     inputSize = network->getInputSize(_id);
@@ -80,6 +81,16 @@ std::unique_ptr<cn::Layer> cn::Layer::fromJSON(Network &network, const cn::JSON 
     deserializerCallbacks["ol"] = [&](const cn::JSON &json) {
         std::cout << "creating output layer \n";
         return std::make_unique<OutputLayer>(network, json);
+    };
+
+    deserializerCallbacks["relu"] = [&](const cn::JSON &json) {
+        std::cout << "creating relu layer \n";
+        return std::make_unique<ReLU>(network, json);
+    };
+
+    deserializerCallbacks["sig"] = [&](const cn::JSON &json) {
+        std::cout << "creating sigmoid layer \n";
+        return std::make_unique<Sigmoid>(network, json);
     };
 
     const auto deserialize = [&](std::string_view type, const cn::JSON &json) {

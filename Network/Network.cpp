@@ -175,7 +175,7 @@ cn::Network::Network(const cn::JSON &json): Network(json["input_size"], json["se
     for(auto l : _layers){
         allocated.push_back(Layer::fromJSON(*this, l));
         layers.push_back(allocated.back().get());
-        if(l["learnable"]){
+        if(l.contains("learnable") && l.at("learnable")){
             learnableLayers.push_back(dynamic_cast<Learnable *>(layers.back()));
         }
     }

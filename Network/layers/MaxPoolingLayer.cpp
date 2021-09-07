@@ -59,8 +59,7 @@ cn::JSON cn::MaxPoolingLayer::jsonEncode() const {
 }
 
 cn::MaxPoolingLayer::MaxPoolingLayer(cn::Network &_network, const cn::JSON &json):
-MaxPoolingLayer(json["id"], _network, json["kernel_size"])
-{}
+MaxPoolingLayer(json.at("id"), _network, json.at("kernel_size")){}
 
 cn::MaxPoolingLayer::MaxPoolingLayer(int _id, cn::Network &_network, cn::Vector2<int> _kernelSize):
 Layer(_id, _network),

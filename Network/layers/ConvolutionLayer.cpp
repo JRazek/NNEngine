@@ -143,6 +143,7 @@ cn::JSON cn::ConvolutionLayer::jsonEncode() const{
     structure["stride"] = stride.jsonEncode();
     structure["padding"] = padding.jsonEncode();
     structure["kernel_size"] = kernelSize.jsonEncode();
+    structure["learnable"] = true;
     for(int i = 0; i < kernelsCount; i ++){
         JSON s;
         s["weights"] = kernels[i].jsonEncode();
@@ -152,12 +153,12 @@ cn::JSON cn::ConvolutionLayer::jsonEncode() const{
     return structure;
 }
 
-cn::ConvolutionLayer::ConvolutionLayer(Network &_network, const cn::JSON &json): ConvolutionLayer(json["id"],
+cn::ConvolutionLayer::ConvolutionLayer(Network &_network, const cn::JSON &json): ConvolutionLayer(json.at("id"),
         _network,
-        json["kernel_size"],
-        json["kernels"].size(),
-        json["stride"],
-        json["padding"]){
+        json.at("kernel_size"),
+        json.at("kernels").size(),
+        json.at("stride"),
+        json.at("padding")){
 }
 
 cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, Vector2<int> _kernelSize, int _kernelsCount, Vector2<int> _stride, Vector2<int> _padding):

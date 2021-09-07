@@ -41,3 +41,5 @@ double cn::Sigmoid::diff(double x) {
 cn::Sigmoid::Sigmoid(int id, cn::Network &network) : Layer(id, network) {
     outputSize = inputSize;
 }
+
+cn::Sigmoid::Sigmoid(cn::Network &_network, const cn::JSON &json): Sigmoid(json.at("id"), _network) {}

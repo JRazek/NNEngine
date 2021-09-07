@@ -13,6 +13,7 @@ namespace cn {
     public:
         constexpr static double e = M_E;
         Sigmoid(int id, Network &network);
+        Sigmoid(Network &_network, const JSON &json);
         Bitmap<double> run(const Bitmap<double> &input) override;
         double getChain(const Vector3<int> &inputPos) override;
         virtual JSON jsonEncode() const override;

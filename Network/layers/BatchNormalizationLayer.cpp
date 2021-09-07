@@ -43,5 +43,5 @@ cn::JSON cn::BatchNormalizationLayer::jsonEncode() const{
     return structure;
 }
 
-cn::BatchNormalizationLayer::BatchNormalizationLayer(cn::Network &_network, const cn::JSON &json): BatchNormalizationLayer(json["id"], _network)
+cn::BatchNormalizationLayer::BatchNormalizationLayer(cn::Network &_network, const cn::JSON &json): BatchNormalizationLayer(json.at("id"), _network)
 {}

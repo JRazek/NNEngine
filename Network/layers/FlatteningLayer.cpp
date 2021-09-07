@@ -34,5 +34,4 @@ cn::JSON cn::FlatteningLayer::jsonEncode() const {
     return structure;
 }
 
-cn::FlatteningLayer::FlatteningLayer(cn::Network &_network, const cn::JSON &json): FlatteningLayer(json["id"], _network)
-{}
+cn::FlatteningLayer::FlatteningLayer(cn::Network &_network, const cn::JSON &json): FlatteningLayer(json.at("id"), _network) {}

@@ -40,3 +40,5 @@ double cn::ReLU::diff(double x) {
 cn::ReLU::ReLU(int id, cn::Network &network) : Layer(id, network) {
     outputSize = inputSize;
 }
+
+cn::ReLU::ReLU(cn::Network &_network, const cn::JSON &json): ReLU(json.at("id"), _network) {}
