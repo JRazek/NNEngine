@@ -28,10 +28,6 @@ void cn::Network::appendConvolutionLayer(int kernelX, int kernelY, int kernelsCo
     allocated.push_back(std::move(c));
 }
 
-cn::Network::Network(int w, int h, int d, int _seed):
-        seed(_seed),
-        inputSize(w, h, d),
-        randomEngine(_seed){}
 
 void cn::Network::feed(Bitmap<double> bitmap) {
     if(bitmap.size() != inputSize){
@@ -164,3 +160,13 @@ cn::JSON cn::Network::jsonEncode() const {
     }
     return jsonObject;
 }
+
+cn::Network::Network(cn::Vector3<int> _inputSize, int _seed):
+seed(_seed),
+inputSize(_inputSize),
+randomEngine(_seed)
+{}
+
+cn::Network::Network(int w, int h, int d, int _seed):
+Network(cn::Vector3<int>(w, h, d), _seed)
+{}

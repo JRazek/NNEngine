@@ -85,6 +85,9 @@ namespace cn {
         Network(int w, int h, int d, int _seed = 1);
 
 
+        Network(cn::Vector3<int> _inputSize, int _seed = 1);
+
+
         /**
          * not supported yet
          */
