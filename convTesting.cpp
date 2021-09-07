@@ -20,11 +20,17 @@ int main(){
     cn::MBGD momentumGd(network, 0.01, 1);
 
     const int outputSize = 10;
-    network.appendConvolutionLayer(3, 3, 1);
+    network.appendConvolutionLayer(3, 3, 1, 2, 2);
+    network.appendReluLayer();
+    network.appendConvolutionLayer(3, 3, 8, 2, 2);
+    network.appendReluLayer();
+    network.appendConvolutionLayer(3, 3, 16);
     network.appendReluLayer();
     network.appendFlatteningLayer();
     network.appendBatchNormalizationLayer();
-    network.appendFFLayer(2);
+    network.appendFFLayer(30);
+    network.appendBatchNormalizationLayer();
+    network.appendFFLayer(10);
     network.appendSigmoidLayer();
     network.initRandom();
     network.ready();

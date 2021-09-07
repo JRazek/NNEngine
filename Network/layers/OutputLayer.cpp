@@ -16,10 +16,10 @@ double cn::OutputLayer::getChain(const Vector3<int> &input) {
 }
 
 void cn::OutputLayer::setTarget(const cn::Bitmap<double> *_target) {
-    target = _target;
-    if(outputSize != target->size()){
+    if(outputSize != _target->size()){
         throw std::logic_error("");
     }
+    target = _target;
 }
 
 cn::JSON cn::OutputLayer::jsonEncode() const {

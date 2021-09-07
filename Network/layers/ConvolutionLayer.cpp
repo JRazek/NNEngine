@@ -4,29 +4,8 @@
 #include "ConvolutionLayer.h"
 #include "../Network.h"
 #include <future>
-cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY,
-                                       int _kernelsCount, int _strideX, int _strideY, int _paddingX, int _paddingY) :
-        cn::Learnable(_id, _network, _kernelsCount),
-        kernelSize(_kernelSizeX, _kernelSizeY, network->getInputSize(_id).z),
-        kernelsCount(_kernelsCount),
-        padding(_paddingX, _paddingY),
-        stride(_strideX, _strideY),
-        biases(kernelsCount) {
-
-    if(inputSize.x < kernelSize.x || inputSize.y < kernelSize.y){
-        throw std::logic_error("kernel must not be larger than input!");
-    }
-    kernels.reserve(_kernelsCount);
-
-    for(int i = 0; i < _kernelsCount; i ++){
-        kernels.emplace_back(kernelSize);
-    }
-
-    int oX = Utils::afterConvolutionSize(kernelSize.x, inputSize.x, padding.x, stride.x);
-    int oY = Utils::afterConvolutionSize(kernelSize.y, inputSize.y, padding.y, stride.y);
-    int oZ = kernelsCount;
-    outputSize = Vector3<int>(oX, oY, oZ);
-}
+cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY, int _kernelsCount, int _strideX, int _strideY, int _paddingX, int _paddingY) :
+ConvolutionLayer(_id, _network, {_kernelSizeX, _kernelSizeY}, _kernelsCount, {_strideX, _strideY}, {_paddingX, _paddingY}) {}
 
 cn::Bitmap<double> cn::ConvolutionLayer::run(const Bitmap<double> &input) {
     if(input.size() != network->getInputSize(__id)){
@@ -163,6 +142,7 @@ cn::JSON cn::ConvolutionLayer::jsonEncode() const{
     structure["kernels"] = std::vector<JSON>();
     structure["stride"] = stride.jsonEncode();
     structure["padding"] = padding.jsonEncode();
+    structure["kernel_size"] = kernelSize.jsonEncode();
     for(int i = 0; i < kernelsCount; i ++){
         JSON s;
         s["weights"] = kernels[i].jsonEncode();
@@ -170,4 +150,33 @@ cn::JSON cn::ConvolutionLayer::jsonEncode() const{
         structure["kernels"].push_back(s);
     }
     return structure;
+}
+
+cn::ConvolutionLayer::ConvolutionLayer(Network &_network, const cn::JSON &json): ConvolutionLayer(json["id"],
+        _network,
+        json["kernel_size"],
+        json["kernels"].size(),
+        json["stride"],
+        json["padding"]){
+}
+
+cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, Vector2<int> _kernelSize, int _kernelsCount, Vector2<int> _stride, Vector2<int> _padding):
+Learnable(_id, _network, _kernelsCount),
+kernelSize(_kernelSize.x, _kernelSize.y, network->getInputSize(_id).z),
+kernelsCount(_kernelsCount),
+padding(_padding), stride(_stride),
+biases(_kernelsCount){
+    if(inputSize.x < kernelSize.x || inputSize.y < kernelSize.y){
+        throw std::logic_error("kernel must not be larger than input!");
+    }
+    kernels.reserve(_kernelsCount);
+
+    for(int i = 0; i < _kernelsCount; i ++){
+        kernels.emplace_back(kernelSize);
+    }
+
+    int oX = Utils::afterConvolutionSize(kernelSize.x, inputSize.x, padding.x, stride.x);
+    int oY = Utils::afterConvolutionSize(kernelSize.y, inputSize.y, padding.y, stride.y);
+    int oZ = kernelsCount;
+    outputSize = Vector3<int>(oX, oY, oZ);
 }

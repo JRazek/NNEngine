@@ -25,6 +25,7 @@ namespace cn {
         Bitmap(const Vector3<int> &s, const T *data, int inputType = 0);
         Bitmap(const Bitmap &bitmap);
         Bitmap(Bitmap &&bitmap);
+        Bitmap(const JSON &json);
         Bitmap();
         ~Bitmap();
         T getCell(int col, int row, int depth) const;
@@ -202,6 +203,13 @@ cn::JSON cn::Bitmap<T>::jsonEncode() const{
     dataVec.insert(dataVec.end(), dataP, dataP + size().multiplyContent());
     json["data"] = dataVec;
     return json;
+}
+
+template<typename T>
+cn::Bitmap<T>::Bitmap(const cn::JSON &json): Bitmap(json["size"]) {
+    std::vector<T> d = json["data"];
+    dataP = d.data();
+    d.data() = nullptr;
 }
 
 
