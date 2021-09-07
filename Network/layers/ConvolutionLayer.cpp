@@ -9,7 +9,6 @@ ConvolutionLayer(_id, _network, {_kernelSizeX, _kernelSizeY}, _kernelsCount, {_s
 
 cn::Bitmap<double> cn::ConvolutionLayer::run(const Bitmap<double> &input) {
     Vector3<int>test = network->getInputSize(__id);
-    //todo fix
     if(input.size() != test){
         throw std::logic_error("CLayer fed with wrong input size!");
     }
@@ -155,12 +154,21 @@ cn::JSON cn::ConvolutionLayer::jsonEncode() const{
     return structure;
 }
 
-cn::ConvolutionLayer::ConvolutionLayer(Network &_network, const cn::JSON &json): ConvolutionLayer(json.at("id"),
+cn::ConvolutionLayer::ConvolutionLayer(Network &_network, const cn::JSON &json):
+ConvolutionLayer(json.at("id"),
         _network,
         json.at("kernel_size"),
         json.at("kernels").size(),
         json.at("stride"),
         json.at("padding")){
+    kernels.reserve(kernelsCount);
+
+    for(u_long i = 0; i < json.at("kernels").size(); i ++){
+        auto k = json.at("kernels")[i];
+        std::cout << k.dump(4);
+        kernels.push_back(k.at("weights"));
+        biases[i] = k.at("bias");
+    }
 }
 
 cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, Vector2<int> _kernelSize, int _kernelsCount, Vector2<int> _stride, Vector2<int> _padding):

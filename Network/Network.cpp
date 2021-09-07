@@ -171,12 +171,15 @@ Network(cn::Vector3<int>(w, h, d), _seed)
 {}
 
 cn::Network::Network(const cn::JSON &json): Network(json.at("input_size"), json.at("seed")) {
-    JSON _layers = json["layers"];
+    JSON _layers = json.at("layers");
     for(auto l : _layers){
-        allocated.push_back(Layer::fromJSON(*this, l));
-        layers.push_back(allocated.back().get());
-        if(l.contains("learnable") && l.at("learnable")){
-            learnableLayers.push_back(dynamic_cast<Learnable *>(layers.back()));
+        if(l.at("type") != "ol") {
+            allocated.push_back(Layer::fromJSON(*this, l));
+            layers.push_back(allocated.back().get());
+            if (l.contains("learnable") && l.at("learnable")) {
+                learnableLayers.push_back(dynamic_cast<Learnable *>(layers.back()));
+            }
         }
     }
+    ready();
 }

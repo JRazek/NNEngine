@@ -8,7 +8,12 @@
 
 cn::FFLayer::FFLayer(Network &_network, const JSON &json):
 FFLayer(json.at("id"), json.at("neurons_count"), _network)
-{}
+{
+    std::vector<double> w = json.at("weights");
+    std::vector<double> b = json.at("biases");
+    weights = w;
+    biases = b;
+}
 
 
 cn::FFLayer::FFLayer(int _id, int _neuronsCount, Network &_network) :

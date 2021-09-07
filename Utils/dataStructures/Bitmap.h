@@ -206,10 +206,9 @@ cn::JSON cn::Bitmap<T>::jsonEncode() const{
 }
 
 template<typename T>
-cn::Bitmap<T>::Bitmap(const cn::JSON &json): Bitmap(json["size"]) {
-    std::vector<T> d = json["data"];
-    dataP = d.data();
-    d.data() = nullptr;
+cn::Bitmap<T>::Bitmap(const cn::JSON &json): Bitmap(Vector3<int>(json.at("size"))) {
+    std::vector<T> d = json.at("data");
+    std::copy(d.begin(), d.end(), dataP);
 }
 
 
