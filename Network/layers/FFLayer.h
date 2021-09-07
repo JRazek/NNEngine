@@ -26,6 +26,8 @@ namespace cn {
          */
         FFLayer(int _id, int _neuronsCount, Network &_network);
 
+        FFLayer(Network &_network, const JSON &json);
+
         Bitmap<double> run(const Bitmap<double> &input) override;
 
         virtual double getChain(const Vector3<int> &inputPos) override;

@@ -5,6 +5,12 @@
 #include "FFLayer.h"
 #include "../Network.h"
 
+
+cn::FFLayer::FFLayer(Network &_network, const JSON &json):
+FFLayer(json["id"], json["neurons_count"], _network)
+{}
+
+
 cn::FFLayer::FFLayer(int _id, int _neuronsCount, Network &_network) :
         Learnable(_id, _network, _neuronsCount),
         biases(_neuronsCount){
@@ -115,6 +121,7 @@ cn::JSON cn::FFLayer::jsonEncode() const{
     structure["id"] = __id;
     structure["type"] = "ffl";
     structure["weights"] = weights;
+    structure["neurons_count"] = neuronsCount;
     structure["biases"] = biases;
 
     return structure;

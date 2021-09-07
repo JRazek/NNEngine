@@ -12,6 +12,7 @@ namespace cn {
         const Bitmap<double> *target;
     public:
         OutputLayer(int id, cn::Network &network);
+        OutputLayer(Network &_network, const JSON &json);
         Bitmap<double> run(const Bitmap<double> &input) override;
         double getChain(const Vector3<int> &input) override;
         void setTarget(const Bitmap<double> *_target);

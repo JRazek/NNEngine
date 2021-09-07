@@ -5,11 +5,7 @@
 #include "MaxPoolingLayer.h"
 #include "../Network.h"
 
-cn::MaxPoolingLayer::MaxPoolingLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY) :
-        Layer(_id, _network),
-        kernelSize(_kernelSizeX, _kernelSizeY){
-    outputSize = Vector3<int>(Utils::afterMaxPoolSize(kernelSize.x, inputSize.x), Utils::afterMaxPoolSize(kernelSize.y, inputSize.y), inputSize.z);
-    mapping.emplace(Bitmap<Vector2<int>>(inputSize));
+cn::MaxPoolingLayer::MaxPoolingLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY) : MaxPoolingLayer(_id, _network, {_kernelSizeX, _kernelSizeY}){
 }
 
 cn::Bitmap<double> cn::MaxPoolingLayer::run(const cn::Bitmap<double> &input) {
@@ -60,4 +56,15 @@ cn::JSON cn::MaxPoolingLayer::jsonEncode() const {
     structure["type"] = "mpl";
     structure["kernel_size"] = kernelSize.jsonEncode();
     return structure;
+}
+
+cn::MaxPoolingLayer::MaxPoolingLayer(cn::Network &_network, const cn::JSON &json):
+MaxPoolingLayer(json["id"], _network, json["kernel_size"])
+{}
+
+cn::MaxPoolingLayer::MaxPoolingLayer(int _id, cn::Network &_network, cn::Vector2<int> _kernelSize):
+Layer(_id, _network),
+kernelSize(_kernelSize){
+    outputSize = Vector3<int>(Utils::afterMaxPoolSize(kernelSize.x, inputSize.x), Utils::afterMaxPoolSize(kernelSize.y, inputSize.y), inputSize.z);
+    mapping.emplace(Bitmap<Vector2<int>>(inputSize));
 }

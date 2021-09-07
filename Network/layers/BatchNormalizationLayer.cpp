@@ -42,3 +42,6 @@ cn::JSON cn::BatchNormalizationLayer::jsonEncode() const{
     structure["type"] = "bnl";
     return structure;
 }
+
+cn::BatchNormalizationLayer::BatchNormalizationLayer(cn::Network &_network, const cn::JSON &json): BatchNormalizationLayer(json["id"], _network)
+{}

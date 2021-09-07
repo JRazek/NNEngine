@@ -28,3 +28,6 @@ cn::JSON cn::OutputLayer::jsonEncode() const {
     structure["type"] = "ol";
     return structure;
 }
+
+cn::OutputLayer::OutputLayer(cn::Network &_network, const cn::JSON &json) : FlatteningLayer(_network, json)
+{}

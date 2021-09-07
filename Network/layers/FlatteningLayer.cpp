@@ -33,3 +33,6 @@ cn::JSON cn::FlatteningLayer::jsonEncode() const {
     structure["type"] = "fl";
     return structure;
 }
+
+cn::FlatteningLayer::FlatteningLayer(cn::Network &_network, const cn::JSON &json): FlatteningLayer(json["id"], _network)
+{}

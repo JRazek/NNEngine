@@ -5,6 +5,8 @@
 #include "Layer.h"
 #include "../../Network.h"
 #include "../../layers/ConvolutionLayer.h"
+#include "../../layers/FFLayer.h"
+#include "../../layers/BatchNormalizationLayer.h"
 
 cn::Layer::Layer(int _id, Network &_network): network(&_network), __id(_id){
     inputSize = network->getInputSize(_id);
@@ -51,14 +53,24 @@ std::unique_ptr<cn::Layer> cn::Layer::fromJSON(Network &network, const cn::JSON 
 
     deserializerCallbacks["cl"] = [&](const cn::JSON &json) {
         std::cout << "creating convolutional_layer\nUsing: ";
-        std::cout << '\n';
         return std::make_unique<ConvolutionLayer>(network, json);
     };
 
     deserializerCallbacks["ffl"] = [&](const cn::JSON &json) {
         std::cout << "creating ff_layer\nUsing: ";
+        return std::make_unique<FFLayer>(network, json);
+    };
+
+    deserializerCallbacks["bnl"] = [&](const cn::JSON &json) {
+        std::cout << "creating batch normalization layer\nUsing: ";
         std::cout << '\n';
-        return std::make_unique<ConvolutionLayer>(network, json);
+        return std::make_unique<BatchNormalizationLayer>(network, json);
+    };
+
+    deserializerCallbacks["fl"] = [&](const cn::JSON &json) {
+        std::cout << "creating batch flattening layer\nUsing: ";
+        std::cout << '\n';
+        return std::make_unique<FlatteningLayer>(network, json);
     };
 
     return std::unique_ptr<Layer>();
