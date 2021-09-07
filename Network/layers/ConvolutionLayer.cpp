@@ -8,7 +8,9 @@ cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSi
 ConvolutionLayer(_id, _network, {_kernelSizeX, _kernelSizeY}, _kernelsCount, {_strideX, _strideY}, {_paddingX, _paddingY}) {}
 
 cn::Bitmap<double> cn::ConvolutionLayer::run(const Bitmap<double> &input) {
-    if(input.size() != network->getInputSize(__id)){
+    Vector3<int>test = network->getInputSize(__id);
+    //todo fix
+    if(input.size() != test){
         throw std::logic_error("CLayer fed with wrong input size!");
     }
     std::vector<std::future<Bitmap<double>>> kernelThreads;

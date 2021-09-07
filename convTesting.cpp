@@ -37,12 +37,7 @@ int main(){
 
     cn::JSON json = network.jsonEncode();
 
-
-    cn::Network recreatedFromJSON(json);
-
-    return 0;
-
-    std::cout<<json.dump(4);
+    network = cn::Network(json);
 
     CSVReader csvReader("/home/user/IdeaProjects/digitRecogniser/dataSet/metadata.csv", ';');
     csvReader.readContents();

@@ -170,7 +170,7 @@ cn::Network::Network(int w, int h, int d, int _seed):
 Network(cn::Vector3<int>(w, h, d), _seed)
 {}
 
-cn::Network::Network(const cn::JSON &json): Network(json["input_size"], json["seed"]) {
+cn::Network::Network(const cn::JSON &json): Network(json.at("input_size"), json.at("seed")) {
     JSON _layers = json["layers"];
     for(auto l : _layers){
         allocated.push_back(Layer::fromJSON(*this, l));
