@@ -161,12 +161,10 @@ ConvolutionLayer(json.at("id"),
         json.at("kernels").size(),
         json.at("stride"),
         json.at("padding")){
-    kernels.reserve(kernelsCount);
 
     for(u_long i = 0; i < json.at("kernels").size(); i ++){
         auto k = json.at("kernels")[i];
-        std::cout << k.dump(4);
-        kernels.push_back(k.at("weights"));
+        kernels[i] = k.at("weights");
         biases[i] = k.at("bias");
     }
 }

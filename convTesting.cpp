@@ -21,13 +21,8 @@ int main(){
     const int outputSize = 10;
     network.appendConvolutionLayer(3, 3, 1, 2, 2);
     network.appendReluLayer();
-    network.appendConvolutionLayer(3, 3, 8, 2, 2);
-    network.appendReluLayer();
-    network.appendConvolutionLayer(3, 3, 16);
-    network.appendReluLayer();
+    network.appendMaxPoolingLayer(4, 4);
     network.appendFlatteningLayer();
-    network.appendBatchNormalizationLayer();
-    network.appendFFLayer(30);
     network.appendBatchNormalizationLayer();
     network.appendFFLayer(10);
     network.appendSigmoidLayer();
@@ -38,10 +33,13 @@ int main(){
 
 
     cn::Network recreatedFromJSON(json);
-    cn::MBGD momentumGd(recreatedFromJSON, 0.01, 1);
+
+    json = recreatedFromJSON.jsonEncode();
+
+    cn::MBGD momentumGd(network, 0.01, 1);
 
 
-    CSVReader csvReader("/home/user/IdeaProjects/digitRecogniser/dataSet/metadata.csv", ';');
+    CSVReader csvReader("/home/jrazek/IdeaProjects/digitRecogniser/dataSet/metadata.csv", ';');
     csvReader.readContents();
     auto &contents = csvReader.getContents();
     std::vector<ImageRepresentation> imageRepresentations;
@@ -82,10 +80,10 @@ int main(){
         bitmap = cn::Utils::average3Layers(bitmap);
         int numVal = std::stoi(imageRepresentation.value);
         target.setCell(numVal, 0, 0, 1);
-        recreatedFromJSON.feed(bitmap);
+        network.feed(bitmap);
         momentumGd.propagate(target);
 
-        int best = getBest(recreatedFromJSON.getNetworkOutput());
+        int best = getBest(network.getNetworkOutput());
         if (best == numVal) {
             correctCount++;
         }

@@ -78,11 +78,6 @@ std::unique_ptr<cn::Layer> cn::Layer::fromJSON(Network &network, const cn::JSON 
         return std::make_unique<MaxPoolingLayer>(network, json);
     };
 
-    deserializerCallbacks["ol"] = [&](const cn::JSON &json) {
-        std::cout << "creating output layer \n";
-        return std::make_unique<OutputLayer>(network, json);
-    };
-
     deserializerCallbacks["relu"] = [&](const cn::JSON &json) {
         std::cout << "creating relu layer \n";
         return std::make_unique<ReLU>(network, json);
@@ -91,6 +86,11 @@ std::unique_ptr<cn::Layer> cn::Layer::fromJSON(Network &network, const cn::JSON 
     deserializerCallbacks["sig"] = [&](const cn::JSON &json) {
         std::cout << "creating sigmoid layer \n";
         return std::make_unique<Sigmoid>(network, json);
+    };
+
+    deserializerCallbacks["ol"] = [&](const cn::JSON &json) {
+        std::cout << "creating output layer \n";
+        return std::make_unique<OutputLayer>(network, json);
     };
 
     const auto deserialize = [&](std::string_view type, const cn::JSON &json) {
