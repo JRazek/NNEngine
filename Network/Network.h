@@ -72,21 +72,6 @@ namespace cn {
         const std::vector<Layer *> &getLayers() const;
 
 
-        /**
-         * input size for feed
-         * @param w width
-         * @param h height
-         * @param d depth
-         * @param _seed - seed for random engine
-         * if the first layer is image - set all the properties.
-         * In case of using only FFLayers - set height and depth to 1.
-         */
-
-        Network(int w, int h, int d, int _seed = 1);
-
-
-        Network(cn::Vector3<int> _inputSize, int _seed = 1);
-
 
         Network(const cn::JSON &json);
 
@@ -136,6 +121,28 @@ namespace cn {
         JSON jsonEncode() const override;
 
         OutputLayer &getOutputLayer();
+
+
+        /**
+         * input size for feed
+         * @param w width
+         * @param h height
+         * @param d depth
+         * @param _seed - seed for random engine
+         * if the first layer is image - set all the properties.
+         * In case of using only FFLayers - set height and depth to 1.
+         */
+
+        Network(int w, int h, int d, int _seed = 1);
+
+
+        Network(cn::Vector3<int> _inputSize, int _seed = 1);
+
+//        //todo
+//        Network (const Network &network);
+//        Network (Network &&network);
+//        Network &operator=(const Network &network);
+//        Network &operator=(Network &&network);
     };
 }
 
