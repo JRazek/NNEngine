@@ -35,3 +35,7 @@ cn::JSON cn::FlatteningLayer::jsonEncode() const {
 }
 
 cn::FlatteningLayer::FlatteningLayer(cn::Network &_network, const cn::JSON &json): FlatteningLayer(json.at("id"), _network) {}
+
+std::unique_ptr<cn::Layer> cn::FlatteningLayer::getCopyAsUniquePtr() const {
+    return std::make_unique<FlatteningLayer>(*this);
+}

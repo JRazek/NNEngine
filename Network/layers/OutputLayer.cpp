@@ -31,3 +31,7 @@ cn::JSON cn::OutputLayer::jsonEncode() const {
 
 cn::OutputLayer::OutputLayer(cn::Network &_network, const cn::JSON &json) : FlatteningLayer(_network, json)
 {}
+
+std::unique_ptr<cn::Layer> cn::OutputLayer::getCopyAsUniquePtr() const {
+    return std::make_unique<OutputLayer>(*this);
+}

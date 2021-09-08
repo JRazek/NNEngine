@@ -19,6 +19,7 @@ namespace cn {
         virtual JSON jsonEncode() const override;
         static double sigmoid(double x);
         static double diff(double x);
+        std::unique_ptr<Layer> getCopyAsUniquePtr() const override;
     };
 }
 

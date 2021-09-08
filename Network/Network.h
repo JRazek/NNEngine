@@ -138,11 +138,10 @@ namespace cn {
 
         Network(cn::Vector3<int> _inputSize, int _seed = 1);
 
-//        //todo
-//        Network (const Network &network);
-//        Network (Network &&network);
-//        Network &operator=(const Network &network);
-//        Network &operator=(Network &&network);
+        Network (const Network &network) = delete;
+        Network (Network &&network) = default;
+        Network &operator=(const Network &network) = delete;
+        Network &operator=(Network &&network) = default;;
     };
 }
 

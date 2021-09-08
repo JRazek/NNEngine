@@ -32,9 +32,9 @@ int main(){
     cn::JSON json = network.jsonEncode();
 
 
-    cn::Network recreatedFromJSON(json);
+    network = cn::Network(json);
 
-    json = recreatedFromJSON.jsonEncode();
+    json = network.jsonEncode();
 
     cn::MBGD momentumGd(network, 0.01, 1);
 

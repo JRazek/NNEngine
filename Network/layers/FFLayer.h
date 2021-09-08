@@ -48,6 +48,8 @@ namespace cn {
         double getWeight(int weightID) const override;
 
         JSON jsonEncode() const override;
+
+        std::unique_ptr<Layer> getCopyAsUniquePtr() const override;
     };
 }
 

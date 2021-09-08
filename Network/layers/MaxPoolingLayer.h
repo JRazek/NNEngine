@@ -19,6 +19,7 @@ namespace cn {
         Bitmap<double> run(const Bitmap<double> &input) override;
         double getChain(const Vector3<int> &inputPos) override;
         JSON jsonEncode() const override;
+        std::unique_ptr<Layer> getCopyAsUniquePtr() const override;
     };
 }
 

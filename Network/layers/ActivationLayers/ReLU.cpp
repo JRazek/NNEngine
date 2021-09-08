@@ -43,3 +43,7 @@ cn::ReLU::ReLU(int id, cn::Network &network) : Layer(id, network) {
 
 cn::ReLU::ReLU(cn::Network &_network, const cn::JSON &json):
 cn::ReLU(json.at("id"), _network) {}
+
+std::unique_ptr<cn::Layer> cn::ReLU::getCopyAsUniquePtr() const {
+    return std::make_unique<ReLU>(*this);
+}

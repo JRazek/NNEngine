@@ -67,3 +67,7 @@ kernelSize(_kernelSize){
     outputSize = Vector3<int>(Utils::afterMaxPoolSize(kernelSize.x, inputSize.x), Utils::afterMaxPoolSize(kernelSize.y, inputSize.y), inputSize.z);
     mapping.emplace(Bitmap<Vector2<int>>(inputSize));
 }
+
+std::unique_ptr<cn::Layer> cn::MaxPoolingLayer::getCopyAsUniquePtr() const {
+    return std::make_unique<MaxPoolingLayer>(*this);
+}

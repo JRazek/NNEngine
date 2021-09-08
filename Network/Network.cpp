@@ -183,9 +183,3 @@ cn::Network::Network(const cn::JSON &json): Network(json.at("input_size"), json.
     }
     ready();
 }
-
-//cn::Network::Network(const cn::Network &network):Network(network.inputSize, network.seed) {
-//    for(const std::unique_ptr<Layer> &p : network.allocated){
-//        //std::unique_ptr<Layer> copied = std::make_unique<>()
-//    }
-//}

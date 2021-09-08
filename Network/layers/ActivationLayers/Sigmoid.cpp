@@ -43,3 +43,7 @@ cn::Sigmoid::Sigmoid(int id, cn::Network &network) : Layer(id, network) {
 }
 
 cn::Sigmoid::Sigmoid(cn::Network &_network, const cn::JSON &json): Sigmoid(json.at("id"), _network) {}
+
+std::unique_ptr<cn::Layer> cn::Sigmoid::getCopyAsUniquePtr() const {
+    return std::make_unique<Sigmoid>(*this);
+}

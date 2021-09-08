@@ -45,3 +45,7 @@ cn::JSON cn::BatchNormalizationLayer::jsonEncode() const{
 
 cn::BatchNormalizationLayer::BatchNormalizationLayer(cn::Network &_network, const cn::JSON &json): BatchNormalizationLayer(json.at("id"), _network)
 {}
+
+std::unique_ptr<cn::Layer> cn::BatchNormalizationLayer::getCopyAsUniquePtr() const {
+    return std::make_unique<BatchNormalizationLayer>(*this);
+}
