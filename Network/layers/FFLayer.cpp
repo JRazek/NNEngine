@@ -6,9 +6,8 @@
 #include "../Network.h"
 
 
-cn::FFLayer::FFLayer(Network &_network, const JSON &json):
-FFLayer(json.at("id"), json.at("neurons_count"), _network)
-{
+cn::FFLayer::FFLayer(const JSON &json) :
+FFLayer(json.at("id"), json.at("input_size"), json.at("neurons_count")){
     std::vector<double> w = json.at("weights");
     std::vector<double> b = json.at("biases");
     weights = w;
@@ -16,8 +15,8 @@ FFLayer(json.at("id"), json.at("neurons_count"), _network)
 }
 
 
-cn::FFLayer::FFLayer(int _id, int _neuronsCount, Network &_network) :
-        Learnable(_id, _network, _neuronsCount),
+cn::FFLayer::FFLayer(int _id, Vector3<int> _inputSize, int _neuronsCount) :
+        Learnable(_id, _inputSize, _neuronsCount),
         biases(_neuronsCount){
 
     if(inputSize.x < 1 || inputSize.y != 1 || inputSize.z != 1){
@@ -44,12 +43,14 @@ cn::Bitmap<double> cn::FFLayer::run(const Bitmap<double> &input) {
     return result;
 }
 
-void cn::FFLayer::randomInit() {
+void cn::FFLayer::randomInit(std::default_random_engine &randomEngine) {
+    std::uniform_real_distribution<> dis(-10, 10);
+
     for(auto &w : weights){
-        w = network->getRandom(-10, 10)* std::sqrt(2.f/inputSize.x);
+        w =  dis(randomEngine) * std::sqrt(2.f/inputSize.x);
     }
     for(auto &b : biases){
-        b = network->getRandom(-10, 10);
+        b = dis(randomEngine);
     }
 }
 
@@ -64,7 +65,7 @@ double cn::FFLayer::getChain(const Vector3<int> &inputPos) {
 
     double res = 0;
     for(int i = 0; i < neuronsCount; i ++){
-        res += weights.at(i * weightsPerNeuron  + inputPos.x) * network->getChain(__id + 1, {i, 0, 0});
+        res += weights.at(i * weightsPerNeuron  + inputPos.x) * nextLayer->getChain({i, 0, 0});
     }
 
     setMemo(inputPos, res);
@@ -73,8 +74,8 @@ double cn::FFLayer::getChain(const Vector3<int> &inputPos) {
 
 double cn::FFLayer::diffWeight(int weightID) {
     int neuron = weightID / inputSize.x;
-    const Bitmap<double> &input = network->getInput(__id);
-    return input.getCell(weightID % inputSize.x, 0, 0) * network->getChain(__id + 1, {neuron, 0, 0});
+    const Bitmap<double> &input = prevLayer->getOutput().value();
+    return input.getCell(weightID % inputSize.x, 0, 0) * nextLayer->getChain({neuron, 0, 0});
 }
 
 int cn::FFLayer::weightsCount() const {
@@ -106,7 +107,7 @@ std::vector<double> cn::FFLayer::getBiasesGradient() {
 }
 
 double cn::FFLayer::diffBias(int neuronID) {
-    return network->getChain(__id + 1, {neuronID, 0, 0});
+    return nextLayer->getChain({neuronID, 0, 0});
 }
 
 void cn::FFLayer::setBias(int neuronID, double value) {
@@ -126,6 +127,7 @@ cn::JSON cn::FFLayer::jsonEncode() const{
     structure["id"] = __id;
     structure["type"] = "ffl";
     structure["weights"] = weights;
+    structure["input_size"] = inputSize.jsonEncode();
     structure["neurons_count"] = neuronsCount;
     structure["biases"] = biases;
     structure["learnable"] = true;

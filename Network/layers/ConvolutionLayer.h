@@ -5,6 +5,7 @@
 #ifndef NEURALNETLIBRARY_CONVOLUTIONLAYER_H
 #define NEURALNETLIBRARY_CONVOLUTIONLAYER_H
 
+#include <random>
 #include "interfaces/Learnable.h"
 
 template<typename T>
@@ -24,14 +25,12 @@ namespace cn {
         double diffBias(int biasID);
 
     public:
-        ConvolutionLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY,
-                         int _kernelsCount, int _strideX, int _strideY, int _paddingX, int _paddingY);
 
-        ConvolutionLayer(int _id, Network &_network, Vector2<int> _kernelSize, int _kernelsCount,
+        ConvolutionLayer(int _id, Vector3<int> _inputSize, Vector2<int> _kernelSize, int _kernelsCount,
                          Vector2<int> _stride, Vector2<int> _padding);
 
-        ConvolutionLayer(Network &_network, const JSON &json);
-        void randomInit() override;
+        ConvolutionLayer(const JSON &json);
+        void randomInit(std::default_random_engine &randomEngine) override;
         Bitmap<double> run(const Bitmap<double> &input) override;
         double getChain(const Vector3<int> &inputPos) override;
         int weightsCount() const override;

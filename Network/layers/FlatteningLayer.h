@@ -11,8 +11,8 @@ namespace cn {
     class Network;
     class FlatteningLayer : public Layer {
     public:
-        FlatteningLayer(int _id, Network &_network);
-        FlatteningLayer(Network &_network, const JSON &json);
+        FlatteningLayer(int _id, Vector3<int> _inputSize);
+        FlatteningLayer(const JSON &json);
         Bitmap<double> run(const Bitmap<double> &input) override;
         virtual double getChain(const Vector3<int> &inputPos) override;
         virtual JSON jsonEncode() const override;

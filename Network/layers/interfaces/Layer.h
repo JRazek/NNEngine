@@ -21,6 +21,11 @@ namespace cn {
     protected:
         Network *network;
 
+        std::optional<Bitmap<double>> output;
+
+        Layer *prevLayer = nullptr;
+        Layer *nextLayer = nullptr;
+
         Vector3<int> inputSize;
         Vector3<int> outputSize;
 
@@ -30,7 +35,7 @@ namespace cn {
         int __id;
 
     public:
-        Layer(int _id, Network &_network);
+        Layer(int _id, Vector3<int> _inputSize);
 
         /**
          *
@@ -56,7 +61,13 @@ namespace cn {
 
         virtual std::unique_ptr<Layer> getCopyAsUniquePtr() const = 0;
 
-        static std::unique_ptr<cn::Layer> fromJSON(Network &network, const cn::JSON &json);
+        static std::unique_ptr<cn::Layer> fromJSON(const cn::JSON &json);
+
+        void setPrevLayer(Layer *_prevLayer);
+
+        const std::optional<Bitmap<double>> &getOutput() const;
+
+        void setNextLayer(Layer *_nextLayer);
     };
 }
 

@@ -11,8 +11,8 @@ namespace cn {
     class OutputLayer : public FlatteningLayer {
         const Bitmap<double> *target;
     public:
-        OutputLayer(int id, cn::Network &network);
-        OutputLayer(Network &_network, const JSON &json);
+        OutputLayer(int id, Vector3<int> _inputSize);
+        OutputLayer(const cn::JSON &json);
         Bitmap<double> run(const Bitmap<double> &input) override;
         double getChain(const Vector3<int> &input) override;
         void setTarget(const Bitmap<double> *_target);

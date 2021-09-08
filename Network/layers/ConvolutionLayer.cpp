@@ -4,11 +4,9 @@
 #include "ConvolutionLayer.h"
 #include "../Network.h"
 #include <future>
-cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY, int _kernelsCount, int _strideX, int _strideY, int _paddingX, int _paddingY) :
-ConvolutionLayer(_id, _network, {_kernelSizeX, _kernelSizeY}, _kernelsCount, {_strideX, _strideY}, {_paddingX, _paddingY}) {}
 
 cn::Bitmap<double> cn::ConvolutionLayer::run(const Bitmap<double> &input) {
-    Vector3<int>test = network->getInputSize(__id);
+    Vector3<int> test = prevLayer->getOutputSize();
     if(input.size() != test){
         throw std::logic_error("CLayer fed with wrong input size!");
     }
@@ -26,16 +24,18 @@ cn::Bitmap<double> cn::ConvolutionLayer::run(const Bitmap<double> &input) {
     return result;
 }
 
-void cn::ConvolutionLayer::randomInit() {
+void cn::ConvolutionLayer::randomInit(std::default_random_engine &randomEngine) {
+    std::uniform_real_distribution<> dis(0, 1);
+
     for(auto &k : kernels){
         for(auto it = k.data(); it != k.data() + k.w() * k.h() * k.d(); ++it){
-            double tmp = network->getRandom(0, 1);
+            double tmp = dis(randomEngine);
             *it = tmp;
         }
     }
     for(auto &b : biases){
         //todo test differentiation
-        b = network->getRandom(0, 0);
+        b = 0;
     }
 }
 
@@ -43,7 +43,7 @@ double cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
     if(getMemoState(inputPos)){
         return getMemo(inputPos);
     }
-    Bitmap<double> paddedInput = Utils::addPadding(network->getInput(__id), padding.x, padding.y);
+    Bitmap<double> paddedInput = Utils::addPadding(prevLayer->getOutput().value(), padding.x, padding.y);
 
     auto validPos = [this](const Vector2<int> &kernelPos, const Bitmap<double> &bitmap){
         return kernelPos.x >= 0 && kernelPos.y >= 0 && kernelPos.x + kernelSize.x - 1 < bitmap.w() && kernelPos.y + kernelSize.y - 1 < bitmap.h();
@@ -59,7 +59,7 @@ double cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
                     Vector3<int> weightPos(paddedInputPos.x - kernelPos.x, paddedInputPos.y - kernelPos.y, inputPos.z);
                     float weight = kernels[z].getCell(weightPos);
                     Vector3<int> outputPos(kernelPos.x / stride.x, kernelPos.y /stride.y, z);
-                    result += weight * network->getChain(__id + 1, outputPos);
+                    result += weight * nextLayer->getChain(outputPos);
                 }
             }
         }
@@ -70,7 +70,7 @@ double cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
 
 double cn::ConvolutionLayer::diffWeight(int weightID) {
     int kSize = kernelSize.multiplyContent();
-    Bitmap<double> paddedInput = Utils::addPadding(network->getInput(__id), padding.x, padding.y);
+    Bitmap<double> paddedInput = Utils::addPadding(prevLayer->getOutput().value(), padding.x, padding.y);
     Vector3<int> weightPos = kernels[weightID / kSize].indexToVector(weightID % kSize);
     int kID = weightID / kSize;
 
@@ -80,7 +80,7 @@ double cn::ConvolutionLayer::diffWeight(int weightID) {
             Vector3<int> inputPos = Vector3<int>(x * stride.x, y * stride.y, 0) + weightPos;
             double inputValue = paddedInput.getCell(inputPos);
             Vector3<int> outputPos (x, y, kID);
-            result += inputValue * network->getChain(__id + 1, outputPos);
+            result += inputValue * nextLayer->getChain(outputPos);
         }
     }
     return result;
@@ -140,6 +140,7 @@ cn::JSON cn::ConvolutionLayer::jsonEncode() const{
     JSON structure;
     structure["id"] = __id;
     structure["type"] = "cl";
+    structure["input_size"] = inputSize.jsonEncode();
     structure["kernels"] = std::vector<JSON>();
     structure["stride"] = stride.jsonEncode();
     structure["padding"] = padding.jsonEncode();
@@ -154,13 +155,13 @@ cn::JSON cn::ConvolutionLayer::jsonEncode() const{
     return structure;
 }
 
-cn::ConvolutionLayer::ConvolutionLayer(Network &_network, const cn::JSON &json):
-ConvolutionLayer(json.at("id"),
-        _network,
-        json.at("kernel_size"),
-        json.at("kernels").size(),
-        json.at("stride"),
-        json.at("padding")){
+cn::ConvolutionLayer::ConvolutionLayer(const JSON &json) :
+        ConvolutionLayer(json.at("id"),
+                         json.at("input_size"),
+                         json.at("kernel_size"),
+                         json.at("kernels").size(),
+                         json.at("stride"),
+                         json.at("padding")) {
 
     for(u_long i = 0; i < json.at("kernels").size(); i ++){
         auto k = json.at("kernels")[i];
@@ -169,9 +170,10 @@ ConvolutionLayer(json.at("id"),
     }
 }
 
-cn::ConvolutionLayer::ConvolutionLayer(int _id, Network &_network, Vector2<int> _kernelSize, int _kernelsCount, Vector2<int> _stride, Vector2<int> _padding):
-Learnable(_id, _network, _kernelsCount),
-kernelSize(_kernelSize.x, _kernelSize.y, network->getInputSize(_id).z),
+cn::ConvolutionLayer::ConvolutionLayer(int _id, Vector3<int> _inputSize, Vector2<int> _kernelSize, int _kernelsCount,
+                                       Vector2<int> _stride, Vector2<int> _padding) :
+Learnable(_id, _inputSize, _kernelsCount),
+kernelSize(_kernelSize.x, _kernelSize.y, _inputSize.z),
 kernelsCount(_kernelsCount),
 padding(_padding), stride(_stride),
 biases(_kernelsCount){

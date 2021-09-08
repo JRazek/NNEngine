@@ -36,11 +36,11 @@ namespace cn {
 
     public:
 
-        void appendConvolutionLayer(int kernelX, int kernelY, int kernelsCount, int strideX = 1, int strideY = 1, int paddingX = 0, int paddingY = 0);
+        void appendConvolutionLayer(Vector2<int> kernelSize, int kernelsCount, Vector2<int> stride = {1, 1}, Vector2<int> padding = {0, 0});
         void appendFFLayer(int neuronsCount);
         void appendFlatteningLayer();
         void appendBatchNormalizationLayer();
-        void appendMaxPoolingLayer(int kernelSizeX, int kernelSizeY);
+        void appendMaxPoolingLayer(Vector2<int> kernelSize);
         void appendReluLayer();
         void appendSigmoidLayer();
 
@@ -81,14 +81,6 @@ namespace cn {
          */
         void initRandom();
 
-        /**
-         *
-         * @param low lower bound for number
-         * @param high higher bound for number
-         * @return pseudorandom number with seed given in constructor
-         */
-        double getRandom(double low, double high);
-
 
         /**
          *
@@ -103,14 +95,6 @@ namespace cn {
          * @return returns input size for each layer
          */
         Vector3<int> getInputSize(int layerID) const;
-
-        /**
-         *
-         * @param layerID layer we want to get the chain from
-         * @param inputPos
-         * @return chain from requested layer
-         */
-        double getChain(int layerID, const Vector3<int> &inputPos);
 
         void resetMemoization();
 

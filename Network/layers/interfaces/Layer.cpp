@@ -11,8 +11,8 @@
 #include "../../layers/ActivationLayers/ReLU.h"
 #include "../../layers/ActivationLayers/Sigmoid.h"
 
-cn::Layer::Layer(int _id, Network &_network): network(&_network), __id(_id){
-    inputSize = network->getInputSize(_id);
+cn::Layer::Layer(int _id, Vector3<int> _inputSize) :
+inputSize(_inputSize), __id(_id){
     memoizationStates.emplace(Bitmap<bool>(inputSize));
     memoizationTable.emplace(Bitmap<double>(inputSize));
     resetMemoization();
@@ -47,7 +47,7 @@ cn::JSON cn::Layer::jsonEncode() const{
     return JSON();
 }
 
-std::unique_ptr<cn::Layer> cn::Layer::fromJSON(Network &network, const cn::JSON &json) {
+std::unique_ptr<cn::Layer> cn::Layer::fromJSON(const cn::JSON &json) {
 
     using callback_type = std::function<std::unique_ptr<Layer>(const cn::JSON &json)>;
 
@@ -55,42 +55,42 @@ std::unique_ptr<cn::Layer> cn::Layer::fromJSON(Network &network, const cn::JSON 
 
     deserializerCallbacks["cl"] = [&](const cn::JSON &json) {
         std::cout << "creating convolutional_layer \n";
-        return std::make_unique<ConvolutionLayer>(network, json);
+        return std::make_unique<ConvolutionLayer>(json);
     };
 
     deserializerCallbacks["ffl"] = [&](const cn::JSON &json) {
         std::cout << "creating ff_layer \n";
-        return std::make_unique<FFLayer>(network, json);
+        return std::make_unique<FFLayer>(json);
     };
 
     deserializerCallbacks["bnl"] = [&](const cn::JSON &json) {
         std::cout << "creating batch normalization layer \n";
-        return std::make_unique<BatchNormalizationLayer>(network, json);
+        return std::make_unique<BatchNormalizationLayer>(json);
     };
 
     deserializerCallbacks["fl"] = [&](const cn::JSON &json) {
         std::cout << "creating flattening layer \n";
-        return std::make_unique<FlatteningLayer>(network, json);
+        return std::make_unique<FlatteningLayer>(json);
     };
 
     deserializerCallbacks["mpl"] = [&](const cn::JSON &json) {
         std::cout << "creating max pooling layer \n";
-        return std::make_unique<MaxPoolingLayer>(network, json);
+        return std::make_unique<MaxPoolingLayer>(json);
     };
 
     deserializerCallbacks["relu"] = [&](const cn::JSON &json) {
         std::cout << "creating relu layer \n";
-        return std::make_unique<ReLU>(network, json);
+        return std::make_unique<ReLU>(json);
     };
 
     deserializerCallbacks["sig"] = [&](const cn::JSON &json) {
         std::cout << "creating sigmoid layer \n";
-        return std::make_unique<Sigmoid>(network, json);
+        return std::make_unique<Sigmoid>(json);
     };
 
     deserializerCallbacks["ol"] = [&](const cn::JSON &json) {
         std::cout << "creating output layer \n";
-        return std::make_unique<OutputLayer>(network, json);
+        return std::make_unique<OutputLayer>(json);
     };
 
     const auto deserialize = [&](std::string_view type, const cn::JSON &json) {
@@ -100,5 +100,17 @@ std::unique_ptr<cn::Layer> cn::Layer::fromJSON(Network &network, const cn::JSON 
     std::string str = json["type"];
 
     return deserialize(str, json);
+}
+
+void cn::Layer::setPrevLayer(cn::Layer *_prevLayer) {
+    prevLayer = _prevLayer;
+}
+
+void cn::Layer::setNextLayer(cn::Layer *_nextLayer) {
+    nextLayer = _nextLayer;
+}
+
+const std::optional<cn::Bitmap<double>> &cn::Layer::getOutput() const {
+    return output;
 }
 

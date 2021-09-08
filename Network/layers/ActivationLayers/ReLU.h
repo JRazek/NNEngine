@@ -10,8 +10,8 @@
 namespace cn {
     class ReLU : public Layer{
     public:
-        ReLU(int id, Network &network);
-        ReLU(Network &_network, const JSON &json);
+        ReLU(int id, Vector3<int> _inputSize);
+        ReLU(const JSON &json);
         Bitmap<double> run(const Bitmap<double> &input) override;
         double getChain(const Vector3<int> &inputPos) override;
         virtual JSON jsonEncode() const override;

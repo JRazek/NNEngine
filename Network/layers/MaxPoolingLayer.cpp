@@ -5,9 +5,6 @@
 #include "MaxPoolingLayer.h"
 #include "../Network.h"
 
-cn::MaxPoolingLayer::MaxPoolingLayer(int _id, Network &_network, int _kernelSizeX, int _kernelSizeY) : MaxPoolingLayer(_id, _network, {_kernelSizeX, _kernelSizeY}){
-}
-
 cn::Bitmap<double> cn::MaxPoolingLayer::run(const cn::Bitmap<double> &input) {
     if(input.size() != inputSize){
         throw std::logic_error("invalid output size in max pool!");
@@ -45,7 +42,7 @@ double cn::MaxPoolingLayer::getChain(const Vector3<int> &inputPos) {
     if(mapped == Vector2<int>(-1, -1))
         res = 0;
     else
-        res = network->getChain(__id + 1, {mapped.x, mapped.y, inputPos.z});
+        res = nextLayer->getChain({mapped.x, mapped.y, inputPos.z});
     setMemo(inputPos, res);
     return res;
 }
@@ -53,16 +50,17 @@ double cn::MaxPoolingLayer::getChain(const Vector3<int> &inputPos) {
 cn::JSON cn::MaxPoolingLayer::jsonEncode() const {
     JSON structure;
     structure["id"] = __id;
+    structure["input_size"] = inputSize.jsonEncode();
     structure["type"] = "mpl";
     structure["kernel_size"] = kernelSize.jsonEncode();
     return structure;
 }
 
-cn::MaxPoolingLayer::MaxPoolingLayer(cn::Network &_network, const cn::JSON &json):
-MaxPoolingLayer(json.at("id"), _network, json.at("kernel_size")){}
+cn::MaxPoolingLayer::MaxPoolingLayer(const cn::JSON &json) :
+MaxPoolingLayer(json.at("id"), json.at("input_size"), json.at("kernel_size")) {}
 
-cn::MaxPoolingLayer::MaxPoolingLayer(int _id, cn::Network &_network, cn::Vector2<int> _kernelSize):
-Layer(_id, _network),
+cn::MaxPoolingLayer::MaxPoolingLayer(int _id, Vector3<int> _inputSize, cn::Vector2<int> _kernelSize) :
+        Layer(_id, _inputSize),
 kernelSize(_kernelSize){
     outputSize = Vector3<int>(Utils::afterMaxPoolSize(kernelSize.x, inputSize.x), Utils::afterMaxPoolSize(kernelSize.y, inputSize.y), inputSize.z);
     mapping.emplace(Bitmap<Vector2<int>>(inputSize));

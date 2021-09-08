@@ -4,7 +4,7 @@
 
 #include "Learnable.h"
 
-cn::Learnable::Learnable(int id, Network &network, int _neuronsCount): Layer(id, network), neuronsCount(_neuronsCount) {}
+cn::Learnable::Learnable(int id, Vector3<int> _inputSize, int neuronsCount) : Layer(id, _inputSize), neuronsCount(neuronsCount) {}
 
 int cn::Learnable::getNeuronsCount() const{
     return neuronsCount;

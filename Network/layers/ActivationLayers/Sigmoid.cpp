@@ -18,13 +18,14 @@ cn::Bitmap<double> cn::Sigmoid::run(const cn::Bitmap<double> &input) {
 }
 
 double cn::Sigmoid::getChain(const Vector3<int> &inputPos) {
-    const Bitmap<double> &input = network->getInput(__id);
-    return diff(input.getCell(inputPos)) * network->getChain(__id + 1, inputPos);
+    const Bitmap<double> &input = nextLayer->getOutput().value();
+    return diff(input.getCell(inputPos)) * nextLayer->getChain(inputPos);
 }
 
 cn::JSON cn::Sigmoid::jsonEncode() const {
     JSON structure;
     structure["id"] = __id;
+    structure["input_size"] = inputSize.jsonEncode();
     structure["type"] = "sig";
     return structure;
 }
@@ -38,11 +39,13 @@ double cn::Sigmoid::diff(double x) {
     return sig * (1.f - sig);
 }
 
-cn::Sigmoid::Sigmoid(int id, cn::Network &network) : Layer(id, network) {
+cn::Sigmoid::Sigmoid(int id, Vector3<int> _inputSize) :
+Layer(id, _inputSize) {
     outputSize = inputSize;
 }
 
-cn::Sigmoid::Sigmoid(cn::Network &_network, const cn::JSON &json): Sigmoid(json.at("id"), _network) {}
+cn::Sigmoid::Sigmoid(const JSON &json) :
+Sigmoid(json.at("id"), json.at("input_size")) {}
 
 std::unique_ptr<cn::Layer> cn::Sigmoid::getCopyAsUniquePtr() const {
     return std::make_unique<Sigmoid>(*this);

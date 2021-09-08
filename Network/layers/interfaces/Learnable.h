@@ -4,6 +4,8 @@
 
 #ifndef NEURALNETLIBRARY_LEARNABLE_H
 #define NEURALNETLIBRARY_LEARNABLE_H
+
+#include <random>
 #include "Layer.h"
 
 namespace cn {
@@ -20,8 +22,8 @@ namespace cn {
         virtual void setBias(int neuronID, double value) = 0;
         virtual double getBias(int neuronID) const = 0;
 
-        virtual void randomInit() = 0;
-        Learnable(int id, Network &network, int neuronsCount);
+        virtual void randomInit(std::default_random_engine &randomEngine) = 0;
+        Learnable(int id, Vector3<int> _inputSize, int neuronsCount);
         virtual std::vector<double> getWeightsGradient() = 0;
         virtual std::vector<double> getBiasesGradient() = 0;
     };

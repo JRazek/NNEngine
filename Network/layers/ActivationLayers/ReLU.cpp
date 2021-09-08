@@ -18,13 +18,14 @@ cn::Bitmap<double> cn::ReLU::run(const cn::Bitmap<double> &input) {
 }
 
 double cn::ReLU::getChain(const Vector3<int> &inputPos) {
-    const Bitmap<double> &input = network->getInput(__id);
-    return diff(input.getCell(inputPos)) * network->getChain(__id + 1, inputPos);
+    const Bitmap<double> &input = prevLayer->getOutput().value();
+    return diff(input.getCell(inputPos)) * nextLayer->getChain(inputPos);
 }
 
 cn::JSON cn::ReLU::jsonEncode() const {
     JSON structure;
     structure["id"] = __id;
+    structure["input_size"] = inputSize.jsonEncode();
     structure["type"] = "relu";
     return structure;
 }
@@ -37,12 +38,12 @@ double cn::ReLU::diff(double x) {
     return x > 0 ? 1 : 0;
 }
 
-cn::ReLU::ReLU(int id, cn::Network &network) : Layer(id, network) {
+cn::ReLU::ReLU(int id, Vector3<int> _inputSize) : Layer(id, _inputSize) {
     outputSize = inputSize;
 }
 
-cn::ReLU::ReLU(cn::Network &_network, const cn::JSON &json):
-cn::ReLU(json.at("id"), _network) {}
+cn::ReLU::ReLU(const JSON &json) :
+        cn::ReLU(json.at("id"), json.at("input_size")) {}
 
 std::unique_ptr<cn::Layer> cn::ReLU::getCopyAsUniquePtr() const {
     return std::make_unique<ReLU>(*this);

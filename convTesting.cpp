@@ -9,8 +9,6 @@
 #include <opencv2/opencv.hpp>
 #include "Utils/Files/CSVReader.h"
 #include "Utils/Files/ImageRepresentation.h"
-
-
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wreorder"
 
@@ -19,9 +17,9 @@ int main(){
 
 
     const int outputSize = 10;
-    network.appendConvolutionLayer(3, 3, 1, 2, 2);
+    network.appendConvolutionLayer(cn::Vector2<int>(3, 3), 1);
     network.appendReluLayer();
-    network.appendMaxPoolingLayer(4, 4);
+    network.appendMaxPoolingLayer({2,2});
     network.appendFlatteningLayer();
     network.appendBatchNormalizationLayer();
     network.appendFFLayer(10);

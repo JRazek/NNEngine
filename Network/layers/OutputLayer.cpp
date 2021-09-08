@@ -5,14 +5,14 @@
 #include "OutputLayer.h"
 #include "../Network.h"
 
-cn::OutputLayer::OutputLayer(int id, cn::Network &network) : FlatteningLayer(id, network) {}
+cn::OutputLayer::OutputLayer(int id, Vector3<int> _inputSize) : FlatteningLayer(id, _inputSize) {}
 
 cn::Bitmap<double> cn::OutputLayer::run(const cn::Bitmap<double> &input) {
     return FlatteningLayer::run(input);
 }
 
 double cn::OutputLayer::getChain(const Vector3<int> &input) {
-    return network->getOutput(__id).getCell(input) - target->getCell(input);
+    return prevLayer->getOutput().value().getCell(input) - target->getCell(input);
 }
 
 void cn::OutputLayer::setTarget(const cn::Bitmap<double> *_target) {
@@ -25,11 +25,13 @@ void cn::OutputLayer::setTarget(const cn::Bitmap<double> *_target) {
 cn::JSON cn::OutputLayer::jsonEncode() const {
     JSON structure;
     structure["id"] = __id;
+    structure["input_size"] = inputSize.jsonEncode();
     structure["type"] = "ol";
     return structure;
 }
 
-cn::OutputLayer::OutputLayer(cn::Network &_network, const cn::JSON &json) : FlatteningLayer(_network, json)
+cn::OutputLayer::OutputLayer(const cn::JSON &json) :
+FlatteningLayer(json)
 {}
 
 std::unique_ptr<cn::Layer> cn::OutputLayer::getCopyAsUniquePtr() const {

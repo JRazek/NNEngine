@@ -5,6 +5,7 @@
 #ifndef NEURALNETLIBRARY_FFLAYER_H
 #define NEURALNETLIBRARY_FFLAYER_H
 
+#include <random>
 #include "interfaces/Layer.h"
 #include "interfaces/Learnable.h"
 
@@ -16,7 +17,7 @@ namespace cn {
         std::vector<double> weights;
 
     public:
-        void randomInit() override;
+        void randomInit(std::default_random_engine &randomEngine) override;
         /**
          *
          * @param _id __id of layer in network
@@ -24,9 +25,9 @@ namespace cn {
          * @param _differentiableFunction function with its derivative
          * @param _neuronsCount input size (neuron count)
          */
-        FFLayer(int _id, int _neuronsCount, Network &_network);
+        FFLayer(int _id, Vector3<int> _inputSize, int _neuronsCount);
 
-        FFLayer(Network &_network, const JSON &json);
+        FFLayer(const JSON &json);
 
         Bitmap<double> run(const Bitmap<double> &input) override;
 

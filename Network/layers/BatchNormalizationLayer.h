@@ -11,8 +11,8 @@ namespace cn {
 
         double normalizationFactor;
     public:
-        BatchNormalizationLayer(int _id, Network &_network);
-        BatchNormalizationLayer(Network &_network, const JSON &json);
+        BatchNormalizationLayer(int _id, Vector3<int> _inputSize);
+        BatchNormalizationLayer(const JSON &json);
         Bitmap<double> run(const Bitmap<double> &input) override;
         double getChain(const Vector3<int> &inputPos) override;
         JSON jsonEncode() const override;
