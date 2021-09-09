@@ -38,7 +38,7 @@ int main(){
     cn::MBGD momentumGd(network, 0.01, 1);
 
 
-    CSVReader csvReader("/home/jrazek/IdeaProjects/digitRecogniser/dataSet/metadata.csv", ';');
+    CSVReader csvReader("/home/user/IdeaProjects/digitRecogniser/dataSet/metadata.csv", ';');
     csvReader.readContents();
     auto &contents = csvReader.getContents();
     std::vector<ImageRepresentation> imageRepresentations;

@@ -11,7 +11,7 @@ cn::InputLayer::InputLayer(int _id, cn::Vector3<int> _inputSize) : Layer(_id, _i
 cn::InputLayer::InputLayer(const cn::JSON &json):Layer(json.at("id"), json.at("input_size"))
 {}
 
-cn::Bitmap<double> cn::InputLayer::run(const cn::Bitmap<double> &_input) {
+void cn::InputLayer::run(const cn::Bitmap<double> &_input) {
     input.emplace(_input);
     output.emplace(_input);
 }
