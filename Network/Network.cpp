@@ -214,12 +214,13 @@ cn::Network &cn::Network::operator=(cn::Network &&network) {
     layers.clear();
     allocated.clear();
     learnableLayers.clear();
-    seed = std::move(network.seed);
-    inputSize = std::move(network.inputSize);
+
+    seed = network.seed;
+    inputSize = network.inputSize;
     randomEngine = std::move(network.randomEngine);
     allocated = std::move(network.allocated);
     learnableLayers = std::move(network.learnableLayers);
-    outputLayer = std::move(network.outputLayer);
+    outputLayer = network.outputLayer;
     for(auto &a : allocated){
         layers.push_back(a.get());
     }
