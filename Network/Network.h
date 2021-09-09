@@ -41,7 +41,7 @@ namespace cn {
         void appendFlatteningLayer();
         void appendBatchNormalizationLayer();
         void appendMaxPoolingLayer(Vector2<int> kernelSize);
-        void appendReluLayer();
+        void appendReLULayer();
         void appendSigmoidLayer();
 
 

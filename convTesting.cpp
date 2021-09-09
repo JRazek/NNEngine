@@ -18,7 +18,7 @@ int main(){
 
     const int outputSize = 10;
     network.appendConvolutionLayer(cn::Vector2<int>(3, 3), 1);
-    network.appendReluLayer();
+    network.appendReLULayer();
     network.appendMaxPoolingLayer({2,2});
     network.appendFlatteningLayer();
     network.appendBatchNormalizationLayer();

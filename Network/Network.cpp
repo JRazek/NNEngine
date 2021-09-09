@@ -85,7 +85,7 @@ void cn::Network::appendMaxPoolingLayer(Vector2<int> kernelSize) {
     allocated.push_back(std::move(m));
 }
 
-void cn::Network::appendReluLayer() {
+void cn::Network::appendReLULayer() {
     int id = this->layers.size();
     std::unique_ptr<ReLU> r = std::make_unique<ReLU>(id, getInputSize(id));
     layers.push_back(r.get());
