@@ -69,7 +69,7 @@ int main(){
     int resetRate = 100;
     int correctCount = 0;
     constexpr int epochsCount = 100;
-    for (u_int i = 0; i < 1; i++) {
+    for (u_int i = 0; i < imageRepresentations.size() * epochsCount; i++) {
         int n = i % imageRepresentations.size();
         ImageRepresentation &imageRepresentation = imageRepresentations[n];
         cv::Mat mat = cv::imread(imageRepresentation.path);

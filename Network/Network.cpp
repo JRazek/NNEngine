@@ -171,10 +171,11 @@ cn::JSON cn::Network::jsonEncode() const {
     return jsonObject;
 }
 
+
 cn::Network::Network(cn::Vector3<int> _inputSize, int _seed):
-seed(_seed),
-inputSize(_inputSize),
-randomEngine(_seed){
+        seed(_seed),
+        inputSize(_inputSize),
+        randomEngine(_seed){
     std::unique_ptr<Layer> inputLayer = std::make_unique<InputLayer>(0, inputSize);
     layers.push_back(inputLayer.get());
     allocated.push_back(std::move(inputLayer));
@@ -184,15 +185,18 @@ cn::Network::Network(int w, int h, int d, int _seed):
 Network(cn::Vector3<int>(w, h, d), _seed)
 {}
 
-cn::Network::Network(const cn::JSON &json): Network(json.at("input_size"), json.at("seed")) {
+cn::Network::Network(const cn::JSON &json): seed(json.at("seed")), inputSize(json.at("input_size")) {
     JSON _layers = json.at("layers");
     for(auto l : _layers){
-        if(l.at("type") != "il" && l.at("type") != "ol") {
+        if (l.at("type") == "ol") {
+            outputLayer.emplace(OutputLayer(l));
+            layers.push_back(&outputLayer.value());
+        }else{
             allocated.push_back(Layer::fromJSON(l));
             layers.push_back(allocated.back().get());
-            if (l.contains("learnable") && l.at("learnable")) {
-                learnableLayers.push_back(dynamic_cast<Learnable *>(layers.back()));
-            }
+        }
+        if (l.contains("learnable") && l.at("learnable")) {
+            learnableLayers.push_back(dynamic_cast<Learnable *>(layers.back()));
         }
     }
     ready();
