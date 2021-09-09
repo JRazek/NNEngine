@@ -98,9 +98,9 @@ namespace cn {
 
         void resetMemoization();
 
-        const Bitmap<double> &getInput(int layerID) const;
-        const Bitmap<double> &getNetworkOutput() const;
-        const Bitmap<double> &getOutput(int layerID) const;
+        const std::optional<cn::Bitmap<double>> &getInput(int layerID) const;
+        const std::optional<cn::Bitmap<double>> &getNetworkOutput() const;
+        const std::optional<cn::Bitmap<double>> &getOutput(int layerID) const;
 
         JSON jsonEncode() const override;
 
@@ -123,9 +123,9 @@ namespace cn {
         Network(cn::Vector3<int> _inputSize, int _seed = 1);
 
         Network (const Network &network) = delete;
-        Network (Network &&network) = default;
         Network &operator=(const Network &network) = delete;
-        Network &operator=(Network &&network) = default;
+        Network (Network &&network);
+        Network &operator=(Network &&network);
     };
 }
 

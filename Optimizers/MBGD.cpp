@@ -29,7 +29,7 @@ void cn::MBGD::propagate(const cn::Bitmap<double> &target) {
     }
     OutputLayer &layer = network.getOutputLayer();
     layer.setTarget(&target);
-    const Bitmap<double> &output = network.getOutput(layer.id());
+    const Bitmap<double> &output = network.getOutput(layer.id()).value();
     if(output.size() != target.size()){
         throw std::logic_error("MBGD, invalid target!");
     }

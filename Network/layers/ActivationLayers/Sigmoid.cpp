@@ -19,7 +19,7 @@ cn::Bitmap<double> cn::Sigmoid::run(const cn::Bitmap<double> &input) {
 }
 
 double cn::Sigmoid::getChain(const Vector3<int> &inputPos) {
-    const Bitmap<double> &input = nextLayer->getOutput().value();
+    const Bitmap<double> &input = getInput().value();
     return diff(input.getCell(inputPos)) * nextLayer->getChain(inputPos);
 }
 

@@ -28,11 +28,10 @@ void cn::Network::feed(Bitmap<double> bitmap) {
         throw std::logic_error("network must have at least one layer in order to feed it!");
     const Bitmap<double> *_input = &bitmap;
     input.emplace(*_input);
-    outputs.clear();
     for(u_int i = 0; i < layers.size(); i ++){
         auto layer = layers[i];
-        outputs.push_back(layer->run(*_input));
-        _input = &getOutput(i);
+        layer->run(*_input);
+        _input = &getOutput(i).value();
     }
 }
 
@@ -138,22 +137,23 @@ cn::Vector3<int> cn::Network::getInputSize(int layerID) const {
     return getOutputSize(layerID - 1);
 }
 
-const cn::Bitmap<double> &cn::Network::getNetworkOutput() const {
-    return outputs.back();
+const std::optional<cn::Bitmap<double>> &cn::Network::getNetworkOutput() const {
+    return layers.back()->getOutput();
 }
 
 cn::OutputLayer &cn::Network::getOutputLayer() {
     return outputLayer.value();
 }
 
-const cn::Bitmap<double> &cn::Network::getInput(int layerID) const{
+const std::optional<cn::Bitmap<double>> &cn::Network::getInput(int layerID) const{
     if(layerID == 0)
-        return input.value();
+        return input;
+
     return getOutput(layerID -1);
 }
 
-const cn::Bitmap<double> &cn::Network::getOutput(int layerID) const {
-    return outputs[layerID];
+const std::optional<cn::Bitmap<double>> &cn::Network::getOutput(int layerID) const {
+    return layers[layerID]->getOutput();
 }
 
 const std::vector<cn::Layer *> &cn::Network::getLayers() const{
@@ -186,18 +186,47 @@ Network(cn::Vector3<int>(w, h, d), _seed)
 {}
 
 cn::Network::Network(const cn::JSON &json): seed(json.at("seed")), inputSize(json.at("input_size")) {
-    JSON _layers = json.at("layers");
-    for(auto l : _layers){
-        if (l.at("type") == "ol") {
-            outputLayer.emplace(OutputLayer(l));
-            layers.push_back(&outputLayer.value());
-        }else{
-            allocated.push_back(Layer::fromJSON(l));
-            layers.push_back(allocated.back().get());
+    try {
+        JSON _layers = json.at("layers");
+        for (auto l : _layers) {
+            if (l.at("type") == "ol") {
+                outputLayer.emplace(OutputLayer(l));
+                layers.push_back(&outputLayer.value());
+            } else {
+                allocated.push_back(Layer::fromJSON(l));
+                layers.push_back(allocated.back().get());
+            }
+            if (l.contains("learnable") && l.at("learnable")) {
+                learnableLayers.push_back(dynamic_cast<Learnable *>(layers.back()));
+            }
         }
-        if (l.contains("learnable") && l.at("learnable")) {
-            learnableLayers.push_back(dynamic_cast<Learnable *>(layers.back()));
-        }
+        ready();
+    }catch(std::exception &e){
+        std::cout<<e.what();
     }
+}
+
+cn::Network::Network(cn::Network &&network) {
+    *this = std::move(network);
+}
+
+cn::Network &cn::Network::operator=(cn::Network &&network) {
+    layers.clear();
+    allocated.clear();
+    learnableLayers.clear();
+    seed = std::move(network.seed);
+    inputSize = std::move(network.inputSize);
+    randomEngine = std::move(network.randomEngine);
+    allocated = std::move(network.allocated);
+    learnableLayers = std::move(network.learnableLayers);
+    outputLayer = std::move(network.outputLayer);
+    for(auto &a : allocated){
+        layers.push_back(a.get());
+    }
+    layers.push_back(&outputLayer.value());
+
+    input = std::move(network.input);
     ready();
+
+    return *this;
 }
