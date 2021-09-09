@@ -6,6 +6,7 @@
 #include "Utils/Utils.h"
 #include "Network/Network.h"
 #include "Optimizers/MBGD.h"
+#include "Optimizers/MomentumGD.h"
 #include <opencv2/opencv.hpp>
 #include "Utils/Files/CSVReader.h"
 #include "Utils/Files/ImageRepresentation.h"
@@ -13,28 +14,26 @@
 #pragma GCC diagnostic ignored "-Wreorder"
 
 int main(){
-    cn::Network network(28, 28, 1, 34453);
+    cn::Network network(28, 28, 1, 1);
 
 
     const int outputSize = 10;
-    network.appendConvolutionLayer(cn::Vector2<int>(3, 3), 1);
+    network.appendConvolutionLayer({3, 3}, 4, {2, 2});
+    network.appendReLULayer();
+    network.appendBatchNormalizationLayer();
+    network.appendConvolutionLayer({3, 3}, 8, {2, 2});
     network.appendReLULayer();
     network.appendMaxPoolingLayer({2,2});
     network.appendFlatteningLayer();
     network.appendBatchNormalizationLayer();
     network.appendFFLayer(10);
     network.appendSigmoidLayer();
+    network.appendFFLayer(outputSize);
+    network.appendSigmoidLayer();
     network.initRandom();
     network.ready();
 
     cn::JSON json = network.jsonEncode();
-
-
-    cn::Network test = cn::Network(json);
-
-    network = std::move(test);
-
-    json = network.jsonEncode();
 
     cn::MBGD momentumGd(network, 0.01, 1);
 
@@ -89,7 +88,7 @@ int main(){
         }
 
         if (!((i + 1) % resetRate)) {
-            std::cout << i << ": " << momentumGd.getError(target) << "\n";
+            std::cout << "LOSS "<< i <<": "<< momentumGd.getError(target) << "\n";
             std::cout << "ACCURACY: " << (double) correctCount / double(resetRate) * 100 << "%\n";
             correctCount = 0;
         }
