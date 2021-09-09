@@ -14,6 +14,7 @@ cn::Bitmap<double> cn::Sigmoid::run(const cn::Bitmap<double> &input) {
             }
         }
     }
+    output.emplace(result);
     return result;
 }
 

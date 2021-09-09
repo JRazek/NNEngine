@@ -26,9 +26,9 @@ cn::FFLayer::FFLayer(int _id, Vector3<int> _inputSize, int _neuronsCount) :
     outputSize = Vector3<int> (neuronsCount, 1, 1);
 }
 
-cn::Bitmap<double> cn::FFLayer::run(const Bitmap<double> &input) {
-    if(input.w() < 1 || input.h() != 1 || input.d() != 1){
-        throw std::logic_error("input bitmap to ff layer must be a normalized vector type!");
+cn::Bitmap<double> cn::FFLayer::run(const Bitmap<double> &_input) {
+    if(_input.size() != inputSize){
+        throw std::logic_error("_input bitmap to ff layer must be a normalized vector type!");
     }
     int weightsPerNeuron = weightsCount() / neuronsCount;
 
@@ -36,10 +36,11 @@ cn::Bitmap<double> cn::FFLayer::run(const Bitmap<double> &input) {
     for(int i = 0; i < neuronsCount; i ++){
         double sum = 0;
         for(int j = 0; j < weightsPerNeuron; j ++){
-            sum += input.getCell(j, 0, 0) * weights.at(i * weightsPerNeuron + j);
+            sum += _input.getCell(j, 0, 0) * weights.at(i * weightsPerNeuron + j);
         }
         result.setCell(i, 0, 0, sum);
     }
+    output.emplace(result);
     return result;
 }
 
@@ -74,7 +75,7 @@ double cn::FFLayer::getChain(const Vector3<int> &inputPos) {
 
 double cn::FFLayer::diffWeight(int weightID) {
     int neuron = weightID / inputSize.x;
-    const Bitmap<double> &input = prevLayer->getOutput().value();
+    const Bitmap<double> &input = getInput().value();
     return input.getCell(weightID % inputSize.x, 0, 0) * nextLayer->getChain({neuron, 0, 0});
 }
 

@@ -30,6 +30,7 @@ cn::Bitmap<double> cn::MaxPoolingLayer::run(const cn::Bitmap<double> &input) {
             }
         }
     }
+    output.emplace(res);
     return res;
 }
 

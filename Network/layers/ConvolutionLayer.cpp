@@ -5,22 +5,22 @@
 #include "../Network.h"
 #include <future>
 
-cn::Bitmap<double> cn::ConvolutionLayer::run(const Bitmap<double> &input) {
-    Vector3<int> test = prevLayer->getOutputSize();
-    if(input.size() != test){
-        throw std::logic_error("CLayer fed with wrong input size!");
+cn::Bitmap<double> cn::ConvolutionLayer::run(const Bitmap<double> &_input) {
+    if(inputSize != _input.size()){
+        throw std::logic_error("CLayer fed with wrong _input size!");
     }
     std::vector<std::future<Bitmap<double>>> kernelThreads;
     auto getConvolved = [this](const Bitmap<double> &input, const cn::Bitmap<double> &kernel){
         return Utils::sumBitmapLayers(Utils::convolve(kernel, input, padding.x, padding.y, stride.x, stride.y));
     };
     for(int i = 0; i < kernelsCount; i ++){
-        kernelThreads.push_back(std::async(getConvolved, input, kernels[i]));
+        kernelThreads.push_back(std::async(getConvolved, _input, kernels[i]));
     }
     Bitmap<double> result(outputSize);
     for(int i = 0; i < kernelsCount; i ++){
         result.setLayer(i, kernelThreads[i].get().data());
     }
+    output.emplace(result);
     return result;
 }
 
@@ -43,7 +43,7 @@ double cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
     if(getMemoState(inputPos)){
         return getMemo(inputPos);
     }
-    Bitmap<double> paddedInput = Utils::addPadding(prevLayer->getOutput().value(), padding.x, padding.y);
+    Bitmap<double> paddedInput = Utils::addPadding(getInput().value(), padding.x, padding.y);
 
     auto validPos = [this](const Vector2<int> &kernelPos, const Bitmap<double> &bitmap){
         return kernelPos.x >= 0 && kernelPos.y >= 0 && kernelPos.x + kernelSize.x - 1 < bitmap.w() && kernelPos.y + kernelSize.y - 1 < bitmap.h();
@@ -70,7 +70,7 @@ double cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
 
 double cn::ConvolutionLayer::diffWeight(int weightID) {
     int kSize = kernelSize.multiplyContent();
-    Bitmap<double> paddedInput = Utils::addPadding(prevLayer->getOutput().value(), padding.x, padding.y);
+    Bitmap<double> paddedInput = Utils::addPadding(getInput().value(), padding.x, padding.y);
     Vector3<int> weightPos = kernels[weightID / kSize].indexToVector(weightID % kSize);
     int kID = weightID / kSize;
 

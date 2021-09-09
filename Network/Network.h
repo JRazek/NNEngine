@@ -125,7 +125,7 @@ namespace cn {
         Network (const Network &network) = delete;
         Network (Network &&network) = default;
         Network &operator=(const Network &network) = delete;
-        Network &operator=(Network &&network) = default;;
+        Network &operator=(Network &&network) = default;
     };
 }
 

@@ -27,6 +27,7 @@ cn::Bitmap<double> cn::BatchNormalizationLayer::run(const cn::Bitmap<double> &in
     }else{
         normalizationFactor = 1;
     }
+    output.emplace(result);
     return result;
 }
 

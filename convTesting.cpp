@@ -30,11 +30,11 @@ int main(){
     cn::JSON json = network.jsonEncode();
 
 
-    network = cn::Network(json);
+    cn::Network test = cn::Network(json);
 
     json = network.jsonEncode();
 
-    cn::MBGD momentumGd(network, 0.01, 1);
+    cn::MBGD momentumGd(test, 0.01, 1);
 
 
     CSVReader csvReader("/home/jrazek/IdeaProjects/digitRecogniser/dataSet/metadata.csv", ';');
@@ -69,7 +69,7 @@ int main(){
     int resetRate = 100;
     int correctCount = 0;
     constexpr int epochsCount = 100;
-    for (u_int i = 0; i < imageRepresentations.size() * epochsCount; i++) {
+    for (u_int i = 0; i < 1; i++) {
         int n = i % imageRepresentations.size();
         ImageRepresentation &imageRepresentation = imageRepresentations[n];
         cv::Mat mat = cv::imread(imageRepresentation.path);
@@ -78,10 +78,10 @@ int main(){
         bitmap = cn::Utils::average3Layers(bitmap);
         int numVal = std::stoi(imageRepresentation.value);
         target.setCell(numVal, 0, 0, 1);
-        network.feed(bitmap);
+        test.feed(bitmap);
         momentumGd.propagate(target);
 
-        int best = getBest(network.getNetworkOutput());
+        int best = getBest(test.getNetworkOutput());
         if (best == numVal) {
             correctCount++;
         }

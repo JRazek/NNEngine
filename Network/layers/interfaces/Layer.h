@@ -19,7 +19,6 @@ namespace cn {
     class Network;
     class Layer : public JSONEncodable{
     protected:
-        Network *network;
 
         std::optional<Bitmap<double>> output;
 
@@ -39,10 +38,10 @@ namespace cn {
 
         /**
          *
-         * @param bitmap input to process
-         * @return output result bitmap of size specified in getOutputSize()
+         * @param _input input to process
+         * @return output result _input of size specified in getOutputSize()
          */
-        virtual Bitmap<double> run(const Bitmap<double> &bitmap) = 0;
+        virtual Bitmap<double> run(const Bitmap<double> &_input) = 0;
 
         virtual double getChain(const Vector3<int> &inputPos) = 0;
 
@@ -66,6 +65,7 @@ namespace cn {
         void setPrevLayer(Layer *_prevLayer);
 
         const std::optional<Bitmap<double>> &getOutput() const;
+        virtual const std::optional<Bitmap<double>> &getInput() const;
 
         void setNextLayer(Layer *_nextLayer);
     };

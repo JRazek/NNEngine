@@ -9,6 +9,7 @@
 #include "layers/FlatteningLayer.h"
 #include "layers/BatchNormalizationLayer.h"
 #include "layers/MaxPoolingLayer.h"
+#include "layers/InputLayer.h"
 #include "layers/ActivationLayers/Sigmoid.h"
 #include "layers/ActivationLayers/ReLU.h"
 
@@ -101,17 +102,19 @@ void cn::Network::appendSigmoidLayer() {
 
 void cn::Network::ready() {
     int id = this->layers.size();
-    outputLayer.emplace(layers.size(), getInputSize(id));
-    layers.push_back(&outputLayer.value());
+    if(!outputLayer.has_value()) {
+        outputLayer.emplace(id, getInputSize(id));
+        layers.push_back(&outputLayer.value());
+    }
     for(u_int i = 0; i < layers.size(); i ++){
         if(i > 0){
             layers[i]->setPrevLayer(layers[i - 1]);
-            layers[i - 1]->setPrevLayer(layers[i]);
         }
         if(i < layers.size() - 1){
             layers[i]->setNextLayer(layers[i + 1]);
         }
     }
+    int tret = 04;
 }
 
 const std::vector<cn::Learnable *> &cn::Network::getLearnables() const{
@@ -171,8 +174,11 @@ cn::JSON cn::Network::jsonEncode() const {
 cn::Network::Network(cn::Vector3<int> _inputSize, int _seed):
 seed(_seed),
 inputSize(_inputSize),
-randomEngine(_seed)
-{}
+randomEngine(_seed){
+    std::unique_ptr<Layer> inputLayer = std::make_unique<InputLayer>(0, inputSize);
+    layers.push_back(inputLayer.get());
+    allocated.push_back(std::move(inputLayer));
+}
 
 cn::Network::Network(int w, int h, int d, int _seed):
 Network(cn::Vector3<int>(w, h, d), _seed)
@@ -181,7 +187,7 @@ Network(cn::Vector3<int>(w, h, d), _seed)
 cn::Network::Network(const cn::JSON &json): Network(json.at("input_size"), json.at("seed")) {
     JSON _layers = json.at("layers");
     for(auto l : _layers){
-        if(l.at("type") != "ol") {
+        if(l.at("type") != "il" && l.at("type") != "ol") {
             allocated.push_back(Layer::fromJSON(l));
             layers.push_back(allocated.back().get());
             if (l.contains("learnable") && l.at("learnable")) {

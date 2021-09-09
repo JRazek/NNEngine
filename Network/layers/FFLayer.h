@@ -29,7 +29,7 @@ namespace cn {
 
         FFLayer(const JSON &json);
 
-        Bitmap<double> run(const Bitmap<double> &input) override;
+        Bitmap<double> run(const Bitmap<double> &_input) override;
 
         virtual double getChain(const Vector3<int> &inputPos) override;
 

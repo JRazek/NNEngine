@@ -10,6 +10,7 @@
 #include "../../layers/MaxPoolingLayer.h"
 #include "../../layers/ActivationLayers/ReLU.h"
 #include "../../layers/ActivationLayers/Sigmoid.h"
+#include "../../layers/InputLayer.h"
 
 cn::Layer::Layer(int _id, Vector3<int> _inputSize) :
 inputSize(_inputSize), __id(_id){
@@ -93,6 +94,11 @@ std::unique_ptr<cn::Layer> cn::Layer::fromJSON(const cn::JSON &json) {
         return std::make_unique<OutputLayer>(json);
     };
 
+    deserializerCallbacks["il"] = [&](const cn::JSON &json) {
+        std::cout << "creating input layer \n";
+        return std::make_unique<InputLayer>(json);
+    };
+
     const auto deserialize = [&](std::string_view type, const cn::JSON &json) {
         return deserializerCallbacks[type](json);
     };
@@ -112,5 +118,9 @@ void cn::Layer::setNextLayer(cn::Layer *_nextLayer) {
 
 const std::optional<cn::Bitmap<double>> &cn::Layer::getOutput() const {
     return output;
+}
+
+const std::optional<cn::Bitmap<double>> &cn::Layer::getInput() const {
+    return prevLayer->getOutput();
 }
 

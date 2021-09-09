@@ -14,11 +14,12 @@ cn::Bitmap<double> cn::ReLU::run(const cn::Bitmap<double> &input) {
             }
         }
     }
+    output.emplace(result);
     return result;
 }
 
 double cn::ReLU::getChain(const Vector3<int> &inputPos) {
-    const Bitmap<double> &input = prevLayer->getOutput().value();
+    const Bitmap<double> &input = getInput().value();
     return diff(input.getCell(inputPos)) * nextLayer->getChain(inputPos);
 }
 
