@@ -30,10 +30,10 @@ namespace cn {
         std::vector<Layer *> layers;
 
         std::optional<Bitmap<double>> input;
-        std::vector<Bitmap<double>> outputs;
 
-        std::optional<OutputLayer> outputLayer;
+        OutputLayer *outputLayer = nullptr;
 
+        void linkLayers();
     public:
 
         void appendConvolutionLayer(Vector2<int> kernelSize, int kernelsCount, Vector2<int> stride = {1, 1}, Vector2<int> padding = {0, 0});

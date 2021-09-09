@@ -13,6 +13,7 @@
 #include "layers/ActivationLayers/Sigmoid.h"
 #include "layers/ActivationLayers/ReLU.h"
 
+[[maybe_unused]]
 void cn::Network::feed(const byte *_input) {
     cn::Bitmap<byte> bitmap(inputSize, _input, 0);
     if(layers.empty())
@@ -101,19 +102,13 @@ void cn::Network::appendSigmoidLayer() {
 
 void cn::Network::ready() {
     int id = this->layers.size();
-    if(!outputLayer.has_value()) {
-        outputLayer.emplace(id, getInputSize(id));
-        layers.push_back(&outputLayer.value());
+    if(!outputLayer) {
+        std::unique_ptr<OutputLayer> _outputLayer = std::make_unique<OutputLayer>(id, getInputSize(id));
+        outputLayer = _outputLayer.get();
+        layers.push_back(outputLayer);
+        allocated.push_back(std::move(_outputLayer));
     }
-    for(u_int i = 0; i < layers.size(); i ++){
-        if(i > 0){
-            layers[i]->setPrevLayer(layers[i - 1]);
-        }
-        if(i < layers.size() - 1){
-            layers[i]->setNextLayer(layers[i + 1]);
-        }
-    }
-    int tret = 04;
+    linkLayers();
 }
 
 const std::vector<cn::Learnable *> &cn::Network::getLearnables() const{
@@ -142,7 +137,7 @@ const std::optional<cn::Bitmap<double>> &cn::Network::getNetworkOutput() const {
 }
 
 cn::OutputLayer &cn::Network::getOutputLayer() {
-    return outputLayer.value();
+    return *outputLayer;
 }
 
 const std::optional<cn::Bitmap<double>> &cn::Network::getInput(int layerID) const{
@@ -156,6 +151,7 @@ const std::optional<cn::Bitmap<double>> &cn::Network::getOutput(int layerID) con
     return layers[layerID]->getOutput();
 }
 
+[[maybe_unused]]
 const std::vector<cn::Layer *> &cn::Network::getLayers() const{
     return layers;
 }
@@ -189,45 +185,52 @@ cn::Network::Network(const cn::JSON &json): seed(json.at("seed")), inputSize(jso
     try {
         JSON _layers = json.at("layers");
         for (auto l : _layers) {
-            if (l.at("type") == "ol") {
-                outputLayer.emplace(OutputLayer(l));
-                layers.push_back(&outputLayer.value());
-            } else {
-                allocated.push_back(Layer::fromJSON(l));
-                layers.push_back(allocated.back().get());
-            }
+            allocated.push_back(Layer::fromJSON(l));
+            layers.push_back(allocated.back().get());
             if (l.contains("learnable") && l.at("learnable")) {
                 learnableLayers.push_back(dynamic_cast<Learnable *>(layers.back()));
             }
+            if(l.at("type") == "ol"){
+                outputLayer = dynamic_cast<OutputLayer *>(layers.back());
+            }
         }
-        ready();
+        linkLayers();
     }catch(std::exception &e){
         std::cout<<e.what();
     }
 }
 
-cn::Network::Network(cn::Network &&network) {
-    *this = std::move(network);
-}
+cn::Network::Network(cn::Network &&network):
+seed(network.seed),
+inputSize(network.inputSize),
+randomEngine(std::move(network.randomEngine)),
+allocated(std::move(network.allocated)),
+learnableLayers(std::move(network.learnableLayers)),
+layers(std::move(network.layers)),
+input(std::move(network.input)),
+outputLayer(network.outputLayer)
+{}
 
 cn::Network &cn::Network::operator=(cn::Network &&network) {
-    layers.clear();
-    allocated.clear();
-    learnableLayers.clear();
-
     seed = network.seed;
     inputSize = network.inputSize;
     randomEngine = std::move(network.randomEngine);
     allocated = std::move(network.allocated);
+    layers = std::move(network.layers);
     learnableLayers = std::move(network.learnableLayers);
     outputLayer = network.outputLayer;
-    for(auto &a : allocated){
-        layers.push_back(a.get());
-    }
-    layers.push_back(&outputLayer.value());
-
     input = std::move(network.input);
-    ready();
 
     return *this;
+}
+
+void cn::Network::linkLayers() {
+    for(u_int i = 0; i < layers.size(); i ++){
+        if(i > 0){
+            layers[i]->setPrevLayer(layers[i - 1]);
+        }
+        if(i < layers.size() - 1){
+            layers[i]->setNextLayer(layers[i + 1]);
+        }
+    }
 }

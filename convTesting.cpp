@@ -32,7 +32,7 @@ int main(){
 
     cn::Network test = cn::Network(json);
 
-    //network = std::move(test);
+    network = std::move(test);
 
     json = network.jsonEncode();
 
