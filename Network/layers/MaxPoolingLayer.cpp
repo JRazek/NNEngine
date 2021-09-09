@@ -5,14 +5,14 @@
 #include "MaxPoolingLayer.h"
 #include "../Network.h"
 
-cn::Bitmap<double> cn::MaxPoolingLayer::run(const cn::Bitmap<double> &input) {
+void cn::MaxPoolingLayer::run(const cn::Bitmap<double> &input) {
     if(input.size() != inputSize){
         throw std::logic_error("invalid output size in max pool!");
     }
 
     std::fill(mapping->data(), mapping->data() + mapping->size().multiplyContent(), Vector2<int>(-1, -1));
 
-    Bitmap<double> res(outputSize);
+    Bitmap<double> result(outputSize);
 
     for(int c = 0; c < input.d(); c++){
         for(int y = 0; y < input.h() - kernelSize.y + 1; y += kernelSize.y){
@@ -25,13 +25,12 @@ cn::Bitmap<double> cn::MaxPoolingLayer::run(const cn::Bitmap<double> &input) {
                         bestPoint = Vector2<int>(x + kX, y + kY);
                     }
                 }
-                res.setCell(x / kernelSize.x, y / kernelSize.y, c, max);
+                result.setCell(x / kernelSize.x, y / kernelSize.y, c, max);
                 mapping->setCell(bestPoint.x, bestPoint.x, c, {x / kernelSize.x, y / kernelSize.y});
             }
         }
     }
-    output.emplace(res);
-    return res;
+    output.emplace(std::move(result));
 }
 
 double cn::MaxPoolingLayer::getChain(const Vector3<int> &inputPos) {

@@ -5,7 +5,7 @@
 #include "../Network.h"
 #include <future>
 
-cn::Bitmap<double> cn::ConvolutionLayer::run(const Bitmap<double> &_input) {
+void cn::ConvolutionLayer::run(const Bitmap<double> &_input) {
     if(inputSize != _input.size()){
         throw std::logic_error("CLayer fed with wrong _input size!");
     }
@@ -20,8 +20,7 @@ cn::Bitmap<double> cn::ConvolutionLayer::run(const Bitmap<double> &_input) {
     for(int i = 0; i < kernelsCount; i ++){
         result.setLayer(i, kernelThreads[i].get().data());
     }
-    output.emplace(result);
-    return result;
+    output.emplace(std::move(result));
 }
 
 void cn::ConvolutionLayer::randomInit(std::default_random_engine &randomEngine) {

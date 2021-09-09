@@ -7,7 +7,7 @@
 
 cn::OutputLayer::OutputLayer(int id, Vector3<int> _inputSize) : FlatteningLayer(id, _inputSize) {}
 
-cn::Bitmap<double> cn::OutputLayer::run(const cn::Bitmap<double> &input) {
+void cn::OutputLayer::run(const cn::Bitmap<double> &input) {
     return FlatteningLayer::run(input);
 }
 

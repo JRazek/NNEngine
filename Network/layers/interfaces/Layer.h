@@ -38,10 +38,9 @@ namespace cn {
 
         /**
          *
-         * @param _input input to process
-         * @return output result _input of size specified in getOutputSize()
+         * @param _input to process
          */
-        virtual Bitmap<double> run(const Bitmap<double> &_input) = 0;
+        virtual void run(const Bitmap<double> &_input) = 0;
 
         virtual double getChain(const Vector3<int> &inputPos) = 0;
 

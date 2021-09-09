@@ -5,7 +5,7 @@
 #include "Sigmoid.h"
 #include "../../Network.h"
 
-cn::Bitmap<double> cn::Sigmoid::run(const cn::Bitmap<double> &input) {
+void cn::Sigmoid::run(const cn::Bitmap<double> &input) {
     Bitmap<double> result(input.size());
     for(int z = 0; z < input.d(); z ++){
         for(int y = 0; y < input.h(); y ++){
@@ -14,8 +14,7 @@ cn::Bitmap<double> cn::Sigmoid::run(const cn::Bitmap<double> &input) {
             }
         }
     }
-    output.emplace(result);
-    return result;
+    output.emplace(std::move(result));
 }
 
 double cn::Sigmoid::getChain(const Vector3<int> &inputPos) {

@@ -26,7 +26,7 @@ cn::FFLayer::FFLayer(int _id, Vector3<int> _inputSize, int _neuronsCount) :
     outputSize = Vector3<int> (neuronsCount, 1, 1);
 }
 
-cn::Bitmap<double> cn::FFLayer::run(const Bitmap<double> &_input) {
+void cn::FFLayer::run(const Bitmap<double> &_input) {
     if(_input.size() != inputSize){
         throw std::logic_error("_input bitmap to ff layer must be a normalized vector type!");
     }
@@ -40,8 +40,7 @@ cn::Bitmap<double> cn::FFLayer::run(const Bitmap<double> &_input) {
         }
         result.setCell(i, 0, 0, sum);
     }
-    output.emplace(result);
-    return result;
+    output.emplace(std::move(result));
 }
 
 void cn::FFLayer::randomInit(std::default_random_engine &randomEngine) {

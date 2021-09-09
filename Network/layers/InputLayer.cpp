@@ -14,7 +14,6 @@ cn::InputLayer::InputLayer(const cn::JSON &json):Layer(json.at("id"), json.at("i
 cn::Bitmap<double> cn::InputLayer::run(const cn::Bitmap<double> &_input) {
     input.emplace(_input);
     output.emplace(_input);
-    return _input;
 }
 
 double cn::InputLayer::getChain(const cn::Vector3<int> &inputPos) {

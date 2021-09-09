@@ -12,7 +12,7 @@ namespace cn {
     public:
         InputLayer(int _id, Vector3<int> _inputSize);
         InputLayer(const JSON &json);
-        Bitmap<double> run(const Bitmap<double> &_input) override;
+        void run(const Bitmap<double> &_input) override;
         virtual double getChain(const Vector3<int> &inputPos) override;
         virtual JSON jsonEncode() const override;
         const std::optional<Bitmap<double>> &getInput() const override;

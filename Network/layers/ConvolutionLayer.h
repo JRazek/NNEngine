@@ -31,7 +31,7 @@ namespace cn {
 
         ConvolutionLayer(const JSON &json);
         void randomInit(std::default_random_engine &randomEngine) override;
-        Bitmap<double> run(const Bitmap<double> &_input) override;
+        void run(const Bitmap<double> &_input) override;
         double getChain(const Vector3<int> &inputPos) override;
         int weightsCount() const override;
         int biasesCount() const override;
