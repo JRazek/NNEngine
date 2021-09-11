@@ -19,15 +19,18 @@ int main(){
 
 
     const int outputSize = 10;
-    network.appendConvolutionLayer({3, 3}, 4, {2, 2});
+    network.appendConvolutionLayer({3, 3}, 4);
     network.appendReLULayer();
     network.appendBatchNormalizationLayer();
     network.appendConvolutionLayer({3, 3}, 8, {2, 2});
     network.appendReLULayer();
-    network.appendMaxPoolingLayer({2,2});
+    network.appendConvolutionLayer({3, 3}, 16, {2, 2});
+    network.appendReLULayer();
     network.appendFlatteningLayer();
     network.appendBatchNormalizationLayer();
-    network.appendFFLayer(10);
+    network.appendFFLayer(100);
+    network.appendSigmoidLayer();
+    network.appendFFLayer(20);
     network.appendSigmoidLayer();
     network.appendFFLayer(outputSize);
     network.appendSigmoidLayer();
