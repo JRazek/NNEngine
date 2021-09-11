@@ -10,6 +10,7 @@
 #include <opencv2/opencv.hpp>
 #include "Utils/Files/CSVReader.h"
 #include "Utils/Files/ImageRepresentation.h"
+#include <fstream>
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wreorder"
 
@@ -38,7 +39,7 @@ int main(){
     cn::MBGD momentumGd(network, 0.01, 1);
 
 
-    CSVReader csvReader("/home/user/IdeaProjects/digitRecogniser/dataSet/metadata.csv", ';');
+    CSVReader csvReader("/home/jrazek/IdeaProjects/digitRecogniser/dataSet/metadata.csv", ';');
     csvReader.readContents();
     auto &contents = csvReader.getContents();
     std::vector<ImageRepresentation> imageRepresentations;
@@ -69,6 +70,9 @@ int main(){
 
     int resetRate = 100;
     int correctCount = 0;
+
+    std::string filePath = "/home/jrazek/networkBackup.json";
+
     constexpr int epochsCount = 100;
     for (u_int i = 0; i < imageRepresentations.size() * epochsCount; i++) {
         int n = i % imageRepresentations.size();
@@ -94,6 +98,12 @@ int main(){
         }
 
         target.setCell(numVal, 0, 0, 0);
+        if((i + 1) % 100){
+            //save time :)
+            std::fstream file(filePath, std::ios::out);
+            file << network.jsonEncode();
+            file.close();
+        }
     }
     return 0;
 }
