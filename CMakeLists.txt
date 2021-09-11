@@ -12,8 +12,8 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 find_package(nlohmann_json 3.2.0 REQUIRED)
 
-add_executable(Test structureTesting.cpp)
-add_executable(TestGenerator testGenerator.cpp)
+#add_executable(Test structureTesting.cpp)
+#add_executable(TestGenerator testGenerator.cpp)
 add_executable(Main convTesting.cpp)
 
 
