@@ -36,7 +36,7 @@ int main(){
 
     cn::JSON json = network.jsonEncode();
 
-    cn::MBGD momentumGd(network, 0.01, 1);
+    cn::MBGD momentumGd(network, 0.001, 64);
 
 
     CSVReader csvReader("/home/jrazek/IdeaProjects/digitRecogniser/dataSet/metadata.csv", ';');
