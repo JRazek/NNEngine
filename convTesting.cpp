@@ -98,7 +98,7 @@ int main(){
         }
 
         target.setCell(numVal, 0, 0, 0);
-        if((i + 1) % 100){
+        if((i + 1) % imageRepresentations.size()){
             //save time :)
             std::fstream file(filePath, std::ios::out);
             file << network.jsonEncode();
