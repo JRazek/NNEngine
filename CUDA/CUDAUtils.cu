@@ -35,10 +35,10 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
     resDev = (double *) fixedCudaMalloc(resultSize);
 
     for(int i = 0; i < kernels.size(); i ++){
-        cudaMemcpy(kernelDev + sX * sY * i, kernels[i].data(), kernels[i].size().multiplyContent() * sizeof(double), cudaMemcpyHostToDevice);
+        cudaMemcpy(kernelDev + sX * sY * i, kernels[i].dataConst(), kernels[i].size().multiplyContent() * sizeof(double), cudaMemcpyHostToDevice);
     }
 
-    cudaMemcpy(dataDev, input.data(), dataSize, cudaMemcpyHostToDevice);
+    cudaMemcpy(dataDev, input.dataConst(), dataSize, cudaMemcpyHostToDevice);
 
     int threadsCount = sX * sY * kernels.size();
 
@@ -51,12 +51,16 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
 
 
 
-    double *hostRes = new double[kernels[0].size().multiplyContent() * kernels.size()];
+    double *hostRes = new double[sX * sY * kernels.size()];
     cudaMemcpy(hostRes, resDev, resultSize, cudaMemcpyDeviceToHost);
 
     Bitmap<double> result(sX, sY, kernels.size(), hostRes);
 
     delete[] hostRes;
+
+    cudaFree(kernelDev);
+    cudaFree(dataDev);
+    cudaFree(resDev);
 
     return result;
 }

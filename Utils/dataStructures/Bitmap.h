@@ -41,7 +41,8 @@ namespace cn {
         Bitmap<T> &operator=(const Bitmap<T> &other);
         Bitmap<T> &operator=(Bitmap<T> &&other);
         bool belongs(const Vector3<int> &point) const;
-        T * data() const;
+        const T * dataConst() const;
+        T * data();
         int w() const;
         int h() const;
         int d() const;
@@ -75,7 +76,12 @@ void cn::Bitmap<T>::setCell(int col, int row, int depth, T val) {
 }
 
 template<typename T>
-T *cn::Bitmap<T>::data() const{
+const T *cn::Bitmap<T>::dataConst() const{
+    return dataP;
+}
+
+template<typename T>
+T *cn::Bitmap<T>::data() {
     return dataP;
 }
 
@@ -104,7 +110,7 @@ cn::Bitmap<T> &cn::Bitmap<T>::operator=(const cn::Bitmap<T> &other) {
         _h = other.h();
         _d = other.d();
         dataP = new T[_w * _h * _d];
-        std::copy(other.data(), other.data() + _w * _h * _d, dataP);
+        std::copy(other.dataConst(), other.dataConst() + _w * _h * _d, dataP);
     }
     return *this;
 }

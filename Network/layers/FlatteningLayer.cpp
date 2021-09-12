@@ -13,7 +13,7 @@ cn::FlatteningLayer::FlatteningLayer(int _id, Vector3<int> _inputSize) : Layer(_
 void cn::FlatteningLayer::run(const cn::Bitmap<double> &input) {
     if(input.size().multiplyContent() != inputSize.multiplyContent())
         throw std::logic_error("invalid input input for flattening layer!");
-    Bitmap<double> result ({inputSize.multiplyContent(), 1, 1}, input.data());
+    Bitmap<double> result ({inputSize.multiplyContent(), 1, 1}, input.dataConst());
     output.emplace(std::move((result)));
 }
 

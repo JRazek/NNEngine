@@ -22,7 +22,7 @@ void cn::ConvolutionLayer::run(const Bitmap<double> &_input) {
         result.setLayer(i, kernelThreads[i].get().data());
     }
 
-   // Bitmap<double> cudaResult = CUDAUtils::cudaConvolve(kr)
+    Bitmap<double> cudaResult = CUDAUtils::cudaConvolve(kernels, _input, padding.x, padding.y, stride.x, stride.y);
 
     output.emplace(std::move(result));
 }
@@ -120,7 +120,7 @@ void cn::ConvolutionLayer::setWeight(int weightID, double value) {
 
 double cn::ConvolutionLayer::getWeight(int weightID) const {
     int kSize = kernelSize.multiplyContent();
-    return *(kernels[weightID / (kSize)].data() + (weightID % kSize));
+    return *(kernels[weightID / (kSize)].dataConst() + (weightID % kSize));
 }
 
 std::vector<double> cn::ConvolutionLayer::getBiasesGradient() {

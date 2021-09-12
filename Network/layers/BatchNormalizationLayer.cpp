@@ -12,11 +12,11 @@ cn::BatchNormalizationLayer::BatchNormalizationLayer(int _id, Vector3<int> _inpu
 void cn::BatchNormalizationLayer::run(const cn::Bitmap<double> &input) {
     if(input.size() != inputSize)
         throw std::logic_error("invalid bitmap input for normalization layer!");
-    Bitmap<double> result(outputSize, input.data());
+    Bitmap<double> result(outputSize, input.dataConst());
 
     double max = 0;
 
-    for(auto it = input.data(); it != input.data() + input.size().multiplyContent(); ++it){
+    for(auto it = input.dataConst(); it != input.dataConst() + input.size().multiplyContent(); ++it){
         max = std::max(*it, max);
     }
     if(std::abs(max) > 1) {

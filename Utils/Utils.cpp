@@ -12,7 +12,7 @@
 cn::Bitmap<double> cn::Utils::normalize(const Bitmap<byte> &input) {
     Bitmap<double> bitmap (input.w(), input.h(), input.d());
     for(int i = 0; i < input.w() * input.h() * input.d(); i ++){
-        bitmap.data()[i] = ((double)input.data()[i]) / 255.f;
+        bitmap.data()[i] = ((double) input.dataConst()[i]) / 255.f;
     }
     return bitmap;
 }
