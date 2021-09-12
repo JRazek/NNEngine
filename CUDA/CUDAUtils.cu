@@ -7,10 +7,10 @@
 
 namespace cn {
     __device__
-    int getDataIndex(dim3 bitmapSize, int col, int row, int depth){
-        if(col < 0 || col >= bitmapSize.x || row < 0 || row >= bitmapSize.y || depth < 0 || depth >= bitmapSize.z)
+    int getDataIndex(dim3 bitmapSize, dim3 pos){
+        if(pos.x >= bitmapSize.x || pos.y >= bitmapSize.y || pos.z >= bitmapSize.z)
             printf("zły arg1 :P");
-        return depth * bitmapSize.x * bitmapSize.y + row * bitmapSize.x + col;
+        return pos.z * bitmapSize.x * bitmapSize.y + pos.y * bitmapSize.x + pos.x;
     }
     __device__
     dim3 getDataPos(dim3 bitmapSize, int index){
@@ -23,11 +23,21 @@ namespace cn {
         return (inputSize + 2 * padding - kernelSize) / stride + 1;
     }
     __global__
-    void cudaConvolveKernel(double *data, double *kernel, dim3 outputSize, dim3 dataSize, dim3 kernelSize, int strideX, int strideY,
-                            int paddingX, int paddingY) {
+    void cudaConvolveKernel(double *input, double *kernel, double *result, dim3 inputSize, dim3 outputSize, int strideX,
+                            int strideY, dim3 kernelSize) {
         u_int index = blockIdx.x * blockDim.x + threadIdx.x;
-        dim3 kernelPos = getDataPos(outputSize, index);
-
+        dim3 kernelPosOutput = getDataPos(outputSize, index);
+        dim3 kernelPosInput = {kernelPosOutput.x * strideX, kernelPosOutput.y * strideY, kernelPosOutput.z};
+        double sum = 0;
+        for(u_int kz = 0; kz < kernelSize.z; kz++) {
+            for (u_int ky = 0; ky < kernelSize.y; ky++) {
+                for (u_int kx = 0; kx < kernelSize.x; kx++) {
+                    dim3 dataPos(kernelPosInput.x + kx, kernelPosInput.y + ky, kernelPosInput.z + kz);
+                    sum += kernel[getDataIndex(kernelSize, {kx, ky, kz})] * input[getDataIndex(inputSize, dataPos)];
+                }
+            }
+        }
+        result[index] = sum;
     }
 }
 
@@ -60,11 +70,18 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
     constexpr int threadsPerBlock = 1024;
 
 
-    cudaConvolveKernel<<<threadsCount/threadsPerBlock + 1, std::min(threadsCount, threadsPerBlock)>>>(dataDev, kernelDev,
-            {static_cast<u_int>(result.w()), static_cast<u_int>(result.h()), static_cast<u_int>(result.d())},
-            {static_cast<u_int>(paddedInput.w()), static_cast<u_int>(paddedInput.h()), static_cast<u_int>(paddedInput.d())},
-            {static_cast<u_int>(kernels[0].w()), static_cast<u_int>(kernels[0].h()), static_cast<u_int>(kernels[0].d())},
-            strideX, strideY, paddingX, paddingY);
+    cudaConvolveKernel<<<threadsCount/threadsPerBlock + 1, std::min(threadsCount, threadsPerBlock)>>>(dataDev, kernelDev, resDev,
+          {static_cast<u_int>(paddedInput.w()),
+           static_cast<u_int>(paddedInput.h()),
+           static_cast<u_int>(paddedInput.d())},
+          {static_cast<u_int>(result.w()),
+           static_cast<u_int>(result.h()),
+           static_cast<u_int>(result.d())},
+          strideX, strideY,
+          {static_cast<u_int>(kernels[0].w()),
+           static_cast<u_int>(kernels[0].h()),
+           static_cast<u_int>(kernels[0].d())}
+    );
 
 
 

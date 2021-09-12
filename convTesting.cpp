@@ -54,7 +54,6 @@ int main(){
     }
 
 
-
     cn::Bitmap<double> target (outputSize, 1, 1);
     for(int i = 0; i < outputSize; i ++){
         target.setCell(i, 0, 0, 0);
