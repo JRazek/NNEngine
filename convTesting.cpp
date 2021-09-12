@@ -19,7 +19,7 @@ int main(){
 
 
     const int outputSize = 10;
-    network.appendConvolutionLayer({3, 3}, 4);
+    network.appendConvolutionLayer({3, 3}, 4, {2, 2});
     network.appendReLULayer();
     network.appendBatchNormalizationLayer();
     network.appendConvolutionLayer({3, 3}, 8, {2, 2});
@@ -28,7 +28,7 @@ int main(){
     network.appendReLULayer();
     network.appendFlatteningLayer();
     network.appendBatchNormalizationLayer();
-    network.appendFFLayer(100);
+    network.appendFFLayer(20);
     network.appendSigmoidLayer();
     network.appendFFLayer(20);
     network.appendSigmoidLayer();
@@ -42,7 +42,7 @@ int main(){
     cn::MomentumGD momentumGd(network, 0.7, 0.01);
 
 
-    CSVReader csvReader("/home/jrazek/IdeaProjects/digitRecogniser/dataSet/metadata.csv", ';');
+    CSVReader csvReader("/home/user/IdeaProjects/digitRecogniser/dataSet/metadata.csv", ';');
     csvReader.readContents();
     auto &contents = csvReader.getContents();
     std::vector<ImageRepresentation> imageRepresentations;
@@ -74,7 +74,7 @@ int main(){
     int resetRate = 100;
     int correctCount = 0;
 
-    std::string filePath = "/home/jrazek/networkBackup.json";
+    std::string filePath = "/home/user/networkBackup.json";
 
     constexpr int epochsCount = 100;
     for (u_int i = 0; i < imageRepresentations.size() * epochsCount; i++) {
