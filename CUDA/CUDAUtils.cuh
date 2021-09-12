@@ -12,7 +12,7 @@ namespace cn {
         static void cudaConvolveKernel(double *data, double *kernel, dim3 dataSize, dim3 kernelSize, int strideX = 1, int strideY = 1, int paddingX = 0, int paddingY = 0);
         static void *fixedCudaMalloc(const size_t size);
     public:
-        static Bitmap<double> cudaConvolve(const Bitmap<double> &kernel, const Bitmap<double> &input, int paddingX = 0, int paddingY = 0, int strideX = 1, int strideY = 1);
+        static Bitmap<double> cudaConvolve(const std::vector<const Bitmap<double> *> &kernels, const Bitmap<double> &input, int paddingX = 0, int paddingY = 0, int strideX = 1, int strideY = 1);
     };
 }
 

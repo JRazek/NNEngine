@@ -8,21 +8,35 @@ int test(){
     return 0;
 }
 
-cn::Bitmap<double>
-cn::CUDAUtils::cudaConvolve(const cn::Bitmap<double> &kernel, const cn::Bitmap<double> &input, int paddingX, int paddingY, int strideX, int strideY) {
-    double *kData,*dData, *result;
-    u_int kerSize = kernel.size().multiplyContent() * sizeof(double);
-    int dataSize = input.size().multiplyContent() * sizeof(double);
+cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<const Bitmap<double> *> &kernels, const cn::Bitmap<double> &input, int paddingX, int paddingY, int strideX, int strideY) {
+    double *kData,*dData, *resData;
+
+    int sX = cn::Utils::afterConvolutionSize(kernels[0]->w(), input.w(), paddingX, strideX);
+    int sY = cn::Utils::afterConvolutionSize(kernels[0]->h(), input.h(), paddingY, strideY);
+
+    u_int kerSize = kernels[0]->size().multiplyContent() * sizeof(double) * kernels.size();
+    u_int dataSize = input.size().multiplyContent() * sizeof(double);
+    u_int resultSize = sX * sY * kernels.size() * sizeof(double);
 
     kData = (double *) fixedCudaMalloc(kerSize);
     dData = (double *) fixedCudaMalloc(dataSize);
+    resData = (double *) fixedCudaMalloc(resultSize);
 
-    cudaMemcpy(kData, kernel.data(), kerSize, cudaMemcpyHostToDevice);
+    cudaMemcpy(kData, kernels.data(), kerSize, cudaMemcpyHostToDevice);
     cudaMemcpy(dData, input.data(), dataSize, cudaMemcpyHostToDevice);
 
+    //run kernel here...
+    //<<< >>>
 
 
-    return cn::Bitmap<double>();
+    double *hostRes = new double[kernels[0]->size().multiplyContent() * kernels.size()];
+    cudaMemcpy(hostRes, resData, resultSize, cudaMemcpyDeviceToHost);
+
+    Bitmap<double> result(sX, sY, kernels.size(), hostRes);
+
+    delete[] hostRes;
+
+    return result;
 }
 
 __host__
