@@ -15,7 +15,7 @@ namespace cn {
             printf("y");
         }
         if(pos.z >= bitmapSize.z) {
-            printf("%d %d \n", bitmapSize.z, pos.z);
+            //printf("z");
         }
         return pos.z * bitmapSize.x * bitmapSize.y + pos.y * bitmapSize.x + pos.x;
     }
@@ -31,19 +31,30 @@ namespace cn {
     }
     __global__
     void cudaConvolveKernel(double *input, double *kernel, double *result, dim3 inputSize, dim3 outputSize, dim3 kernelSize) {
+        u_int strideX = inputSize.x / outputSize.x;
+        u_int strideY = inputSize.y / outputSize.y;
+
         u_int index = blockIdx.x * blockDim.x + threadIdx.x;
+        u_int posXOutput = index % outputSize.x;
+        u_int posYOutput = (index % (outputSize.x * outputSize.y)) / outputSize.x;
+        u_int posZOutput = (index % (outputSize.x * outputSize.y * outputSize.z)) / (outputSize.x * outputSize.y);
+
         u_int kID = index / (inputSize.x * inputSize.y * inputSize.z);
-        u_int kPosX = index % inputSize.x;
-        u_int kPosY = (index % (inputSize.x * inputSize.y)) / inputSize.x;
-        u_int kPosZ = (index % (inputSize.x * inputSize.y * inputSize.z)) / (inputSize.x * inputSize.y);
+        u_int kPosX = posXOutput * strideX;
+        u_int kPosY = posYOutput * strideY;
+        u_int kPosZ = posZOutput;
 
-        double *kernelLayerStart = kernel + kID * (kernelSize.x * kernelSize.y * kernelSize.z) + kPosZ * kernelSize.x * kernelSize.y;
+        double *kernelStart = kernel + kID * (kernelSize.x * kernelSize.y * kernelSize.z);
 
+        double sum = 0;
         for(u_int ky = 0; ky < kernelSize.y; ky++){
-            for(u_int kx = 0; kx < kernelSize.y; kx++){
-
+            for(u_int kx = 0; kx < kernelSize.x; kx++){
+                if(kPosZ >= kernelSize.z)
+                    printf("%d %d \n", kernelSize.z, kPosZ);
+                sum += kernelStart[getDataIndex(kernelSize, {kx, ky, kPosZ})] * input[getDataIndex(inputSize, {kPosX + kx, kPosY + ky, kPosZ})];
             }
         }
+        result[index] = sum;
     }
 }
 
@@ -76,10 +87,18 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
     constexpr int threadsPerBlock = 1024;
 
 
+    dim3 inputSize = {static_cast<u_int>(paddedInput.w()), static_cast<u_int>(paddedInput.h()), static_cast<u_int>(paddedInput.d())};
+    dim3 outputSize = {static_cast<u_int>(result.w()), static_cast<u_int>(result.h()), static_cast<u_int>(result.d())};
+    dim3 kernelSize = {static_cast<u_int>(kernels[0].w()), static_cast<u_int>(kernels[0].h()), static_cast<u_int>(kernels[0].d())};
+
     cudaConvolveKernel<<<threadsCount/threadsPerBlock + 1, std::min(threadsCount, threadsPerBlock)>>>
-    (dataDev,
-    kernelDev,
-    resDev,
+    (
+        dataDev,
+        kernelDev,
+        resDev,
+        inputSize,
+        outputSize,
+        kernelSize
     );
 
 
