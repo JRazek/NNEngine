@@ -15,23 +15,13 @@
 #pragma GCC diagnostic ignored "-Wreorder"
 
 int main(){
-    cn::Network network(28, 28, 1, 1);
+    cn::Network network(9, 9, 1, 1);
 
 
     const int outputSize = 10;
-    network.appendConvolutionLayer({3, 3}, 4, {2, 2});
-    network.appendReLULayer();
-    network.appendBatchNormalizationLayer();
-    network.appendConvolutionLayer({3, 3}, 8, {2, 2});
-    network.appendReLULayer();
-    network.appendConvolutionLayer({3, 3}, 16, {2, 2});
+    network.appendConvolutionLayer({3, 3},1, {2, 2}, {1, 1} );
     network.appendReLULayer();
     network.appendFlatteningLayer();
-    network.appendBatchNormalizationLayer();
-    network.appendFFLayer(20);
-    network.appendSigmoidLayer();
-    network.appendFFLayer(20);
-    network.appendSigmoidLayer();
     network.appendFFLayer(outputSize);
     network.appendSigmoidLayer();
     network.initRandom();
@@ -85,7 +75,8 @@ int main(){
         bitmap = cn::Utils::average3Layers(bitmap);
         int numVal = std::stoi(imageRepresentation.value);
         target.setCell(numVal, 0, 0, 1);
-        network.feed(bitmap);
+        cn::Vector3<int> inputSize = network.getInputSize(0);
+        network.feed(cn::Utils::resize(bitmap, inputSize.x, inputSize.y));
         momentumGd.propagate(target);
 
         int best = getBest(network.getNetworkOutput().value());

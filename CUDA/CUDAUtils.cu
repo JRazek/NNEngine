@@ -9,13 +9,13 @@ namespace cn {
     __device__
     int getDataIndex(dim3 bitmapSize, dim3 pos){
         if(pos.x >= bitmapSize.x) {
-            printf("x");
+            printf("x, %d %d\n", pos.x, bitmapSize.x);
         }
         if(pos.y >= bitmapSize.y) {
-            printf("y");
+            printf("y, %d %d\n", pos.y, bitmapSize.y);
         }
         if(pos.z >= bitmapSize.z) {
-            printf("z");
+            printf("z, %d %d\n", pos.z, bitmapSize.z);
         }
         return pos.z * bitmapSize.x * bitmapSize.y + pos.y * bitmapSize.x + pos.x;
     }
@@ -30,25 +30,23 @@ namespace cn {
         return (inputSize + 2 * padding - kernelSize) / stride + 1;
     }
     __global__
-    void cudaConvolveKernel(double *input, double *kernel, double *result, dim3 inputSize, dim3 outputSize, dim3 kernelSize) {
-        u_int strideX = inputSize.x / outputSize.x;
-        u_int strideY = inputSize.y / outputSize.y;
+    void cudaConvolveKernel(double *input, double *kernel, double *result, int strideX, int strideY, dim3 inputSize, dim3 outputSize, dim3 kernelSize) {
 
         u_int index = blockIdx.x * blockDim.x + threadIdx.x;
         u_int posXOutput = index % outputSize.x;
         u_int posYOutput = (index % (outputSize.x * outputSize.y)) / outputSize.x;
-        u_int posZOutput = (index % (outputSize.x * outputSize.y * outputSize.z)) / (outputSize.x * outputSize.y);
 
-        printf("%d\n", posZOutput);
+        u_int kID = index / (outputSize.x * outputSize.y * outputSize.z); //same as posZOutput
 
-        u_int kID = index / (inputSize.x * inputSize.y * inputSize.z);
         u_int kPosX = posXOutput * strideX;
         u_int kPosY = posYOutput * strideY;
-        u_int kPosZ = posZOutput;
+        u_int kPosZ = (index % (outputSize.x * outputSize.y)) / (outputSize.x * outputSize.y);
+//        printf("x:%d y:%d\n", kPosX, kPosY);
 
         double *kernelStart = kernel + kID * (kernelSize.x * kernelSize.y * kernelSize.z);
 
         double sum = 0;
+//        printf("%d", kPosZ);
         for(u_int ky = 0; ky < kernelSize.y; ky++){
             for(u_int kx = 0; kx < kernelSize.x; kx++){
                 sum += kernelStart[getDataIndex(kernelSize, {kx, ky, kPosZ})] * input[getDataIndex(inputSize, {kPosX + kx, kPosY + ky, kPosZ})];
@@ -63,8 +61,8 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
 
     Bitmap<double> paddedInput = cn::Utils::addPadding(input, paddingX, paddingY);
 
-    int sX = cn::Utils::afterConvolutionSize(kernels[0].w(), paddedInput.w(), paddingX, strideX);
-    int sY = cn::Utils::afterConvolutionSize(kernels[0].h(), paddedInput.h(), paddingY, strideY);
+    int sX = cn::Utils::afterConvolutionSize(kernels[0].w(), input.w(), paddingX, strideX);
+    int sY = cn::Utils::afterConvolutionSize(kernels[0].h(), input.h(), paddingY, strideY);
 
     u_int kerSize = kernels[0].size().multiplyContent() * sizeof(double) * kernels.size();
     u_int dataSize = paddedInput.size().multiplyContent() * sizeof(double);
@@ -96,6 +94,8 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
         dataDev,
         kernelDev,
         resDev,
+        strideX,
+        strideY,
         inputSize,
         outputSize,
         kernelSize
