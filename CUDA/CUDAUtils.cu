@@ -15,7 +15,7 @@ namespace cn {
             printf("y");
         }
         if(pos.z >= bitmapSize.z) {
-            //printf("z");
+            printf("z");
         }
         return pos.z * bitmapSize.x * bitmapSize.y + pos.y * bitmapSize.x + pos.x;
     }
@@ -39,6 +39,8 @@ namespace cn {
         u_int posYOutput = (index % (outputSize.x * outputSize.y)) / outputSize.x;
         u_int posZOutput = (index % (outputSize.x * outputSize.y * outputSize.z)) / (outputSize.x * outputSize.y);
 
+        printf("%d\n", posZOutput);
+
         u_int kID = index / (inputSize.x * inputSize.y * inputSize.z);
         u_int kPosX = posXOutput * strideX;
         u_int kPosY = posYOutput * strideY;
@@ -49,8 +51,6 @@ namespace cn {
         double sum = 0;
         for(u_int ky = 0; ky < kernelSize.y; ky++){
             for(u_int kx = 0; kx < kernelSize.x; kx++){
-                if(kPosZ >= kernelSize.z)
-                    printf("%d %d \n", kernelSize.z, kPosZ);
                 sum += kernelStart[getDataIndex(kernelSize, {kx, ky, kPosZ})] * input[getDataIndex(inputSize, {kPosX + kx, kPosY + ky, kPosZ})];
             }
         }
