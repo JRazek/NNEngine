@@ -36,7 +36,8 @@ namespace cn {
         u_int posXOutput = index % outputSize.x;
         u_int posYOutput = (index % (outputSize.x * outputSize.y)) / outputSize.x;
 
-        u_int kID = index / (outputSize.x * outputSize.y * outputSize.z); //same as posZOutput
+        u_int kID = index / (outputSize.x * outputSize.y); //same as posZOutput
+//        printf("kID:%d index:%d \n", kID, index);
 
         u_int kPosX = posXOutput * strideX;
         u_int kPosY = posYOutput * strideY;

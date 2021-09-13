@@ -25,7 +25,7 @@ void cn::ConvolutionLayer::run(const Bitmap<double> &_input) {
     Bitmap<double> cudaResult = CUDAUtils::cudaConvolve(kernels, _input, padding.x, padding.y, stride.x, stride.y);
 
     output.emplace(std::move(cudaResult));
-   // output.emplace(std::move(result));
+    output.emplace(std::move(result));
 }
 
 void cn::ConvolutionLayer::randomInit(std::default_random_engine &randomEngine) {
