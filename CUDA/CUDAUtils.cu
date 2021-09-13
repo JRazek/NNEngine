@@ -32,9 +32,13 @@ namespace cn {
     __global__
     void cudaConvolveKernel(double *input, double *kernel, double *result, dim3 inputSize, dim3 outputSize, dim3 kernelSize) {
         u_int index = blockIdx.x * blockDim.x + threadIdx.x;
+        u_int kID = index / (inputSize.x * inputSize.y * inputSize.z);
         u_int kPosX = index % inputSize.x;
         u_int kPosY = (index % (inputSize.x * inputSize.y)) / inputSize.x;
         u_int kPosZ = (index % (inputSize.x * inputSize.y * inputSize.z)) / (inputSize.x * inputSize.y);
+
+        double *kernelLayerStart = kernel + kID * (kernelSize.x * kernelSize.y * kernelSize.z) + kPosZ * kernelSize.x * kernelSize.y;
+
         for(u_int ky = 0; ky < kernelSize.y; ky++){
             for(u_int kx = 0; kx < kernelSize.y; kx++){
 
@@ -74,7 +78,9 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
 
     cudaConvolveKernel<<<threadsCount/threadsPerBlock + 1, std::min(threadsCount, threadsPerBlock)>>>
     (dataDev,
-            kernelDev, resDev,);
+    kernelDev,
+    resDev,
+    );
 
 
 
