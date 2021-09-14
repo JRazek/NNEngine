@@ -15,11 +15,11 @@
 #pragma GCC diagnostic ignored "-Wreorder"
 
 int main(){
-    cn::Network network(9, 9, 1, 1);
+    cn::Network network(9, 9, 3, 1);
 
 
     const int outputSize = 10;
-    network.appendConvolutionLayer({3, 3},2, {1, 1}, {1, 1} );
+    network.appendConvolutionLayer({3, 3},1, {1, 1}, {1, 1} );
     network.appendReLULayer();
     network.appendFlatteningLayer();
     network.appendFFLayer(outputSize);
@@ -72,7 +72,7 @@ int main(){
         cv::Mat mat = cv::imread(imageRepresentation.path);
 
         cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
-        bitmap = cn::Utils::average3Layers(bitmap);
+//        bitmap = cn::Utils::average3Layers(bitmap);
         int numVal = std::stoi(imageRepresentation.value);
         target.setCell(numVal, 0, 0, 1);
         cn::Vector3<int> inputSize = network.getInputSize(0);
@@ -84,7 +84,7 @@ int main(){
             correctCount++;
         }
 
-        if (!((i + 1) % resetRate)) {
+        if (!((i + 1) % 1)) {
             std::cout << "LOSS "<< i <<": "<< momentumGd.getError(target) << "\n";
             std::cout << "ACCURACY: " << (double) correctCount / double(resetRate) * 100 << "%\n";
             correctCount = 0;
@@ -97,6 +97,8 @@ int main(){
             file << network.jsonEncode();
             file.close();
         }
+
+        return 0;
     }
     return 0;
 }

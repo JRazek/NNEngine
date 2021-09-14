@@ -30,27 +30,25 @@ cn::Bitmap<double> cn::Utils::convolve(const Bitmap<double> &kernel, const Bitma
         throw std::invalid_argument("kernel bigger than input!");
     }
 
-    cn::Bitmap<double> output (sizeX, sizeY, input.d());
+    cn::Bitmap<double> result (sizeX, sizeY, input.d());
 
     cn::Bitmap<double> paddedInput = addPadding(input, paddingX, paddingY);
 
-    for(int y = 0; y < paddedInput.h() - kernel.h() + 1; y+=strideY){
-        for(int x = 0; x < paddedInput.w() - kernel.w() + 1; x+=strideX){
+    for(int y = 0; y < result.h(); y++){
+        for(int x = 0; x < result.w(); x++){
             for(int c = 0; c < paddedInput.d(); c++){
-                Vector2<int> kernelPos(x, y);
+                Vector2<int> kernelPos(x * strideX, y * strideY);
                 double sum = 0;
                 for(int ky = 0; ky < kernel.h(); ky++){
                     for(int kx = 0; kx < kernel.w(); kx++){
                         sum += paddedInput.getCell(kernelPos.x + kx, kernelPos.y + ky, c) * kernel.getCell(kx, ky, c);
                     }
                 }
-                int outputX = kernelPos.x / strideX;
-                int outputY = kernelPos.y / strideY;
-                output.setCell(outputX, outputY, c, sum);
+                result.setCell(x, y, c, sum);
             }
         }
     }
-    return output;
+    return result;
 }
 
 int cn::Utils::afterConvolutionSize(int kernelSize, int inputSize, int padding, int stride) {

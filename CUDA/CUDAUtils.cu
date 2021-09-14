@@ -17,6 +17,7 @@ namespace cn {
         if(pos.z >= bitmapSize.z) {
             printf("z, %d %d\n", pos.z, bitmapSize.z);
         }
+        //    return depth * _w * _h + row * _w + col;
         return pos.z * bitmapSize.x * bitmapSize.y + pos.y * bitmapSize.x + pos.x;
     }
     __device__
@@ -36,24 +37,25 @@ namespace cn {
         u_int posXOutput = index % outputSize.x;
         u_int posYOutput = (index % (outputSize.x * outputSize.y)) / outputSize.x;
 
-        u_int kID = index / (outputSize.x * outputSize.y); //same as posZOutput
+        u_int kID = index / (outputSize.x * outputSize.y * inputSize.z); //same as posZOutput
 //        printf("kID:%d index:%d \n", kID, index);
 
         u_int kPosX = posXOutput * strideX;
         u_int kPosY = posYOutput * strideY;
-        u_int kPosZ = (index % (outputSize.x * outputSize.y)) / (outputSize.x * outputSize.y);
-//        printf("x:%d y:%d\n", kPosX, kPosY);
+        u_int kPosZ = index / (outputSize.x * outputSize.y);
 
+//        printf("x:%d y:%d z:%d kID:%d\n", kPosX, kPosY, kPosZ, kID);
         double *kernelStart = kernel + kID * (kernelSize.x * kernelSize.y * kernelSize.z);
 
         double sum = 0;
-//        printf("%d", kPosZ);
         for(u_int ky = 0; ky < kernelSize.y; ky++){
             for(u_int kx = 0; kx < kernelSize.x; kx++){
+//                if(index > 80)
+//                    printf("kdataIndex:%d\n", getDataIndex(kernelSize, {kx, ky, kPosZ}));
                 sum += kernelStart[getDataIndex(kernelSize, {kx, ky, kPosZ})] * input[getDataIndex(inputSize, {kPosX + kx, kPosY + ky, kPosZ})];
             }
         }
-        result[index] = sum;
+        result[getDataIndex(outputSize, {posXOutput, posYOutput, kID})] += sum;
     }
 }
 
@@ -72,7 +74,7 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
     kernelDev = (double *) fixedCudaMalloc(kerSize);
     dataDev = (double *) fixedCudaMalloc(dataSize);
     resDev = (double *) fixedCudaMalloc(resultSize);
-
+    cudaMemset(resDev, 0, resultSize);
     for(int i = 0; i < kernels.size(); i ++){
         cudaMemcpy(kernelDev + sX * sY * i, kernels[i].dataConst(), kernels[i].size().multiplyContent() * sizeof(double), cudaMemcpyHostToDevice);
     }
