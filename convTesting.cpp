@@ -72,10 +72,12 @@ int main(){
         cv::Mat mat = cv::imread(imageRepresentation.path);
 
         cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
-//        bitmap = cn::Utils::average3Layers(bitmap);
         int numVal = std::stoi(imageRepresentation.value);
         target.setCell(numVal, 0, 0, 1);
         cn::Vector3<int> inputSize = network.getInputSize(0);
+        if(inputSize.z != 3){
+            bitmap = cn::Utils::average3Layers(bitmap);
+        }
         network.feed(cn::Utils::resize(bitmap, inputSize.x, inputSize.y));
         momentumGd.propagate(target);
 

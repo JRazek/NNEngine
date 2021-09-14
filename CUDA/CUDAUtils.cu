@@ -30,9 +30,9 @@ namespace cn {
     int afterConvolutionSize(int kernelSize, int inputSize, int padding, int stride) {
         return (inputSize + 2 * padding - kernelSize) / stride + 1;
     }
+
     __global__
     void cudaConvolveKernel(double *input, double *kernel, double *result, int strideX, int strideY, dim3 inputSize, dim3 outputSize, dim3 kernelSize) {
-
         u_int index = blockIdx.x * blockDim.x + threadIdx.x;
         u_int posXOutput = index % outputSize.x;
         u_int posYOutput = (index % (outputSize.x * outputSize.y)) / outputSize.x;
@@ -44,18 +44,20 @@ namespace cn {
         u_int kPosY = posYOutput * strideY;
         u_int kPosZ = index / (outputSize.x * outputSize.y);
 
-//        printf("x:%d y:%d z:%d kID:%d\n", kPosX, kPosY, kPosZ, kID);
-        double *kernelStart = kernel + kID * (kernelSize.x * kernelSize.y * kernelSize.z);
+        const double *kernelStart = kernel + kID * (kernelSize.x * kernelSize.y * kernelSize.z);
 
         double sum = 0;
         for(u_int ky = 0; ky < kernelSize.y; ky++){
             for(u_int kx = 0; kx < kernelSize.x; kx++){
-//                if(index > 80)
-//                    printf("kdataIndex:%d\n", getDataIndex(kernelSize, {kx, ky, kPosZ}));
-                sum += kernelStart[getDataIndex(kernelSize, {kx, ky, kPosZ})] * input[getDataIndex(inputSize, {kPosX + kx, kPosY + ky, kPosZ})];
+                double v = kernelStart[getDataIndex(kernelSize, {kx, ky, kPosZ})];
+                double in = input[getDataIndex(inputSize, {kPosX + kx, kPosY + ky, kPosZ})];
+                sum += v * in;
             }
         }
-        result[getDataIndex(outputSize, {posXOutput, posYOutput, kID})] += sum;
+        u_int resultIndex = getDataIndex(outputSize, {posXOutput, posYOutput, kID});
+        result[resultIndex] += sum;
+
+        printf("index:%d x:%d y:%d z:%d kID:%d resultIndex:%d sum:%g resVal:%g\n", index, kPosX, kPosY, kPosZ, kID, resultIndex, sum, result[resultIndex]);
     }
 }
 
@@ -74,10 +76,14 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
     kernelDev = (double *) fixedCudaMalloc(kerSize);
     dataDev = (double *) fixedCudaMalloc(dataSize);
     resDev = (double *) fixedCudaMalloc(resultSize);
-    cudaMemset(resDev, 0, resultSize);
+    if(!kernelDev || !dataDev || !resDev){
+        throw std::logic_error("BAD ALLOC");
+    }
     for(int i = 0; i < kernels.size(); i ++){
         cudaMemcpy(kernelDev + sX * sY * i, kernels[i].dataConst(), kernels[i].size().multiplyContent() * sizeof(double), cudaMemcpyHostToDevice);
     }
+
+    cudaMemset(resDev, 0, resultSize);
 
     cudaMemcpy(dataDev, paddedInput.dataConst(), dataSize, cudaMemcpyHostToDevice);
 
