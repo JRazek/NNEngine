@@ -19,7 +19,7 @@ int main(){
 
 
     const int outputSize = 10;
-    network.appendConvolutionLayer({3, 3},1, {1, 1}, {1, 1} );
+    network.appendConvolutionLayer({3, 3},2, {1, 1}, {1, 1} );
     network.appendReLULayer();
     network.appendFlatteningLayer();
     network.appendFFLayer(outputSize);

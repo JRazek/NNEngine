@@ -38,6 +38,10 @@ namespace cn {
         u_int posXOutput = index % outputSize.x;
         u_int posYOutput = (index % (outputSize.x * outputSize.y)) / outputSize.x;
 
+        if(index == 0){
+            printf("KVAL:%.15f\n", kernel[27]);
+        }
+
         u_int kID = index / (outputSize.x * outputSize.y * inputSize.z); //same as posZOutput
 //        printf("kID:%d index:%d \n", kID, index);
 
@@ -57,9 +61,6 @@ namespace cn {
         }
        // u_int resultIndex = getDataIndex(outputSize, {posXOutput, posYOutput, kID});
         result[index] = sum;
-        if(posXOutput == 2 && posYOutput == 0){
-//            printf("ind:%d val2:%.15f\n", index, result[index]);
-        }
 
 //        printf("index:%d x:%d y:%d z:%d kID:%d  sum:%g\n", index, kPosX, kPosY, kPosZ, kID, sum);
     }
@@ -116,10 +117,8 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
     }
 
     for(int i = 0; i < kernels.size(); i ++){
-        cudaMemcpy(kernelDev + i * kerSize, kernels[i].dataConst(), kerSize, cudaMemcpyHostToDevice);
+        cudaMemcpy(kernelDev + i * kernels[i].size().multiplyContent(), kernels[i].dataConst(), kerSize, cudaMemcpyHostToDevice);
     }
-
-//    cudaMemset(resRawDev, 0, resultRawSize);
 
     cudaMemcpy(dataDev, paddedInput.dataConst(), dataSize, cudaMemcpyHostToDevice);
 
@@ -128,7 +127,6 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
     int threadsRawCount = result.w() * result.h() * kernels.size() * paddedInput.d();
 
     constexpr int threadsPerBlock = 1024;
-
 
     dim3 inputSize = {static_cast<u_int>(paddedInput.w()), static_cast<u_int>(paddedInput.h()), static_cast<u_int>(paddedInput.d())};
     dim3 outputSize = {static_cast<u_int>(result.w()), static_cast<u_int>(result.h()), static_cast<u_int>(result.d())};
@@ -147,7 +145,8 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
     );
 
     int threadsCombinedCount = result.w() * result.h() * kernels.size();
-    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+
+    cudaDeviceSynchronize();
 
     cudaCombineResult<<<threadsCombinedCount / threadsPerBlock + 1, std::min(threadsCombinedCount, threadsPerBlock)>>>
     (
