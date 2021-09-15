@@ -69,18 +69,19 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
     int sX = cn::Utils::afterConvolutionSize(kernels[0].w(), input.w(), paddingX, strideX);
     int sY = cn::Utils::afterConvolutionSize(kernels[0].h(), input.h(), paddingY, strideY);
 
-    u_int kerSize = kernels[0].size().multiplyContent() * sizeof(double) * kernels.size();
+    u_int kerSize = kernels[0].size().multiplyContent() * sizeof(double);
     u_int dataSize = paddedInput.size().multiplyContent() * sizeof(double);
     u_int resultSize = sX * sY * kernels.size() * sizeof(double);
 
-    kernelDev = (double *) fixedCudaMalloc(kerSize);
+    kernelDev = (double *) fixedCudaMalloc(kerSize * kernels.size());
     dataDev = (double *) fixedCudaMalloc(dataSize);
     resDev = (double *) fixedCudaMalloc(resultSize);
     if(!kernelDev || !dataDev || !resDev){
         throw std::logic_error("BAD ALLOC");
     }
+
     for(int i = 0; i < kernels.size(); i ++){
-        cudaMemcpy(kernelDev + sX * sY * i, kernels[i].dataConst(), kernels[i].size().multiplyContent() * sizeof(double), cudaMemcpyHostToDevice);
+        cudaMemcpy(kernelDev + i * kerSize, kernels[i].dataConst(), kerSize, cudaMemcpyHostToDevice);
     }
 
     cudaMemset(resDev, 0, resultSize);

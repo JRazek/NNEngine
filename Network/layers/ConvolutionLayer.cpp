@@ -23,7 +23,7 @@ void cn::ConvolutionLayer::run(const Bitmap<double> &_input) {
             double norm = result.dataConst()[i];
             Vector3<int> pos = cudaResult.indexToVector(i);
             if(cuda != norm){
-                std::cout<<"g";
+                std::cout<<"";
             }
         }
     }
