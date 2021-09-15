@@ -2,6 +2,7 @@
 // Created by user on 12.09.2021.
 //
 
+#include <thread>
 #include "CUDAUtils.cuh"
 #include "../Utils/dataStructures/Bitmap.h"
 
@@ -80,9 +81,10 @@ namespace cn {
         if(index == 0){
             printf("%.15f\n%.15f\n%.15f\n", resultRaw[2], resultRaw[164], resultRaw[83]);
         }
+
         for(u_int zRaw = resultCombinedPosZ * kSizeZ; zRaw < (resultCombinedPosZ + 1) * kSizeZ; zRaw++){
             u_int indexRaw = getDataIndex(resultRawDim, {resultCombinedPosX, resultCombinedPosY, zRaw});
-            float val = resultRaw[indexRaw];
+            double val = resultRaw[indexRaw];
             resultCombined[index] += val;
             if(resultCombinedPosX == 2 && resultCombinedPosY == 0){
                 printf("index:%d, val:%.15f \n", indexRaw,  val);
@@ -145,6 +147,7 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
     );
 
     int threadsCombinedCount = result.w() * result.h() * kernels.size();
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
     cudaCombineResult<<<threadsCombinedCount / threadsPerBlock + 1, std::min(threadsCombinedCount, threadsPerBlock)>>>
     (
