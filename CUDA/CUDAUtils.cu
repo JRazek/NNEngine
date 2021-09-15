@@ -32,7 +32,7 @@ namespace cn {
     }
 
     __global__
-    void cudaConvolveKernel(double *input, double *kernel, double *result, int strideX, int strideY, dim3 inputSize, dim3 outputSize, dim3 kernelSize) {
+    void cudaConvolveKernel(double *input, const double *kernel, double *result, int strideX, int strideY, dim3 inputSize, dim3 outputSize, dim3 kernelSize) {
         u_int index = blockIdx.x * blockDim.x + threadIdx.x;
         u_int posXOutput = index % outputSize.x;
         u_int posYOutput = (index % (outputSize.x * outputSize.y)) / outputSize.x;
@@ -56,14 +56,20 @@ namespace cn {
         }
        // u_int resultIndex = getDataIndex(outputSize, {posXOutput, posYOutput, kID});
         result[index] = sum;
+        if(posXOutput == 2 && posYOutput == 0){
+//            printf("ind:%d val2:%.15f\n", index, result[index]);
+        }
 
 //        printf("index:%d x:%d y:%d z:%d kID:%d  sum:%g\n", index, kPosX, kPosY, kPosZ, kID, sum);
     }
     __global__
-    void cudaCombineResult(double *resultRaw, double *resultCombined, u_int kernelDepth, dim3 resultCombinedDim){
+    void cudaCombineResult(const double *resultRaw, double *resultCombined, u_int kernelDepth, dim3 resultCombinedDim){
         dim3 resultRawDim(resultCombinedDim.x, resultCombinedDim.y, kernelDepth * resultCombinedDim.z);
         u_int kSizeZ = resultRawDim.z / resultCombinedDim.z;
         u_int index = blockIdx.x * blockDim.x + threadIdx.x;
+
+
+
         u_int resultCombinedPosX = index % resultCombinedDim.x;
         u_int resultCombinedPosY = (index % (resultCombinedDim.x * resultCombinedDim.y)) / resultCombinedDim.x;
         u_int resultCombinedPosZ = index / (resultCombinedDim.x * resultCombinedDim.y);
@@ -71,17 +77,18 @@ namespace cn {
 
 
         resultCombined[index] = 0;
-
+        if(index == 0){
+            printf("%.15f\n%.15f\n%.15f\n", resultRaw[2], resultRaw[164], resultRaw[83]);
+        }
         for(u_int zRaw = resultCombinedPosZ * kSizeZ; zRaw < (resultCombinedPosZ + 1) * kSizeZ; zRaw++){
             u_int indexRaw = getDataIndex(resultRawDim, {resultCombinedPosX, resultCombinedPosY, zRaw});
             float val = resultRaw[indexRaw];
             resultCombined[index] += val;
-//            if(resultCombinedPosX == 0 && resultCombinedPosY == 0){
-//                printf("val:%.15f res:%.15f\n", val, resultCombined[index]);
-//            }
+            if(resultCombinedPosX == 2 && resultCombinedPosY == 0){
+                printf("index:%d, val:%.15f \n", indexRaw,  val);
+            }
         }
 //        printf("index:%d x:%d y:%d z:%d res:%f\n", index, resultCombinedPosX, resultCombinedPosY, resultCombinedPosZ, resultCombined[index]);
-
     }
 }
 
