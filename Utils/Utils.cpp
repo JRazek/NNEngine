@@ -46,8 +46,6 @@ cn::Bitmap<double> cn::Utils::convolve(const Bitmap<double> &kernel, const Bitma
                         sum += v1 * v2;
                     }
                 }
-                if(x == 2 && y == 0 && c == 2)
-                    printf("NORM sum: %f\n", sum);
                 result.setCell(x, y, c, sum);
             }
         }

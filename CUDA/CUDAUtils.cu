@@ -8,22 +8,22 @@
 namespace cn {
     __device__
     int getDataIndex(dim3 bitmapSize, dim3 pos){
-        if(pos.x >= bitmapSize.x) {
-            printf("x, %d %d\n", pos.x, bitmapSize.x);
-        }
-        if(pos.y >= bitmapSize.y) {
-            printf("y, %d %d\n", pos.y, bitmapSize.y);
-        }
-        if(pos.z >= bitmapSize.z) {
-            printf("z, %d %d\n", pos.z, bitmapSize.z);
-        }
+//        if(pos.x >= bitmapSize.x) {
+//            printf("x, %d %d\n", pos.x, bitmapSize.x);
+//        }
+//        if(pos.y >= bitmapSize.y) {
+//            printf("y, %d %d\n", pos.y, bitmapSize.y);
+//        }
+//        if(pos.z >= bitmapSize.z) {
+//            printf("z, %d %d\n", pos.z, bitmapSize.z);
+//        }
         //    return depth * _w * _h + row * _w + col;
         return pos.z * bitmapSize.x * bitmapSize.y + pos.y * bitmapSize.x + pos.x;
     }
     __device__
     dim3 getDataPos(dim3 bitmapSize, int index){
-        if(index >= bitmapSize.x * bitmapSize.y * bitmapSize.z)
-            printf("zły arg2 :P");
+//        if(index >= bitmapSize.x * bitmapSize.y * bitmapSize.z)
+//            printf("zły arg2 :P");
         return dim3(index % bitmapSize.x, (index / bitmapSize.x) % bitmapSize.x, index / (bitmapSize.x * bitmapSize.y));
     }
     __device__
@@ -57,7 +57,7 @@ namespace cn {
        // u_int resultIndex = getDataIndex(outputSize, {posXOutput, posYOutput, kID});
         result[index] = sum;
 
-       // printf("index:%d x:%d y:%d z:%d kID:%d resultIndex:%d sum:%g resVal:%g\n", index, kPosX, kPosY, kPosZ, kID, resultIndex, sum, result[resultIndex]);
+//        printf("index:%d x:%d y:%d z:%d kID:%d  sum:%g\n", index, kPosX, kPosY, kPosZ, kID, sum);
     }
     __global__
     void cudaCombineResult(double *resultRaw, double *resultCombined, u_int kernelDepth, dim3 resultCombinedDim){
@@ -68,10 +68,20 @@ namespace cn {
         u_int resultCombinedPosY = (index % (resultCombinedDim.x * resultCombinedDim.y)) / resultCombinedDim.x;
         u_int resultCombinedPosZ = index / (resultCombinedDim.x * resultCombinedDim.y);
 
+
+
         resultCombined[index] = 0;
+
         for(u_int zRaw = resultCombinedPosZ * kSizeZ; zRaw < (resultCombinedPosZ + 1) * kSizeZ; zRaw++){
-            resultCombined[index] += resultRaw[getDataIndex(resultRawDim, {resultCombinedPosX, resultCombinedPosY, zRaw})];
+            u_int indexRaw = getDataIndex(resultRawDim, {resultCombinedPosX, resultCombinedPosY, zRaw});
+            float val = resultRaw[indexRaw];
+            resultCombined[index] += val;
+//            if(resultCombinedPosX == 0 && resultCombinedPosY == 0){
+//                printf("val:%.15f res:%.15f\n", val, resultCombined[index]);
+//            }
         }
+//        printf("index:%d x:%d y:%d z:%d res:%f\n", index, resultCombinedPosX, resultCombinedPosY, resultCombinedPosZ, resultCombined[index]);
+
     }
 }
 
@@ -139,7 +149,7 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
 
 
     double *hostRes = new double[sX * sY * kernels.size()];
-    cudaMemcpy(hostRes, resCombinedDev, resultRawSize, cudaMemcpyDeviceToHost);
+    cudaMemcpy(hostRes, resCombinedDev, resultCombinedSize, cudaMemcpyDeviceToHost);
 
     result.setData(hostRes);
 
