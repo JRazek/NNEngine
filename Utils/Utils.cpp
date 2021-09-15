@@ -41,9 +41,13 @@ cn::Bitmap<double> cn::Utils::convolve(const Bitmap<double> &kernel, const Bitma
                 double sum = 0;
                 for(int ky = 0; ky < kernel.h(); ky++){
                     for(int kx = 0; kx < kernel.w(); kx++){
-                        sum += paddedInput.getCell(kernelPos.x + kx, kernelPos.y + ky, c) * kernel.getCell(kx, ky, c);
+                        double v1 = kernel.getCell(kx, ky, c);
+                        double v2 = paddedInput.getCell(kernelPos.x + kx, kernelPos.y + ky, c);
+                        sum += v1 * v2;
                     }
                 }
+                if(x == 2 && y == 0 && c == 2)
+                    printf("NORM sum: %f\n", sum);
                 result.setCell(x, y, c, sum);
             }
         }

@@ -29,7 +29,7 @@ void cn::ConvolutionLayer::run(const Bitmap<double> &_input) {
     }
 
     output.emplace(std::move(cudaResult));
-    //output.emplace(std::move(result));
+    output.emplace(std::move(result));
 }
 
 void cn::ConvolutionLayer::randomInit(std::default_random_engine &randomEngine) {

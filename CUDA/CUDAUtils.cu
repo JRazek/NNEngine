@@ -54,15 +54,29 @@ namespace cn {
                 sum += v * in;
             }
         }
-        u_int resultIndex = getDataIndex(outputSize, {posXOutput, posYOutput, kID});
-        result[resultIndex] += sum;
+       // u_int resultIndex = getDataIndex(outputSize, {posXOutput, posYOutput, kID});
+        result[index] = sum;
 
-        printf("index:%d x:%d y:%d z:%d kID:%d resultIndex:%d sum:%g resVal:%g\n", index, kPosX, kPosY, kPosZ, kID, resultIndex, sum, result[resultIndex]);
+       // printf("index:%d x:%d y:%d z:%d kID:%d resultIndex:%d sum:%g resVal:%g\n", index, kPosX, kPosY, kPosZ, kID, resultIndex, sum, result[resultIndex]);
+    }
+    __global__
+    void cudaCombineResult(double *resultRaw, double *resultCombined, u_int kernelDepth, dim3 resultCombinedDim){
+        dim3 resultRawDim(resultCombinedDim.x, resultCombinedDim.y, kernelDepth * resultCombinedDim.z);
+        u_int kSizeZ = resultRawDim.z / resultCombinedDim.z;
+        u_int index = blockIdx.x * blockDim.x + threadIdx.x;
+        u_int resultCombinedPosX = index % resultCombinedDim.x;
+        u_int resultCombinedPosY = (index % (resultCombinedDim.x * resultCombinedDim.y)) / resultCombinedDim.x;
+        u_int resultCombinedPosZ = index / (resultCombinedDim.x * resultCombinedDim.y);
+
+        resultCombined[index] = 0;
+        for(u_int zRaw = resultCombinedPosZ * kSizeZ; zRaw < (resultCombinedPosZ + 1) * kSizeZ; zRaw++){
+            resultCombined[index] += resultRaw[getDataIndex(resultRawDim, {resultCombinedPosX, resultCombinedPosY, zRaw})];
+        }
     }
 }
 
 cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<double>> &kernels, const cn::Bitmap<double> &input, int paddingX, int paddingY, int strideX, int strideY) {
-    double *kernelDev, *dataDev, *resDev;
+    double *kernelDev, *dataDev, *resRawDev, *resCombinedDev;
 
     Bitmap<double> paddedInput = cn::Utils::addPadding(input, paddingX, paddingY);
 
@@ -71,12 +85,14 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
 
     u_int kerSize = kernels[0].size().multiplyContent() * sizeof(double);
     u_int dataSize = paddedInput.size().multiplyContent() * sizeof(double);
-    u_int resultSize = sX * sY * kernels.size() * sizeof(double);
+    u_int resultRawSize = sX * sY * paddedInput.d() * kernels.size() * sizeof(double);
+    u_int resultCombinedSize = sX * sY * kernels.size() * sizeof(double);
 
     kernelDev = (double *) fixedCudaMalloc(kerSize * kernels.size());
     dataDev = (double *) fixedCudaMalloc(dataSize);
-    resDev = (double *) fixedCudaMalloc(resultSize);
-    if(!kernelDev || !dataDev || !resDev){
+    resRawDev = (double *) fixedCudaMalloc(resultRawSize);
+    resCombinedDev = (double *) fixedCudaMalloc(resultCombinedSize);
+    if(!kernelDev || !dataDev || !resRawDev || !resCombinedDev){
         throw std::logic_error("BAD ALLOC");
     }
 
@@ -84,13 +100,13 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
         cudaMemcpy(kernelDev + i * kerSize, kernels[i].dataConst(), kerSize, cudaMemcpyHostToDevice);
     }
 
-    cudaMemset(resDev, 0, resultSize);
+//    cudaMemset(resRawDev, 0, resultRawSize);
 
     cudaMemcpy(dataDev, paddedInput.dataConst(), dataSize, cudaMemcpyHostToDevice);
 
     Bitmap<double> result(sX, sY, kernels.size());
 
-    int threadsCount = result.w() * result.h() * kernels.size() * paddedInput.d();
+    int threadsRawCount = result.w() * result.h() * kernels.size() * paddedInput.d();
 
     constexpr int threadsPerBlock = 1024;
 
@@ -99,22 +115,31 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
     dim3 outputSize = {static_cast<u_int>(result.w()), static_cast<u_int>(result.h()), static_cast<u_int>(result.d())};
     dim3 kernelSize = {static_cast<u_int>(kernels[0].w()), static_cast<u_int>(kernels[0].h()), static_cast<u_int>(kernels[0].d())};
 
-    cudaConvolveKernel<<<threadsCount/threadsPerBlock + 1, std::min(threadsCount, threadsPerBlock)>>>
+    cudaConvolveKernel<<<threadsRawCount/threadsPerBlock + 1, std::min(threadsRawCount, threadsPerBlock)>>>
     (
-        dataDev,
-        kernelDev,
-        resDev,
-        strideX,
-        strideY,
-        inputSize,
-        outputSize,
-        kernelSize
+            dataDev,
+            kernelDev,
+            resRawDev,
+            strideX,
+            strideY,
+            inputSize,
+            outputSize,
+            kernelSize
+    );
+
+    int threadsCombinedCount = result.w() * result.h() * kernels.size();
+
+    cudaCombineResult<<<threadsCombinedCount / threadsPerBlock + 1, std::min(threadsCombinedCount, threadsPerBlock)>>>
+    (
+            resRawDev,
+            resCombinedDev,
+            kernels[0].d(),
+            outputSize
     );
 
 
-
     double *hostRes = new double[sX * sY * kernels.size()];
-    cudaMemcpy(hostRes, resDev, resultSize, cudaMemcpyDeviceToHost);
+    cudaMemcpy(hostRes, resCombinedDev, resultRawSize, cudaMemcpyDeviceToHost);
 
     result.setData(hostRes);
 
@@ -122,7 +147,7 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
 
     cudaFree(kernelDev);
     cudaFree(dataDev);
-    cudaFree(resDev);
+    cudaFree(resRawDev);
 
     return result;
 }
