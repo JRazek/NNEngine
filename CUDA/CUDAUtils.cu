@@ -9,15 +9,15 @@
 namespace cn {
     __device__
     int getDataIndex(dim3 bitmapSize, dim3 pos){
-//        if(pos.x >= bitmapSize.x) {
-//            printf("x, %d %d\n", pos.x, bitmapSize.x);
-//        }
-//        if(pos.y >= bitmapSize.y) {
-//            printf("y, %d %d\n", pos.y, bitmapSize.y);
-//        }
-//        if(pos.z >= bitmapSize.z) {
-//            printf("z, %d %d\n", pos.z, bitmapSize.z);
-//        }
+        if(pos.x >= bitmapSize.x) {
+            printf("x, %d %d\n", pos.x, bitmapSize.x);
+        }
+        if(pos.y >= bitmapSize.y) {
+            printf("y, %d %d\n", pos.y, bitmapSize.y);
+        }
+        if(pos.z >= bitmapSize.z) {
+            printf("z, %d %d\n", pos.z, bitmapSize.z);
+        }
         //    return depth * _w * _h + row * _w + col;
         return pos.z * bitmapSize.x * bitmapSize.y + pos.y * bitmapSize.x + pos.x;
     }
@@ -47,7 +47,7 @@ namespace cn {
 
         u_int kPosX = posXOutput * strideX;
         u_int kPosY = posYOutput * strideY;
-        u_int kPosZ = index / (outputSize.x * outputSize.y);
+        u_int kPosZ = (index ) / (outputSize.x * outputSize.y); //todo
 
         const double *kernelStart = kernel + kID * (kernelSize.x * kernelSize.y * kernelSize.z);
 
