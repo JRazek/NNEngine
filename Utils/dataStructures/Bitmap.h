@@ -33,7 +33,7 @@ namespace cn {
         void setCell(int col, int row, int depth, T val);
         void setCell(const Vector3<int> &c, T b);
         void setData(const T * data, int inputType = 0);
-        void setData(T ** data);
+        void setData(T *&&data);
         void setLayer(int layerID, T *input);
         [[nodiscard]] int getDataIndex(int col, int row, int depth) const;
         [[nodiscard]] int getDataIndex(const Vector3<T> &v) const;
@@ -219,9 +219,9 @@ cn::Bitmap<T>::Bitmap(const cn::JSON &json): Bitmap(Vector3<int>(json.at("size")
 }
 
 template<typename T>
-void cn::Bitmap<T>::setData(T ** data) {
-    dataP = *data;
-    *data = nullptr;
+void cn::Bitmap<T>::setData(T *&&data) {
+    dataP = data;
+    data = nullptr;
 }
 
 
