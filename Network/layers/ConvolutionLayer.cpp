@@ -10,26 +10,9 @@ void cn::ConvolutionLayer::run(const Bitmap<double> &_input) {
     if(inputSize != _input.size()){
         throw std::logic_error("CLayer fed with wrong _input size!");
     }
-    Bitmap<double> result(outputSize);
-    for(int i = 0; i < kernelsCount; i ++){
-        result.setLayer(i, Utils::sumBitmapLayers(Utils::convolve(kernels[i], _input, padding.x, padding.y, stride.x, stride.y)).data());
-    }
-
     Bitmap<double> cudaResult = CUDAUtils::cudaConvolve(kernels, _input, padding.x, padding.y, stride.x, stride.y);
 
-    for(int i = 0; i < cudaResult.size().multiplyContent(); i++){
-        if(cudaResult.dataConst()[i] != result.dataConst()[i]){
-            double cuda = cudaResult.dataConst()[i];
-            double norm = result.dataConst()[i];
-            Vector3<int> pos = cudaResult.indexToVector(i);
-            if(cuda != norm){
-                std::cout<<"";
-            }
-        }
-    }
-
     output.emplace(std::move(cudaResult));
-//    output.emplace(std::move(result));
 }
 
 void cn::ConvolutionLayer::randomInit(std::default_random_engine &randomEngine) {

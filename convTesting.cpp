@@ -15,12 +15,13 @@
 #pragma GCC diagnostic ignored "-Wreorder"
 
 int main(){
-    cn::Network network(9, 9, 3, 1);
+    cn::Network network(28, 28, 3, 1);
 
 
     const int outputSize = 10;
-    network.appendConvolutionLayer({3, 3},5, {1, 1}, {1, 1} );
+    network.appendConvolutionLayer({3, 3},5, {2, 2}, {1, 1} );
     network.appendReLULayer();
+    network.appendBatchNormalizationLayer();
     network.appendFlatteningLayer();
     network.appendFFLayer(outputSize);
     network.appendSigmoidLayer();
