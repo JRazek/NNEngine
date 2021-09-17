@@ -9,15 +9,15 @@
 namespace cn {
     __device__
     int getDataIndex(dim3 bitmapSize, dim3 pos){
-        if(pos.x >= bitmapSize.x) {
-            printf("x, %d %d\n", pos.x, bitmapSize.x);
-        }
-        if(pos.y >= bitmapSize.y) {
-            printf("y, %d %d\n", pos.y, bitmapSize.y);
-        }
-        if(pos.z >= bitmapSize.z) {
-            printf("z, %d %d\n", pos.z, bitmapSize.z);
-        }
+//        if(pos.x >= bitmapSize.x) {
+//            printf("x, %d %d\n", pos.x, bitmapSize.x);
+//        }
+//        if(pos.y >= bitmapSize.y) {
+//            printf("y, %d %d\n", pos.y, bitmapSize.y);
+//        }
+//        if(pos.z >= bitmapSize.z) {
+//            printf("z, %d %d\n", pos.z, bitmapSize.z);
+//        }
         //    return depth * _w * _h + row * _w + col;
         return pos.z * bitmapSize.x * bitmapSize.y + pos.y * bitmapSize.x + pos.x;
     }
@@ -74,7 +74,7 @@ namespace cn {
 
         resultCombined[index] = 0;
         if(index == 0){
-            printf("%.15f\n%.15f\n%.15f\n", resultRaw[2], resultRaw[164], resultRaw[83]);
+//            printf("%.15f\n%.15f\n%.15f\n", resultRaw[2], resultRaw[164], resultRaw[83]);
         }
 
         for(u_int zRaw = resultCombinedPosZ * kSizeZ; zRaw < (resultCombinedPosZ + 1) * kSizeZ; zRaw++){
@@ -82,7 +82,7 @@ namespace cn {
             double val = resultRaw[indexRaw];
             resultCombined[index] += val;
             if(resultCombinedPosX == 2 && resultCombinedPosY == 0){
-                printf("index:%d, val:%.15f \n", indexRaw,  val);
+//                printf("index:%d, val:%.15f \n", indexRaw,  val);
             }
         }
 //        printf("index:%d x:%d y:%d z:%d res:%f\n", index, resultCombinedPosX, resultCombinedPosY, resultCombinedPosZ, resultCombined[index]);
