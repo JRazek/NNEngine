@@ -99,13 +99,13 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
 
     u_int kerBytes = kernels[0].size().multiplyContent() * sizeof(double);
     u_int inputBytes = paddedInput.size().multiplyContent() * sizeof(double);
-    u_int resultRawSize = sX * sY * paddedInput.d() * kernels.size() * sizeof(double);
-    u_int resultCombinedSize = sX * sY * kernels.size() * sizeof(double);
+    u_int resultRawBytes = sX * sY * paddedInput.d() * kernels.size() * sizeof(double);
+    u_int resultCombinedBytes = sX * sY * kernels.size() * sizeof(double);
 
     kernelDev = (double *) fixedCudaMalloc(kerBytes * kernels.size());
     dataDev = (double *) fixedCudaMalloc(inputBytes);
-    resRawDev = (double *) fixedCudaMalloc(resultRawSize);
-    resCombinedDev = (double *) fixedCudaMalloc(resultCombinedSize);
+    resRawDev = (double *) fixedCudaMalloc(resultRawBytes);
+    resCombinedDev = (double *) fixedCudaMalloc(resultCombinedBytes);
     if(!kernelDev || !dataDev || !resRawDev || !resCombinedDev){
         throw std::logic_error("BAD ALLOC");
     }
@@ -152,7 +152,7 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
 
 
     double *hostRes = new double[sX * sY * kernels.size()];
-    cudaMemcpy(hostRes, resCombinedDev, resultCombinedSize, cudaMemcpyDeviceToHost);
+    cudaMemcpy(hostRes, resCombinedDev, resultCombinedBytes, cudaMemcpyDeviceToHost);
 
     result.setData(std::move(hostRes));
 
