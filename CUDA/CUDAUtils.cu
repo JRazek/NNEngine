@@ -32,26 +32,29 @@ namespace cn {
         return (inputSize + 2 * padding - kernelSize) / stride + 1;
     }
 
+
     __global__
     void cudaConvolveKernel(double *input, const double *kernel, double *result, int strideX, int strideY, dim3 inputSize, dim3 outputSize, dim3 kernelSize) {
+        //each index corresponds to output cell.
         u_int index = blockIdx.x * blockDim.x + threadIdx.x;
+        if(index >= outputSize.x * outputSize.y * kernelSize.z)
+            return;
         u_int posXInput = (index % outputSize.x) * strideX;
         u_int posYInput = ((index % (outputSize.x * outputSize.y)) / outputSize.x) * strideY;
         u_int posZInput = (index % (outputSize.x * outputSize.y * outputSize.z)) / (outputSize.x * outputSize.y);
 
-        u_int kernelPosZ = index / (outputSize.x * outputSize.y);
+        u_int posZKernel = index / (outputSize.x * outputSize.y);
 
         double sum = 0;
         for(u_int ky = 0; ky < kernelSize.y; ky++){
             for(u_int kx = 0; kx < kernelSize.x; kx++){
-                sum += kernel[getDataIndex(kernelSize, {kx, ky, kernelPosZ})] * input[getDataIndex(inputSize, {posXInput + kx, posYInput + ky, posZInput})];
+                sum += kernel[getDataIndex(kernelSize, {kx, ky, posZKernel})] * input[getDataIndex(inputSize, {posXInput + kx, posYInput + ky, posZInput})];
             }
         }
 
-       // u_int resultIndex = getDataIndex(outputSize, {posXOutput, posYOutput, kID});
         result[index] = sum;
 
-//        printf("index:%d x:%d y:%d z:%d kID:%d  sum:%g\n", index, kPosX, kPosY, kPosZ, kID, sum);
+//      printf("index:%d x:%d y:%d z:%d kID:%d  sum:%g\n", index, kPosX, kPosY, kPosZ, kID, sum);
     }
     __global__
     void cudaCombineResult(const double *resultRaw, double *resultCombined, u_int kernelDepth, dim3 resultCombinedDim){
@@ -59,6 +62,8 @@ namespace cn {
         u_int kSizeZ = resultRawDim.z / resultCombinedDim.z;
         u_int index = blockIdx.x * blockDim.x + threadIdx.x;
 
+        if(index >= resultCombinedDim.x * resultCombinedDim.y * resultCombinedDim.z)
+            return;
 
 
         u_int resultCombinedPosX = index % resultCombinedDim.x;
@@ -92,13 +97,13 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
     int sX = cn::Utils::afterConvolutionSize(kernels[0].w(), input.w(), paddingX, strideX);
     int sY = cn::Utils::afterConvolutionSize(kernels[0].h(), input.h(), paddingY, strideY);
 
-    u_int kerSize = kernels[0].size().multiplyContent() * sizeof(double);
-    u_int dataSize = paddedInput.size().multiplyContent() * sizeof(double);
+    u_int kerBytes = kernels[0].size().multiplyContent() * sizeof(double);
+    u_int inputBytes = paddedInput.size().multiplyContent() * sizeof(double);
     u_int resultRawSize = sX * sY * paddedInput.d() * kernels.size() * sizeof(double);
     u_int resultCombinedSize = sX * sY * kernels.size() * sizeof(double);
 
-    kernelDev = (double *) fixedCudaMalloc(kerSize * kernels.size());
-    dataDev = (double *) fixedCudaMalloc(dataSize);
+    kernelDev = (double *) fixedCudaMalloc(kerBytes * kernels.size());
+    dataDev = (double *) fixedCudaMalloc(inputBytes);
     resRawDev = (double *) fixedCudaMalloc(resultRawSize);
     resCombinedDev = (double *) fixedCudaMalloc(resultCombinedSize);
     if(!kernelDev || !dataDev || !resRawDev || !resCombinedDev){
@@ -106,22 +111,22 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
     }
 
     for(int i = 0; i < kernels.size(); i ++){
-        cudaMemcpy(kernelDev + i * kernels[i].size().multiplyContent(), kernels[i].dataConst(), kerSize, cudaMemcpyHostToDevice);
+        cudaMemcpy(kernelDev + i * kernels[i].size().multiplyContent(), kernels[i].dataConst(), kerBytes, cudaMemcpyHostToDevice);
     }
 
-    cudaMemcpy(dataDev, paddedInput.dataConst(), dataSize, cudaMemcpyHostToDevice);
+    cudaMemcpy(dataDev, paddedInput.dataConst(), inputBytes, cudaMemcpyHostToDevice);
 
     Bitmap<double> result(sX, sY, kernels.size());
-
-    int threadsRawCount = result.w() * result.h() * kernels.size() * paddedInput.d();
 
     constexpr int threadsPerBlock = 1024;
 
     dim3 inputDim = {static_cast<u_int>(paddedInput.w()), static_cast<u_int>(paddedInput.h()), static_cast<u_int>(paddedInput.d())};
-    dim3 outputDim = {static_cast<u_int>(result.w()), static_cast<u_int>(result.h()), static_cast<u_int>(result.d())};
+    dim3 convOutputDim = {static_cast<u_int>(result.w()), static_cast<u_int>(result.h()), static_cast<u_int>(paddedInput.d())};
+    dim3 finalOutputDim = {static_cast<u_int>(result.w()), static_cast<u_int>(result.h()), static_cast<u_int>(result.d())};
     dim3 kernelDim = {static_cast<u_int>(kernels[0].w()), static_cast<u_int>(kernels[0].h()), static_cast<u_int>(kernels[0].d() * kernels.size())};
 
-    cudaConvolveKernel<<<threadsRawCount/threadsPerBlock + 1, std::min(threadsRawCount, threadsPerBlock)>>>
+    int threadsRawCount = result.w() * result.h() * kernels.size() * paddedInput.d();
+    cudaConvolveKernel<<<threadsRawCount/threadsPerBlock + 1, threadsPerBlock>>>
     (
             dataDev,
             kernelDev,
@@ -129,27 +134,27 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
             strideX,
             strideY,
             inputDim,
-            outputDim,
+            convOutputDim,
             kernelDim
     );
 
-    int threadsCombinedCount = result.w() * result.h() * kernels.size();
 
     cudaDeviceSynchronize();
 
-    cudaCombineResult<<<threadsCombinedCount / threadsPerBlock + 1, std::min(threadsCombinedCount, threadsPerBlock)>>>
+    int threadsCombinedCount = result.w() * result.h() * kernels.size();
+    cudaCombineResult<<<threadsCombinedCount / threadsPerBlock + 1, threadsPerBlock>>>
     (
             resRawDev,
             resCombinedDev,
             kernels[0].d(),
-            outputDim
+            finalOutputDim
     );
 
 
     double *hostRes = new double[sX * sY * kernels.size()];
     cudaMemcpy(hostRes, resCombinedDev, resultCombinedSize, cudaMemcpyDeviceToHost);
 
-    result.setData(&hostRes);
+    result.setData(std::move(hostRes));
 
     delete[] hostRes;
 
