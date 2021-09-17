@@ -5,7 +5,7 @@
 #ifndef NEURALNETLIBRARY_SIGMOID_H
 #define NEURALNETLIBRARY_SIGMOID_H
 #include <cmath>
-#include "../interfaces/Layer.h"
+#include "../../interfaces/Layer.h"
 
 
 namespace cn {

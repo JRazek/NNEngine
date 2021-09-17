@@ -10,8 +10,8 @@
 #include "layers/BatchNormalizationLayer/BatchNormalizationLayer.h"
 #include "layers/MaxPoolingLayer/MaxPoolingLayer.h"
 #include "layers/InputLayer/InputLayer.h"
-#include "layers/ActivationLayers/Sigmoid.h"
-#include "layers/ActivationLayers/ReLU.h"
+#include "layers/ActivationLayers/Sigmoid/Sigmoid.h"
+#include "layers/ActivationLayers/ReLU/ReLU.h"
 
 [[maybe_unused]]
 void cn::Network::feed(const byte *_input) {

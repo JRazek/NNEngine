@@ -3,7 +3,7 @@
 //
 
 #include "ReLU.h"
-#include "../../Network.h"
+#include "../../../Network.h"
 
 void cn::ReLU::run(const cn::Bitmap<double> &input) {
     Bitmap<double> result(input.size());

@@ -3,7 +3,7 @@
 //
 
 #include "Sigmoid.h"
-#include "../../Network.h"
+#include "../../../Network.h"
 
 void cn::Sigmoid::run(const cn::Bitmap<double> &input) {
     Bitmap<double> result(input.size());

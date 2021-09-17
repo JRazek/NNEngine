@@ -4,7 +4,7 @@
 
 #ifndef NEURALNETLIBRARY_RELU_H
 #define NEURALNETLIBRARY_RELU_H
-#include "../interfaces/Layer.h"
+#include "../../interfaces/Layer.h"
 
 
 namespace cn {

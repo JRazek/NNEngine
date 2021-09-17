@@ -8,8 +8,8 @@
 #include "../FFLayer/FFLayer.h"
 #include "../BatchNormalizationLayer/BatchNormalizationLayer.h"
 #include "../MaxPoolingLayer/MaxPoolingLayer.h"
-#include "../../layers/ActivationLayers/ReLU.h"
-#include "../../layers/ActivationLayers/Sigmoid.h"
+#include "../ActivationLayers/ReLU/ReLU.h"
+#include "../ActivationLayers/Sigmoid/Sigmoid.h"
 #include "../InputLayer/InputLayer.h"
 
 cn::Layer::Layer(int _id, Vector3<int> _inputSize) :
