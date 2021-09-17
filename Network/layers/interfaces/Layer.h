@@ -33,6 +33,13 @@ namespace cn {
 
         int __id;
 
+
+        /**
+         * todo - each layer will have 4 files - .h, .cpp .cuh and .cu
+         */
+        virtual void CUDARun() = 0;
+        virtual void CPURun() = 0;
+
     public:
         Layer(int _id, Vector3<int> _inputSize);
 
