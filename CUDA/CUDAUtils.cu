@@ -145,6 +145,7 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
             outputDim
     );
 
+    cudaDeviceSynchronize();
 
     double *hostRes = new double[sX * sY * kernels.size()];
     cudaMemcpy(hostRes, resCombinedDev, resultCombinedSize, cudaMemcpyDeviceToHost);
