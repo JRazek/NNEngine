@@ -3,7 +3,7 @@
 //
 
 #include "MaxPoolingLayer.h"
-#include "../Network.h"
+#include "../../Network.h"
 
 void cn::MaxPoolingLayer::run(const cn::Bitmap<double> &input) {
     if(input.size() != inputSize){

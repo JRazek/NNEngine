@@ -5,7 +5,7 @@
 #ifndef NEURALNETLIBRARY_FLATTENINGLAYER_H
 #define NEURALNETLIBRARY_FLATTENINGLAYER_H
 
-#include "interfaces/Layer.h"
+#include "../interfaces/Layer.h"
 
 namespace cn {
     class Network;

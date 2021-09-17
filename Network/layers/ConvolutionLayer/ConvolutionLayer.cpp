@@ -2,9 +2,9 @@
 // Created by jrazek on 27.07.2021.
 //
 #include "ConvolutionLayer.h"
-#include "../Network.h"
+#include "../../Network.h"
 #include <future>
-#include "../../CUDA/CUDAUtils.cuh"
+#include "../../../CUDA/CUDAUtils.cuh"
 
 void cn::ConvolutionLayer::run(const Bitmap<double> &_input) {
     if(inputSize != _input.size()){

@@ -6,7 +6,7 @@
 #define NEURALNETLIBRARY_CONVOLUTIONLAYER_H
 
 #include <random>
-#include "interfaces/Learnable.h"
+#include "../interfaces/Learnable.h"
 
 template<typename T>
 struct Vector3;

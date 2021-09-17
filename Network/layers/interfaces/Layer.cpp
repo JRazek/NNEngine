@@ -4,13 +4,13 @@
 
 #include "Layer.h"
 #include "../../Network.h"
-#include "../../layers/ConvolutionLayer.h"
-#include "../../layers/FFLayer.h"
-#include "../../layers/BatchNormalizationLayer.h"
-#include "../../layers/MaxPoolingLayer.h"
+#include "../ConvolutionLayer/ConvolutionLayer.h"
+#include "../FFLayer/FFLayer.h"
+#include "../BatchNormalizationLayer/BatchNormalizationLayer.h"
+#include "../MaxPoolingLayer/MaxPoolingLayer.h"
 #include "../../layers/ActivationLayers/ReLU.h"
 #include "../../layers/ActivationLayers/Sigmoid.h"
-#include "../../layers/InputLayer.h"
+#include "../InputLayer/InputLayer.h"
 
 cn::Layer::Layer(int _id, Vector3<int> _inputSize) :
 inputSize(_inputSize), __id(_id){

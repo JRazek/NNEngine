@@ -3,7 +3,7 @@
 //
 
 #include "BatchNormalizationLayer.h"
-#include "../Network.h"
+#include "../../Network.h"
 
 cn::BatchNormalizationLayer::BatchNormalizationLayer(int _id, Vector3<int> _inputSize) : Layer(_id, _inputSize) {
     outputSize = inputSize;

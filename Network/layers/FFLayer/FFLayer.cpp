@@ -3,7 +3,7 @@
 //
 
 #include "FFLayer.h"
-#include "../Network.h"
+#include "../../Network.h"
 
 
 cn::FFLayer::FFLayer(const JSON &json) :

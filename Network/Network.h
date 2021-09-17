@@ -9,7 +9,7 @@
 #include <random>
 #include "../Utils/Utils.h"
 #include "layers/interfaces/Learnable.h"
-#include "layers/OutputLayer.h"
+#include "layers/OutputLayer/OutputLayer.h"
 #include "../Utils/interfaces/JSONEncodable.h"
 #include <memory>
 

@@ -4,12 +4,12 @@
 
 #include <stdexcept>
 #include "Network.h"
-#include "layers/ConvolutionLayer.h"
-#include "layers/FFLayer.h"
-#include "layers/FlatteningLayer.h"
-#include "layers/BatchNormalizationLayer.h"
-#include "layers/MaxPoolingLayer.h"
-#include "layers/InputLayer.h"
+#include "layers/ConvolutionLayer/ConvolutionLayer.h"
+#include "layers/FFLayer/FFLayer.h"
+#include "layers/FlatteningLayer/FlatteningLayer.h"
+#include "layers/BatchNormalizationLayer/BatchNormalizationLayer.h"
+#include "layers/MaxPoolingLayer/MaxPoolingLayer.h"
+#include "layers/InputLayer/InputLayer.h"
 #include "layers/ActivationLayers/Sigmoid.h"
 #include "layers/ActivationLayers/ReLU.h"
 

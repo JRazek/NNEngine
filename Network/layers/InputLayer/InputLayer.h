@@ -4,7 +4,7 @@
 
 #ifndef NEURALNETLIBRARY_INPUTLAYER_H
 #define NEURALNETLIBRARY_INPUTLAYER_H
-#include "interfaces/Layer.h"
+#include "../interfaces/Layer.h"
 namespace cn {
 
     class InputLayer : public Layer{

@@ -4,7 +4,7 @@
 
 #ifndef NEURALNETLIBRARY_OUTPUTLAYER_H
 #define NEURALNETLIBRARY_OUTPUTLAYER_H
-#include "FlatteningLayer.h"
+#include "../FlatteningLayer/FlatteningLayer.h"
 
 
 namespace cn {

@@ -4,7 +4,7 @@
 
 #ifndef NEURALNETLIBRARY_MAXPOOLINGLAYER_H
 #define NEURALNETLIBRARY_MAXPOOLINGLAYER_H
-#include "interfaces/Layer.h"
+#include "../interfaces/Layer.h"
 
 namespace cn {
     class MaxPoolingLayer : public Layer{

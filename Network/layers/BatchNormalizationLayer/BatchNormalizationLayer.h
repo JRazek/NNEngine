@@ -5,7 +5,7 @@
 #ifndef NEURALNETLIBRARY_BATCHNORMALIZATIONLAYER_H
 #define NEURALNETLIBRARY_BATCHNORMALIZATIONLAYER_H
 
-#include "interfaces/Layer.h"
+#include "../interfaces/Layer.h"
 namespace cn {
     class BatchNormalizationLayer : public Layer {
 

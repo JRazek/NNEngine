@@ -3,7 +3,7 @@
 //
 
 #include "OutputLayer.h"
-#include "../Network.h"
+#include "../../Network.h"
 
 cn::OutputLayer::OutputLayer(int id, Vector3<int> _inputSize) : FlatteningLayer(id, _inputSize) {}
 

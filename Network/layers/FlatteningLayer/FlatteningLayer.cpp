@@ -3,7 +3,7 @@
 //
 
 #include "FlatteningLayer.h"
-#include "../Network.h"
+#include "../../Network.h"
 
 cn::FlatteningLayer::FlatteningLayer(int _id, Vector3<int> _inputSize) : Layer(_id, _inputSize) {
     int size = inputSize.multiplyContent();

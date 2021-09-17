@@ -5,7 +5,7 @@
 #ifndef NEURALNETLIBRARY_NETFILEMANAGER_H
 #define NEURALNETLIBRARY_NETFILEMANAGER_H
 #include "../../Network/layers/interfaces/Layer.h"
-#include "../../Network/layers/FFLayer.h"
+#include "../../Network/layers/FFLayer/FFLayer.h"
 #include "../../Network/Network.h"
 #include <memory>
 namespace cn {

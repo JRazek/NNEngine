@@ -6,8 +6,8 @@
 #define NEURALNETLIBRARY_FFLAYER_H
 
 #include <random>
-#include "interfaces/Layer.h"
-#include "interfaces/Learnable.h"
+#include "../interfaces/Layer.h"
+#include "../interfaces/Learnable.h"
 
 namespace cn {
     class Network;
