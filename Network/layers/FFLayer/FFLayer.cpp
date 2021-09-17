@@ -26,7 +26,7 @@ cn::FFLayer::FFLayer(int _id, Vector3<int> _inputSize, int _neuronsCount) :
     outputSize = Vector3<int> (neuronsCount, 1, 1);
 }
 
-void cn::FFLayer::run(const Bitmap<double> &_input) {
+void cn::FFLayer::CPURun(const Bitmap<double> &_input) {
     if(_input.size() != inputSize){
         throw std::logic_error("_input bitmap to ff layer must be a normalized vector type!");
     }

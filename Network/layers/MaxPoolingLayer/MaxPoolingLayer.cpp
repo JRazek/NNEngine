@@ -5,7 +5,7 @@
 #include "MaxPoolingLayer.h"
 #include "../../Network.h"
 
-void cn::MaxPoolingLayer::run(const cn::Bitmap<double> &input) {
+void cn::MaxPoolingLayer::CPURun(const cn::Bitmap<double> &input) {
     if(input.size() != inputSize){
         throw std::logic_error("invalid output size in max pool!");
     }

@@ -57,7 +57,7 @@ namespace cn {
         void feed(const Bitmap<cn::byte> &bitmap);
 
         /**
-         * when network structure is ready - run this function.
+         * when network structure is ready - CPURun this function.
          */
         void ready();
 

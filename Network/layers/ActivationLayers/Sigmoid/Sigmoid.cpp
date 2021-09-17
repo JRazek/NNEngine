@@ -5,7 +5,7 @@
 #include "Sigmoid.h"
 #include "../../../Network.h"
 
-void cn::Sigmoid::run(const cn::Bitmap<double> &input) {
+void cn::Sigmoid::CPURun(const cn::Bitmap<double> &input) {
     Bitmap<double> result(input.size());
     for(int z = 0; z < input.d(); z ++){
         for(int y = 0; y < input.h(); y ++){

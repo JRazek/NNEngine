@@ -6,13 +6,22 @@
 #include <future>
 #include "../../../CUDA/CUDAUtils.cuh"
 
-void cn::ConvolutionLayer::run(const Bitmap<double> &_input) {
+void cn::ConvolutionLayer::CPURun(const Bitmap<double> &_input) {
     if(inputSize != _input.size()){
         throw std::logic_error("CLayer fed with wrong _input size!");
     }
-    Bitmap<double> cudaResult = CUDAUtils::cudaConvolve(kernels, _input, padding.x, padding.y, stride.x, stride.y);
-
-    output.emplace(std::move(cudaResult));
+    std::vector<std::future<Bitmap<double>>> kernelThreads;
+    auto getConvolved = [this](const Bitmap<double> &input, const cn::Bitmap<double> &kernel){
+        return Utils::sumBitmapLayers(Utils::convolve(kernel, input, padding.x, padding.y, stride.x, stride.y));
+    };
+    for(int i = 0; i < kernelsCount; i ++){
+        kernelThreads.push_back(std::async(getConvolved, _input, kernels[i]));
+    }
+    Bitmap<double> result(outputSize);
+    for(int i = 0; i < kernelsCount; i ++){
+        result.setLayer(i, kernelThreads[i].get().data());
+    }
+    output.emplace(std::move(result));
 }
 
 void cn::ConvolutionLayer::randomInit(std::default_random_engine &randomEngine) {
@@ -185,4 +194,8 @@ biases(_kernelsCount){
 
 std::unique_ptr<cn::Layer> cn::ConvolutionLayer::getCopyAsUniquePtr() const {
     return std::make_unique<ConvolutionLayer>(*this);
+}
+
+void cn::ConvolutionLayer::CUDARun(const cn::Bitmap<double> &_input) {
+    Layer::CUDARun(_input);
 }

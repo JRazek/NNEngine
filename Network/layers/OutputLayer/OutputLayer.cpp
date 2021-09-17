@@ -7,8 +7,8 @@
 
 cn::OutputLayer::OutputLayer(int id, Vector3<int> _inputSize) : FlatteningLayer(id, _inputSize) {}
 
-void cn::OutputLayer::run(const cn::Bitmap<double> &input) {
-    return FlatteningLayer::run(input);
+void cn::OutputLayer::CPURun(const cn::Bitmap<double> &input) {
+    return FlatteningLayer::CPURun(input);
 }
 
 double cn::OutputLayer::getChain(const Vector3<int> &input) {

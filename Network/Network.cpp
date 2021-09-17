@@ -31,7 +31,7 @@ void cn::Network::feed(Bitmap<double> bitmap) {
     input.emplace(*_input);
     for(u_int i = 0; i < layers.size(); i ++){
         auto layer = layers[i];
-        layer->run(*_input);
+        layer->CPURun(*_input);
         _input = &getOutput(i).value();
     }
 }

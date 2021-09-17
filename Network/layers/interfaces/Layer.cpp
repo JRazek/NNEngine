@@ -124,3 +124,8 @@ const std::optional<cn::Bitmap<double>> &cn::Layer::getInput() const {
     return prevLayer->getOutput();
 }
 
+//todo remove
+void cn::Layer::CUDARun(const cn::Bitmap<double> &_input) {
+
+}
+

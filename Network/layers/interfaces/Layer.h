@@ -34,20 +34,9 @@ namespace cn {
         int __id;
 
 
-        /**
-         * todo - each layer will have 4 files - .h, .cpp .cuh and .cu
-         */
-        virtual void CUDARun() = 0;
-        virtual void CPURun() = 0;
-
     public:
         Layer(int _id, Vector3<int> _inputSize);
 
-        /**
-         *
-         * @param _input to process
-         */
-        virtual void run(const Bitmap<double> &_input) = 0;
 
         virtual double getChain(const Vector3<int> &inputPos) = 0;
 
@@ -74,6 +63,18 @@ namespace cn {
         virtual const std::optional<Bitmap<double>> &getInput() const;
 
         void setNextLayer(Layer *_nextLayer);
+
+        /**
+             *
+             * @param _input to process
+             */
+        virtual void CPURun(const Bitmap<double> &_input) = 0;
+
+        /**
+         * todo - each layer will have 4 files - .h, .cpp .cuh and .cu
+         * make it pure virtual!
+         */
+        virtual void CUDARun(const Bitmap<double> &_input);
     };
 }
 

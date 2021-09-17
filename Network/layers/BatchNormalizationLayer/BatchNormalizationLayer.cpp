@@ -9,7 +9,7 @@ cn::BatchNormalizationLayer::BatchNormalizationLayer(int _id, Vector3<int> _inpu
     outputSize = inputSize;
 }
 
-void cn::BatchNormalizationLayer::run(const cn::Bitmap<double> &input) {
+void cn::BatchNormalizationLayer::CPURun(const cn::Bitmap<double> &input) {
     if(input.size() != inputSize)
         throw std::logic_error("invalid bitmap input for normalization layer!");
     Bitmap<double> result(outputSize, input.dataConst());

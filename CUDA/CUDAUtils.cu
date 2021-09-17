@@ -2,7 +2,6 @@
 // Created by user on 12.09.2021.
 //
 
-#include <thread>
 #include "CUDAUtils.cuh"
 #include "../Utils/dataStructures/Bitmap.h"
 

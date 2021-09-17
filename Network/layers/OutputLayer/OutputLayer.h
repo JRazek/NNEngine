@@ -13,7 +13,7 @@ namespace cn {
     public:
         OutputLayer(int id, Vector3<int> _inputSize);
         OutputLayer(const cn::JSON &json);
-        void run(const Bitmap<double> &input) override;
+        void CPURun(const Bitmap<double> &input) override;
         double getChain(const Vector3<int> &input) override;
         void setTarget(const Bitmap<double> *_target);
         JSON jsonEncode() const override;
