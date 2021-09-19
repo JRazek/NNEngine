@@ -20,7 +20,7 @@ namespace cn {
     class Layer : public JSONEncodable{
     protected:
 
-        std::optional<Bitmap<double>> output;
+        std::unique_ptr<Bitmap<double>> output;
 
         Layer *prevLayer = nullptr;
         Layer *nextLayer = nullptr;
@@ -28,15 +28,16 @@ namespace cn {
         Vector3<int> inputSize;
         Vector3<int> outputSize;
 
-        std::optional<Bitmap<bool>> memoizationStates;
-        std::optional<Bitmap<double>> memoizationTable;
+        std::unique_ptr<Bitmap<bool>> memoizationStates;
+        std::unique_ptr<Bitmap<double>> memoizationTable;
 
         int __id;
 
 
     public:
         Layer(int _id, Vector3<int> _inputSize);
-
+        Layer(const Layer &layer);
+        Layer(Layer &&layer);
 
         virtual double getChain(const Vector3<int> &inputPos) = 0;
 
@@ -59,8 +60,8 @@ namespace cn {
 
         void setPrevLayer(Layer *_prevLayer);
 
-        const std::optional<Bitmap<double>> &getOutput() const;
-        virtual const std::optional<Bitmap<double>> &getInput() const;
+        const std::unique_ptr<Bitmap<double>> &getOutput() const;
+        virtual const std::unique_ptr<Bitmap<double>> &getInput() const;
 
         void setNextLayer(Layer *_nextLayer);
 

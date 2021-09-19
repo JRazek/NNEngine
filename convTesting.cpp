@@ -82,7 +82,7 @@ int main(){
         network.feed(cn::Utils::resize(bitmap, inputSize.x, inputSize.y));
         momentumGd.propagate(target);
 
-        int best = getBest(network.getNetworkOutput().value());
+        int best = getBest(*network.getNetworkOutput().get());
         if (best == numVal) {
             correctCount++;
         }

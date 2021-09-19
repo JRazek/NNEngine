@@ -27,7 +27,7 @@ void cn::BatchNormalizationLayer::CPURun(const cn::Bitmap<double> &input) {
     }else{
         normalizationFactor = 1;
     }
-    output.emplace(std::move(result));
+    output = std::make_unique<Bitmap<double>>(std::move(result));
 }
 
 double cn::BatchNormalizationLayer::getChain(const Vector3<int> &inputPos) {

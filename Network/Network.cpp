@@ -27,12 +27,14 @@ void cn::Network::feed(Bitmap<double> bitmap) {
     }
     if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
-    const Bitmap<double> *_input = &bitmap;
-    input.emplace(*_input);
+
+    input = std::make_unique<Bitmap<double>>(std::move(bitmap));
+
+    const Bitmap<double> *_input = input.get();
     for(u_int i = 0; i < layers.size(); i ++){
         auto layer = layers[i];
         layer->CPURun(*_input);
-        _input = &getOutput(i).value();
+        _input = getOutput(i).get();
     }
 }
 
@@ -132,7 +134,7 @@ cn::Vector3<int> cn::Network::getInputSize(int layerID) const {
     return getOutputSize(layerID - 1);
 }
 
-const std::optional<cn::Bitmap<double>> &cn::Network::getNetworkOutput() const {
+const std::unique_ptr<cn::Bitmap<double>> &cn::Network::getNetworkOutput() const {
     return layers.back()->getOutput();
 }
 
@@ -140,14 +142,14 @@ cn::OutputLayer &cn::Network::getOutputLayer() {
     return *outputLayer;
 }
 
-const std::optional<cn::Bitmap<double>> &cn::Network::getInput(int layerID) const{
+const std::unique_ptr<cn::Bitmap<double>> &cn::Network::getInput(int layerID) const{
     if(layerID == 0)
         return input;
 
     return getOutput(layerID -1);
 }
 
-const std::optional<cn::Bitmap<double>> &cn::Network::getOutput(int layerID) const {
+const std::unique_ptr<cn::Bitmap<double>> &cn::Network::getOutput(int layerID) const {
     return layers[layerID]->getOutput();
 }
 

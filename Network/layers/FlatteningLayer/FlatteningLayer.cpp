@@ -14,14 +14,14 @@ void cn::FlatteningLayer::CPURun(const cn::Bitmap<double> &input) {
     if(input.size().multiplyContent() != inputSize.multiplyContent())
         throw std::logic_error("invalid input input for flattening layer!");
     Bitmap<double> result ({inputSize.multiplyContent(), 1, 1}, input.dataConst());
-    output.emplace(std::move((result)));
+    output = std::make_unique<Bitmap<double>>(std::move(result));
 }
 
 double cn::FlatteningLayer::getChain(const Vector3<int> &inputPos) {
     if(getMemoState(inputPos)){
         return getMemo(inputPos);
     }
-    int outputIndex = prevLayer->getOutput().value().getDataIndex(inputPos);
+    int outputIndex = prevLayer->getOutput()->getDataIndex(inputPos);
     double res = nextLayer->getChain({outputIndex, 0, 0});
     setMemo(inputPos, res);
     return res;

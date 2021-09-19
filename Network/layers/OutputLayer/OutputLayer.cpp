@@ -12,7 +12,7 @@ void cn::OutputLayer::CPURun(const cn::Bitmap<double> &input) {
 }
 
 double cn::OutputLayer::getChain(const Vector3<int> &input) {
-    return getInput().value().getCell(input) - target->getCell(input);
+    return getInput()->getCell(input) - target->getCell(input);
 }
 
 void cn::OutputLayer::setTarget(const cn::Bitmap<double> *_target) {

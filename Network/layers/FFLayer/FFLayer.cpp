@@ -40,7 +40,7 @@ void cn::FFLayer::CPURun(const Bitmap<double> &_input) {
         }
         result.setCell(i, 0, 0, sum);
     }
-    output.emplace(std::move(result));
+    output = std::make_unique<Bitmap<double>>(std::move(result));
 }
 
 void cn::FFLayer::randomInit(std::default_random_engine &randomEngine) {
@@ -74,7 +74,7 @@ double cn::FFLayer::getChain(const Vector3<int> &inputPos) {
 
 double cn::FFLayer::diffWeight(int weightID) {
     int neuron = weightID / inputSize.x;
-    const Bitmap<double> &input = getInput().value();
+    const Bitmap<double> &input = *getInput();
     return input.getCell(weightID % inputSize.x, 0, 0) * nextLayer->getChain({neuron, 0, 0});
 }
 

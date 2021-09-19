@@ -29,7 +29,7 @@ namespace cn {
         std::vector<Learnable *> learnableLayers;
         std::vector<Layer *> layers;
 
-        std::optional<Bitmap<double>> input;
+        std::unique_ptr<Bitmap<double>> input;
 
         OutputLayer *outputLayer = nullptr;
 
@@ -98,9 +98,9 @@ namespace cn {
 
         void resetMemoization();
 
-        const std::optional<cn::Bitmap<double>> &getInput(int layerID) const;
-        const std::optional<cn::Bitmap<double>> &getNetworkOutput() const;
-        const std::optional<cn::Bitmap<double>> &getOutput(int layerID) const;
+        const std::unique_ptr<cn::Bitmap<double>> & getInput(int layerID) const;
+        const std::unique_ptr<cn::Bitmap<double>> & getNetworkOutput() const;
+        const std::unique_ptr<cn::Bitmap<double>> & getOutput(int layerID) const;
 
         JSON jsonEncode() const override;
 

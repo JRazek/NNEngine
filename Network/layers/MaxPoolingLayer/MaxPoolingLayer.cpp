@@ -30,7 +30,7 @@ void cn::MaxPoolingLayer::CPURun(const cn::Bitmap<double> &input) {
             }
         }
     }
-    output.emplace(std::move(result));
+    output = std::make_unique<Bitmap<double>>(std::move(result));
 }
 
 double cn::MaxPoolingLayer::getChain(const Vector3<int> &inputPos) {

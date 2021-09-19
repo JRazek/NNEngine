@@ -14,11 +14,11 @@ void cn::Sigmoid::CPURun(const cn::Bitmap<double> &input) {
             }
         }
     }
-    output.emplace(std::move(result));
+    output = std::make_unique<Bitmap<double>>(std::move(result));
 }
 
 double cn::Sigmoid::getChain(const Vector3<int> &inputPos) {
-    const Bitmap<double> &input = getInput().value();
+    const Bitmap<double> &input = *getInput().get();
     return diff(input.getCell(inputPos)) * nextLayer->getChain(inputPos);
 }
 

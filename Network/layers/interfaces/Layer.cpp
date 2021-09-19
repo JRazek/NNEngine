@@ -14,8 +14,8 @@
 
 cn::Layer::Layer(int _id, Vector3<int> _inputSize) :
 inputSize(_inputSize), __id(_id){
-    memoizationStates.emplace(Bitmap<bool>(inputSize));
-    memoizationTable.emplace(Bitmap<double>(inputSize));
+    memoizationStates = std::make_unique<Bitmap<bool>>(Bitmap<bool>(inputSize));
+    memoizationTable = std::make_unique<Bitmap<double>>(Bitmap<double>(inputSize));
     resetMemoization();
 }
 
@@ -116,11 +116,11 @@ void cn::Layer::setNextLayer(cn::Layer *_nextLayer) {
     nextLayer = _nextLayer;
 }
 
-const std::optional<cn::Bitmap<double>> &cn::Layer::getOutput() const {
+const std::unique_ptr<cn::Bitmap<double>> &cn::Layer::getOutput() const {
     return output;
 }
 
-const std::optional<cn::Bitmap<double>> &cn::Layer::getInput() const {
+const std::unique_ptr<cn::Bitmap<double>> &cn::Layer::getInput() const {
     return prevLayer->getOutput();
 }
 
@@ -129,3 +129,14 @@ void cn::Layer::CUDARun(const cn::Bitmap<double> &_input) {
 
 }
 
+cn::Layer::Layer(const cn::Layer &layer) :
+inputSize(layer.inputSize), __id(layer.id()){
+    memoizationStates = std::make_unique<Bitmap<bool>>(*layer.memoizationStates.get());
+    memoizationTable = std::make_unique<Bitmap<double>>(*layer.memoizationTable.get());
+}
+
+cn::Layer::Layer(cn::Layer &&layer) :
+inputSize(layer.inputSize), __id(layer.id()){
+    memoizationStates = std::move(layer.memoizationStates);
+    memoizationTable = std::move(layer.memoizationTable);
+}
