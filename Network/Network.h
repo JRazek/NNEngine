@@ -20,6 +20,7 @@ namespace cn {
         friend class Optimizer;
 
         int seed;
+
         /**
          * what the dimensions of the byte array is after being normalized and sampled
          */
