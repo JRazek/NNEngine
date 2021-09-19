@@ -3,7 +3,8 @@
 //
 
 #include "CUDAConvolutionLayer.cuh"
+#include "ConvolutionLayer.h"
 
-void cn::CUDAConvolutionLayer::CUDARun(cn::ConvolutionLayer &convolutionLayer, const cn::Bitmap<double> &_input) {
+cn::Bitmap<double> cn::CUDAConvolutionLayer::CUDARun(cn::ConvolutionLayer &convolutionLayer, const cn::Bitmap<double> &_input) {
 
 }

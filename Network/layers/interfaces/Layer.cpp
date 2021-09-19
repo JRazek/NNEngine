@@ -124,9 +124,9 @@ const std::unique_ptr<cn::Bitmap<double>> &cn::Layer::getInput() const {
     return prevLayer->getOutput();
 }
 
-//todo remove
 void cn::Layer::CUDARun(const cn::Bitmap<double> &_input) {
-
+    CPURun(_input);
+    ///placeholder
 }
 
 cn::Layer::Layer(const cn::Layer &layer) :

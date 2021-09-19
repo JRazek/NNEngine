@@ -2,9 +2,9 @@
 // Created by jrazek on 27.07.2021.
 //
 #include "ConvolutionLayer.h"
+#include "CUDAConvolutionLayer.cuh"
 #include "../../Network.h"
 #include <future>
-#include "../../../CUDA/CUDAUtils.cuh"
 
 void cn::ConvolutionLayer::CPURun(const Bitmap<double> &_input) {
     if(inputSize != _input.size()){
@@ -22,6 +22,13 @@ void cn::ConvolutionLayer::CPURun(const Bitmap<double> &_input) {
         result.setLayer(i, kernelThreads[i].get().data());
     }
     output = std::make_unique<Bitmap<double>>(std::move(result));
+}
+
+void cn::ConvolutionLayer::CUDARun(const cn::Bitmap<double> &_input) {
+    if(inputSize != _input.size()){
+        throw std::logic_error("CLayer fed with wrong _input size!");
+    }
+    output = std::make_unique<Bitmap<double>>(CUDAConvolutionLayer::CUDARun(*this, _input));
 }
 
 void cn::ConvolutionLayer::randomInit(std::default_random_engine &randomEngine) {
@@ -194,8 +201,4 @@ biases(_kernelsCount){
 
 std::unique_ptr<cn::Layer> cn::ConvolutionLayer::getCopyAsUniquePtr() const {
     return std::make_unique<ConvolutionLayer>(*this);
-}
-
-void cn::ConvolutionLayer::CUDARun(const cn::Bitmap<double> &_input) {
-    Layer::CUDARun(_input);
 }

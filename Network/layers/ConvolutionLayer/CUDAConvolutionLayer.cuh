@@ -12,7 +12,7 @@ namespace cn {
 
     class CUDAConvolutionLayer{
     public:
-        static void CUDARun(ConvolutionLayer &convolutionLayer, const Bitmap<double> &_input);
+        static Bitmap<double> CUDARun(ConvolutionLayer &convolutionLayer, const Bitmap<double> &_input);
     };
 }
 

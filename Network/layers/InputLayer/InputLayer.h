@@ -19,7 +19,6 @@ namespace cn {
         std::unique_ptr <Layer> getCopyAsUniquePtr() const override;
 
         InputLayer(const InputLayer &inputLayer);
-        InputLayer(InputLayer &&inputLayer);
     };
 
 }
