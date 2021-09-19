@@ -11,12 +11,14 @@ theta(_theta)
 
 void cn::MomentumGD::propagate(const cn::Bitmap<double> &target) {
     network.resetMemoization();
+    const std::vector<cn::Learnable *> &learnables = getLearnables();
+
     if(!iteration){
-        emaWeightsMemo = std::vector<std::vector<float>>(network.getLearnables().size(), std::vector<float>());
-        emaBiasesMemo = std::vector<std::vector<float>>(network.getLearnables().size(), std::vector<float>());
-        for(u_int i = 0; i < network.getLearnables().size(); i ++){
-            emaWeightsMemo[i] = std::vector<float>(network.getLearnables().at(i)->weightsCount(), 0);
-            emaBiasesMemo[i] = std::vector<float>(network.getLearnables().at(i)->biasesCount(), 0);
+        emaWeightsMemo = std::vector<std::vector<float>>(learnables.size(), std::vector<float>());
+        emaBiasesMemo = std::vector<std::vector<float>>(learnables.size(), std::vector<float>());
+        for(u_int i = 0; i < learnables.size(); i ++){
+            emaWeightsMemo[i] = std::vector<float>(learnables.at(i)->weightsCount(), 0);
+            emaBiasesMemo[i] = std::vector<float>(learnables.at(i)->biasesCount(), 0);
         }
     }
     OutputLayer &layer = network.getOutputLayer();
@@ -25,8 +27,8 @@ void cn::MomentumGD::propagate(const cn::Bitmap<double> &target) {
     if(output.size() != target.size()){
         throw std::logic_error("MBGD, invalid target!");
     }
-    for(u_int k = 0; k < network.getLearnables().size(); k ++){
-        Learnable *learnable = network.getLearnables().at(k);
+    for(u_int k = 0; k < learnables.size(); k ++){
+        Learnable *learnable = learnables.at(k);
         std::vector<double> weightsGradient = learnable->getWeightsGradient();
         std::vector<double> biasesGradient = learnable->getBiasesGradient();
 

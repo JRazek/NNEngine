@@ -17,6 +17,8 @@ namespace cn {
 
     class Network : public JSONEncodable{
     private:
+        friend class Optimizer;
+
         int seed;
         /**
          * what the dimensions of the byte array is after being normalized and sampled
@@ -24,7 +26,6 @@ namespace cn {
         Vector3<int> inputSize;
         std::default_random_engine randomEngine;
         std::vector<std::unique_ptr<Layer>> allocated;
-
     protected:
         std::vector<Learnable *> learnableLayers;
         std::vector<Layer *> layers;
@@ -34,6 +35,7 @@ namespace cn {
         OutputLayer *outputLayer = nullptr;
 
         void linkLayers();
+
     public:
 
         void appendConvolutionLayer(Vector2<int> kernelSize, int kernelsCount, Vector2<int> stride = {1, 1}, Vector2<int> padding = {0, 0});
@@ -60,16 +62,6 @@ namespace cn {
          * when network structure is ready - CPURun this function.
          */
         void ready();
-
-
-        /**
-         *
-         * @return learnables
-         */
-        const std::vector<Learnable *> &getLearnables() const;
-
-
-        const std::vector<Layer *> &getLayers() const;
 
 
 

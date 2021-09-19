@@ -113,10 +113,6 @@ void cn::Network::ready() {
     linkLayers();
 }
 
-const std::vector<cn::Learnable *> &cn::Network::getLearnables() const{
-    return learnableLayers;
-}
-
 void cn::Network::resetMemoization() {
     for(auto l : layers){
         l->resetMemoization();
@@ -151,11 +147,6 @@ const std::unique_ptr<cn::Bitmap<double>> &cn::Network::getInput(int layerID) co
 
 const std::unique_ptr<cn::Bitmap<double>> &cn::Network::getOutput(int layerID) const {
     return layers[layerID]->getOutput();
-}
-
-[[maybe_unused]]
-const std::vector<cn::Layer *> &cn::Network::getLayers() const{
-    return layers;
 }
 
 cn::JSON cn::Network::jsonEncode() const {
