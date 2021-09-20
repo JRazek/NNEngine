@@ -16,7 +16,6 @@ namespace cn {
 
     template<typename T>
     struct Vector3;
-    class Network;
     class Layer : public JSONEncodable{
     protected:
 
@@ -43,8 +42,8 @@ namespace cn {
 
         /**
          *
-         * @return counts gradient iteratively.
-         * @warning Layers must be called in correct order. Otherwise error will be thrown.
+         * counts gradient iteratively.
+         * @warning Layers must be called in correct order. From the ending layer to the first. Otherwise error will be thrown.
          */
         virtual void CUDAAutoGrad();
 
@@ -73,9 +72,9 @@ namespace cn {
         void setNextLayer(Layer *_nextLayer);
 
         /**
-             *
-             * @param _input to process
-             */
+         *
+         * @param _input to process
+         */
         virtual void CPURun(const Bitmap<double> &_input) = 0;
 
         /**
