@@ -8,4 +8,4 @@ For any kind of image edition there are util functions in Utils class that may b
 interpolations and matrix transformations.
 <br>
 
-Currently CUDA support is in progress as well as parallel convolutions on multiple devices for better performance.
+CUDA support is in progress as well as parallel convolutions on multiple devices for better performance.
