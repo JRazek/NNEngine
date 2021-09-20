@@ -48,6 +48,8 @@ namespace cn {
         virtual void CUDARun(const Bitmap<double> &_input) override;
         void CPURun(const Bitmap<double> &_input) override;
 
+        void CUDAAutoGrad() override;
+
         JSON jsonEncode() const override;
 
         std::unique_ptr<Layer> getCopyAsUniquePtr() const override;

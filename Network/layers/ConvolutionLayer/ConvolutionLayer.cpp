@@ -202,3 +202,7 @@ biases(_kernelsCount){
 std::unique_ptr<cn::Layer> cn::ConvolutionLayer::getCopyAsUniquePtr() const {
     return std::make_unique<ConvolutionLayer>(*this);
 }
+
+void cn::ConvolutionLayer::CUDAAutoGrad() {
+    CUDAConvolutionLayer::CUDAAutoGrad(*this);
+}

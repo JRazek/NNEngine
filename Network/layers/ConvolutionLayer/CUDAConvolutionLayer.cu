@@ -18,3 +18,7 @@ cn::Bitmap<double> cn::CUDAConvolutionLayer::CUDARun(cn::ConvolutionLayer &convo
 
     return *convolutionLayer.output.get();
 }
+
+void cn::CUDAConvolutionLayer::CUDAAutoGrad(cn::ConvolutionLayer &convolutionLayer) {
+
+}

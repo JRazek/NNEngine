@@ -46,7 +46,8 @@ namespace cn {
          * @return counts gradient iteratively.
          * @warning Layers must be called in correct order. Otherwise error will be thrown.
          */
-//        virtual double CUDAAutoGrad() = 0;
+        virtual void CUDAAutoGrad();
+
 
         virtual ~Layer() = default;
 
@@ -58,7 +59,6 @@ namespace cn {
 
         [[maybe_unused]] int id() const;
 
-        //for development purposes only. To delete in future
         virtual JSON jsonEncode() const override;
 
         virtual std::unique_ptr<Layer> getCopyAsUniquePtr() const = 0;

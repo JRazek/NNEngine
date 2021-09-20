@@ -19,7 +19,7 @@ int main(){
 
 
     const int outputSize = 10;
-    network.appendConvolutionLayer({3, 3},5, {2, 2}, {1, 1} );
+    network.appendConvolutionLayer({3, 3},5, {2, 2}, {1, 1});
     network.appendReLULayer();
     network.appendBatchNormalizationLayer();
     network.appendFlatteningLayer();
@@ -87,7 +87,7 @@ int main(){
             correctCount++;
         }
 
-        if (!((i + 1) % 1)) {
+        if (!((i + 1) % resetRate)) {
             std::cout << "LOSS "<< i <<": "<< momentumGd.getError(target) << "\n";
             std::cout << "ACCURACY: " << (double) correctCount / double(resetRate) * 100 << "%\n";
             correctCount = 0;
@@ -100,8 +100,6 @@ int main(){
             file << network.jsonEncode();
             file.close();
         }
-
-        return 0;
     }
     return 0;
 }

@@ -140,3 +140,7 @@ inputSize(layer.inputSize), __id(layer.id()){
     memoizationStates = std::move(layer.memoizationStates);
     memoizationTable = std::move(layer.memoizationTable);
 }
+
+void cn::Layer::CUDAAutoGrad() {
+    throw std::logic_error("this should be overridden!");
+}
