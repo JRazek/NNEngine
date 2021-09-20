@@ -4,6 +4,7 @@ set(CMAKE_CXX_COMPILER /usr/bin/gcc)
 cmake_minimum_required(VERSION 3.0.2)
 project(NeuralNetLibrary LANGUAGES CXX CUDA)
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CUDA_STANDARD 14)
 
 
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")

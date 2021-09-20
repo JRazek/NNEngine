@@ -41,6 +41,13 @@ namespace cn {
 
         virtual double getChain(const Vector3<int> &inputPos) = 0;
 
+        /**
+         *
+         * @return counts gradient iteratively.
+         * @warning Layers must be called in correct order. Otherwise error will be thrown.
+         */
+//        virtual double CUDAAutoGrad() = 0;
+
         virtual ~Layer() = default;
 
         void resetMemoization();
@@ -72,8 +79,7 @@ namespace cn {
         virtual void CPURun(const Bitmap<double> &_input) = 0;
 
         /**
-         * todo - each layer will have 4 files - .h, .cpp .cuh and .cu
-         * make it pure virtual!
+         * if not supported yet - CPURun is being called.
          */
         virtual void CUDARun(const Bitmap<double> &_input);
     };
