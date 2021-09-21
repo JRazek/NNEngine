@@ -4,6 +4,7 @@
 
 #include "OutputLayer.h"
 #include "../../Network.h"
+#include "CUDAOutputLayer.cuh"
 
 cn::OutputLayer::OutputLayer(int id, Vector3<int> _inputSize) : FlatteningLayer(id, _inputSize) {}
 
@@ -36,4 +37,8 @@ FlatteningLayer(json)
 
 std::unique_ptr<cn::Layer> cn::OutputLayer::getCopyAsUniquePtr() const {
     return std::make_unique<OutputLayer>(*this);
+}
+
+void cn::OutputLayer::CUDAAutoGrad() {
+    CUDAOutputLayer::CUDAAutoGrad(*this);
 }

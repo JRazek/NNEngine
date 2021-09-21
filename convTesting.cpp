@@ -80,7 +80,7 @@ int main(){
             bitmap = cn::Utils::average3Layers(bitmap);
         }
         network.feed(cn::Utils::resize(bitmap, inputSize.x, inputSize.y));
-        momentumGd.propagate(target, false);
+        momentumGd.propagate(target, true);
 
         int best = getBest(*network.getNetworkOutput().get());
         if (best == numVal) {
