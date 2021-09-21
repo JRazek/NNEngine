@@ -17,7 +17,7 @@ namespace cn {
         std::vector<std::vector<double>> memorizedBiases;
     public:
         MBGD(Network &_network, double _learningRate, int _miniBatchSize);
-        void propagate(const Bitmap<double> &target, bool CUDAAccelerate) override;
+        void propagate(const Bitmap<double> &target, bool CUDAAccelerate = false) override;
     };
 
 }
