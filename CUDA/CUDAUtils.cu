@@ -7,7 +7,7 @@
 
 namespace cn {
     __device__
-    int getDataIndex(dim3 bitmapSize, dim3 pos){
+    inline int getDataIndex(dim3 bitmapSize, dim3 pos){
 //        if(pos.x >= bitmapSize.x) {
 //            printf("x, %d %d\n", pos.x, bitmapSize.x);
 //        }
@@ -21,13 +21,13 @@ namespace cn {
         return pos.z * bitmapSize.x * bitmapSize.y + pos.y * bitmapSize.x + pos.x;
     }
     __device__
-    dim3 getDataPos(dim3 bitmapSize, int index){
+    inline dim3 getDataPos(dim3 bitmapSize, int index){
 //        if(index >= bitmapSize.x * bitmapSize.y * bitmapSize.z)
 //            printf("zły arg2 :P");
         return dim3(index % bitmapSize.x, (index / bitmapSize.x) % bitmapSize.x, index / (bitmapSize.x * bitmapSize.y));
     }
     __device__
-    int afterConvolutionSize(int kernelSize, int inputSize, int padding, int stride) {
+    inline int afterConvolutionSize(int kernelSize, int inputSize, int padding, int stride) {
         return (inputSize + 2 * padding - kernelSize) / stride + 1;
     }
 

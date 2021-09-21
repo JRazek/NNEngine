@@ -9,7 +9,7 @@ Optimizer(_network, _learningRate),
 theta(_theta)
 {}
 
-void cn::MomentumGD::propagate(const cn::Bitmap<double> &target) {
+void cn::MomentumGD::propagate(const cn::Bitmap<double> &target, bool CUDAAccelerate) {
     network.resetMemoization();
     const std::vector<cn::Learnable *> &learnables = getLearnables();
 

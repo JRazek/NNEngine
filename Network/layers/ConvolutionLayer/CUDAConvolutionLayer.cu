@@ -9,13 +9,13 @@
 
 namespace cn{
     __device__
-    dim3 getDataPos(dim3 bitmapSize, int index){
+    inline dim3 getDataPos(dim3 bitmapSize, int index){
         if(index >= bitmapSize.x * bitmapSize.y * bitmapSize.z)
             printf("zły arg2 :P");
         return dim3(index % bitmapSize.x, (index % bitmapSize.x * bitmapSize.y) / bitmapSize.x, index / (bitmapSize.x * bitmapSize.y));
     }
     __device__
-    int getDataIndex(dim3 bitmapSize, dim3 pos){
+    inline int getDataIndex(dim3 bitmapSize, dim3 pos){
         if(pos.x >= bitmapSize.x) {
             printf("x, %d %d\n", pos.x, bitmapSize.x);
         }
@@ -74,7 +74,7 @@ void cn::CUDAConvolutionLayer::CUDAAutoGrad(cn::ConvolutionLayer &convolutionLay
 
     cudaMemcpy(inputDev, paddedInput.data(), paddedInputBytes, cudaMemcpyHostToDevice);
 
-    CUDAConvAutoGrad<<<inputSize/cn::THREADS_PER_BLOCK+1, cn::THREADS_PER_BLOCK>>>();
+//    CUDAConvAutoGrad<<<inputSize/cn::THREADS_PER_BLOCK+1, cn::THREADS_PER_BLOCK>>>();
 
     cudaMemcpy(convolutionLayer.memoizationTable->data(), chainValuesDev, paddedInputBytes, cudaMemcpyDeviceToHost);
 

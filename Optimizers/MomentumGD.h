@@ -13,7 +13,7 @@ namespace cn {
         std::vector<std::vector<float>> emaBiasesMemo;
     public:
         MomentumGD(Network &_network, float _theta, double _learningRate);
-        void propagate(const Bitmap<double> &target) override;
+        void propagate(const Bitmap<double> &target, bool CUDAAccelerate) override;
     };
 }
 

@@ -17,7 +17,7 @@ namespace cn {
         const std::vector<cn::Layer *> &getNetworkLayers();
         const std::vector<cn::Learnable *> &getLearnables();
     public:
-        virtual void propagate(const Bitmap<double> &target) = 0;
+        virtual void propagate(const Bitmap<double> &target, bool CUDAAccelerate = false) = 0;
         double getError(const cn::Bitmap<double> &target) const;
     };
 }

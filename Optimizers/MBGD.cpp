@@ -13,7 +13,7 @@ cn::MBGD::MBGD(Network &_network, double _learningRate, int _miniBatchSize) :
     }
 }
 
-void cn::MBGD::propagate(const cn::Bitmap<double> &target) {
+void cn::MBGD::propagate(const cn::Bitmap<double> &target, bool CUDAAccelerate) {
     network.resetMemoization();
     const std::vector<cn::Learnable *> &learnables = getLearnables();
 
