@@ -9,7 +9,7 @@ namespace cn {
     class OutputLayer;
     class CUDAOutputLayer {
     public:
-        static void CUDAAutoGrad(OutputLayer &convolutionLayer);
+        static void CUDAAutoGrad(OutputLayer &outputLayer);
     };
 }
 

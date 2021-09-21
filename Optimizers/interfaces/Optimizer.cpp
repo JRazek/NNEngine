@@ -19,10 +19,10 @@ double cn::Optimizer::getError(const cn::Bitmap<double> &target) const {
     return error;
 }
 
-const std::vector<cn::Layer *> &cn::Optimizer::getNetworkLayers() {
+const std::vector<cn::Layer *> &cn::Optimizer::getNetworkLayers() const {
     return network.layers;
 }
 
-const std::vector<cn::Learnable *> &cn::Optimizer::getLearnables() {
+const std::vector<cn::Learnable *> &cn::Optimizer::getLearnables() const {
     return network.learnableLayers;
 }
