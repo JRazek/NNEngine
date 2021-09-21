@@ -7,7 +7,7 @@
 #include "Utils/dataStructures/QuadTree.h"
 #include "Utils/dataStructures/KDTree.h"
 #include "Network/Network.h"
-#include "Network/layers/ConvolutionLayer.h"
+#include "Network/layers/ConvolutionLayer/ConvolutionLayer.h"
 #include <opencv2/opencv.hpp>
 #include <fstream>
 

@@ -3,13 +3,13 @@
 //
 
 #include "BatchNormalizationLayer.h"
-#include "../Network.h"
+#include "../../Network.h"
 
 cn::BatchNormalizationLayer::BatchNormalizationLayer(int _id, Vector3<int> _inputSize) : Layer(_id, _inputSize) {
     outputSize = inputSize;
 }
 
-void cn::BatchNormalizationLayer::run(const cn::Bitmap<double> &input) {
+void cn::BatchNormalizationLayer::CPURun(const cn::Bitmap<double> &input) {
     if(input.size() != inputSize)
         throw std::logic_error("invalid bitmap input for normalization layer!");
     Bitmap<double> result(outputSize, input.dataConst());
@@ -27,7 +27,7 @@ void cn::BatchNormalizationLayer::run(const cn::Bitmap<double> &input) {
     }else{
         normalizationFactor = 1;
     }
-    output.emplace(std::move(result));
+    output = std::make_unique<Bitmap<double>>(std::move(result));
 }
 
 double cn::BatchNormalizationLayer::getChain(const Vector3<int> &inputPos) {

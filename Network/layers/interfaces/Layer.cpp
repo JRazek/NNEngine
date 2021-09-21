@@ -4,18 +4,18 @@
 
 #include "Layer.h"
 #include "../../Network.h"
-#include "../../layers/ConvolutionLayer.h"
-#include "../../layers/FFLayer.h"
-#include "../../layers/BatchNormalizationLayer.h"
-#include "../../layers/MaxPoolingLayer.h"
-#include "../../layers/ActivationLayers/ReLU.h"
-#include "../../layers/ActivationLayers/Sigmoid.h"
-#include "../../layers/InputLayer.h"
+#include "../ConvolutionLayer/ConvolutionLayer.h"
+#include "../FFLayer/FFLayer.h"
+#include "../BatchNormalizationLayer/BatchNormalizationLayer.h"
+#include "../MaxPoolingLayer/MaxPoolingLayer.h"
+#include "../ActivationLayers/ReLU/ReLU.h"
+#include "../ActivationLayers/Sigmoid/Sigmoid.h"
+#include "../InputLayer/InputLayer.h"
 
 cn::Layer::Layer(int _id, Vector3<int> _inputSize) :
 inputSize(_inputSize), __id(_id){
-    memoizationStates.emplace(Bitmap<bool>(inputSize));
-    memoizationTable.emplace(Bitmap<double>(inputSize));
+    memoizationStates = std::make_unique<Bitmap<bool>>(Bitmap<bool>(inputSize));
+    memoizationTable = std::make_unique<Bitmap<double>>(Bitmap<double>(inputSize));
     resetMemoization();
 }
 
@@ -116,11 +116,31 @@ void cn::Layer::setNextLayer(cn::Layer *_nextLayer) {
     nextLayer = _nextLayer;
 }
 
-const std::optional<cn::Bitmap<double>> &cn::Layer::getOutput() const {
+const std::unique_ptr<cn::Bitmap<double>> &cn::Layer::getOutput() const {
     return output;
 }
 
-const std::optional<cn::Bitmap<double>> &cn::Layer::getInput() const {
+const std::unique_ptr<cn::Bitmap<double>> &cn::Layer::getInput() const {
     return prevLayer->getOutput();
 }
 
+void cn::Layer::CUDARun(const cn::Bitmap<double> &_input) {
+    CPURun(_input);
+    ///placeholder
+}
+
+cn::Layer::Layer(const cn::Layer &layer) :
+inputSize(layer.inputSize), __id(layer.id()){
+    memoizationStates = std::make_unique<Bitmap<bool>>(*layer.memoizationStates.get());
+    memoizationTable = std::make_unique<Bitmap<double>>(*layer.memoizationTable.get());
+}
+
+cn::Layer::Layer(cn::Layer &&layer) :
+inputSize(layer.inputSize), __id(layer.id()){
+    memoizationStates = std::move(layer.memoizationStates);
+    memoizationTable = std::move(layer.memoizationTable);
+}
+
+void cn::Layer::CUDAAutoGrad() {
+    throw std::logic_error("this should be overridden!");
+}

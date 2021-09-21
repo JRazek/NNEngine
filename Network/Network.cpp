@@ -4,14 +4,14 @@
 
 #include <stdexcept>
 #include "Network.h"
-#include "layers/ConvolutionLayer.h"
-#include "layers/FFLayer.h"
-#include "layers/FlatteningLayer.h"
-#include "layers/BatchNormalizationLayer.h"
-#include "layers/MaxPoolingLayer.h"
-#include "layers/InputLayer.h"
-#include "layers/ActivationLayers/Sigmoid.h"
-#include "layers/ActivationLayers/ReLU.h"
+#include "layers/ConvolutionLayer/ConvolutionLayer.h"
+#include "layers/FFLayer/FFLayer.h"
+#include "layers/FlatteningLayer/FlatteningLayer.h"
+#include "layers/BatchNormalizationLayer/BatchNormalizationLayer.h"
+#include "layers/MaxPoolingLayer/MaxPoolingLayer.h"
+#include "layers/InputLayer/InputLayer.h"
+#include "layers/ActivationLayers/Sigmoid/Sigmoid.h"
+#include "layers/ActivationLayers/ReLU/ReLU.h"
 
 [[maybe_unused]]
 void cn::Network::feed(const byte *_input) {
@@ -27,12 +27,14 @@ void cn::Network::feed(Bitmap<double> bitmap) {
     }
     if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
-    const Bitmap<double> *_input = &bitmap;
-    input.emplace(*_input);
+
+    input = std::make_unique<Bitmap<double>>(std::move(bitmap));
+
+    const Bitmap<double> *_input = input.get();
     for(u_int i = 0; i < layers.size(); i ++){
         auto layer = layers[i];
-        layer->run(*_input);
-        _input = &getOutput(i).value();
+        layer->CPURun(*_input);
+        _input = getOutput(i).get();
     }
 }
 
@@ -111,10 +113,6 @@ void cn::Network::ready() {
     linkLayers();
 }
 
-const std::vector<cn::Learnable *> &cn::Network::getLearnables() const{
-    return learnableLayers;
-}
-
 void cn::Network::resetMemoization() {
     for(auto l : layers){
         l->resetMemoization();
@@ -132,7 +130,7 @@ cn::Vector3<int> cn::Network::getInputSize(int layerID) const {
     return getOutputSize(layerID - 1);
 }
 
-const std::optional<cn::Bitmap<double>> &cn::Network::getNetworkOutput() const {
+const std::unique_ptr<cn::Bitmap<double>> &cn::Network::getNetworkOutput() const {
     return layers.back()->getOutput();
 }
 
@@ -140,20 +138,15 @@ cn::OutputLayer &cn::Network::getOutputLayer() {
     return *outputLayer;
 }
 
-const std::optional<cn::Bitmap<double>> &cn::Network::getInput(int layerID) const{
+const std::unique_ptr<cn::Bitmap<double>> &cn::Network::getInput(int layerID) const{
     if(layerID == 0)
         return input;
 
     return getOutput(layerID -1);
 }
 
-const std::optional<cn::Bitmap<double>> &cn::Network::getOutput(int layerID) const {
+const std::unique_ptr<cn::Bitmap<double>> &cn::Network::getOutput(int layerID) const {
     return layers[layerID]->getOutput();
-}
-
-[[maybe_unused]]
-const std::vector<cn::Layer *> &cn::Network::getLayers() const{
-    return layers;
 }
 
 cn::JSON cn::Network::jsonEncode() const {

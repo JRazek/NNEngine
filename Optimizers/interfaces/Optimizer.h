@@ -14,7 +14,8 @@ namespace cn {
         int iteration;
         double learningRate;
         Optimizer(Network &_network, double _learningRate);
-
+        const std::vector<cn::Layer *> &getNetworkLayers();
+        const std::vector<cn::Learnable *> &getLearnables();
     public:
         virtual void propagate(const Bitmap<double> &target) = 0;
         double getError(const cn::Bitmap<double> &target) const;

@@ -3,16 +3,16 @@
 //
 
 #include "OutputLayer.h"
-#include "../Network.h"
+#include "../../Network.h"
 
 cn::OutputLayer::OutputLayer(int id, Vector3<int> _inputSize) : FlatteningLayer(id, _inputSize) {}
 
-void cn::OutputLayer::run(const cn::Bitmap<double> &input) {
-    return FlatteningLayer::run(input);
+void cn::OutputLayer::CPURun(const cn::Bitmap<double> &input) {
+    return FlatteningLayer::CPURun(input);
 }
 
 double cn::OutputLayer::getChain(const Vector3<int> &input) {
-    return getInput().value().getCell(input) - target->getCell(input);
+    return getInput()->getCell(input) - target->getCell(input);
 }
 
 void cn::OutputLayer::setTarget(const cn::Bitmap<double> *_target) {

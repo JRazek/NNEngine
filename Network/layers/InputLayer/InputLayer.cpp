@@ -11,9 +11,9 @@ cn::InputLayer::InputLayer(int _id, cn::Vector3<int> _inputSize) : Layer(_id, _i
 cn::InputLayer::InputLayer(const cn::JSON &json):Layer(json.at("id"), json.at("input_size"))
 {}
 
-void cn::InputLayer::run(const cn::Bitmap<double> &_input) {
-    input.emplace(_input);
-    output.emplace(_input);
+void cn::InputLayer::CPURun(const cn::Bitmap<double> &_input) {
+    input = std::make_unique<Bitmap<double>>(std::move(_input));
+    output = std::make_unique<Bitmap<double>>(std::move(_input));
 }
 
 double cn::InputLayer::getChain(const cn::Vector3<int> &inputPos) {
@@ -32,6 +32,10 @@ std::unique_ptr<cn::Layer> cn::InputLayer::getCopyAsUniquePtr() const {
     return std::make_unique<InputLayer>(*this);
 }
 
-const std::optional<cn::Bitmap <double>> &cn::InputLayer::getInput() const {
+const std::unique_ptr<cn::Bitmap <double>> &cn::InputLayer::getInput() const {
     return input;
+}
+
+cn::InputLayer::InputLayer(const cn::InputLayer &inputLayer):Layer(inputLayer) {
+     input = std::make_unique<Bitmap<double>>(*inputLayer.getInput().get());
 }

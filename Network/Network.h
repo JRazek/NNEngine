@@ -9,7 +9,7 @@
 #include <random>
 #include "../Utils/Utils.h"
 #include "layers/interfaces/Learnable.h"
-#include "layers/OutputLayer.h"
+#include "layers/OutputLayer/OutputLayer.h"
 #include "../Utils/interfaces/JSONEncodable.h"
 #include <memory>
 
@@ -17,23 +17,26 @@ namespace cn {
 
     class Network : public JSONEncodable{
     private:
+        friend class Optimizer;
+
         int seed;
+
         /**
          * what the dimensions of the byte array is after being normalized and sampled
          */
         Vector3<int> inputSize;
         std::default_random_engine randomEngine;
         std::vector<std::unique_ptr<Layer>> allocated;
-
     protected:
         std::vector<Learnable *> learnableLayers;
         std::vector<Layer *> layers;
 
-        std::optional<Bitmap<double>> input;
+        std::unique_ptr<Bitmap<double>> input;
 
         OutputLayer *outputLayer = nullptr;
 
         void linkLayers();
+
     public:
 
         void appendConvolutionLayer(Vector2<int> kernelSize, int kernelsCount, Vector2<int> stride = {1, 1}, Vector2<int> padding = {0, 0});
@@ -57,19 +60,9 @@ namespace cn {
         void feed(const Bitmap<cn::byte> &bitmap);
 
         /**
-         * when network structure is ready - run this function.
+         * when network structure is ready - CPURun this function.
          */
         void ready();
-
-
-        /**
-         *
-         * @return learnables
-         */
-        const std::vector<Learnable *> &getLearnables() const;
-
-
-        const std::vector<Layer *> &getLayers() const;
 
 
 
@@ -98,9 +91,9 @@ namespace cn {
 
         void resetMemoization();
 
-        const std::optional<cn::Bitmap<double>> &getInput(int layerID) const;
-        const std::optional<cn::Bitmap<double>> &getNetworkOutput() const;
-        const std::optional<cn::Bitmap<double>> &getOutput(int layerID) const;
+        const std::unique_ptr<cn::Bitmap<double>> & getInput(int layerID) const;
+        const std::unique_ptr<cn::Bitmap<double>> & getNetworkOutput() const;
+        const std::unique_ptr<cn::Bitmap<double>> & getOutput(int layerID) const;
 
         JSON jsonEncode() const override;
 

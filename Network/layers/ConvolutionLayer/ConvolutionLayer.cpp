@@ -2,17 +2,33 @@
 // Created by jrazek on 27.07.2021.
 //
 #include "ConvolutionLayer.h"
-#include "../Network.h"
+#include "CUDAConvolutionLayer.cuh"
+#include "../../Network.h"
 #include <future>
-#include "../../CUDA/CUDAUtils.cuh"
 
-void cn::ConvolutionLayer::run(const Bitmap<double> &_input) {
+void cn::ConvolutionLayer::CPURun(const Bitmap<double> &_input) {
     if(inputSize != _input.size()){
         throw std::logic_error("CLayer fed with wrong _input size!");
     }
-    Bitmap<double> cudaResult = CUDAUtils::cudaConvolve(kernels, _input, padding.x, padding.y, stride.x, stride.y);
+    std::vector<std::future<Bitmap<double>>> kernelThreads;
+    auto getConvolved = [this](const Bitmap<double> &input, const cn::Bitmap<double> &kernel){
+        return Utils::sumBitmapLayers(Utils::convolve(kernel, input, padding.x, padding.y, stride.x, stride.y));
+    };
+    for(int i = 0; i < kernelsCount; i ++){
+        kernelThreads.push_back(std::async(getConvolved, _input, kernels[i]));
+    }
+    Bitmap<double> result(outputSize);
+    for(int i = 0; i < kernelsCount; i ++){
+        result.setLayer(i, kernelThreads[i].get().data());
+    }
+    output = std::make_unique<Bitmap<double>>(std::move(result));
+}
 
-    output.emplace(std::move(cudaResult));
+void cn::ConvolutionLayer::CUDARun(const cn::Bitmap<double> &_input) {
+    if(inputSize != _input.size()){
+        throw std::logic_error("CLayer fed with wrong _input size!");
+    }
+    output = std::make_unique<Bitmap<double>>(CUDAConvolutionLayer::CUDARun(*this, _input));
 }
 
 void cn::ConvolutionLayer::randomInit(std::default_random_engine &randomEngine) {
@@ -34,7 +50,7 @@ double cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
     if(getMemoState(inputPos)){
         return getMemo(inputPos);
     }
-    Bitmap<double> paddedInput = Utils::addPadding(getInput().value(), padding.x, padding.y);
+    Bitmap<double> paddedInput = Utils::addPadding(*getInput().get(), padding.x, padding.y);
 
     auto validPos = [this](const Vector2<int> &kernelPos, const Bitmap<double> &bitmap){
         return kernelPos.x >= 0 && kernelPos.y >= 0 && kernelPos.x + kernelSize.x - 1 < bitmap.w() && kernelPos.y + kernelSize.y - 1 < bitmap.h();
@@ -61,7 +77,7 @@ double cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
 
 double cn::ConvolutionLayer::diffWeight(int weightID) {
     int kSize = kernelSize.multiplyContent();
-    Bitmap<double> paddedInput = Utils::addPadding(getInput().value(), padding.x, padding.y);
+    Bitmap<double> paddedInput = Utils::addPadding(*getInput().get(), padding.x, padding.y);
     Vector3<int> weightPos = kernels[weightID / kSize].indexToVector(weightID % kSize);
     int kID = weightID / kSize;
 
@@ -185,4 +201,8 @@ biases(_kernelsCount){
 
 std::unique_ptr<cn::Layer> cn::ConvolutionLayer::getCopyAsUniquePtr() const {
     return std::make_unique<ConvolutionLayer>(*this);
+}
+
+void cn::ConvolutionLayer::CUDAAutoGrad() {
+    CUDAConvolutionLayer::CUDAAutoGrad(*this);
 }

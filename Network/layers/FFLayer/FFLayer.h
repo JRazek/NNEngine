@@ -6,8 +6,8 @@
 #define NEURALNETLIBRARY_FFLAYER_H
 
 #include <random>
-#include "interfaces/Layer.h"
-#include "interfaces/Learnable.h"
+#include "../interfaces/Layer.h"
+#include "../interfaces/Learnable.h"
 
 namespace cn {
     class Network;
@@ -29,7 +29,7 @@ namespace cn {
 
         FFLayer(const JSON &json);
 
-        void run(const Bitmap<double> &_input) override;
+        void CPURun(const Bitmap<double> &_input) override;
 
         virtual double getChain(const Vector3<int> &inputPos) override;
 

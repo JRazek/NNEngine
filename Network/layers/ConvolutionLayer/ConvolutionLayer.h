@@ -6,13 +6,14 @@
 #define NEURALNETLIBRARY_CONVOLUTIONLAYER_H
 
 #include <random>
-#include "interfaces/Learnable.h"
+#include "../interfaces/Learnable.h"
 
-template<typename T>
-struct Vector3;
+
 namespace cn {
+    class CUDAConvolutionLayer;
     class ConvolutionLayer : public Learnable{
     private:
+        friend CUDAConvolutionLayer;
         Vector3<int> kernelSize;
         int kernelsCount;
         Vector2<int> padding;
@@ -31,7 +32,6 @@ namespace cn {
 
         ConvolutionLayer(const JSON &json);
         void randomInit(std::default_random_engine &randomEngine) override;
-        void run(const Bitmap<double> &_input) override;
         double getChain(const Vector3<int> &inputPos) override;
         int weightsCount() const override;
         int biasesCount() const override;
@@ -44,6 +44,11 @@ namespace cn {
 
         void setWeight(int weightID, double value) override;
         double getWeight(int weightID) const override;
+
+        virtual void CUDARun(const Bitmap<double> &_input) override;
+        void CPURun(const Bitmap<double> &_input) override;
+
+        void CUDAAutoGrad() override;
 
         JSON jsonEncode() const override;
 

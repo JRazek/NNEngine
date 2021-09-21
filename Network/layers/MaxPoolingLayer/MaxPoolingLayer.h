@@ -4,7 +4,7 @@
 
 #ifndef NEURALNETLIBRARY_MAXPOOLINGLAYER_H
 #define NEURALNETLIBRARY_MAXPOOLINGLAYER_H
-#include "interfaces/Layer.h"
+#include "../interfaces/Layer.h"
 
 namespace cn {
     class MaxPoolingLayer : public Layer{
@@ -15,7 +15,7 @@ namespace cn {
 
         MaxPoolingLayer(int _id, Vector3<int> _inputSize, cn::Vector2<int> _kernelSize);
         MaxPoolingLayer(const cn::JSON &json);
-        void run(const Bitmap<double> &input) override;
+        void CPURun(const Bitmap<double> &input) override;
         double getChain(const Vector3<int> &inputPos) override;
         JSON jsonEncode() const override;
         std::unique_ptr<Layer> getCopyAsUniquePtr() const override;

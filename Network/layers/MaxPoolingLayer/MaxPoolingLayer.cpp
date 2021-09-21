@@ -3,9 +3,9 @@
 //
 
 #include "MaxPoolingLayer.h"
-#include "../Network.h"
+#include "../../Network.h"
 
-void cn::MaxPoolingLayer::run(const cn::Bitmap<double> &input) {
+void cn::MaxPoolingLayer::CPURun(const cn::Bitmap<double> &input) {
     if(input.size() != inputSize){
         throw std::logic_error("invalid output size in max pool!");
     }
@@ -30,7 +30,7 @@ void cn::MaxPoolingLayer::run(const cn::Bitmap<double> &input) {
             }
         }
     }
-    output.emplace(std::move(result));
+    output = std::make_unique<Bitmap<double>>(std::move(result));
 }
 
 double cn::MaxPoolingLayer::getChain(const Vector3<int> &inputPos) {

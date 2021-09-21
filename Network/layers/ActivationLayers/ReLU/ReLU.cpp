@@ -3,9 +3,9 @@
 //
 
 #include "ReLU.h"
-#include "../../Network.h"
+#include "../../../Network.h"
 
-void cn::ReLU::run(const cn::Bitmap<double> &input) {
+void cn::ReLU::CPURun(const cn::Bitmap<double> &input) {
     Bitmap<double> result(input.size());
     for(int z = 0; z < input.d(); z ++){
         for(int y = 0; y < input.h(); y ++){
@@ -14,11 +14,11 @@ void cn::ReLU::run(const cn::Bitmap<double> &input) {
             }
         }
     }
-    output.emplace(std::move(result));
+    output = std::make_unique<Bitmap<double>>(std::move(result));
 }
 
 double cn::ReLU::getChain(const Vector3<int> &inputPos) {
-    const Bitmap<double> &input = getInput().value();
+    const Bitmap<double> &input = *getInput();
     return diff(input.getCell(inputPos)) * nextLayer->getChain(inputPos);
 }
 
