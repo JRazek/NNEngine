@@ -14,14 +14,14 @@
 #include "layers/ActivationLayers/ReLU/ReLU.h"
 
 [[maybe_unused]]
-void cn::Network::feed(const byte *_input) {
+void cn::Network::feed(const byte *_input, bool CUDAAccelerate) {
     cn::Bitmap<byte> bitmap(inputSize, _input, 0);
     if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
-    feed(cn::Utils::normalize(bitmap));
+    feed(cn::Utils::normalize(bitmap), CUDAAccelerate);
 }
 
-void cn::Network::feed(Bitmap<double> bitmap) {
+void cn::Network::feed(Bitmap<double> bitmap, bool CUDAAccelerate) {
     if(bitmap.size() != inputSize){
         throw std::logic_error("invalid input size!");
     }
@@ -33,13 +33,16 @@ void cn::Network::feed(Bitmap<double> bitmap) {
     const Bitmap<double> *_input = input.get();
     for(u_int i = 0; i < layers.size(); i ++){
         auto layer = layers[i];
-        layer->CPURun(*_input);
+        if(!CUDAAccelerate)
+            layer->CPURun(*_input);
+        else
+            layer->CUDARun(*_input);
         _input = getOutput(i).get();
     }
 }
 
-void cn::Network::feed(const cn::Bitmap<cn::byte> &bitmap) {
-    feed(Utils::normalize(bitmap));
+void cn::Network::feed(const cn::Bitmap<cn::byte> &bitmap, bool CUDAAccelerate) {
+    feed(Utils::normalize(bitmap), CUDAAccelerate);
 }
 
 void cn::Network::initRandom() {

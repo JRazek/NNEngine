@@ -27,6 +27,7 @@ namespace cn {
         Vector3<int> inputSize;
         std::default_random_engine randomEngine;
         std::vector<std::unique_ptr<Layer>> allocated;
+
     protected:
         std::vector<Learnable *> learnableLayers;
         std::vector<Layer *> layers;
@@ -54,10 +55,10 @@ namespace cn {
          *
          * @param takes _input in 1 format type
          */
-        void feed(const byte *_input);
+        void feed(const byte *_input, bool CUDAAccelerate = false);
 
-        void feed(Bitmap<double> bitmap);
-        void feed(const Bitmap<cn::byte> &bitmap);
+        void feed(Bitmap<double> bitmap, bool CUDAAccelerate = false);
+        void feed(const Bitmap<cn::byte> &bitmap, bool CUDAAccelerate = false);
 
         /**
          * when network structure is ready - CPURun this function.
