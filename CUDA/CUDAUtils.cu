@@ -117,15 +117,13 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
 
     Bitmap<double> result(sX, sY, kernels.size());
 
-    constexpr int threadsPerBlock = 1024;
-
     dim3 inputDim = {static_cast<u_int>(paddedInput.w()), static_cast<u_int>(paddedInput.h()), static_cast<u_int>(paddedInput.d())};
     dim3 convOutputDim = {static_cast<u_int>(result.w()), static_cast<u_int>(result.h()), static_cast<u_int>(paddedInput.d())};
     dim3 finalOutputDim = {static_cast<u_int>(result.w()), static_cast<u_int>(result.h()), static_cast<u_int>(result.d())};
     dim3 kernelDim = {static_cast<u_int>(kernels[0].w()), static_cast<u_int>(kernels[0].h()), static_cast<u_int>(kernels[0].d() * kernels.size())};
 
     int threadsRawCount = result.w() * result.h() * kernels.size() * paddedInput.d();
-    cudaConvolveKernel<<<threadsRawCount/threadsPerBlock + 1, threadsPerBlock>>>
+    cudaConvolveKernel<<<threadsRawCount/cn::THREADS_PER_BLOCK + 1, cn::THREADS_PER_BLOCK>>>
     (
             dataDev,
             kernelDev,
@@ -141,7 +139,7 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
     cudaDeviceSynchronize();
 
     int threadsCombinedCount = result.w() * result.h() * kernels.size();
-    cudaCombineResult<<<threadsCombinedCount / threadsPerBlock + 1, threadsPerBlock>>>
+    cudaCombineResult<<<threadsCombinedCount / cn::THREADS_PER_BLOCK + 1, cn::THREADS_PER_BLOCK>>>
     (
             resRawDev,
             resCombinedDev,

@@ -6,6 +6,7 @@
 #define NEURALNETLIBRARY_CUDACONVOLUTIONLAYER_CUH
 
 namespace cn {
+
     class ConvolutionLayer;
     template<typename T>
     class Bitmap;

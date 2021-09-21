@@ -10,6 +10,7 @@ namespace cn {
     template<typename T>
     class Bitmap;
 
+    constexpr u_int THREADS_PER_BLOCK = 1024;
     class CUDAUtils {
         static void *fixedCudaMalloc(const size_t size);
 
