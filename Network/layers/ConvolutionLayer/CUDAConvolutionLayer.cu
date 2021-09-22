@@ -29,7 +29,7 @@ namespace cn{
     }
     __global__
     void CUDAConvAutoGrad(double *chainValues, double *kernelValues, dim3 inputDim, dim3 kernelSize){
-        u_int index = blockDim.x * threadIdx.x + threadIdx.x;
+        u_int index = blockDim.x * blockIdx.x + threadIdx.x;
         if(index >= inputDim.x * inputDim.y * inputDim.z)
             return;
         dim3 inputPos = getDataPos(inputDim, index);

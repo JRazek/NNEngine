@@ -8,9 +8,14 @@
 
 namespace cn{
     __global__
-    void CUDACalcOutputGradients(double *output, double *target, double *result){
-        u_int index = blockDim.x * threadIdx.x + threadIdx.x;
-        result[index] = index;
+    void CUDACalcOutputGradients(double *output, double *target, double *result, dim3 outputDims){
+        u_int index = blockDim.x * blockIdx.x + threadIdx.x;
+        if(index >= outputDims.x * outputDims.y * outputDims.z)
+            return;
+        result[index] =  output[index] - target[index];
+    }
+    dim3 vec3ToDim3(const cn::Vector3<int> &vec){
+        return dim3(static_cast<u_int>(vec.x), static_cast<u_int>(vec.y), static_cast<u_int>(vec.z));
     }
 }
 
@@ -26,16 +31,10 @@ void cn::CUDAOutputLayer::CUDAAutoGrad(cn::OutputLayer &outputLayer) {
     cudaMemcpy(outputDev, outputLayer.output->dataConst(), outputLayer.output->size().multiplyContent() * sizeof(double), cudaMemcpyHostToDevice);
     cudaMemcpy(targetDev, outputLayer.target->dataConst(), outputLayer.target->size().multiplyContent() * sizeof(double), cudaMemcpyHostToDevice);
 
-    CUDACalcOutputGradients<<<threadsCount / cn::THREADS_PER_BLOCK + 1, cn::THREADS_PER_BLOCK>>> (outputDev, targetDev, resultDev);
-
-
-//    double *result = new double[outputLayer.target->size().multiplyContent()];
+    CUDACalcOutputGradients<<<threadsCount / cn::THREADS_PER_BLOCK + 1, cn::THREADS_PER_BLOCK>>> (outputDev, targetDev, resultDev, vec3ToDim3(outputLayer.outputSize));
 
     cudaMemcpy(outputLayer.memoizationTable->data(), resultDev, outputLayer.target->size().multiplyContent() * sizeof(double), cudaMemcpyDeviceToHost);
     std::fill(outputLayer.memoizationStates->data(), outputLayer.memoizationStates->data() + outputLayer.outputSize.multiplyContent(), true);
-//    std::copy(result, result + outputLayer.outputSize.x, outputLayer.memoizationStates->data());
-
-//    delete [] result;
 
     cudaFree(outputDev);
     cudaFree(targetDev);
