@@ -12,9 +12,9 @@ namespace cn{
         u_int index = blockDim.x * blockIdx.x + threadIdx.x;
         if(index >= outputDims.x * outputDims.y * outputDims.z)
             return;
-        result[index] =  output[index] - target[index];
+        result[index] = output[index] - target[index];
     }
-    dim3 vec3ToDim3(const cn::Vector3<int> &vec){
+    inline dim3 vec3ToDim3(const cn::Vector3<int> &vec){
         return dim3(static_cast<u_int>(vec.x), static_cast<u_int>(vec.y), static_cast<u_int>(vec.z));
     }
 }
@@ -39,6 +39,4 @@ void cn::CUDAOutputLayer::CUDAAutoGrad(cn::OutputLayer &outputLayer) {
     cudaFree(outputDev);
     cudaFree(targetDev);
     cudaFree(resultDev);
-
-    //todo
 }

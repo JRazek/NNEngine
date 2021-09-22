@@ -32,7 +32,6 @@ int main(){
 
     cn::MomentumGD momentumGd(network, 0.7, 0.01);
 
-
     CSVReader csvReader("/home/user/IdeaProjects/digitRecogniser/dataSet/metadata.csv", ';');
     csvReader.readContents();
     auto &contents = csvReader.getContents();

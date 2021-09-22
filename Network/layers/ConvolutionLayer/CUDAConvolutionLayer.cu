@@ -8,6 +8,11 @@
 #include "../../../CUDA/CUDAUtils.cuh"
 
 namespace cn{
+
+    __device__
+    inline int afterConvolutionSize(int kernelSize, int inputSize, int padding, int stride) {
+        return (inputSize + 2 * padding - kernelSize) / stride + 1;
+    }
     __device__
     inline dim3 getDataPos(dim3 bitmapSize, int index){
         if(index >= bitmapSize.x * bitmapSize.y * bitmapSize.z)
@@ -28,12 +33,11 @@ namespace cn{
         return pos.z * bitmapSize.x * bitmapSize.y + pos.y * bitmapSize.x + pos.x;
     }
     __global__
-    void CUDAConvAutoGrad(double *chainValues, double *kernelValues, dim3 inputDim, dim3 kernelSize){
+    void
+    CUDAConvAutoGrad(double *inputValues, double *kernelValues, double *resultChainValues, double *nextLayerChains, int kernelsCount, const Vector3<int> &inputSize, const Vector3<int> &kernelSize, const Vector2<int> &stride) {
         u_int index = blockDim.x * blockIdx.x + threadIdx.x;
-        if(index >= inputDim.x * inputDim.y * inputDim.z)
+        if(index >= inputSize.x * inputSize.y * inputSize.z)
             return;
-        dim3 inputPos = getDataPos(inputDim, index);
-
 
     }
 }
@@ -70,12 +74,10 @@ void cn::CUDAConvolutionLayer::CUDAAutoGrad(cn::ConvolutionLayer &convolutionLay
         std::copy(kernel.dataConst(), kernel.dataConst() + kernel.size().multiplyContent(), kernelsCombinedData.begin() + kernel.size().multiplyContent());
     }
 
-
-
     cudaMemcpy(inputDev, paddedInput.data(), paddedInputBytes, cudaMemcpyHostToDevice);
 
     //todo
-//    CUDAConvAutoGrad<<<inputSize/cn::THREADS_PER_BLOCK+1, cn::THREADS_PER_BLOCK>>>();
+    CUDAConvAutoGrad<<<inputSize/cn::THREADS_PER_BLOCK+1, cn::THREADS_PER_BLOCK>>>(inputDev, kernelDev, chainValuesDev, paddedInput.size(), convolutionLayer.kernels[0].size());
 
     cudaMemcpy(convolutionLayer.memoizationTable->data(), chainValuesDev, paddedInputBytes, cudaMemcpyDeviceToHost);
 

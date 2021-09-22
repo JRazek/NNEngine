@@ -26,10 +26,6 @@ namespace cn {
 //            printf("zły arg2 :P");
         return dim3(index % bitmapSize.x, (index / bitmapSize.x) % bitmapSize.x, index / (bitmapSize.x * bitmapSize.y));
     }
-    __device__
-    inline int afterConvolutionSize(int kernelSize, int inputSize, int padding, int stride) {
-        return (inputSize + 2 * padding - kernelSize) / stride + 1;
-    }
 
 
     __global__

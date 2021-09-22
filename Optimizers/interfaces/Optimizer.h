@@ -17,6 +17,11 @@ namespace cn {
         Optimizer(Network &_network, double _learningRate);
         const std::vector<cn::Layer *> &getNetworkLayers() const;
         const std::vector<cn::Learnable *> &getLearnables() const;
+
+        //until network changed for pointer
+        Optimizer(const Optimizer &optimizer) = delete;
+        Optimizer &operator=(const Optimizer &optimizer) = delete;
+
     public:
         virtual void propagate(const Bitmap<double> &target, bool CUDAAccelerate = false) = 0;
         double getError(const cn::Bitmap<double> &target) const;
