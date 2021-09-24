@@ -10,13 +10,11 @@
 #include <opencv2/opencv.hpp>
 #include "Utils/Files/CSVReader.h"
 #include "Utils/Files/ImageRepresentation.h"
-#include <fstream>
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wreorder"
 
 int main(){
     cn::Network network(28, 28, 3, 1);
-
 
     const int outputSize = 10;
     network.appendConvolutionLayer({3, 3},5, {2, 2}, {1, 1});
@@ -79,7 +77,7 @@ int main(){
             bitmap = cn::Utils::average3Layers(bitmap);
         }
         network.feed(cn::Utils::resize(bitmap, inputSize.x, inputSize.y));
-        momentumGd.propagate(target, true);
+        momentumGd.propagate(target, false);
 
         int best = getBest(*network.getNetworkOutput().get());
         if (best == numVal) {

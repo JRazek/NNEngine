@@ -132,7 +132,10 @@ namespace cn {
         static double distanceSquared(const std::pair<double, double> &p1, const std::pair<double, double> &p2);
 
         template<typename T>
-        static Bitmap<T>sumBitmapLayers(const Bitmap <T> &input);
+        static Bitmap<T> sumBitmapLayers(const Bitmap <T> &input);
+
+        template<typename T>
+        static Bitmap<T> elementWiseProduct(const Bitmap<T> &v1, const Bitmap<T> &v2);
     };
 };
 

@@ -136,8 +136,10 @@ cn::Bitmap<T> &cn::Bitmap<T>::operator=(cn::Bitmap<T> &&other){
 
 template<typename T>
 cn::Bitmap<T>::Bitmap(cn::Bitmap<T> &&bitmap):_w(bitmap.w()), _h(bitmap.h()), _d(bitmap.d()){
-    dataP = bitmap.dataP;
-    bitmap.dataP = nullptr;
+    if(&bitmap != this){
+        dataP = bitmap.dataP;
+        bitmap.dataP = nullptr;
+    }
 }
 
 template<typename T>
