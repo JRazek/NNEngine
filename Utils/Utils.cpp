@@ -111,3 +111,17 @@ cn::Bitmap<cn::byte> cn::Utils::average3Layers(const cn::Bitmap<cn::byte> &input
     }
     return result;
 }
+
+template<typename T>
+cn::Bitmap<T> cn::Utils::elementWiseProduct(const cn::Bitmap<T> &v1, const cn::Bitmap<T> &v2) {
+    if(v1.size() != v2.size())
+        throw std::logic_error("incorrect input sizes for element wise multiplication!");
+
+    cn::Bitmap<T> res = cn::Bitmap<T>(v1);
+
+    for(int i = 0; i < res.size().multiplyContent(); i ++){
+        res.data()[i] *= v2.dataConst()[i];
+    }
+
+    return res;
+}

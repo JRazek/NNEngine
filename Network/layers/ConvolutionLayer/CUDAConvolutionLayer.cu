@@ -77,7 +77,7 @@ void cn::CUDAConvolutionLayer::CUDAAutoGrad(cn::ConvolutionLayer &convolutionLay
     cudaMemcpy(inputDev, paddedInput.data(), paddedInputBytes, cudaMemcpyHostToDevice);
 
     //todo
-    CUDAConvAutoGrad<<<inputSize/cn::THREADS_PER_BLOCK+1, cn::THREADS_PER_BLOCK>>>(inputDev, kernelDev, chainValuesDev, paddedInput.size(), convolutionLayer.kernels[0].size());
+//    CUDAConvAutoGrad<<<inputSize/cn::THREADS_PER_BLOCK+1, cn::THREADS_PER_BLOCK>>>(inputDev, kernelDev, chainValuesDev, paddedInput.size(), convolutionLayer.kernels[0].size());
 
     cudaMemcpy(convolutionLayer.memoizationTable->data(), chainValuesDev, paddedInputBytes, cudaMemcpyDeviceToHost);
 
