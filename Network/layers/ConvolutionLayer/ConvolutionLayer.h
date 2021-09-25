@@ -19,7 +19,7 @@ namespace cn {
         Vector2<int> padding;
         Vector2<int> stride;
 
-        std::vector<Bitmap<double>> kernels;
+        std::vector<Tensor<double>> kernels;
         std::vector<double> biases;//ith corresponds to ith kernel
 
         double diffWeight(int weightID);
@@ -45,8 +45,8 @@ namespace cn {
         void setWeight(int weightID, double value) override;
         double getWeight(int weightID) const override;
 
-        virtual void CUDARun(const Bitmap<double> &_input) override;
-        void CPURun(const Bitmap<double> &_input) override;
+        virtual void CUDARun(const Tensor<double> &_input) override;
+        void CPURun(const Tensor<double> &_input) override;
 
         void CUDAAutoGrad() override;
 

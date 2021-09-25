@@ -13,7 +13,7 @@ namespace cn {
     public:
         FlatteningLayer(int _id, Vector3<int> _inputSize);
         FlatteningLayer(const JSON &json);
-        void CPURun(const Bitmap<double> &input) override;
+        void CPURun(const Tensor<double> &input) override;
         virtual double getChain(const Vector3<int> &inputPos) override;
         virtual JSON jsonEncode() const override;
         virtual std::unique_ptr<Layer> getCopyAsUniquePtr() const override;

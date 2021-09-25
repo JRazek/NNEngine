@@ -7,7 +7,7 @@
 
 #include <vector>
 #include <optional>
-#include "../../../Utils/dataStructures/Bitmap.h"
+#include "../../../Utils/dataStructures/Tensor.h"
 #include "../../../Utils/interfaces/JSONEncodable.h"
 
 namespace cn {
@@ -19,7 +19,7 @@ namespace cn {
     class Layer : public JSONEncodable{
     protected:
 
-        std::unique_ptr<Bitmap<double>> output;
+        std::unique_ptr<Tensor<double>> output;
 
         Layer *prevLayer = nullptr;
         Layer *nextLayer = nullptr;
@@ -27,8 +27,8 @@ namespace cn {
         Vector3<int> inputSize;
         Vector3<int> outputSize;
 
-        std::unique_ptr<Bitmap<bool>> memoizationStates;
-        std::unique_ptr<Bitmap<double>> memoizationTable;
+        std::unique_ptr<Tensor<bool>> memoizationStates;
+        std::unique_ptr<Tensor<double>> memoizationTable;
 
         int __id;
 
@@ -66,8 +66,8 @@ namespace cn {
 
         void setPrevLayer(Layer *_prevLayer);
 
-        const std::unique_ptr<Bitmap<double>> &getOutput() const;
-        virtual const std::unique_ptr<Bitmap<double>> &getInput() const;
+        const std::unique_ptr<Tensor<double>> &getOutput() const;
+        virtual const std::unique_ptr<Tensor<double>> &getInput() const;
 
         void setNextLayer(Layer *_nextLayer);
 
@@ -75,12 +75,12 @@ namespace cn {
          *
          * @param _input to process
          */
-        virtual void CPURun(const Bitmap<double> &_input) = 0;
+        virtual void CPURun(const Tensor<double> &_input) = 0;
 
         /**
          * if not supported yet - CPURun is being called.
          */
-        virtual void CUDARun(const Bitmap<double> &_input);
+        virtual void CUDARun(const Tensor<double> &_input);
     };
 }
 

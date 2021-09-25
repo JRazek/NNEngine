@@ -1,4 +1,4 @@
-#include "dataStructures/Bitmap.h"
+#include "dataStructures/Tensor.h"
 #include "Utils.h"
 #include <unordered_set>
 #include <stack>
@@ -9,8 +9,8 @@
 // Created by jrazek on 05.08.2021.
 //
 
-cn::Bitmap<double> cn::Utils::normalize(const Bitmap<byte> &input) {
-    Bitmap<double> bitmap (input.w(), input.h(), input.d());
+cn::Tensor<double> cn::Utils::normalize(const Tensor<byte> &input) {
+    Tensor<double> bitmap (input.w(), input.h(), input.d());
     for(int i = 0; i < input.w() * input.h() * input.d(); i ++){
         bitmap.data()[i] = ((double) input.dataConst()[i]) / 255.f;
     }
@@ -19,7 +19,7 @@ cn::Bitmap<double> cn::Utils::normalize(const Bitmap<byte> &input) {
 
 
 
-cn::Bitmap<double> cn::Utils::convolve(const Bitmap<double> &kernel, const Bitmap<double> &input, int paddingX, int paddingY, int strideX, int strideY) {
+cn::Tensor<double> cn::Utils::convolve(const Tensor<double> &kernel, const Tensor<double> &input, int paddingX, int paddingY, int strideX, int strideY) {
     if(!(kernel.w() % 2 && kernel.h() % 2 && kernel.d() == input.d())){
         throw std::invalid_argument("wrong dimensions of kernel!");
     }
@@ -30,9 +30,9 @@ cn::Bitmap<double> cn::Utils::convolve(const Bitmap<double> &kernel, const Bitma
         throw std::invalid_argument("kernel bigger than input!");
     }
 
-    cn::Bitmap<double> result (sizeX, sizeY, input.d());
+    cn::Tensor<double> result (sizeX, sizeY, input.d());
 
-    cn::Bitmap<double> paddedInput = addPadding(input, paddingX, paddingY);
+    cn::Tensor<double> paddedInput = addPadding(input, paddingX, paddingY);
 
     for(int y = 0; y < result.h(); y++){
         for(int x = 0; x < result.w(); x++){
@@ -65,8 +65,8 @@ int cn::Utils::afterMaxPoolSize(int kernelSize, int inputSize) {
     return inputSize/kernelSize;
 }
 
-cn::Bitmap<double> cn::Utils::maxPool(const cn::Bitmap<double> &input, int kernelSizeX, int kernelSizeY) {
-    Bitmap<double> output(afterMaxPoolSize(kernelSizeX, input.w()), afterMaxPoolSize(kernelSizeY, input.h()), input.d());
+cn::Tensor<double> cn::Utils::maxPool(const cn::Tensor<double> &input, int kernelSizeX, int kernelSizeY) {
+    Tensor<double> output(afterMaxPoolSize(kernelSizeX, input.w()), afterMaxPoolSize(kernelSizeY, input.h()), input.d());
     for(int c = 0; c < input.d(); c++){
         for(int y = 0; y < input.h(); y += kernelSizeY){
             for(int x = 0; x < input.w(); x += kernelSizeX){
@@ -84,8 +84,8 @@ cn::Bitmap<double> cn::Utils::maxPool(const cn::Bitmap<double> &input, int kerne
 }
 
 template<typename T>
-cn::Bitmap<T> cn::Utils::addPadding(const cn::Bitmap<T> &input, int paddingX, int paddingY) {
-    cn::Bitmap<double> paddedInput (input.w() + paddingX * 2, input.h() + paddingY * 2, input.d());
+cn::Tensor<T> cn::Utils::addPadding(const cn::Tensor<T> &input, int paddingX, int paddingY) {
+    cn::Tensor<double> paddedInput (input.w() + paddingX * 2, input.h() + paddingY * 2, input.d());
 
     std::fill(paddedInput.data(), paddedInput.data() + paddedInput.w() * paddedInput.h() * paddedInput.d(), 0);
 
@@ -99,10 +99,10 @@ cn::Bitmap<T> cn::Utils::addPadding(const cn::Bitmap<T> &input, int paddingX, in
     return paddedInput;
 }
 
-cn::Bitmap<cn::byte> cn::Utils::average3Layers(const cn::Bitmap<cn::byte> &input) {
+cn::Tensor<cn::byte> cn::Utils::average3Layers(const cn::Tensor<cn::byte> &input) {
     if(input.d() != 3)
         throw std::logic_error("image must have 3 layers!");
-    cn::Bitmap<cn::byte> result(input.w(), input.h(), 1);
+    cn::Tensor<cn::byte> result(input.w(), input.h(), 1);
     for(int y = 0; y < result.h(); y ++){
         for(int x = 0; x < result.w(); x++){
             int res = input.getCell(x, y, 0) + input.getCell(x, y, 1) + input.getCell(x, y, 2);
@@ -112,16 +112,4 @@ cn::Bitmap<cn::byte> cn::Utils::average3Layers(const cn::Bitmap<cn::byte> &input
     return result;
 }
 
-template<typename T>
-cn::Bitmap<T> cn::Utils::elementWiseProduct(const cn::Bitmap<T> &v1, const cn::Bitmap<T> &v2) {
-    if(v1.size() != v2.size())
-        throw std::logic_error("incorrect input sizes for element wise multiplication!");
 
-    cn::Bitmap<T> res = cn::Bitmap<T>(v1);
-
-    for(int i = 0; i < res.size().multiplyContent(); i ++){
-        res.data()[i] *= v2.dataConst()[i];
-    }
-
-    return res;
-}

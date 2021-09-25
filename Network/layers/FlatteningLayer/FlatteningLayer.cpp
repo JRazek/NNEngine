@@ -10,11 +10,11 @@ cn::FlatteningLayer::FlatteningLayer(int _id, Vector3<int> _inputSize) : Layer(_
     outputSize = Vector3<int>(size, 1, 1);
 }
 
-void cn::FlatteningLayer::CPURun(const cn::Bitmap<double> &input) {
+void cn::FlatteningLayer::CPURun(const cn::Tensor<double> &input) {
     if(input.size().multiplyContent() != inputSize.multiplyContent())
         throw std::logic_error("invalid input input for flattening layer!");
-    Bitmap<double> result ({inputSize.multiplyContent(), 1, 1}, input.dataConst());
-    output = std::make_unique<Bitmap<double>>(std::move(result));
+    Tensor<double> result ({inputSize.multiplyContent(), 1, 1}, input.dataConst());
+    output = std::make_unique<Tensor<double>>(std::move(result));
 }
 
 double cn::FlatteningLayer::getChain(const Vector3<int> &inputPos) {

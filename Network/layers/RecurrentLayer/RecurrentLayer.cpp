@@ -10,22 +10,22 @@ std::unique_ptr<cn::Layer> cn::RecurrentLayer::getCopyAsUniquePtr() const {
 
 cn::RecurrentLayer::RecurrentLayer(int _id, cn::Vector3<int> _inputSize) : Layer(_id, _inputSize) {
     outputSize = inputSize;
-    Bitmap<double> identity(inputSize);
+    Tensor<double> identity(inputSize);
     std::fill(identity.data(), identity.data() + identity.size().multiplyContent(), 0);
     memoryStates.push(std::move(identity));
 }
 
-void cn::RecurrentLayer::CPURun(const cn::Bitmap<double> &_input) {
-    Bitmap<double> res = Utils::elementWiseProduct(_input, memoryStates.top());
+void cn::RecurrentLayer::CPURun(const cn::Tensor<double> &_input) {
+    Tensor<double> res = Utils::elementWiseSum(_input, memoryStates.top());
     memoryStates.push(res);
-    output = std::make_unique<Bitmap<double>>(std::move(res));
+    output = std::make_unique<Tensor<double>>(_input);
 }
 
 double cn::RecurrentLayer::getChain(const cn::Vector3<int> &inputPos) {
     while (memoryStates.size() != 1){
-
+        break;
     }
-    return 0;
+    return nextLayer->getChain(inputPos);
 }
 
 cn::JSON cn::RecurrentLayer::jsonEncode() const {
@@ -33,3 +33,4 @@ cn::JSON cn::RecurrentLayer::jsonEncode() const {
 }
 
 cn::RecurrentLayer::RecurrentLayer(const cn::JSON &json) : RecurrentLayer(json.at("id"), json.at("input_size")) {}
+

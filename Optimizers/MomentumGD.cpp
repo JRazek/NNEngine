@@ -9,7 +9,7 @@ Optimizer(_network, _learningRate),
 theta(_theta)
 {}
 
-void cn::MomentumGD::propagate(const cn::Bitmap<double> &target, bool CUDAAccelerate) {
+void cn::MomentumGD::propagate(const cn::Tensor<double> &target, bool CUDAAccelerate) {
     network.resetMemoization();
     const std::vector<cn::Learnable *> &learnables = getLearnables();
     const std::vector<cn::Layer *> &layers = getNetworkLayers();
@@ -24,7 +24,7 @@ void cn::MomentumGD::propagate(const cn::Bitmap<double> &target, bool CUDAAccele
     }
     OutputLayer &layer = network.getOutputLayer();
     layer.setTarget(&target);
-    const Bitmap<double> &output = *network.getOutput(layer.id());
+    const Tensor<double> &output = *network.getOutput(layer.id());
     if(output.size() != target.size()){
         throw std::logic_error("MBGD, invalid target!");
     }

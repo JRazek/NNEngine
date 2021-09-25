@@ -10,13 +10,14 @@
 
 namespace cn {
     class RecurrentLayer : public Layer {
-        std::stack<Bitmap<double>> memoryStates;
+        std::stack<Tensor<double>> memoryStates;
         std::unique_ptr<Layer> getCopyAsUniquePtr() const override;
-        void CPURun(const Bitmap<double> &_input) override;
+        void CPURun(const Tensor<double> &_input) override;
         double getChain(const Vector3<int> &inputPos) override;
         RecurrentLayer(const JSON &json);
 
         JSON jsonEncode() const override;
+
     public:
         RecurrentLayer(int _id, Vector3<int> _inputSize);
     };

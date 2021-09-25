@@ -8,13 +8,13 @@
 
 namespace cn {
     template<typename T>
-    class Bitmap;
+    class Tensor;
 
     constexpr u_int THREADS_PER_BLOCK = 1024;
     class CUDAUtils {
 
     public:
-        static Bitmap<double> cudaConvolve(const std::vector<cn::Bitmap<double>> &kernels, const Bitmap<double> &input, int paddingX = 0, int paddingY = 0, int strideX = 1, int strideY = 1);
+        static Tensor<double> cudaConvolve(const std::vector<cn::Tensor<double>> &kernels, const Tensor<double> &input, int paddingX = 0, int paddingY = 0, int strideX = 1, int strideY = 1);
 
         static void *fixedCudaMalloc(const size_t size);
     };

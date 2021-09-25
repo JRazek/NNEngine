@@ -19,7 +19,7 @@ namespace cn {
     using byte = uint8_t;
 
     template<typename T>
-    class Bitmap;
+    class Tensor;
 
     template<typename T>
     class PrefixSum2D;
@@ -33,7 +33,7 @@ namespace cn {
          * @param input
          * @return normalized input. Each byte is now value equal to [ x / 255 ].
          */
-        static Bitmap<double> normalize(const Bitmap<unsigned char> &input);
+        static Tensor<double> normalize(const Tensor<unsigned char> &input);
 
         /**
          *
@@ -68,7 +68,7 @@ namespace cn {
          * @return transformed bitmap
          */
         template<typename T>
-        static Bitmap<T> downsample(const Bitmap<T> &input, int destSizeX, int destSizeY, int method);
+        static Tensor<T> downsample(const Tensor<T> &input, int destSizeX, int destSizeY, int method);
 
 
         /**
@@ -80,7 +80,7 @@ namespace cn {
          * @return resampled bitmap
          */
         template<typename T>
-        static Bitmap<T> resize(const Bitmap<T> &input, int destSizeX, int destSizeY);
+        static Tensor<T> resize(const Tensor<T> &input, int destSizeX, int destSizeY);
 
 
         /**
@@ -95,7 +95,7 @@ namespace cn {
          * @return transformed bitmap
          */
         template<typename T>
-        static Bitmap<T> upsample(const Bitmap<T> &input, int destSizeX, int destSizeY, int method);
+        static Tensor<T> upsample(const Tensor<T> &input, int destSizeX, int destSizeY, int method);
 
         /**
          *
@@ -105,7 +105,7 @@ namespace cn {
          * @return transformed image
          */
         template<typename T>
-        static Bitmap<T> transform(const Bitmap<T> &input, const TMatrix<double> &tMatrix);
+        static Tensor<T> transform(const Tensor<T> &input, const TMatrix<double> &tMatrix);
 
         /**
          *
@@ -115,27 +115,30 @@ namespace cn {
          * @return rotated bitmap
          */
         template<typename T>
-        static Bitmap<T> rotate(const Bitmap<T> &input, double rad);
+        static Tensor<T> rotate(const Tensor<T> &input, double rad);
 
         template<typename T>
-        static Bitmap<T> addPadding(const Bitmap<T> &input, int paddingX, int paddingY);
+        static Tensor<T> addPadding(const Tensor<T> &input, int paddingX, int paddingY);
 
 
         static int afterConvolutionSize(int kernelSize, int inputSize, int padding, int stride);
-        static Bitmap<double> convolve(const Bitmap<double> &kernel, const Bitmap<double> &input, int paddingX = 0, int paddingY = 0, int strideX = 1, int strideY = 1);
+        static Tensor<double> convolve(const Tensor<double> &kernel, const Tensor<double> &input, int paddingX = 0, int paddingY = 0, int strideX = 1, int strideY = 1);
 
-        static Bitmap<cn::byte> average3Layers(const Bitmap<cn::byte> &input);
+        static Tensor<cn::byte> average3Layers(const Tensor<cn::byte> &input);
 
         static int afterMaxPoolSize(int kernelSize, int inputSize);
-        static Bitmap<double> maxPool(const Bitmap<double> &input, int kernelSizeX, int kernelSizeY);
+        static Tensor<double> maxPool(const Tensor<double> &input, int kernelSizeX, int kernelSizeY);
 
         static double distanceSquared(const std::pair<double, double> &p1, const std::pair<double, double> &p2);
 
         template<typename T>
-        static Bitmap<T> sumBitmapLayers(const Bitmap <T> &input);
+        static Tensor<T> sumBitmapLayers(const Tensor <T> &input);
 
         template<typename T>
-        static Bitmap<T> elementWiseProduct(const Bitmap<T> &v1, const Bitmap<T> &v2);
+        static Tensor<T> elementWiseProduct(const Tensor<T> &v1, const Tensor<T> &v2);
+
+        template<typename T>
+        static Tensor<T> elementWiseSum(const Tensor<T> &v1, const Tensor<T> &v2);
     };
 };
 
@@ -160,7 +163,7 @@ void cn::Utils::convert(const T *input, T *output, int w, int h, int d, int inpu
 }
 
 template<typename T>
-cn::Bitmap<T> cn::Utils::resize(const cn::Bitmap<T> &input, int destSizeX, int destSizeY) {
+cn::Tensor<T> cn::Utils::resize(const cn::Tensor<T> &input, int destSizeX, int destSizeY) {
     auto max = [](double x, double y){
         return x > y ? x : y;
     };
@@ -169,13 +172,13 @@ cn::Bitmap<T> cn::Utils::resize(const cn::Bitmap<T> &input, int destSizeX, int d
         return x < y ? x : y;
     };
 
-    cn::Bitmap<T> sampled = upsample<T>(input, max(input.w(), destSizeX), max(input.h(), destSizeY), 0);
+    cn::Tensor<T> sampled = upsample<T>(input, max(input.w(), destSizeX), max(input.h(), destSizeY), 0);
     return downsample<T>(sampled, min(sampled.w(), destSizeX), min(sampled.h(), destSizeY), 0);
 }
 
 
 template<typename T>
-cn::Bitmap<T> cn::Utils::downsample(const cn::Bitmap<T> &input, int destSizeX, int destSizeY, int method) {
+cn::Tensor<T> cn::Utils::downsample(const cn::Tensor<T> &input, int destSizeX, int destSizeY, int method) {
     double factorX = ((double)destSizeX) / (double)input.w();
     double factorY = (double)destSizeY / (double)input.h();
 
@@ -184,7 +187,7 @@ cn::Bitmap<T> cn::Utils::downsample(const cn::Bitmap<T> &input, int destSizeX, i
 
     std::vector<int> avgCount (destSizeX * destSizeY * input.d(), 0);
 
-    cn::Bitmap<T> output(destSizeX, destSizeY, input.d());
+    cn::Tensor<T> output(destSizeX, destSizeY, input.d());
     std::fill(output.data(), output.data() + output.w() * output.h() * output.d(), 0);
 
     if(method == 0){
@@ -211,14 +214,14 @@ cn::Bitmap<T> cn::Utils::downsample(const cn::Bitmap<T> &input, int destSizeX, i
 
 
 template<typename T>
-cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int destSizeY, int method) {
+cn::Tensor<T> cn::Utils::upsample(const cn::Tensor<T> &input, int destSizeX, int destSizeY, int method) {
     double factorX = (double)destSizeX / (double)input.w();
     double factorY = (double)destSizeY / (double)input.h();
 
     if(factorX == 1 && factorY == 1)
         return input;
 
-    cn::Bitmap<T> result(destSizeX, destSizeY, input.d());
+    cn::Tensor<T> result(destSizeX, destSizeY, input.d());
 
     if(method == 0){
         for(int c = 0; c < result.d();  c++){
@@ -235,8 +238,8 @@ cn::Bitmap<T> cn::Utils::upsample(const cn::Bitmap<T> &input, int destSizeX, int
 }
 
 template<typename T>
-cn::Bitmap<T> cn::Utils::sumBitmapLayers(const cn::Bitmap<T> &input){
-    cn::Bitmap<T> output(input.w(), input.h(), 1);
+cn::Tensor<T> cn::Utils::sumBitmapLayers(const cn::Tensor<T> &input){
+    cn::Tensor<T> output(input.w(), input.h(), 1);
     std::fill(output.data(), output.data() + output.w() * output.h(), 0);
     for(int c = 0; c < input.d();  c++){
         for(int y = 0; y < input.h(); y++){
@@ -249,7 +252,7 @@ cn::Bitmap<T> cn::Utils::sumBitmapLayers(const cn::Bitmap<T> &input){
 }
 
 template<typename T>
-cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, const TMatrix<double> &tMatrix) {
+cn::Tensor<T> cn::Utils::transform(const cn::Tensor<T> &input, const TMatrix<double> &tMatrix) {
     int maxX = 0, minX = INT32_MAX, maxY = 0, minY = INT32_MAX;
     std::vector<Vector2<int>> edges(4);
     edges[0] = {0,0};
@@ -266,7 +269,7 @@ cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, const TMatrix<dou
     }
     int w = (int)(maxX - minX) + 1;
     int h = (int)(maxY - minY) + 1;
-    cn::Bitmap<T> result(w, h, input.d());
+    cn::Tensor<T> result(w, h, input.d());
     std::fill(result.data(), result.data() + w * h * result.d(), 0);
 
     Vector2<int> shift = {minX, minY};
@@ -288,12 +291,38 @@ cn::Bitmap<T> cn::Utils::transform(const cn::Bitmap<T> &input, const TMatrix<dou
 }
 
 template<typename T>
-cn::Bitmap<T> cn::Utils::rotate(const cn::Bitmap<T> &input, double rad) {
+cn::Tensor<T> cn::Utils::rotate(const cn::Tensor<T> &input, double rad) {
     double sin = std::sin(rad);
     double cos = std::cos(rad);
     TMatrix<double> rotationMatrix(cos, -sin, sin, cos);
     return transform<T>(input, rotationMatrix);
 }
 
+template<typename T>
+cn::Tensor<T> cn::Utils::elementWiseProduct(const cn::Tensor<T> &v1, const cn::Tensor<T> &v2) {
+    if(v1.size() != v2.size())
+        throw std::logic_error("incorrect input sizes for element wise multiplication!");
+
+    cn::Tensor<T> res(v1);
+
+    for(int i = 0; i < res.size().multiplyContent(); i ++){
+        res.data()[i] *= v2.dataConst()[i];
+    }
+
+    return res;
+}
+template<typename T>
+cn::Tensor<T> cn::Utils::elementWiseSum(const cn::Tensor<T> &v1, const cn::Tensor<T> &v2) {
+    if(v1.size() != v2.size())
+        throw std::logic_error("incorrect input sizes for element wise multiplication!");
+
+    cn::Tensor<T> res(v1);
+
+    for(int i = 0; i < res.size().multiplyContent(); i ++){
+        res.data()[i] += v2.dataConst()[i];
+    }
+
+    return res;
+}
 
 #endif //NEURALNETLIBRARY_UTILS_H

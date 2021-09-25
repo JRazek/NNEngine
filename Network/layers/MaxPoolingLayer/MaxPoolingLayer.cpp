@@ -5,14 +5,14 @@
 #include "MaxPoolingLayer.h"
 #include "../../Network.h"
 
-void cn::MaxPoolingLayer::CPURun(const cn::Bitmap<double> &input) {
+void cn::MaxPoolingLayer::CPURun(const cn::Tensor<double> &input) {
     if(input.size() != inputSize){
         throw std::logic_error("invalid output size in max pool!");
     }
 
     std::fill(mapping->data(), mapping->data() + mapping->size().multiplyContent(), Vector2<int>(-1, -1));
 
-    Bitmap<double> result(outputSize);
+    Tensor<double> result(outputSize);
 
     for(int c = 0; c < input.d(); c++){
         for(int y = 0; y < input.h() - kernelSize.y + 1; y += kernelSize.y){
@@ -30,7 +30,7 @@ void cn::MaxPoolingLayer::CPURun(const cn::Bitmap<double> &input) {
             }
         }
     }
-    output = std::make_unique<Bitmap<double>>(std::move(result));
+    output = std::make_unique<Tensor<double>>(std::move(result));
 }
 
 double cn::MaxPoolingLayer::getChain(const Vector3<int> &inputPos) {
@@ -63,7 +63,7 @@ cn::MaxPoolingLayer::MaxPoolingLayer(int _id, Vector3<int> _inputSize, cn::Vecto
         Layer(_id, _inputSize),
 kernelSize(_kernelSize){
     outputSize = Vector3<int>(Utils::afterMaxPoolSize(kernelSize.x, inputSize.x), Utils::afterMaxPoolSize(kernelSize.y, inputSize.y), inputSize.z);
-    mapping.emplace(Bitmap<Vector2<int>>(inputSize));
+    mapping.emplace(Tensor<Vector2<int>>(inputSize));
 }
 
 std::unique_ptr<cn::Layer> cn::MaxPoolingLayer::getCopyAsUniquePtr() const {

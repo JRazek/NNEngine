@@ -3,7 +3,7 @@
 //
 
 #include "CUDAUtils.cuh"
-#include "../Utils/dataStructures/Bitmap.h"
+#include "../Utils/dataStructures/Tensor.h"
 
 namespace cn {
     __device__
@@ -84,10 +84,10 @@ namespace cn {
     }
 }
 
-cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<double>> &kernels, const cn::Bitmap<double> &input, int paddingX, int paddingY, int strideX, int strideY) {
+cn::Tensor<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Tensor<double>> &kernels, const cn::Tensor<double> &input, int paddingX, int paddingY, int strideX, int strideY) {
     double *kernelDev, *dataDev, *resRawDev, *resCombinedDev;
 
-    Bitmap<double> paddedInput = cn::Utils::addPadding(input, paddingX, paddingY);
+    Tensor<double> paddedInput = cn::Utils::addPadding(input, paddingX, paddingY);
 
     int sX = cn::Utils::afterConvolutionSize(kernels[0].w(), input.w(), paddingX, strideX);
     int sY = cn::Utils::afterConvolutionSize(kernels[0].h(), input.h(), paddingY, strideY);
@@ -111,7 +111,7 @@ cn::Bitmap<double> cn::CUDAUtils::cudaConvolve(const std::vector<cn::Bitmap<doub
 
     cudaMemcpy(dataDev, paddedInput.dataConst(), inputBytes, cudaMemcpyHostToDevice);
 
-    Bitmap<double> result(sX, sY, kernels.size());
+    Tensor<double> result(sX, sY, kernels.size());
 
     dim3 inputDim = {static_cast<u_int>(paddedInput.w()), static_cast<u_int>(paddedInput.h()), static_cast<u_int>(paddedInput.d())};
     dim3 convOutputDim = {static_cast<u_int>(result.w()), static_cast<u_int>(result.h()), static_cast<u_int>(paddedInput.d())};

@@ -4,13 +4,13 @@
 
 #ifndef NEURALNETLIBRARY_PREFIXSUM2D_H
 #define NEURALNETLIBRARY_PREFIXSUM2D_H
-#include "Bitmap.h"
+#include "Tensor.h"
 namespace cn {
     template<typename T>
-    class PrefixSum2D : public cn::Bitmap<T> {
+    class PrefixSum2D : public cn::Tensor<T> {
     public:
         template<typename Y>
-        PrefixSum2D(const cn::Bitmap<Y> &input);
+        PrefixSum2D(const cn::Tensor<Y> &input);
 
         T sum(Vector3<int> nw, Vector3<int> se);
     };
@@ -18,7 +18,7 @@ namespace cn {
 
 template<typename T>
 template<typename Y>
-cn::PrefixSum2D<T>::PrefixSum2D(const cn::Bitmap<Y> &input):cn::Bitmap<T>(input.w(), input.h(), input.d()) {
+cn::PrefixSum2D<T>::PrefixSum2D(const cn::Tensor<Y> &input):cn::Tensor<T>(input.w(), input.h(), input.d()) {
     for(int c = 0; c < this->d(); c++) {
         for (int x = 0; x < this->w(); x++) {
             this->setCell(x, 0, c, input.getCell(x, 0, c));

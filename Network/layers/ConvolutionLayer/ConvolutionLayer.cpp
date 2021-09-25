@@ -6,29 +6,29 @@
 #include "../../Network.h"
 #include <future>
 
-void cn::ConvolutionLayer::CPURun(const Bitmap<double> &_input) {
+void cn::ConvolutionLayer::CPURun(const Tensor<double> &_input) {
     if(inputSize != _input.size()){
         throw std::logic_error("CLayer fed with wrong _input size!");
     }
-    std::vector<std::future<Bitmap<double>>> kernelThreads;
-    auto getConvolved = [this](const Bitmap<double> &input, const cn::Bitmap<double> &kernel){
+    std::vector<std::future<Tensor<double>>> kernelThreads;
+    auto getConvolved = [this](const Tensor<double> &input, const cn::Tensor<double> &kernel){
         return Utils::sumBitmapLayers(Utils::convolve(kernel, input, padding.x, padding.y, stride.x, stride.y));
     };
     for(int i = 0; i < kernelsCount; i ++){
         kernelThreads.push_back(std::async(getConvolved, _input, kernels[i]));
     }
-    Bitmap<double> result(outputSize);
+    Tensor<double> result(outputSize);
     for(int i = 0; i < kernelsCount; i ++){
         result.setLayer(i, kernelThreads[i].get().data());
     }
-    output = std::make_unique<Bitmap<double>>(std::move(result));
+    output = std::make_unique<Tensor<double>>(std::move(result));
 }
 
-void cn::ConvolutionLayer::CUDARun(const cn::Bitmap<double> &_input) {
+void cn::ConvolutionLayer::CUDARun(const cn::Tensor<double> &_input) {
     if(inputSize != _input.size()){
         throw std::logic_error("CLayer fed with wrong _input size!");
     }
-    output = std::make_unique<Bitmap<double>>(CUDAConvolutionLayer::CUDARun(*this, _input));
+    output = std::make_unique<Tensor<double>>(CUDAConvolutionLayer::CUDARun(*this, _input));
 }
 
 void cn::ConvolutionLayer::randomInit(std::default_random_engine &randomEngine) {
@@ -50,9 +50,9 @@ double cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
     if(getMemoState(inputPos)){
         return getMemo(inputPos);
     }
-    Bitmap<double> paddedInput = Utils::addPadding(*getInput().get(), padding.x, padding.y);
+    Tensor<double> paddedInput = Utils::addPadding(*getInput().get(), padding.x, padding.y);
 
-    auto validPos = [this](const Vector2<int> &kernelPos, const Bitmap<double> &bitmap){
+    auto validPos = [this](const Vector2<int> &kernelPos, const Tensor<double> &bitmap){
         return kernelPos.x >= 0 && kernelPos.y >= 0 && kernelPos.x + kernelSize.x - 1 < bitmap.w() && kernelPos.y + kernelSize.y - 1 < bitmap.h();
     };
 
@@ -77,7 +77,7 @@ double cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
 
 double cn::ConvolutionLayer::diffWeight(int weightID) {
     int kSize = kernelSize.multiplyContent();
-    Bitmap<double> paddedInput = Utils::addPadding(*getInput().get(), padding.x, padding.y);
+    Tensor<double> paddedInput = Utils::addPadding(*getInput().get(), padding.x, padding.y);
     Vector3<int> weightPos = kernels[weightID / kSize].indexToVector(weightID % kSize);
     int kID = weightID / kSize;
 

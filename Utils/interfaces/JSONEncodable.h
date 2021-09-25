@@ -13,6 +13,6 @@ namespace cn{
         virtual JSON jsonEncode() const = 0;
     };
     template<typename T>
-    class Bitmap;
+    class Tensor;
 }
 #endif //NEURALNETLIBRARY_JSONENCODABLE_H

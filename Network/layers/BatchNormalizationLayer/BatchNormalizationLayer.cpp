@@ -9,10 +9,10 @@ cn::BatchNormalizationLayer::BatchNormalizationLayer(int _id, Vector3<int> _inpu
     outputSize = inputSize;
 }
 
-void cn::BatchNormalizationLayer::CPURun(const cn::Bitmap<double> &input) {
+void cn::BatchNormalizationLayer::CPURun(const cn::Tensor<double> &input) {
     if(input.size() != inputSize)
         throw std::logic_error("invalid bitmap input for normalization layer!");
-    Bitmap<double> result(outputSize, input.dataConst());
+    Tensor<double> result(outputSize, input.dataConst());
 
     double max = 0;
 
@@ -27,7 +27,7 @@ void cn::BatchNormalizationLayer::CPURun(const cn::Bitmap<double> &input) {
     }else{
         normalizationFactor = 1;
     }
-    output = std::make_unique<Bitmap<double>>(std::move(result));
+    output = std::make_unique<Tensor<double>>(std::move(result));
 }
 
 double cn::BatchNormalizationLayer::getChain(const Vector3<int> &inputPos) {

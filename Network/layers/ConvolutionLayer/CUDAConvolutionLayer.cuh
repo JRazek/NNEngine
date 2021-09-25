@@ -9,11 +9,11 @@ namespace cn {
 
     class ConvolutionLayer;
     template<typename T>
-    class Bitmap;
+    class Tensor;
 
     class CUDAConvolutionLayer{
     public:
-        static Bitmap<double> CUDARun(ConvolutionLayer &convolutionLayer, const Bitmap<double> &_input);
+        static Tensor<double> CUDARun(ConvolutionLayer &convolutionLayer, const Tensor<double> &_input);
         static void CUDAAutoGrad(ConvolutionLayer &convolutionLayer);
     };
 }

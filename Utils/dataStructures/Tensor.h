@@ -10,7 +10,7 @@
 
 namespace cn {
     template<typename T>
-    class Bitmap : public JSONEncodable{
+    class Tensor : public JSONEncodable{
     protected:
 
         /**
@@ -19,16 +19,16 @@ namespace cn {
         T * dataP;
         int _w, _h, _d;
     public:
-        Bitmap(int w, int h, int d);
-        Bitmap(const Vector3<int> &s);
-        Bitmap(int w, int h, int d, const T *data, int inputType = 0);
-        Bitmap(const Vector3<int> &s, const T *data, int inputType = 0);
-        Bitmap(const Vector3<int> &s, T *&&data);
-        Bitmap(const Bitmap &bitmap);
-        Bitmap(Bitmap &&bitmap);
-        Bitmap(const JSON &json);
-        Bitmap();
-        ~Bitmap();
+        Tensor(int w, int h, int d);
+        Tensor(const Vector3<int> &s);
+        Tensor(int w, int h, int d, const T *data, int inputType = 0);
+        Tensor(const Vector3<int> &s, const T *data, int inputType = 0);
+        Tensor(const Vector3<int> &s, T *&&data);
+        Tensor(const Tensor &bitmap);
+        Tensor(Tensor &&bitmap);
+        Tensor(const JSON &json);
+        Tensor();
+        ~Tensor();
         T getCell(int col, int row, int depth) const;
         T getCell(const Vector3<int> &c) const;
         void setCell(int col, int row, int depth, T val);
@@ -44,8 +44,8 @@ namespace cn {
         [[nodiscard]] int getDataIndex(const Vector3<T> &v) const;
         Vector3<int> indexToVector(int index) const;
 
-        Bitmap<T> &operator=(const Bitmap<T> &other);
-        Bitmap<T> &operator=(Bitmap<T> &&other);
+        Tensor<T> &operator=(const Tensor<T> &other);
+        Tensor<T> &operator=(Tensor<T> &&other);
         bool belongs(const Vector3<int> &point) const;
         const T * dataConst() const;
         T * data();
@@ -60,56 +60,56 @@ namespace cn {
 
 /////DEFINITIONS/////
 template<typename T>
-cn::Bitmap<T>::Bitmap(int w, int h, int d): _w(w), _h(h), _d(d) {
+cn::Tensor<T>::Tensor(int w, int h, int d): _w(w), _h(h), _d(d) {
     if(_w < 1 || _h < 1 || _d < 1)
         throw std::logic_error("invalid bitmap size!");
     dataP = new T [_w * _h * _d];
 }
 
 template<typename T>
-cn::Bitmap<T>::Bitmap(const Bitmap<T> &bitmap): Bitmap(bitmap.w(), bitmap.h(), bitmap.d()) {
+cn::Tensor<T>::Tensor(const Tensor<T> &bitmap): Tensor(bitmap.w(), bitmap.h(), bitmap.d()) {
     std::copy(bitmap.dataP, bitmap.dataP + _w * _h * _d, dataP);
 }
 
 template<typename T>
-T cn::Bitmap<T>::getCell(int col, int row, int depth) const {
+T cn::Tensor<T>::getCell(int col, int row, int depth) const {
     return dataP[getDataIndex(col, row, depth)];
 }
 
 template<typename T>
-void cn::Bitmap<T>::setCell(int col, int row, int depth, T val) {
+void cn::Tensor<T>::setCell(int col, int row, int depth, T val) {
     dataP[getDataIndex(col, row, depth)] = val;
 }
 
 template<typename T>
-const T *cn::Bitmap<T>::dataConst() const{
+const T *cn::Tensor<T>::dataConst() const{
     return dataP;
 }
 
 template<typename T>
-T *cn::Bitmap<T>::data() {
+T *cn::Tensor<T>::data() {
     return dataP;
 }
 
 template<typename T>
-cn::Bitmap<T>::~Bitmap() {
+cn::Tensor<T>::~Tensor() {
     delete [] dataP;
 }
 
 template<typename T>
-cn::Bitmap<T>::Bitmap(int _w, int _h, int _d, const T *data, int inputType): Bitmap(_w, _h, _d) {
+cn::Tensor<T>::Tensor(int _w, int _h, int _d, const T *data, int inputType): Tensor(_w, _h, _d) {
     setData(data, inputType);
 }
 
 template<typename T>
-int cn::Bitmap<T>::getDataIndex(int col, int row, int depth) const{
+int cn::Tensor<T>::getDataIndex(int col, int row, int depth) const{
     if(col < 0 || col >= _w || row < 0 || row >= _h || depth < 0 || depth >= _d)
         throw std::logic_error("invalid read!");
     return depth * _w * _h + row * _w + col;
 }
 
 template<typename T>
-cn::Bitmap<T> &cn::Bitmap<T>::operator=(const cn::Bitmap<T> &other) {
+cn::Tensor<T> &cn::Tensor<T>::operator=(const cn::Tensor<T> &other) {
     if(&other != this) {
         delete[] dataP;
         _w = other.w();
@@ -122,7 +122,7 @@ cn::Bitmap<T> &cn::Bitmap<T>::operator=(const cn::Bitmap<T> &other) {
 }
 
 template<typename T>
-cn::Bitmap<T> &cn::Bitmap<T>::operator=(cn::Bitmap<T> &&other){
+cn::Tensor<T> &cn::Tensor<T>::operator=(cn::Tensor<T> &&other){
     if(&other != this) {
         delete [] dataP;
         _w = other.w();
@@ -135,7 +135,7 @@ cn::Bitmap<T> &cn::Bitmap<T>::operator=(cn::Bitmap<T> &&other){
 }
 
 template<typename T>
-cn::Bitmap<T>::Bitmap(cn::Bitmap<T> &&bitmap):_w(bitmap.w()), _h(bitmap.h()), _d(bitmap.d()){
+cn::Tensor<T>::Tensor(cn::Tensor<T> &&bitmap):_w(bitmap.w()), _h(bitmap.h()), _d(bitmap.d()){
     if(&bitmap != this){
         dataP = bitmap.dataP;
         bitmap.dataP = nullptr;
@@ -143,74 +143,74 @@ cn::Bitmap<T>::Bitmap(cn::Bitmap<T> &&bitmap):_w(bitmap.w()), _h(bitmap.h()), _d
 }
 
 template<typename T>
-void cn::Bitmap<T>::setData(const T *data, int inputType) {
+void cn::Tensor<T>::setData(const T *data, int inputType) {
     cn::Utils::convert(data, dataP, _w, _h, _d, inputType, 0);
 }
 
 template<typename T>
-void cn::Bitmap<T>::setLayer(int layerID, T *input) {
+void cn::Tensor<T>::setLayer(int layerID, T *input) {
     std::copy(input, input + _w * _h, dataP + _w * _h * layerID);
 }
 
 
 template<typename T>
-int cn::Bitmap<T>::w() const {
+int cn::Tensor<T>::w() const {
     return _w;
 }
 
 template<typename T>
-int cn::Bitmap<T>::h() const {
+int cn::Tensor<T>::h() const {
     return _h;
 }
 
 template<typename T>
-int cn::Bitmap<T>::d() const {
+int cn::Tensor<T>::d() const {
     return _d;
 }
 
 template<typename T>
-T cn::Bitmap<T>::getCell(const Vector3<int> &c) const {
+T cn::Tensor<T>::getCell(const Vector3<int> &c) const {
     return getCell(c.x, c.y, c.z);
 }
 
 template<typename T>
-int cn::Bitmap<T>::getDataIndex(const Vector3<T> &v) const {
+int cn::Tensor<T>::getDataIndex(const Vector3<T> &v) const {
     return getDataIndex(v.x, v.y, v.z);
 }
 
 template<typename T>
-cn::Vector3<int> cn::Bitmap<T>::indexToVector(int index) const{
+cn::Vector3<int> cn::Tensor<T>::indexToVector(int index) const{
     return {index % _w, (index / _w) % _w, index / (_w * _h)};
 }
 
 template<typename T>
-void cn::Bitmap<T>::setCell(const Vector3<int> &c, T b) {
+void cn::Tensor<T>::setCell(const Vector3<int> &c, T b) {
     setCell(c.x, c.y, c.z, b);
 }
 
 template<typename T>
-cn::Vector3<int> cn::Bitmap<T>::size() const {
+cn::Vector3<int> cn::Tensor<T>::size() const {
     return Vector3<int>(_w, _h, _d);
 }
 
 template<typename T>
-cn::Bitmap<T>::Bitmap(const Vector3<int> &s):Bitmap(s.x, s.y, s.z) {}
+cn::Tensor<T>::Tensor(const Vector3<int> &s):Tensor(s.x, s.y, s.z) {}
 
 template<typename T>
-cn::Bitmap<T>::Bitmap(const Vector3<int> &s, const T *data, int inputType):Bitmap(s.x, s.y, s.z, data, inputType) {}
+cn::Tensor<T>::Tensor(const Vector3<int> &s, const T *data, int inputType):Tensor(s.x, s.y, s.z, data, inputType) {}
 
 template<typename T>
-cn::Bitmap<T>::Bitmap():Bitmap(0, 0, 0) {
+cn::Tensor<T>::Tensor():Tensor(0, 0, 0) {
     dataP = nullptr;
 }
 
 template<typename T>
-bool cn::Bitmap<T>::belongs(const Vector3<int> &p) const {
+bool cn::Tensor<T>::belongs(const Vector3<int> &p) const {
     return p.x >= 0 && p.x < _w && p.y >= 0 && p.y < _h && p.z >= 0 && p.z < _d;
 }
 
 template<typename T>
-cn::JSON cn::Bitmap<T>::jsonEncode() const{
+cn::JSON cn::Tensor<T>::jsonEncode() const{
     JSON json;
     json["size"] = size().jsonEncode();
     std::vector<T> dataVec;
@@ -220,19 +220,19 @@ cn::JSON cn::Bitmap<T>::jsonEncode() const{
 }
 
 template<typename T>
-cn::Bitmap<T>::Bitmap(const cn::JSON &json): Bitmap(Vector3<int>(json.at("size"))) {
+cn::Tensor<T>::Tensor(const cn::JSON &json): Tensor(Vector3<int>(json.at("size"))) {
     std::vector<T> d = json.at("data");
     std::copy(d.begin(), d.end(), dataP);
 }
 
 template<typename T>
-void cn::Bitmap<T>::setData(T *&&data) {
+void cn::Tensor<T>::setData(T *&&data) {
     dataP = data;
     data = nullptr;
 }
 
 template<typename T>
-cn::Bitmap<T>::Bitmap(const cn::Vector3<int> &s, T *&&data):Bitmap(s) {
+cn::Tensor<T>::Tensor(const cn::Vector3<int> &s, T *&&data):Tensor(s) {
     dataP = data;
     data = nullptr;
 }

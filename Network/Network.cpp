@@ -12,25 +12,26 @@
 #include "layers/InputLayer/InputLayer.h"
 #include "layers/ActivationLayers/Sigmoid/Sigmoid.h"
 #include "layers/ActivationLayers/ReLU/ReLU.h"
+#include "layers/RecurrentLayer/RecurrentLayer.h"
 
 [[maybe_unused]]
 void cn::Network::feed(const byte *_input, bool CUDAAccelerate) {
-    cn::Bitmap<byte> bitmap(inputSize, _input, 0);
+    cn::Tensor<byte> bitmap(inputSize, _input, 0);
     if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
     feed(cn::Utils::normalize(bitmap), CUDAAccelerate);
 }
 
-void cn::Network::feed(Bitmap<double> bitmap, bool CUDAAccelerate) {
+void cn::Network::feed(Tensor<double> bitmap, bool CUDAAccelerate) {
     if(bitmap.size() != inputSize){
         throw std::logic_error("invalid input size!");
     }
     if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
 
-    input = std::make_unique<Bitmap<double>>(std::move(bitmap));
+    input = std::make_unique<Tensor<double>>(std::move(bitmap));
 
-    const Bitmap<double> *_input = input.get();
+    const Tensor<double> *_input = input.get();
     for(u_int i = 0; i < layers.size(); i ++){
         auto layer = layers[i];
         if(!CUDAAccelerate)
@@ -41,7 +42,7 @@ void cn::Network::feed(Bitmap<double> bitmap, bool CUDAAccelerate) {
     }
 }
 
-void cn::Network::feed(const cn::Bitmap<cn::byte> &bitmap, bool CUDAAccelerate) {
+void cn::Network::feed(const cn::Tensor<cn::byte> &bitmap, bool CUDAAccelerate) {
     feed(Utils::normalize(bitmap), CUDAAccelerate);
 }
 
@@ -133,7 +134,7 @@ cn::Vector3<int> cn::Network::getInputSize(int layerID) const {
     return getOutputSize(layerID - 1);
 }
 
-const std::unique_ptr<cn::Bitmap<double>> &cn::Network::getNetworkOutput() const {
+const std::unique_ptr<cn::Tensor<double>> &cn::Network::getNetworkOutput() const {
     return layers.back()->getOutput();
 }
 
@@ -141,14 +142,14 @@ cn::OutputLayer &cn::Network::getOutputLayer() {
     return *outputLayer;
 }
 
-const std::unique_ptr<cn::Bitmap<double>> &cn::Network::getInput(int layerID) const{
+const std::unique_ptr<cn::Tensor<double>> &cn::Network::getInput(int layerID) const{
     if(layerID == 0)
         return input;
 
     return getOutput(layerID -1);
 }
 
-const std::unique_ptr<cn::Bitmap<double>> &cn::Network::getOutput(int layerID) const {
+const std::unique_ptr<cn::Tensor<double>> &cn::Network::getOutput(int layerID) const {
     return layers[layerID]->getOutput();
 }
 
@@ -229,4 +230,11 @@ void cn::Network::linkLayers() {
             layers[i]->setNextLayer(layers[i + 1]);
         }
     }
+}
+
+void cn::Network::appendRecurrentLayer() {
+    int id = this->layers.size();
+    std::unique_ptr<RecurrentLayer> r = std::make_unique<RecurrentLayer>(id, getInputSize(id));
+    layers.push_back(r.get());
+    allocated.push_back(std::move(r));
 }

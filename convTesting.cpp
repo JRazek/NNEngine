@@ -2,7 +2,7 @@
 // Created by user on 31.07.2021.
 //
 #include <iostream>
-#include "Utils/dataStructures/Bitmap.h"
+#include "Utils/dataStructures/Tensor.h"
 #include "Utils/Utils.h"
 #include "Network/Network.h"
 #include "Optimizers/MBGD.h"
@@ -20,7 +20,18 @@ int main(){
     network.appendConvolutionLayer({3, 3},5, {2, 2}, {1, 1});
     network.appendReLULayer();
     network.appendBatchNormalizationLayer();
+    network.appendConvolutionLayer({3, 3},5, {2, 2}, {1, 1});
+    network.appendReLULayer();
+    network.appendBatchNormalizationLayer();
+    network.appendConvolutionLayer({3, 3},5, {2, 2}, {1, 1});
+    network.appendReLULayer();
+    network.appendBatchNormalizationLayer();
+    network.appendConvolutionLayer({3, 3},5, {2, 2}, {1, 1});
+    network.appendReLULayer();
+    network.appendBatchNormalizationLayer();
     network.appendFlatteningLayer();
+    network.appendFFLayer(outputSize);
+    network.appendSigmoidLayer();
     network.appendFFLayer(outputSize);
     network.appendSigmoidLayer();
     network.initRandom();
@@ -42,11 +53,11 @@ int main(){
     }
 
 
-    cn::Bitmap<double> target (outputSize, 1, 1);
+    cn::Tensor<double> target (outputSize, 1, 1);
     for(int i = 0; i < outputSize; i ++){
         target.setCell(i, 0, 0, 0);
     }
-    auto getBest = [](const cn::Bitmap<double> &output){
+    auto getBest = [](const cn::Tensor<double> &output){
         int best = 0;
         for (int j = 0; j < output.w(); ++j) {
             if(output.getCell(j, 0, 0) > output.getCell(best, 0, 0)){
@@ -69,7 +80,7 @@ int main(){
         ImageRepresentation &imageRepresentation = imageRepresentations[n];
         cv::Mat mat = cv::imread(imageRepresentation.path);
 
-        cn::Bitmap<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
+        cn::Tensor<cn::byte> bitmap(mat.cols, mat.rows, mat.channels(), mat.data, 1);
         int numVal = std::stoi(imageRepresentation.value);
         target.setCell(numVal, 0, 0, 1);
         cn::Vector3<int> inputSize = network.getInputSize(0);

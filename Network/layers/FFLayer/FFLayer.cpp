@@ -26,13 +26,13 @@ cn::FFLayer::FFLayer(int _id, Vector3<int> _inputSize, int _neuronsCount) :
     outputSize = Vector3<int> (neuronsCount, 1, 1);
 }
 
-void cn::FFLayer::CPURun(const Bitmap<double> &_input) {
+void cn::FFLayer::CPURun(const Tensor<double> &_input) {
     if(_input.size() != inputSize){
         throw std::logic_error("_input bitmap to ff layer must be a normalized vector type!");
     }
     int weightsPerNeuron = weightsCount() / neuronsCount;
 
-    Bitmap<double> result(neuronsCount, 1, 1);
+    Tensor<double> result(neuronsCount, 1, 1);
     for(int i = 0; i < neuronsCount; i ++){
         double sum = 0;
         for(int j = 0; j < weightsPerNeuron; j ++){
@@ -40,7 +40,7 @@ void cn::FFLayer::CPURun(const Bitmap<double> &_input) {
         }
         result.setCell(i, 0, 0, sum);
     }
-    output = std::make_unique<Bitmap<double>>(std::move(result));
+    output = std::make_unique<Tensor<double>>(std::move(result));
 }
 
 void cn::FFLayer::randomInit(std::default_random_engine &randomEngine) {
@@ -74,7 +74,7 @@ double cn::FFLayer::getChain(const Vector3<int> &inputPos) {
 
 double cn::FFLayer::diffWeight(int weightID) {
     int neuron = weightID / inputSize.x;
-    const Bitmap<double> &input = *getInput();
+    const Tensor<double> &input = *getInput();
     return input.getCell(weightID % inputSize.x, 0, 0) * nextLayer->getChain({neuron, 0, 0});
 }
 

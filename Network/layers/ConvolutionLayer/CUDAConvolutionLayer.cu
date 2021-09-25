@@ -41,8 +41,8 @@ namespace cn{
 
     }
 }
-cn::Bitmap<double> cn::CUDAConvolutionLayer::CUDARun(cn::ConvolutionLayer &convolutionLayer, const cn::Bitmap<double> &_input) {
-    convolutionLayer.output = std::make_unique<Bitmap<double>>(
+cn::Tensor<double> cn::CUDAConvolutionLayer::CUDARun(cn::ConvolutionLayer &convolutionLayer, const cn::Tensor<double> &_input) {
+    convolutionLayer.output = std::make_unique<Tensor<double>>(
             CUDAUtils::cudaConvolve(
                 convolutionLayer.kernels, _input,
                 convolutionLayer.padding.x, convolutionLayer.padding.y,
@@ -58,7 +58,7 @@ void cn::CUDAConvolutionLayer::CUDAAutoGrad(cn::ConvolutionLayer &convolutionLay
     double *inputDev, *kernelDev, *chainValuesDev;
 
 
-    Bitmap<double> paddedInput = Utils::addPadding(*convolutionLayer.getInput().get(), convolutionLayer.padding.x, convolutionLayer.padding.y);
+    Tensor<double> paddedInput = Utils::addPadding(*convolutionLayer.getInput().get(), convolutionLayer.padding.x, convolutionLayer.padding.y);
 
     u_int paddedInputBytes = paddedInput.size().multiplyContent() * sizeof(double);
     u_int combinedKernelsBytes = convolutionLayer.kernels[0].size().multiplyContent() * convolutionLayer.kernelsCount * sizeof(double);
@@ -70,7 +70,7 @@ void cn::CUDAConvolutionLayer::CUDAAutoGrad(cn::ConvolutionLayer &convolutionLay
 
     std::vector<double> kernelsCombinedData(convolutionLayer.kernels[0].size().multiplyContent() * convolutionLayer.kernelsCount);
     for(u_int i = 0; i < convolutionLayer.kernelsCount; i ++){
-        Bitmap<double> &kernel = convolutionLayer.kernels[i];
+        Tensor<double> &kernel = convolutionLayer.kernels[i];
         std::copy(kernel.dataConst(), kernel.dataConst() + kernel.size().multiplyContent(), kernelsCombinedData.begin() + kernel.size().multiplyContent());
     }
 

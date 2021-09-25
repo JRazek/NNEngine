@@ -8,7 +8,7 @@
 
 cn::OutputLayer::OutputLayer(int id, Vector3<int> _inputSize) : FlatteningLayer(id, _inputSize) {}
 
-void cn::OutputLayer::CPURun(const cn::Bitmap<double> &input) {
+void cn::OutputLayer::CPURun(const cn::Tensor<double> &input) {
     return FlatteningLayer::CPURun(input);
 }
 
@@ -16,7 +16,7 @@ double cn::OutputLayer::getChain(const Vector3<int> &input) {
     return getInput()->getCell(input) - target->getCell(input);
 }
 
-void cn::OutputLayer::setTarget(const cn::Bitmap<double> *_target) {
+void cn::OutputLayer::setTarget(const cn::Tensor<double> *_target) {
     if(outputSize != _target->size()){
         throw std::logic_error("");
     }

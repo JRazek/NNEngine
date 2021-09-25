@@ -14,7 +14,7 @@ namespace cn {
         constexpr static double e = M_E;
         Sigmoid(int id, Vector3<int> _inputSize);
         Sigmoid(const JSON &json);
-        void CPURun(const Bitmap<double> &input) override;
+        void CPURun(const Tensor<double> &input) override;
         double getChain(const Vector3<int> &inputPos) override;
         virtual JSON jsonEncode() const override;
         static double sigmoid(double x);

@@ -3,7 +3,7 @@
 //
 
 #include "MBGD.h"
-#include "../Utils/dataStructures/Bitmap.h"
+#include "../Utils/dataStructures/Tensor.h"
 
 cn::MBGD::MBGD(Network &_network, double _learningRate, int _miniBatchSize) :
         Optimizer(_network, _learningRate),
@@ -13,7 +13,7 @@ cn::MBGD::MBGD(Network &_network, double _learningRate, int _miniBatchSize) :
     }
 }
 
-void cn::MBGD::propagate(const cn::Bitmap<double> &target, bool CUDAAccelerate) {
+void cn::MBGD::propagate(const cn::Tensor<double> &target, bool CUDAAccelerate) {
     network.resetMemoization();
     const std::vector<cn::Learnable *> &learnables = getLearnables();
     const std::vector<cn::Layer *> &layers = getNetworkLayers();
@@ -32,7 +32,7 @@ void cn::MBGD::propagate(const cn::Bitmap<double> &target, bool CUDAAccelerate) 
     }
     OutputLayer &layer = network.getOutputLayer();
     layer.setTarget(&target);
-    const Bitmap<double> &output = *network.getOutput(layer.id()).get();
+    const Tensor<double> &output = *network.getOutput(layer.id()).get();
     if(output.size() != target.size()){
         throw std::logic_error("MBGD, invalid target!");
     }

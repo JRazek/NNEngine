@@ -29,7 +29,7 @@ namespace cn {
 
         FFLayer(const JSON &json);
 
-        void CPURun(const Bitmap<double> &_input) override;
+        void CPURun(const Tensor<double> &_input) override;
 
         virtual double getChain(const Vector3<int> &inputPos) override;
 

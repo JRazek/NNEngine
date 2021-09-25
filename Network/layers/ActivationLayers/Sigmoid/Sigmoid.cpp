@@ -5,8 +5,8 @@
 #include "Sigmoid.h"
 #include "../../../Network.h"
 
-void cn::Sigmoid::CPURun(const cn::Bitmap<double> &input) {
-    Bitmap<double> result(input.size());
+void cn::Sigmoid::CPURun(const cn::Tensor<double> &input) {
+    Tensor<double> result(input.size());
     for(int z = 0; z < input.d(); z ++){
         for(int y = 0; y < input.h(); y ++){
             for(int x = 0; x < input.w(); x ++){
@@ -14,11 +14,11 @@ void cn::Sigmoid::CPURun(const cn::Bitmap<double> &input) {
             }
         }
     }
-    output = std::make_unique<Bitmap<double>>(std::move(result));
+    output = std::make_unique<Tensor<double>>(std::move(result));
 }
 
 double cn::Sigmoid::getChain(const Vector3<int> &inputPos) {
-    const Bitmap<double> &input = *getInput().get();
+    const Tensor<double> &input = *getInput().get();
     return diff(input.getCell(inputPos)) * nextLayer->getChain(inputPos);
 }
 

@@ -11,11 +11,11 @@ namespace cn {
     public:
         Vector2<int> kernelSize;
 
-        std::optional<Bitmap<Vector2<int>>> mapping;
+        std::optional<Tensor<Vector2<int>>> mapping;
 
         MaxPoolingLayer(int _id, Vector3<int> _inputSize, cn::Vector2<int> _kernelSize);
         MaxPoolingLayer(const cn::JSON &json);
-        void CPURun(const Bitmap<double> &input) override;
+        void CPURun(const Tensor<double> &input) override;
         double getChain(const Vector3<int> &inputPos) override;
         JSON jsonEncode() const override;
         std::unique_ptr<Layer> getCopyAsUniquePtr() const override;

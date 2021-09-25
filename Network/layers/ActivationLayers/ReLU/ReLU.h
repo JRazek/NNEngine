@@ -12,7 +12,7 @@ namespace cn {
     public:
         ReLU(int id, Vector3<int> _inputSize);
         ReLU(const JSON &json);
-        void CPURun(const Bitmap<double> &input) override;
+        void CPURun(const Tensor<double> &input) override;
         double getChain(const Vector3<int> &inputPos) override;
         virtual JSON jsonEncode() const override;
         static double relu(double x);

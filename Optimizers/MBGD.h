@@ -8,7 +8,7 @@
 #include "interfaces/Optimizer.h"
 namespace cn {
     template<typename T>
-    class Bitmap;
+    class Tensor;
     class Network;
 
     class MBGD : public Optimizer{
@@ -17,7 +17,7 @@ namespace cn {
         std::vector<std::vector<double>> memorizedBiases;
     public:
         MBGD(Network &_network, double _learningRate, int _miniBatchSize);
-        void propagate(const Bitmap<double> &target, bool CUDAAccelerate = false) override;
+        void propagate(const Tensor<double> &target, bool CUDAAccelerate = false) override;
     };
 
 }

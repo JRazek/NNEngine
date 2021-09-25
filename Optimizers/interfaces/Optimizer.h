@@ -23,8 +23,8 @@ namespace cn {
         Optimizer &operator=(const Optimizer &optimizer) = delete;
 
     public:
-        virtual void propagate(const Bitmap<double> &target, bool CUDAAccelerate = false) = 0;
-        double getError(const cn::Bitmap<double> &target) const;
+        virtual void propagate(const Tensor<double> &target, bool CUDAAccelerate = false) = 0;
+        double getError(const cn::Tensor<double> &target) const;
     };
 }
 

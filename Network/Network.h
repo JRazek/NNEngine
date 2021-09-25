@@ -32,7 +32,7 @@ namespace cn {
         std::vector<Learnable *> learnableLayers;
         std::vector<Layer *> layers;
 
-        std::unique_ptr<Bitmap<double>> input;
+        std::unique_ptr<Tensor<double>> input;
 
         OutputLayer *outputLayer = nullptr;
 
@@ -45,6 +45,7 @@ namespace cn {
         void appendFlatteningLayer();
         void appendBatchNormalizationLayer();
         void appendMaxPoolingLayer(Vector2<int> kernelSize);
+        void appendRecurrentLayer();
         void appendReLULayer();
         void appendSigmoidLayer();
 
@@ -57,8 +58,8 @@ namespace cn {
          */
         void feed(const byte *_input, bool CUDAAccelerate = false);
 
-        void feed(Bitmap<double> bitmap, bool CUDAAccelerate = false);
-        void feed(const Bitmap<cn::byte> &bitmap, bool CUDAAccelerate = false);
+        void feed(Tensor<double> bitmap, bool CUDAAccelerate = false);
+        void feed(const Tensor<cn::byte> &bitmap, bool CUDAAccelerate = false);
 
         /**
          * when network structure is ready - CPURun this function.
@@ -92,9 +93,9 @@ namespace cn {
 
         void resetMemoization();
 
-        const std::unique_ptr<cn::Bitmap<double>> & getInput(int layerID) const;
-        const std::unique_ptr<cn::Bitmap<double>> & getNetworkOutput() const;
-        const std::unique_ptr<cn::Bitmap<double>> & getOutput(int layerID) const;
+        const std::unique_ptr<cn::Tensor<double>> & getInput(int layerID) const;
+        const std::unique_ptr<cn::Tensor<double>> & getNetworkOutput() const;
+        const std::unique_ptr<cn::Tensor<double>> & getOutput(int layerID) const;
 
         JSON jsonEncode() const override;
 
