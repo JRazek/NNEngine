@@ -1,4 +1,3 @@
-
 set(CMAKE_CUDA_COMPILER /usr/local/cuda-11.4/bin/nvcc)
 set(CMAKE_CXX_COMPILER /usr/bin/gcc)
 cmake_minimum_required(VERSION 3.0.2)
@@ -25,5 +24,4 @@ add_library(ImageProcessingLib Network/Network.cpp Network/Network.h Network/lay
 target_link_libraries(ImageProcessingLib PRIVATE nlohmann_json::nlohmann_json)
 
 target_link_libraries(Main ImageProcessingLib)
-target_link_libraries(Main ${OpenCV_LIBS})
 target_link_libraries(Main ${OpenCV_LIBS})

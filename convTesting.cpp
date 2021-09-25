@@ -20,6 +20,7 @@ int main(){
     cn::VectorN<4, int> vectorN;
     vectorN * -1;
     cn::Vector2<int> vector2;
+    vector2 * -1;
 
 
     const int outputSize = 10;
