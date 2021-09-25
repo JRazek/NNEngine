@@ -18,6 +18,9 @@ int main(){
     cn::Network network(28, 28, 3, 1);
 
     cn::VectorN<4, int> vectorN;
+    vectorN * -1;
+    cn::Vector2<int> vector2;
+
 
     const int outputSize = 10;
     network.appendConvolutionLayer({3, 3},5, {2, 2}, {1, 1});

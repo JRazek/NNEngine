@@ -33,7 +33,7 @@ namespace cn {
 
         T multiplyContent() const;
 
-        cn::JSON jsonEncode() const override;
+        virtual cn::JSON jsonEncode() const override;
     };
 
     template<u_int N, typename T>
