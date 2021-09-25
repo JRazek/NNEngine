@@ -84,7 +84,8 @@ cn::Vector3<T> cn::Vector3<T>::operator-(const Vector3<T> &other) {
 
 template<typename T>
 template<typename Y>
-cn::Vector3<T>::Vector3(const Vector3<Y> &other): Vector3<T>((T) other.x, (T) other.y, (T) other.z) {}
+cn::Vector3<T>::Vector3(const Vector3<Y> &other):
+Vector3<T>(static_cast<T>(other.x), static_cast<T>(other.y), static_cast<T>(other.z)) {}
 
 template<typename T>
 bool cn::Vector3<T>::operator==(const Vector3<T> &other) const{
