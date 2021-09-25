@@ -9,12 +9,12 @@
 #include "../interfaces/Layer.h"
 
 namespace cn {
-    class RecurrentLayer : Layer {
+    class RecurrentLayer : public Layer {
         std::stack<Bitmap<double>> memoryStates;
         std::unique_ptr<Layer> getCopyAsUniquePtr() const override;
         void CPURun(const Bitmap<double> &_input) override;
         double getChain(const Vector3<int> &inputPos) override;
-        void CUDAAutoGrad() override;
+        RecurrentLayer(const JSON &json);
 
         JSON jsonEncode() const override;
     public:

@@ -5,8 +5,7 @@
 #include "RecurrentLayer.h"
 
 std::unique_ptr<cn::Layer> cn::RecurrentLayer::getCopyAsUniquePtr() const {
-    RecurrentLayer recurrentLayer(*this);
-//    return std::make_unique<RecurrentLayer>(recurrentLayer);
+    return std::make_unique<RecurrentLayer>(*this);
 }
 
 cn::RecurrentLayer::RecurrentLayer(int _id, cn::Vector3<int> _inputSize) : Layer(_id, _inputSize) {
@@ -23,6 +22,9 @@ void cn::RecurrentLayer::CPURun(const cn::Bitmap<double> &_input) {
 }
 
 double cn::RecurrentLayer::getChain(const cn::Vector3<int> &inputPos) {
+    while (memoryStates.size() != 1){
+
+    }
     return 0;
 }
 
@@ -30,6 +32,4 @@ cn::JSON cn::RecurrentLayer::jsonEncode() const {
     return Layer::jsonEncode();
 }
 
-void cn::RecurrentLayer::CUDAAutoGrad() {
-    Layer::CUDAAutoGrad();
-}
+cn::RecurrentLayer::RecurrentLayer(const cn::JSON &json) : RecurrentLayer(json.at("id"), json.at("input_size")) {}
