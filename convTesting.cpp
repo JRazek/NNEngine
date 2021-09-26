@@ -11,6 +11,8 @@
 #include "Utils/Files/CSVReader.h"
 #include "Utils/Files/ImageRepresentation.h"
 #include "Utils/dataStructures/VectorN.h"
+#include "Utils/dataStructures/Vector4.h"
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wreorder"
 
