@@ -26,7 +26,7 @@ void cn::MaxPoolingLayer::CPURun(const cn::Tensor<double> &input) {
                     }
                 }
                 result.setCell(x / kernelSize.x, y / kernelSize.y, c, max);
-                mapping[mapping.size()].setCell(bestPoint.x, bestPoint.x, c, {x / kernelSize.x, y / kernelSize.y});
+                mapping[getTime()].setCell(bestPoint.x, bestPoint.x, c, {x / kernelSize.x, y / kernelSize.y});
             }
         }
     }
@@ -68,4 +68,9 @@ kernelSize(_kernelSize){
 
 std::unique_ptr<cn::Layer> cn::MaxPoolingLayer::getCopyAsUniquePtr() const {
     return std::make_unique<MaxPoolingLayer>(*this);
+}
+
+void cn::MaxPoolingLayer::resetState() {
+    Layer::resetState();
+    mapping.clear();
 }

@@ -54,7 +54,7 @@ namespace cn {
 
         virtual ~Layer() = default;
 
-        void resetState();
+        virtual void resetState();
         void setMemo(const Vector4<int> &pos, double val);
         bool getMemoState(const Vector4<int> &pos) const;
         double getMemo(const Vector4<int> &pos) const;

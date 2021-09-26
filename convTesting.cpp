@@ -20,10 +20,10 @@ int main(){
     cn::Network network(28, 28, 3, 1);
 
     const int outputSize = 10;
-    network.appendConvolutionLayer({3, 3},5, {2, 2}, {1, 1});
-    network.appendReLULayer();
-    network.appendBatchNormalizationLayer();
+    network.appendMaxPoolingLayer({2,2});
     network.appendFlatteningLayer();
+    network.appendFFLayer(outputSize);
+    network.appendSigmoidLayer();
     network.appendFFLayer(outputSize);
     network.appendSigmoidLayer();
     network.appendFFLayer(outputSize);
@@ -81,6 +81,7 @@ int main(){
         if(inputSize.z != 3){
             bitmap = cn::Utils::average3Layers(bitmap);
         }
+
         network.resetState();
         network.feed(cn::Utils::resize(bitmap, inputSize.x, inputSize.y));
         momentumGd.propagate(target, false);
@@ -100,9 +101,10 @@ int main(){
         if((i + 1) % imageRepresentations.size()){
             //save time :)
             std::fstream file(filePath, std::ios::out);
-//            file << network.jsonEncode();
+            file << network.jsonEncode();
             file.close();
         }
+
     }
     return 0;
 }

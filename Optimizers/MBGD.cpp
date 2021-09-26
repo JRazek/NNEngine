@@ -14,7 +14,6 @@ cn::MBGD::MBGD(Network &_network, double _learningRate, int _miniBatchSize) :
 }
 
 void cn::MBGD::propagate(const cn::Tensor<double> &target, bool CUDAAccelerate) {
-    network.resetState();
     const std::vector<cn::Learnable *> &learnables = getLearnables();
     const std::vector<cn::Layer *> &layers = getNetworkLayers();
 
