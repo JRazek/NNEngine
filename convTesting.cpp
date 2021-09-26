@@ -11,7 +11,6 @@
 #include "Utils/Files/CSVReader.h"
 #include "Utils/Files/ImageRepresentation.h"
 #include "Utils/dataStructures/VectorN.h"
-#include "Utils/dataStructures/Vector4.h"
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wreorder"
@@ -83,9 +82,8 @@ int main(){
             bitmap = cn::Utils::average3Layers(bitmap);
         }
 
-        network.resetState();
         network.feed(cn::Utils::resize(bitmap, inputSize.x, inputSize.y));
-        momentumGd.propagate(target, false);
+
 
         int best = getBest(network.getNetworkOutput(0));
         if (best == numVal) {
@@ -97,7 +95,10 @@ int main(){
             std::cout << "ACCURACY: " << (double) correctCount / double(resetRate) * 100 << "%\n";
             correctCount = 0;
         }
-
+        if(!(i % 1)) {
+            momentumGd.propagate(target, false);
+            network.resetState();
+        }
         target.setCell(numVal, 0, 0, 0);
         if((i + 1) % imageRepresentations.size()){
             //save time :)
