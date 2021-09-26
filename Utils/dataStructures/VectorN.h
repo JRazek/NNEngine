@@ -24,7 +24,7 @@ namespace cn {
         VectorN<N, T> operator-(const VectorN<N, T> &other);
         bool operator==(const VectorN<N, T> &other) const;
         bool operator!=(const VectorN<N, T> &other) const;
-        VectorN<N, T> &operator=(const VectorN<N, T> &other) = default;
+
         T multiplyContent() const;
         virtual cn::JSON jsonEncode() const override;
     };

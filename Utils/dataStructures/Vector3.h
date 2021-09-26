@@ -13,7 +13,7 @@ namespace cn {
     struct TMatrix;
 
     template<typename T>
-    struct Vector3 : public VectorN<3, T> {
+    struct Vector3 : public VectorN<3U, T> {
         T &x, &y, &z;
 
         using VectorN<3, T>::operator*;
@@ -22,11 +22,10 @@ namespace cn {
         Vector3<T>();
         Vector3<T>(T _x, T _y, T _z);
         Vector3<T>(const Vector3<T> &other);
+        Vector3<T>(const VectorN<3U, T> &other);
 
-        template<typename Y>
-        Vector3<T>(const Vector3<Y> &other);
         Vector3<T> &operator=(const Vector3<T> &other);
-//        Vector3<T> &operator=(const VectorN<3, T> &other);
+        Vector3<T> &operator=(const VectorN<3U, T> &other) noexcept;
         cn::JSON jsonEncode() const override;
     };
 
@@ -39,7 +38,11 @@ namespace cn {
     static void from_json(const JSON &j, Vector3<T> &value);
 }
 template<typename T>
-cn::Vector3<T>::Vector3(T _x, T _y, T _z): x(_x), y(_y), z(_z) {}
+cn::Vector3<T>::Vector3(T _x, T _y, T _z): x(this->v[0]), y(this->v[1]), z(this->v[2]) {
+    x = _x;
+    y = _y;
+    z = _z;
+}
 
 template<typename T>
 [[maybe_unused]]
@@ -54,15 +57,7 @@ static void cn::from_json(const JSON &j, Vector3<T> &value){
 }
 
 template<typename T>
-cn::Vector3<T>::Vector3(): x(this->v[0]), y(this->v[1]), z(this->v[2]) {
-    x = 0;
-    y = 0;
-    z = 0;
-}
-
-template<typename T>
-template<typename Y>
-cn::Vector3<T>::Vector3(const Vector3<Y> &other): Vector3<T>(static_cast<T>(other.x), static_cast<T>(other.y), static_cast<T>(other.z)) {}
+cn::Vector3<T>::Vector3(): Vector3(0,0,0) {}
 
 template<typename T>
 cn::Vector3<T>::Vector3(const Vector3<T> &other): Vector3<T>(other.x, other.y, other.z) {}
@@ -83,5 +78,21 @@ cn::Vector3<T> &cn::Vector3<T>::operator=(const cn::Vector3<T> &other) {
     z = other.z;
     return *this;
 }
+
+template<typename T>
+cn::Vector3<T> &cn::Vector3<T>::operator=(const cn::VectorN<3U, T> &other) noexcept {
+    x = other.v[0];
+    y = other.v[1];
+    z = other.v[2];
+    return *this;
+}
+
+template<typename T>
+cn::Vector3<T>::Vector3(const cn::VectorN<3U, T> &other):
+VectorN<3, T>(other),
+x(this->v[0]),
+y(this->v[1]),
+z(this->v[2])
+{}
 
 #endif //NEURALNETLIBRARY_VECTOR3_H

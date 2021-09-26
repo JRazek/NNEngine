@@ -41,7 +41,7 @@ namespace cn {
         void setData(T *&&data);
         void setLayer(int layerID, T *input);
         [[nodiscard]] int getDataIndex(int col, int row, int depth) const;
-        [[nodiscard]] int getDataIndex(const Vector3<T> &v) const;
+        [[nodiscard]] int getDataIndex(const Vector3<int> &v) const;
         Vector3<int> indexToVector(int index) const;
 
         Tensor<T> &operator=(const Tensor<T> &other);
@@ -174,7 +174,7 @@ T cn::Tensor<T>::getCell(const Vector3<int> &c) const {
 }
 
 template<typename T>
-int cn::Tensor<T>::getDataIndex(const Vector3<T> &v) const {
+int cn::Tensor<T>::getDataIndex(const Vector3<int> &v) const {
     return getDataIndex(v.x, v.y, v.z);
 }
 

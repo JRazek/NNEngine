@@ -14,22 +14,24 @@ namespace cn {
     struct TMatrix;
 
     template<typename T>
-    struct Vector2 : public VectorN<2, T> {
+    struct Vector2 : public VectorN<2U, T> {
         T &x, &y;
 
         Vector2<T>(const std::pair<T, T> &p);
 
-        using VectorN<2, T>::operator*;
-        using VectorN<2, T>::operator=;
+        using VectorN<2U, T>::operator*;
+        using VectorN<2U, T>::operator=;
+        using VectorN<2U, T>::operator+;
         Vector2<T>(const Vector2<T> &other);
-        template<typename Y>
-        Vector2<T>(const Vector2<Y> &other);
+        Vector2<T>(const VectorN<2U, T> &other);
         Vector2<T>();
         Vector2<T>(T _x, T _y);
-        cn::JSON jsonEncode() const override;
         template<typename Y>
         Vector2<T> operator*(const TMatrix<Y> &tMatrix);
-        Vector2<T> &operator=(const Vector2<T> &other);
+
+        Vector2<T> &operator=(const Vector2<T> &other) noexcept;
+        Vector2<T> &operator=(const VectorN<2U, T> &other) noexcept;
+        cn::JSON jsonEncode() const override;
     };
 }
 template<typename T>
@@ -62,14 +64,6 @@ cn::Vector2<T> cn::Vector2<T>::operator*(const cn::TMatrix<Y> &tMatrix) {
 }
 
 template<typename T>
-template<typename Y>
-cn::Vector2<T>::Vector2(const Vector2<Y> &other):
-    Vector2<T>(
-        static_cast<T>(other.x),
-        static_cast<T>(other.y)
-    ) {}
-
-template<typename T>
 cn::Vector2<T>::Vector2(const Vector2<T> &other):Vector2<T>(other.x, other.y) {}
 
 
@@ -82,11 +76,24 @@ cn::JSON cn::Vector2<T>::jsonEncode() const{
 }
 
 template<typename T>
-cn::Vector2<T> &cn::Vector2<T>::operator=(const cn::Vector2<T> &other) {
+cn::Vector2<T> &cn::Vector2<T>::operator=(const cn::Vector2<T> &other) noexcept {
     x = other.x;
     y = other.y;
     return *this;
 }
 
+template<typename T>
+cn::Vector2<T> &cn::Vector2<T>::operator=(const cn::VectorN<2U, T> &other) noexcept {
+    x = other.v[0];
+    y = other.v[1];
+    return *this;
+};
+
+template<typename T>
+cn::Vector2<T>::Vector2(const cn::VectorN<2U, T> &other):
+        VectorN<2U, T>(other),
+        x(this->v[0]),
+        y(this->v[1])
+{}
 
 #endif //NEURALNETLIBRARY_VECTOR2_H

@@ -10,6 +10,7 @@
 #include <opencv2/opencv.hpp>
 #include "Utils/Files/CSVReader.h"
 #include "Utils/Files/ImageRepresentation.h"
+#include "Utils/dataStructures/VectorN.h"
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wreorder"
 
@@ -17,15 +18,6 @@ int main(){
     cn::Network network(28, 28, 3, 1);
 
     const int outputSize = 10;
-    network.appendConvolutionLayer({3, 3},5, {2, 2}, {1, 1});
-    network.appendReLULayer();
-    network.appendBatchNormalizationLayer();
-    network.appendConvolutionLayer({3, 3},5, {2, 2}, {1, 1});
-    network.appendReLULayer();
-    network.appendBatchNormalizationLayer();
-    network.appendConvolutionLayer({3, 3},5, {2, 2}, {1, 1});
-    network.appendReLULayer();
-    network.appendBatchNormalizationLayer();
     network.appendConvolutionLayer({3, 3},5, {2, 2}, {1, 1});
     network.appendReLULayer();
     network.appendBatchNormalizationLayer();
