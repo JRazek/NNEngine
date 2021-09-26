@@ -15,6 +15,7 @@ void cn::FlatteningLayer::CPURun(const cn::Tensor<double> &input) {
         throw std::logic_error("invalid input input for flattening layer!");
     Tensor<double> result ({inputSize.multiplyContent(), 1, 1}, input.dataConst());
     output.emplace_back(Tensor<double>(std::move(result)));
+    addMemoLayer();
 }
 
 double cn::FlatteningLayer::getChain(const Vector4<int> &inputPos) {

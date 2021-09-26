@@ -91,7 +91,7 @@ namespace cn {
          */
         Vector3<int> getInputSize(int layerID) const;
 
-        void resetMemoization();
+        void resetState();
 
         const Tensor<double> &getInput(int layerID, int time) const;
         const Tensor<double> &getNetworkOutput(int time) const;

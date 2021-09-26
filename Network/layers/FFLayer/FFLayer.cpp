@@ -41,6 +41,7 @@ void cn::FFLayer::CPURun(const Tensor<double> &_input) {
         result.setCell(i, 0, 0, sum);
     }
     output.emplace_back(Tensor<double>(std::move(result)));
+    addMemoLayer();
 }
 
 void cn::FFLayer::randomInit(std::default_random_engine &randomEngine) {
@@ -74,8 +75,8 @@ double cn::FFLayer::getChain(const Vector4<int> &inputPos) {
 
 double cn::FFLayer::diffWeight(int weightID) {
     int neuron = weightID / inputSize.x;
-    const Tensor<double> &input = getInput(getTime());
-    return input.getCell(weightID % inputSize.x, 0, 0) * nextLayer->getChain({neuron, 0, 0, getTime()});
+    const Tensor<double> &input = getInput(getTime() - 1);
+    return input.getCell(weightID % inputSize.x, 0, 0) * nextLayer->getChain({neuron, 0, 0, getTime() - 1});
 }
 
 int cn::FFLayer::weightsCount() const {
@@ -107,7 +108,7 @@ std::vector<double> cn::FFLayer::getBiasesGradient() {
 }
 
 double cn::FFLayer::diffBias(int neuronID) {
-    return nextLayer->getChain({neuronID, 0, 0, getTime()});
+    return nextLayer->getChain({neuronID, 0, 0, getTime() - 1});
 }
 
 void cn::FFLayer::setBias(int neuronID, double value) {

@@ -15,6 +15,7 @@ void cn::ReLU::CPURun(const cn::Tensor<double> &input) {
         }
     }
     output.push_back(Tensor<double>(std::move(result)));
+    addMemoLayer();
 }
 
 double cn::ReLU::getChain(const Vector4<int> &inputPos) {

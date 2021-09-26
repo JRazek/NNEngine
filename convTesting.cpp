@@ -81,6 +81,7 @@ int main(){
         if(inputSize.z != 3){
             bitmap = cn::Utils::average3Layers(bitmap);
         }
+        network.resetState();
         network.feed(cn::Utils::resize(bitmap, inputSize.x, inputSize.y));
         momentumGd.propagate(target, false);
 
@@ -99,7 +100,7 @@ int main(){
         if((i + 1) % imageRepresentations.size()){
             //save time :)
             std::fstream file(filePath, std::ios::out);
-            file << network.jsonEncode();
+//            file << network.jsonEncode();
             file.close();
         }
     }

@@ -29,8 +29,6 @@ void cn::Network::feed(Tensor<double> bitmap, bool CUDAAccelerate) {
     if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
 
-//    input = std::make_unique<Tensor<double>>(std::move(bitmap));
-
     const Tensor<double> *_input = &bitmap;
     for(u_int i = 0; i < layers.size(); i ++){
         auto layer = layers[i];
@@ -40,6 +38,9 @@ void cn::Network::feed(Tensor<double> bitmap, bool CUDAAccelerate) {
             layer->CUDARun(*_input);
         _input = &getOutput(i, layer->getTime());
     }
+
+    for(auto l : layers)
+        l->incTime();
 }
 
 void cn::Network::feed(const cn::Tensor<cn::byte> &bitmap, bool CUDAAccelerate) {
@@ -117,9 +118,9 @@ void cn::Network::ready() {
     linkLayers();
 }
 
-void cn::Network::resetMemoization() {
+void cn::Network::resetState() {
     for(auto l : layers){
-        l->resetMemoization();
+        l->resetState();
     }
 }
 

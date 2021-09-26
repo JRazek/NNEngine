@@ -28,6 +28,7 @@ void cn::BatchNormalizationLayer::CPURun(const cn::Tensor<double> &input) {
         normalizationFactor = 1;
     }
     output.emplace_back(Tensor<double>(std::move(result)));
+    addMemoLayer();
 }
 
 double cn::BatchNormalizationLayer::getChain(const Vector4<int> &inputPos) {

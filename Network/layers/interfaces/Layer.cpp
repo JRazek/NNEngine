@@ -13,7 +13,7 @@
 #include "../InputLayer/InputLayer.h"
 cn::Layer::Layer(int _id, Vector3<int> _inputSize) :
 inputSize(_inputSize), __id(_id){
-    resetMemoization();
+    resetState();
 }
 
 [[maybe_unused]] int cn::Layer::id() const {
@@ -25,7 +25,9 @@ void cn::Layer::setMemo(const Vector4<int> &pos, double val) {
     memoizationTable[pos.t].setCell({pos.x, pos.y, pos.z}, val);
 }
 
-void cn::Layer::resetMemoization() {
+void cn::Layer::resetState() {
+    time = 0;
+    output.clear();
     memoizationTable.clear();
     memoizationStates.clear();
 }
@@ -140,7 +142,21 @@ void cn::Layer::CUDAAutoGrad() {
     throw std::logic_error("this should be overridden!");
 }
 
+void cn::Layer::addMemoLayer() {
+    Tensor<bool> states(inputSize);
+    Tensor<double> table(inputSize);
+
+    std::fill(states.data(), states.data() + states.size().multiplyContent(), 0);
+    std::fill(table.data(), table.data() + table.size().multiplyContent(), 0);
+
+    memoizationStates.push_back(std::move(states));
+    memoizationTable.push_back(std::move(table));
+}
+
+void cn::Layer::incTime() {
+    ++time;
+}
 
 int cn::Layer::getTime() const{
-    return memoizationStates.size();
+    return time;
 }

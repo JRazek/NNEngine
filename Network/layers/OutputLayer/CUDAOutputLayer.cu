@@ -20,7 +20,7 @@ namespace cn{
 }
 
 void cn::CUDAOutputLayer::CUDAAutoGrad(cn::OutputLayer &outputLayer) {
-    double *outputDev, *targetDev, *resultDev;
+//    double *outputDev, *targetDev, *resultDev;
 
 
 }

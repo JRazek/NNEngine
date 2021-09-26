@@ -15,6 +15,7 @@ void cn::Sigmoid::CPURun(const cn::Tensor<double> &input) {
         }
     }
     output.emplace_back(Tensor<double>(std::move(result)));
+    addMemoLayer();
 }
 
 double cn::Sigmoid::getChain(const Vector4<int> &inputPos) {

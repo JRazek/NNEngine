@@ -10,7 +10,6 @@ theta(_theta)
 {}
 
 void cn::MomentumGD::propagate(const cn::Tensor<double> &target, bool CUDAAccelerate) {
-    network.resetMemoization();
     const std::vector<cn::Learnable *> &learnables = getLearnables();
     const std::vector<cn::Layer *> &layers = getNetworkLayers();
 

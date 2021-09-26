@@ -30,11 +30,14 @@ namespace cn {
         Vector3<int> inputSize;
         Vector3<int> outputSize;
 
-
+        int time;
         int __id;
 
+        void addMemoLayer();
 
     public:
+        void incTime();
+        int getTime() const;
         Layer(int _id, Vector3<int> _inputSize);
         Layer(const Layer &layer);
         Layer(Layer &&layer);
@@ -51,7 +54,7 @@ namespace cn {
 
         virtual ~Layer() = default;
 
-        void resetMemoization();
+        void resetState();
         void setMemo(const Vector4<int> &pos, double val);
         bool getMemoState(const Vector4<int> &pos) const;
         double getMemo(const Vector4<int> &pos) const;
@@ -82,12 +85,6 @@ namespace cn {
          * if not supported yet - CPURun is being called.
          */
         virtual void CUDARun(const Tensor<double> &_input);
-
-        /**
-         *
-         * @return current feed time point
-         */
-        int getTime() const;
 
     };
 }

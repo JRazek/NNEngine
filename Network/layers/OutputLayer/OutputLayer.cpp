@@ -9,6 +9,7 @@
 cn::OutputLayer::OutputLayer(int id, Vector3<int> _inputSize) : FlatteningLayer(id, _inputSize) {}
 
 void cn::OutputLayer::CPURun(const cn::Tensor<double> &input) {
+    addMemoLayer();
     return FlatteningLayer::CPURun(input);
 }
 

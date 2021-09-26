@@ -14,6 +14,7 @@ cn::InputLayer::InputLayer(const cn::JSON &json):Layer(json.at("id"), json.at("i
 void cn::InputLayer::CPURun(const cn::Tensor<double> &_input) {
     input.push_back(_input);
     output.push_back(_input);
+    addMemoLayer();
 }
 
 double cn::InputLayer::getChain(const Vector4<int> &inputPos) {

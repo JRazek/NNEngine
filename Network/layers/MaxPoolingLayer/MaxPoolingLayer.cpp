@@ -31,6 +31,7 @@ void cn::MaxPoolingLayer::CPURun(const cn::Tensor<double> &input) {
         }
     }
     output.emplace_back(Tensor<double>(std::move(result)));
+    addMemoLayer();
 }
 
 double cn::MaxPoolingLayer::getChain(const Vector4<int> &inputPos) {
