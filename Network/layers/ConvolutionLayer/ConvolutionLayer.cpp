@@ -21,14 +21,14 @@ void cn::ConvolutionLayer::CPURun(const Tensor<double> &_input) {
     for(int i = 0; i < kernelsCount; i ++){
         result.setLayer(i, kernelThreads[i].get().data());
     }
-    output = std::make_unique<Tensor<double>>(std::move(result));
+    output.emplace_back(Tensor<double>(std::move(result)));
 }
 
 void cn::ConvolutionLayer::CUDARun(const cn::Tensor<double> &_input) {
     if(inputSize != _input.size()){
         throw std::logic_error("CLayer fed with wrong _input size!");
     }
-    output = std::make_unique<Tensor<double>>(CUDAConvolutionLayer::CUDARun(*this, _input));
+    CUDAConvolutionLayer::CUDARun(*this, _input);
 }
 
 void cn::ConvolutionLayer::randomInit(std::default_random_engine &randomEngine) {
@@ -46,11 +46,11 @@ void cn::ConvolutionLayer::randomInit(std::default_random_engine &randomEngine) 
     }
 }
 
-double cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
+double cn::ConvolutionLayer::getChain(const Vector4<int> &inputPos) {
     if(getMemoState(inputPos)){
         return getMemo(inputPos);
     }
-    Tensor<double> paddedInput = Utils::addPadding(*getInput().get(), padding.x, padding.y);
+    Tensor<double> paddedInput = Utils::addPadding(getInput(inputPos.t), padding.x, padding.y);
 
     auto validPos = [this](const Vector2<int> &kernelPos, const Tensor<double> &bitmap){
         return kernelPos.x >= 0 && kernelPos.y >= 0 && kernelPos.x + kernelSize.x - 1 < bitmap.w() && kernelPos.y + kernelSize.y - 1 < bitmap.h();
@@ -65,7 +65,7 @@ double cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
                 if (validPos(kernelPos, paddedInput)) {
                     Vector3<int> weightPos(paddedInputPos.x - kernelPos.x, paddedInputPos.y - kernelPos.y, inputPos.z);
                     float weight = kernels[z].getCell(weightPos);
-                    Vector3<int> outputPos(kernelPos.x / stride.x, kernelPos.y /stride.y, z);
+                    Vector4<int> outputPos(kernelPos.x / stride.x, kernelPos.y /stride.y, z, inputPos.t);
                     result += weight * nextLayer->getChain(outputPos);
                 }
             }
@@ -77,16 +77,16 @@ double cn::ConvolutionLayer::getChain(const Vector3<int> &inputPos) {
 
 double cn::ConvolutionLayer::diffWeight(int weightID) {
     int kSize = kernelSize.multiplyContent();
-    Tensor<double> paddedInput = Utils::addPadding(*getInput().get(), padding.x, padding.y);
+    Tensor<double> paddedInput = Utils::addPadding(getInput(getTime()), padding.x, padding.y);
     Vector3<int> weightPos = kernels[weightID / kSize].indexToVector(weightID % kSize);
     int kID = weightID / kSize;
 
     double result = 0;
     for(int y = 0; y < outputSize.y - kernelSize.y; y++){
         for(int x = 0; x < outputSize.x - kernelSize.x; x++){
-            Vector3<int> inputPos = Vector3<int>(x * stride.x, y * stride.y, 0) + weightPos;
+            Vector3<int> inputPos = Vector3<int>(x * stride.x, y * stride.y, getTime()) + weightPos;
             double inputValue = paddedInput.getCell(inputPos);
-            Vector3<int> outputPos (x, y, kID);
+            Vector4<int> outputPos (x, y, kID, 0);
             result += inputValue * nextLayer->getChain(outputPos);
         }
     }
@@ -98,7 +98,7 @@ double cn::ConvolutionLayer::diffBias(int biasID) {
     double res = 0;
     for(int y = 0; y < outputSize.y; y++){
         for(int x = 0; x < outputSize.x; x++){
-            res += getChain({x, y, biasID});
+            res += getChain({x, y, biasID, getTime()});
         }
     }
     return res;

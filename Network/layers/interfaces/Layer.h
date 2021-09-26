@@ -9,17 +9,20 @@
 #include <optional>
 #include "../../../Utils/dataStructures/Tensor.h"
 #include "../../../Utils/interfaces/JSONEncodable.h"
+#include "../../../Utils/dataStructures/Vector4.h"
+
 
 namespace cn {
 
     class FFLayer;
 
-    template<typename T>
-    struct Vector3;
     class Layer : public JSONEncodable{
+    private:
+        std::vector<Tensor<bool>> memoizationStates;
+        std::vector<Tensor<double>> memoizationTable;
     protected:
 
-        std::unique_ptr<Tensor<double>> output;
+        std::vector<Tensor<double>> output;
 
         Layer *prevLayer = nullptr;
         Layer *nextLayer = nullptr;
@@ -27,8 +30,6 @@ namespace cn {
         Vector3<int> inputSize;
         Vector3<int> outputSize;
 
-        std::unique_ptr<Tensor<bool>> memoizationStates;
-        std::unique_ptr<Tensor<double>> memoizationTable;
 
         int __id;
 
@@ -38,7 +39,7 @@ namespace cn {
         Layer(const Layer &layer);
         Layer(Layer &&layer);
 
-        virtual double getChain(const Vector3<int> &inputPos) = 0;
+        virtual double getChain(const Vector4<int> &inputPos) = 0;
 
         /**
          *
@@ -51,9 +52,9 @@ namespace cn {
         virtual ~Layer() = default;
 
         void resetMemoization();
-        void setMemo(const Vector3<int> &pos, double val);
-        bool getMemoState(const Vector3<int> &pos) const;
-        double getMemo(const Vector3<int> &pos) const;
+        void setMemo(const Vector4<int> &pos, double val);
+        bool getMemoState(const Vector4<int> &pos) const;
+        double getMemo(const Vector4<int> &pos) const;
         Vector3<int> getOutputSize() const;
 
         [[maybe_unused]] int id() const;
@@ -66,8 +67,8 @@ namespace cn {
 
         void setPrevLayer(Layer *_prevLayer);
 
-        const std::unique_ptr<Tensor<double>> &getOutput() const;
-        virtual const std::unique_ptr<Tensor<double>> &getInput() const;
+        const Tensor<double> &getOutput(int time) const;
+        virtual const Tensor<double> &getInput(int time) const;
 
         void setNextLayer(Layer *_nextLayer);
 
@@ -81,6 +82,13 @@ namespace cn {
          * if not supported yet - CPURun is being called.
          */
         virtual void CUDARun(const Tensor<double> &_input);
+
+        /**
+         *
+         * @return current feed time point
+         */
+        int getTime() const;
+
     };
 }
 

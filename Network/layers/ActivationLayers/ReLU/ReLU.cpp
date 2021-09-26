@@ -14,12 +14,12 @@ void cn::ReLU::CPURun(const cn::Tensor<double> &input) {
             }
         }
     }
-    output = std::make_unique<Tensor<double>>(std::move(result));
+    output.push_back(Tensor<double>(std::move(result)));
 }
 
-double cn::ReLU::getChain(const Vector3<int> &inputPos) {
-    const Tensor<double> &input = *getInput();
-    return diff(input.getCell(inputPos)) * nextLayer->getChain(inputPos);
+double cn::ReLU::getChain(const Vector4<int> &inputPos) {
+    const Tensor<double> &input = getInput(inputPos.t);
+    return diff(input.getCell({inputPos.x, inputPos.y, inputPos.z})) * nextLayer->getChain(inputPos);
 }
 
 cn::JSON cn::ReLU::jsonEncode() const {

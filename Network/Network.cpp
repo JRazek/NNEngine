@@ -29,16 +29,16 @@ void cn::Network::feed(Tensor<double> bitmap, bool CUDAAccelerate) {
     if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
 
-    input = std::make_unique<Tensor<double>>(std::move(bitmap));
+//    input = std::make_unique<Tensor<double>>(std::move(bitmap));
 
-    const Tensor<double> *_input = input.get();
+    const Tensor<double> *_input = &bitmap;
     for(u_int i = 0; i < layers.size(); i ++){
         auto layer = layers[i];
         if(!CUDAAccelerate)
             layer->CPURun(*_input);
         else
             layer->CUDARun(*_input);
-        _input = getOutput(i).get();
+        _input = &getOutput(i, layer->getTime());
     }
 }
 
@@ -134,23 +134,23 @@ cn::Vector3<int> cn::Network::getInputSize(int layerID) const {
     return getOutputSize(layerID - 1);
 }
 
-const std::unique_ptr<cn::Tensor<double>> &cn::Network::getNetworkOutput() const {
-    return layers.back()->getOutput();
+const cn::Tensor<double> &cn::Network::getNetworkOutput(int time) const {
+    return layers.back()->getOutput(time);
 }
 
 cn::OutputLayer &cn::Network::getOutputLayer() {
     return *outputLayer;
 }
 
-const std::unique_ptr<cn::Tensor<double>> &cn::Network::getInput(int layerID) const{
+const cn::Tensor<double> &cn::Network::getInput(int layerID, int time) const{
     if(layerID == 0)
-        return input;
+        return inputLayer->getInput(time);
 
-    return getOutput(layerID -1);
+    return getOutput(layerID - 1, time);
 }
 
-const std::unique_ptr<cn::Tensor<double>> &cn::Network::getOutput(int layerID) const {
-    return layers[layerID]->getOutput();
+const cn::Tensor<double> & cn::Network::getOutput(int layerID, int time) const {
+    return layers[layerID]->getOutput(time);
 }
 
 cn::JSON cn::Network::jsonEncode() const {
@@ -169,9 +169,10 @@ cn::Network::Network(cn::Vector3<int> _inputSize, int _seed):
         seed(_seed),
         inputSize(_inputSize),
         randomEngine(_seed){
-    std::unique_ptr<Layer> inputLayer = std::make_unique<InputLayer>(0, inputSize);
-    layers.push_back(inputLayer.get());
-    allocated.push_back(std::move(inputLayer));
+    std::unique_ptr<InputLayer> _inputLayer = std::make_unique<InputLayer>(0, inputSize);
+    layers.push_back(_inputLayer.get());
+    allocated.push_back(std::move(_inputLayer));
+    inputLayer = _inputLayer.get();
 }
 
 cn::Network::Network(int w, int h, int d, int _seed):
@@ -186,6 +187,9 @@ cn::Network::Network(const cn::JSON &json): seed(json.at("seed")), inputSize(jso
             layers.push_back(allocated.back().get());
             if (l.contains("learnable") && l.at("learnable")) {
                 learnableLayers.push_back(dynamic_cast<Learnable *>(layers.back()));
+            }
+            if(l.at("type") == "il"){
+                inputLayer = dynamic_cast<InputLayer *>(layers.back());
             }
             if(l.at("type") == "ol"){
                 outputLayer = dynamic_cast<OutputLayer *>(layers.back());
@@ -204,7 +208,6 @@ randomEngine(std::move(network.randomEngine)),
 allocated(std::move(network.allocated)),
 learnableLayers(std::move(network.learnableLayers)),
 layers(std::move(network.layers)),
-input(std::move(network.input)),
 outputLayer(network.outputLayer)
 {}
 
@@ -215,8 +218,8 @@ cn::Network &cn::Network::operator=(cn::Network &&network) {
     allocated = std::move(network.allocated);
     layers = std::move(network.layers);
     learnableLayers = std::move(network.learnableLayers);
+    inputLayer = network.inputLayer;
     outputLayer = network.outputLayer;
-    input = std::move(network.input);
 
     return *this;
 }

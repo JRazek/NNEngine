@@ -32,7 +32,7 @@ namespace cn {
 
         ConvolutionLayer(const JSON &json);
         void randomInit(std::default_random_engine &randomEngine) override;
-        double getChain(const Vector3<int> &inputPos) override;
+        double getChain(const Vector4<int> &inputPos) override;
         int weightsCount() const override;
         int biasesCount() const override;
 

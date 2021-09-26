@@ -13,7 +13,7 @@ namespace cn {
 
     class CUDAConvolutionLayer{
     public:
-        static Tensor<double> CUDARun(ConvolutionLayer &convolutionLayer, const Tensor<double> &_input);
+        static void CUDARun(ConvolutionLayer &convolutionLayer, const Tensor<double> &_input);
         static void CUDAAutoGrad(ConvolutionLayer &convolutionLayer);
     };
 }

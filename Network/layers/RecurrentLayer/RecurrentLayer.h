@@ -13,7 +13,7 @@ namespace cn {
         std::stack<Tensor<double>> memoryStates;
         std::unique_ptr<Layer> getCopyAsUniquePtr() const override;
         void CPURun(const Tensor<double> &_input) override;
-        double getChain(const Vector3<int> &inputPos) override;
+        double getChain(const Vector4<int> &inputPos) override;
         RecurrentLayer(const JSON &json);
 
         JSON jsonEncode() const override;

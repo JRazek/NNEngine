@@ -12,8 +12,8 @@ void cn::OutputLayer::CPURun(const cn::Tensor<double> &input) {
     return FlatteningLayer::CPURun(input);
 }
 
-double cn::OutputLayer::getChain(const Vector3<int> &input) {
-    return getInput()->getCell(input) - target->getCell(input);
+double cn::OutputLayer::getChain(const Vector4<int> &input) {
+    return getInput(input.t).getCell({input.x, input.y, input.z}) - target->getCell({input.x, input.y, input.z});
 }
 
 void cn::OutputLayer::setTarget(const cn::Tensor<double> *_target) {

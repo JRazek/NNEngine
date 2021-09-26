@@ -18,10 +18,10 @@ cn::RecurrentLayer::RecurrentLayer(int _id, cn::Vector3<int> _inputSize) : Layer
 void cn::RecurrentLayer::CPURun(const cn::Tensor<double> &_input) {
     Tensor<double> res = Utils::elementWiseSum(_input, memoryStates.top());
     memoryStates.push(res);
-    output = std::make_unique<Tensor<double>>(_input);
+//    output = std::make_unique<Tensor<double>>(_input);
 }
 
-double cn::RecurrentLayer::getChain(const cn::Vector3<int> &inputPos) {
+double cn::RecurrentLayer::getChain(const Vector4<int> &inputPos) {
     while (memoryStates.size() != 1){
         break;
     }

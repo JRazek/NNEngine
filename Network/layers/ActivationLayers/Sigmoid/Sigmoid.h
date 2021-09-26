@@ -15,7 +15,7 @@ namespace cn {
         Sigmoid(int id, Vector3<int> _inputSize);
         Sigmoid(const JSON &json);
         void CPURun(const Tensor<double> &input) override;
-        double getChain(const Vector3<int> &inputPos) override;
+        double getChain(const Vector4<int> &inputPos) override;
         virtual JSON jsonEncode() const override;
         static double sigmoid(double x);
         static double diff(double x);

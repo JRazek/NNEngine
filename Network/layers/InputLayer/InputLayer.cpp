@@ -12,11 +12,11 @@ cn::InputLayer::InputLayer(const cn::JSON &json):Layer(json.at("id"), json.at("i
 {}
 
 void cn::InputLayer::CPURun(const cn::Tensor<double> &_input) {
-    input = std::make_unique<Tensor<double>>(std::move(_input));
-    output = std::make_unique<Tensor<double>>(std::move(_input));
+    input.push_back(_input);
+    output.push_back(_input);
 }
 
-double cn::InputLayer::getChain(const cn::Vector3<int> &inputPos) {
+double cn::InputLayer::getChain(const Vector4<int> &inputPos) {
     return nextLayer->getChain(inputPos);
 }
 
@@ -32,10 +32,9 @@ std::unique_ptr<cn::Layer> cn::InputLayer::getCopyAsUniquePtr() const {
     return std::make_unique<InputLayer>(*this);
 }
 
-const std::unique_ptr<cn::Tensor <double>> &cn::InputLayer::getInput() const {
-    return input;
+const cn::Tensor<double> &cn::InputLayer::getInput(int time) const {
+    return input[time];
 }
 
-cn::InputLayer::InputLayer(const cn::InputLayer &inputLayer):Layer(inputLayer) {
-     input = std::make_unique<Tensor<double>>(*inputLayer.getInput().get());
-}
+
+cn::InputLayer::InputLayer(const cn::InputLayer &inputLayer):Layer(inputLayer) {}

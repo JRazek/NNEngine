@@ -32,7 +32,8 @@ void cn::MBGD::propagate(const cn::Tensor<double> &target, bool CUDAAccelerate) 
     }
     OutputLayer &layer = network.getOutputLayer();
     layer.setTarget(&target);
-    const Tensor<double> &output = *network.getOutput(layer.id()).get();
+    //todo time set
+    const Tensor<double> &output = network.getOutput(layer.id(), 0);
     if(output.size() != target.size()){
         throw std::logic_error("MBGD, invalid target!");
     }

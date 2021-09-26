@@ -9,8 +9,8 @@ void cn::MaxPoolingLayer::CPURun(const cn::Tensor<double> &input) {
     if(input.size() != inputSize){
         throw std::logic_error("invalid output size in max pool!");
     }
-
-    std::fill(mapping->data(), mapping->data() + mapping->size().multiplyContent(), Vector2<int>(-1, -1));
+    mapping.emplace_back(Tensor<Vector2<int>>(inputSize));
+    std::fill(mapping.back().data(), mapping.back().data() + mapping.back().size().multiplyContent(), Vector2<int>(-1, -1));
 
     Tensor<double> result(outputSize);
 
@@ -26,23 +26,23 @@ void cn::MaxPoolingLayer::CPURun(const cn::Tensor<double> &input) {
                     }
                 }
                 result.setCell(x / kernelSize.x, y / kernelSize.y, c, max);
-                mapping->setCell(bestPoint.x, bestPoint.x, c, {x / kernelSize.x, y / kernelSize.y});
+                mapping[mapping.size()].setCell(bestPoint.x, bestPoint.x, c, {x / kernelSize.x, y / kernelSize.y});
             }
         }
     }
-    output = std::make_unique<Tensor<double>>(std::move(result));
+    output.emplace_back(Tensor<double>(std::move(result)));
 }
 
-double cn::MaxPoolingLayer::getChain(const Vector3<int> &inputPos) {
+double cn::MaxPoolingLayer::getChain(const Vector4<int> &inputPos) {
     if(getMemoState(inputPos)){
         return getMemo(inputPos);
     }
-    Vector2<int> mapped = mapping->getCell(inputPos);
+    Vector2<int> mapped = mapping[inputPos.t].getCell({inputPos.x, inputPos.y, inputPos.z});
     double res;
     if(mapped == Vector2<int>(-1, -1))
         res = 0;
     else
-        res = nextLayer->getChain({mapped.x, mapped.y, inputPos.z});
+        res = nextLayer->getChain({mapped.x, mapped.y, inputPos.z, inputPos.t});
     setMemo(inputPos, res);
     return res;
 }
@@ -63,7 +63,6 @@ cn::MaxPoolingLayer::MaxPoolingLayer(int _id, Vector3<int> _inputSize, cn::Vecto
         Layer(_id, _inputSize),
 kernelSize(_kernelSize){
     outputSize = Vector3<int>(Utils::afterMaxPoolSize(kernelSize.x, inputSize.x), Utils::afterMaxPoolSize(kernelSize.y, inputSize.y), inputSize.z);
-    mapping.emplace(Tensor<Vector2<int>>(inputSize));
 }
 
 std::unique_ptr<cn::Layer> cn::MaxPoolingLayer::getCopyAsUniquePtr() const {

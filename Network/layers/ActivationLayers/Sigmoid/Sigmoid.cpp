@@ -14,12 +14,12 @@ void cn::Sigmoid::CPURun(const cn::Tensor<double> &input) {
             }
         }
     }
-    output = std::make_unique<Tensor<double>>(std::move(result));
+    output.emplace_back(Tensor<double>(std::move(result)));
 }
 
-double cn::Sigmoid::getChain(const Vector3<int> &inputPos) {
-    const Tensor<double> &input = *getInput().get();
-    return diff(input.getCell(inputPos)) * nextLayer->getChain(inputPos);
+double cn::Sigmoid::getChain(const Vector4<int> &inputPos) {
+    const Tensor<double> &input = getInput(inputPos.t);
+    return diff(input.getCell({inputPos.x, inputPos.y, inputPos.z})) * nextLayer->getChain(inputPos);
 }
 
 cn::JSON cn::Sigmoid::jsonEncode() const {

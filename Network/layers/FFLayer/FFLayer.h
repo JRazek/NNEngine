@@ -31,7 +31,7 @@ namespace cn {
 
         void CPURun(const Tensor<double> &_input) override;
 
-        virtual double getChain(const Vector3<int> &inputPos) override;
+        virtual double getChain(const Vector4<int> &inputPos) override;
 
         double diffWeight(int weightID);
         double diffBias(int neuronID);

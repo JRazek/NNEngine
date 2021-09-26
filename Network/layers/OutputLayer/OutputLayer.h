@@ -17,7 +17,7 @@ namespace cn {
         OutputLayer(int id, Vector3<int> _inputSize);
         OutputLayer(const cn::JSON &json);
         void CPURun(const Tensor<double> &input) override;
-        double getChain(const Vector3<int> &input) override;
+        double getChain(const Vector4<int> &input) override;
         void CUDAAutoGrad() override;
         void setTarget(const Tensor<double> *_target);
         JSON jsonEncode() const override;

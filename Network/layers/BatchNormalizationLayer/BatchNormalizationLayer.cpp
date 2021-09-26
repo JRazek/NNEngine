@@ -27,10 +27,10 @@ void cn::BatchNormalizationLayer::CPURun(const cn::Tensor<double> &input) {
     }else{
         normalizationFactor = 1;
     }
-    output = std::make_unique<Tensor<double>>(std::move(result));
+    output.emplace_back(Tensor<double>(std::move(result)));
 }
 
-double cn::BatchNormalizationLayer::getChain(const Vector3<int> &inputPos) {
+double cn::BatchNormalizationLayer::getChain(const Vector4<int> &inputPos) {
     if(normalizationFactor == 0)
         return 0;
     return (1.f/normalizationFactor) * nextLayer->getChain(inputPos);

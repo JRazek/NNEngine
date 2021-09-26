@@ -11,11 +11,8 @@
 #include "../ActivationLayers/ReLU/ReLU.h"
 #include "../ActivationLayers/Sigmoid/Sigmoid.h"
 #include "../InputLayer/InputLayer.h"
-
 cn::Layer::Layer(int _id, Vector3<int> _inputSize) :
 inputSize(_inputSize), __id(_id){
-    memoizationStates = std::make_unique<Tensor<bool>>(Tensor<bool>(inputSize));
-    memoizationTable = std::make_unique<Tensor<double>>(Tensor<double>(inputSize));
     resetMemoization();
 }
 
@@ -23,21 +20,22 @@ inputSize(_inputSize), __id(_id){
     return __id;
 }
 
-void cn::Layer::setMemo(const Vector3<int> &pos, double val) {
-    memoizationStates->setCell(pos, true);
-    memoizationTable->setCell(pos, val);
+void cn::Layer::setMemo(const Vector4<int> &pos, double val) {
+    memoizationStates[pos.t].setCell({pos.x, pos.y, pos.z}, true);
+    memoizationTable[pos.t].setCell({pos.x, pos.y, pos.z}, val);
 }
 
 void cn::Layer::resetMemoization() {
-    std::fill(memoizationStates->data(), memoizationStates->data() + memoizationStates->size().multiplyContent(), false);
+    memoizationTable.clear();
+    memoizationStates.clear();
 }
 
-double cn::Layer::getMemo(const Vector3<int> &pos) const {
-    return memoizationTable->getCell(pos);
+double cn::Layer::getMemo(const Vector4<int> &pos) const {
+    return memoizationTable[pos.t].getCell({pos.x, pos.y, pos.z});
 }
 
-bool cn::Layer::getMemoState(const Vector3<int> &pos) const {
-    return memoizationStates->getCell(pos);
+bool cn::Layer::getMemoState(const Vector4<int> &pos) const {
+    return memoizationStates[pos.t].getCell({pos.x, pos.y, pos.z});
 }
 
 cn::Vector3<int> cn::Layer::getOutputSize() const {
@@ -116,12 +114,12 @@ void cn::Layer::setNextLayer(cn::Layer *_nextLayer) {
     nextLayer = _nextLayer;
 }
 
-const std::unique_ptr<cn::Tensor<double>> &cn::Layer::getOutput() const {
-    return output;
+const cn::Tensor<double> &cn::Layer::getOutput(int time) const {
+    return output[time];
 }
 
-const std::unique_ptr<cn::Tensor<double>> &cn::Layer::getInput() const {
-    return prevLayer->getOutput();
+const cn::Tensor<double> &cn::Layer::getInput(int time) const {
+    return prevLayer->getOutput(time);
 }
 
 void cn::Layer::CUDARun(const cn::Tensor<double> &_input) {
@@ -130,10 +128,7 @@ void cn::Layer::CUDARun(const cn::Tensor<double> &_input) {
 }
 
 cn::Layer::Layer(const cn::Layer &layer) :
-inputSize(layer.inputSize), __id(layer.id()){
-    memoizationStates = std::make_unique<Tensor<bool>>(*layer.memoizationStates.get());
-    memoizationTable = std::make_unique<Tensor<double>>(*layer.memoizationTable.get());
-}
+inputSize(layer.inputSize), __id(layer.id()){}
 
 cn::Layer::Layer(cn::Layer &&layer) :
 inputSize(layer.inputSize), __id(layer.id()){
@@ -143,4 +138,9 @@ inputSize(layer.inputSize), __id(layer.id()){
 
 void cn::Layer::CUDAAutoGrad() {
     throw std::logic_error("this should be overridden!");
+}
+
+
+int cn::Layer::getTime() const{
+    return memoizationStates.size();
 }

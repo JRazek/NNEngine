@@ -14,7 +14,7 @@
 #include <memory>
 
 namespace cn {
-
+    class InputLayer;
     class Network : public JSONEncodable{
     private:
         friend class Optimizer;
@@ -32,7 +32,7 @@ namespace cn {
         std::vector<Learnable *> learnableLayers;
         std::vector<Layer *> layers;
 
-        std::unique_ptr<Tensor<double>> input;
+        cn::InputLayer *inputLayer = nullptr;
 
         OutputLayer *outputLayer = nullptr;
 
@@ -93,9 +93,9 @@ namespace cn {
 
         void resetMemoization();
 
-        const std::unique_ptr<cn::Tensor<double>> & getInput(int layerID) const;
-        const std::unique_ptr<cn::Tensor<double>> & getNetworkOutput() const;
-        const std::unique_ptr<cn::Tensor<double>> & getOutput(int layerID) const;
+        const Tensor<double> &getInput(int layerID, int time) const;
+        const Tensor<double> &getNetworkOutput(int time) const;
+        const Tensor<double> &getOutput(int layerID, int time) const;
 
         JSON jsonEncode() const override;
 

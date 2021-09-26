@@ -8,14 +8,14 @@
 namespace cn {
 
     class InputLayer : public Layer{
-        std::unique_ptr<Tensor<double>> input;
+        std::vector<Tensor<double>> input;
     public:
         InputLayer(int _id, Vector3<int> _inputSize);
         InputLayer(const JSON &json);
         void CPURun(const Tensor<double> &_input) override;
-        virtual double getChain(const Vector3<int> &inputPos) override;
+        virtual double getChain(const Vector4<int> &inputPos) override;
         virtual JSON jsonEncode() const override;
-        const std::unique_ptr<Tensor<double>> &getInput() const override;
+        const Tensor<double> &getInput(int time) const override;
         std::unique_ptr <Layer> getCopyAsUniquePtr() const override;
 
         InputLayer(const InputLayer &inputLayer);

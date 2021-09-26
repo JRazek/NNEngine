@@ -41,16 +41,14 @@ namespace cn{
 
     }
 }
-cn::Tensor<double> cn::CUDAConvolutionLayer::CUDARun(cn::ConvolutionLayer &convolutionLayer, const cn::Tensor<double> &_input) {
-    convolutionLayer.output = std::make_unique<Tensor<double>>(
+void cn::CUDAConvolutionLayer::CUDARun(cn::ConvolutionLayer &convolutionLayer, const cn::Tensor<double> &_input) {
+    convolutionLayer.output.push_back(Tensor<double>(
             CUDAUtils::cudaConvolve(
                 convolutionLayer.kernels, _input,
                 convolutionLayer.padding.x, convolutionLayer.padding.y,
                 convolutionLayer.stride.x, convolutionLayer.stride.y
             )
-    );
-
-    return *convolutionLayer.output.get();
+    ));
 }
 
 void cn::CUDAConvolutionLayer::CUDAAutoGrad(cn::ConvolutionLayer &convolutionLayer) {
@@ -58,7 +56,7 @@ void cn::CUDAConvolutionLayer::CUDAAutoGrad(cn::ConvolutionLayer &convolutionLay
     double *inputDev, *kernelDev, *chainValuesDev;
 
 
-    Tensor<double> paddedInput = Utils::addPadding(*convolutionLayer.getInput().get(), convolutionLayer.padding.x, convolutionLayer.padding.y);
+    Tensor<double> paddedInput = Utils::addPadding(convolutionLayer.getInput(convolutionLayer.getTime()), convolutionLayer.padding.x, convolutionLayer.padding.y);
 
     u_int paddedInputBytes = paddedInput.size().multiplyContent() * sizeof(double);
     u_int combinedKernelsBytes = convolutionLayer.kernels[0].size().multiplyContent() * convolutionLayer.kernelsCount * sizeof(double);
@@ -79,9 +77,9 @@ void cn::CUDAConvolutionLayer::CUDAAutoGrad(cn::ConvolutionLayer &convolutionLay
     //todo
 //    CUDAConvAutoGrad<<<inputSize/cn::THREADS_PER_BLOCK+1, cn::THREADS_PER_BLOCK>>>(inputDev, kernelDev, chainValuesDev, paddedInput.size(), convolutionLayer.kernels[0].size());
 
-    cudaMemcpy(convolutionLayer.memoizationTable->data(), chainValuesDev, paddedInputBytes, cudaMemcpyDeviceToHost);
-
-    std::fill(convolutionLayer.memoizationStates->data(), convolutionLayer.memoizationStates->data() + paddedInput.size().multiplyContent(), true);
+//    cudaMemcpy(convolutionLayer.memoizationTable->data(), chainValuesDev, paddedInputBytes, cudaMemcpyDeviceToHost);
+//
+//    std::fill(convolutionLayer.memoizationStates->data(), convolutionLayer.memoizationStates->data() + paddedInput.size().multiplyContent(), true);
 
     cudaFree(inputDev);
     cudaFree(kernelDev);

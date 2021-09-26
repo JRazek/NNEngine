@@ -12,7 +12,7 @@ learningRate(_learningRate) {}
 double cn::Optimizer::getError(const cn::Tensor<double> &target) const {
     double error = 0;
     OutputLayer &layer = network.getOutputLayer();
-    const Tensor<double> &output = *network.getOutput(layer.id());
+    const Tensor<double> &output = network.getOutput(layer.id(), layer.getTime());
     for(int i = 0; i < target.w(); i ++){
         error += 0.5*std::pow(target.getCell(i, 0, 0) - output.getCell(i, 0, 0), 2);
     }

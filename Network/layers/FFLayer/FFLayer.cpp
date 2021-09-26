@@ -40,7 +40,7 @@ void cn::FFLayer::CPURun(const Tensor<double> &_input) {
         }
         result.setCell(i, 0, 0, sum);
     }
-    output = std::make_unique<Tensor<double>>(std::move(result));
+    output.emplace_back(Tensor<double>(std::move(result)));
 }
 
 void cn::FFLayer::randomInit(std::default_random_engine &randomEngine) {
@@ -54,7 +54,7 @@ void cn::FFLayer::randomInit(std::default_random_engine &randomEngine) {
     }
 }
 
-double cn::FFLayer::getChain(const Vector3<int> &inputPos) {
+double cn::FFLayer::getChain(const Vector4<int> &inputPos) {
     if(inputPos.x < 0 || inputPos.y != 0 || inputPos.z != 0){
         throw std::logic_error("wrong chain request!");
     }
@@ -65,7 +65,7 @@ double cn::FFLayer::getChain(const Vector3<int> &inputPos) {
 
     double res = 0;
     for(int i = 0; i < neuronsCount; i ++){
-        res += weights.at(i * weightsPerNeuron  + inputPos.x) * nextLayer->getChain({i, 0, 0});
+        res += weights.at(i * weightsPerNeuron  + inputPos.x) * nextLayer->getChain({i, 0, 0, inputPos.t});
     }
 
     setMemo(inputPos, res);
@@ -74,8 +74,8 @@ double cn::FFLayer::getChain(const Vector3<int> &inputPos) {
 
 double cn::FFLayer::diffWeight(int weightID) {
     int neuron = weightID / inputSize.x;
-    const Tensor<double> &input = *getInput();
-    return input.getCell(weightID % inputSize.x, 0, 0) * nextLayer->getChain({neuron, 0, 0});
+    const Tensor<double> &input = getInput(getTime());
+    return input.getCell(weightID % inputSize.x, 0, 0) * nextLayer->getChain({neuron, 0, 0, getTime()});
 }
 
 int cn::FFLayer::weightsCount() const {
@@ -107,7 +107,7 @@ std::vector<double> cn::FFLayer::getBiasesGradient() {
 }
 
 double cn::FFLayer::diffBias(int neuronID) {
-    return nextLayer->getChain({neuronID, 0, 0});
+    return nextLayer->getChain({neuronID, 0, 0, getTime()});
 }
 
 void cn::FFLayer::setBias(int neuronID, double value) {

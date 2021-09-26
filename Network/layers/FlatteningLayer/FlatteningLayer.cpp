@@ -14,15 +14,16 @@ void cn::FlatteningLayer::CPURun(const cn::Tensor<double> &input) {
     if(input.size().multiplyContent() != inputSize.multiplyContent())
         throw std::logic_error("invalid input input for flattening layer!");
     Tensor<double> result ({inputSize.multiplyContent(), 1, 1}, input.dataConst());
-    output = std::make_unique<Tensor<double>>(std::move(result));
+    output.emplace_back(Tensor<double>(std::move(result)));
 }
 
-double cn::FlatteningLayer::getChain(const Vector3<int> &inputPos) {
+double cn::FlatteningLayer::getChain(const Vector4<int> &inputPos) {
     if(getMemoState(inputPos)){
+        //todo memo is empty!!!!
         return getMemo(inputPos);
     }
-    int outputIndex = prevLayer->getOutput()->getDataIndex(inputPos);
-    double res = nextLayer->getChain({outputIndex, 0, 0});
+    int outputIndex = prevLayer->getOutput(inputPos.t).getDataIndex({inputPos.x, inputPos.y, inputPos.z});
+    double res = nextLayer->getChain({outputIndex, 0, 0, inputPos.t});
     setMemo(inputPos, res);
     return res;
 }
