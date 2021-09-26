@@ -24,6 +24,7 @@ int main(){
     network.appendFlatteningLayer();
     network.appendFFLayer(outputSize);
     network.appendSigmoidLayer();
+    network.appendRecurrentLayer();
     network.appendFFLayer(outputSize);
     network.appendSigmoidLayer();
     network.appendFFLayer(outputSize);

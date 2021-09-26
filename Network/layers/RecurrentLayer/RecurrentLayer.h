@@ -10,11 +10,11 @@
 
 namespace cn {
     class RecurrentLayer : public Layer {
-        std::stack<Tensor<double>> memoryStates;
         std::unique_ptr<Layer> getCopyAsUniquePtr() const override;
         void CPURun(const Tensor<double> &_input) override;
         double getChain(const Vector4<int> &inputPos) override;
         RecurrentLayer(const JSON &json);
+        Tensor<double> identity;
 
         JSON jsonEncode() const override;
 
