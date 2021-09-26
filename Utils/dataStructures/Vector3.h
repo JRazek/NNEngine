@@ -6,38 +6,28 @@
 #define NEURALNETLIBRARY_VECTOR3_H
 
 #include <vector>
-#include "../interfaces/JSONEncodable.h"
+#include "VectorN.h"
 
 namespace cn {
     template<typename T>
     struct TMatrix;
 
     template<typename T>
-    struct Vector3 : public cn::JSONEncodable {
-        T x, y, z;
+    struct Vector3 : public VectorN<3, T> {
+        T &x, &y, &z;
 
+        using VectorN<3, T>::operator*;
+        using VectorN<3, T>::operator=;
+        using VectorN<3, T>::operator+;
         Vector3<T>();
-
         Vector3<T>(T _x, T _y, T _z);
+        Vector3<T>(const Vector3<T> &other);
 
         template<typename Y>
         Vector3<T>(const Vector3<Y> &other);
-
+        Vector3<T> &operator=(const Vector3<T> &other);
+//        Vector3<T> &operator=(const VectorN<3, T> &other);
         cn::JSON jsonEncode() const override;
-
-        Vector3<T> operator*(const T &scalar);
-
-        Vector3<T> operator/(const T &scalar);
-
-        Vector3<T> operator+(const Vector3<T> &other);
-
-        Vector3<T> operator-(const Vector3<T> &other);
-
-        bool operator==(const Vector3<T> &other) const;
-
-        bool operator!=(const Vector3<T> &other) const;
-
-        T multiplyContent() const;
     };
 
     template<typename T>
@@ -64,47 +54,18 @@ static void cn::from_json(const JSON &j, Vector3<T> &value){
 }
 
 template<typename T>
-cn::Vector3<T>::Vector3(): x(0), y(0), z(0) {}
-
-
-template<typename T>
-cn::Vector3<T> cn::Vector3<T>::operator*(const T &scalar) {
-    return Vector3<T>(scalar * x, scalar * y, scalar * z);
-}
-
-template<typename T>
-cn::Vector3<T> cn::Vector3<T>::operator+(const Vector3<T> &other) {
-    return Vector3<T>(x + other.x, y + other.y, z + other.z);
-}
-
-template<typename T>
-cn::Vector3<T> cn::Vector3<T>::operator-(const Vector3<T> &other) {
-    return Vector3<T>(x - other.x, y - other.y, z - other.z);
+cn::Vector3<T>::Vector3(): x(this->v[0]), y(this->v[1]), z(this->v[2]) {
+    x = 0;
+    y = 0;
+    z = 0;
 }
 
 template<typename T>
 template<typename Y>
-cn::Vector3<T>::Vector3(const Vector3<Y> &other): Vector3<T>((T) other.x, (T) other.y, (T) other.z) {}
+cn::Vector3<T>::Vector3(const Vector3<Y> &other): Vector3<T>(static_cast<T>(other.x), static_cast<T>(other.y), static_cast<T>(other.z)) {}
 
 template<typename T>
-bool cn::Vector3<T>::operator==(const Vector3<T> &other) const{
-    return x == other.x && y == other.y && z == other.z;
-}
-
-template<typename T>
-cn::Vector3<T> cn::Vector3<T>::operator/(const T &scalar) {
-    return Vector3<T>(x / scalar, y / scalar, z / scalar);
-}
-
-template<typename T>
-T cn::Vector3<T>::multiplyContent() const {
-    return x * y * z;
-}
-
-template<typename T>
-bool cn::Vector3<T>::operator!=(const Vector3<T> &other) const {
-    return !(*this == other);
-}
+cn::Vector3<T>::Vector3(const Vector3<T> &other): Vector3<T>(other.x, other.y, other.z) {}
 
 template<typename T>
 cn::JSON cn::Vector3<T>::jsonEncode() const{
@@ -113,6 +74,14 @@ cn::JSON cn::Vector3<T>::jsonEncode() const{
     json["y"] = y;
     json["z"] = z;
     return json;
+}
+
+template<typename T>
+cn::Vector3<T> &cn::Vector3<T>::operator=(const cn::Vector3<T> &other) {
+    x = other.x;
+    y = other.y;
+    z = other.z;
+    return *this;
 }
 
 #endif //NEURALNETLIBRARY_VECTOR3_H

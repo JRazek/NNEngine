@@ -6,6 +6,7 @@
 #define NEURALNETLIBRARY_VECTOR2_H
 #include <vector>
 #include "../interfaces/JSONEncodable.h"
+#include "VectorN.h"
 
 
 namespace cn {
@@ -13,91 +14,64 @@ namespace cn {
     struct TMatrix;
 
     template<typename T>
-    struct Vector2 : public cn::JSONEncodable {
-        T x, y;
+    struct Vector2 : public VectorN<2, T> {
+        T &x, &y;
 
-        explicit Vector2<T>(const std::pair<T, T> &p);
+        Vector2<T>(const std::pair<T, T> &p);
 
-        Vector2<T>();
-
-        Vector2<T>(T _x, T _y);
-
-        cn::JSON jsonEncode() const override;
-
+        using VectorN<2, T>::operator*;
+        using VectorN<2, T>::operator=;
+        Vector2<T>(const Vector2<T> &other);
         template<typename Y>
         Vector2<T>(const Vector2<Y> &other);
-
-        Vector2<T> operator*(const T &scalar);
-
+        Vector2<T>();
+        Vector2<T>(T _x, T _y);
+        cn::JSON jsonEncode() const override;
         template<typename Y>
         Vector2<T> operator*(const TMatrix<Y> &tMatrix);
-
-        Vector2<T> operator+(const Vector2<T> &other);
-
-        Vector2<T> operator-(const Vector2<T> &other);
-
-        bool operator==(const Vector2<T> &other) const;
+        Vector2<T> &operator=(const Vector2<T> &other);
     };
-
-    template<typename T>
-    [[maybe_unused]]
-    static void to_json(JSON &j, const Vector2<T> &value);
-
-    template<typename T>
-    [[maybe_unused]]
-    static void from_json(const JSON &j, Vector2<T> &value);
 }
 template<typename T>
-cn::Vector2<T>::Vector2(const std::pair<T, T> &p): x(p.first), y(p.second) {}
-
-template<typename T>
-[[maybe_unused]]
-static void cn::to_json(JSON &json, const Vector2<T> &v){
-    json = v.jsonEncode();
+cn::Vector2<T>::Vector2(const std::pair<T, T> &p): Vector2() {
+    x = p.first;
+    y = p.second;
 }
 
 template<typename T>
-[[maybe_unused]]
-static void cn::from_json(const JSON &j, Vector2<T> &value){
-    value = cn::Vector2<int>(j["x"], j["y"]);
+cn::Vector2<T>::Vector2(T _x, T _y): Vector2(){
+    x = _x;
+    y = _y;
 }
 
 template<typename T>
-cn::Vector2<T>::Vector2(T _x, T _y): x(_x), y(_y) {}
+cn::Vector2<T>::Vector2(): x(this->v[0]), y(this->v[1])  {}
 
-template<typename T>
-cn::Vector2<T>::Vector2(): x(0), y(0) {}
-
-
-template<typename T>
-cn::Vector2<T> cn::Vector2<T>::operator*(const T &scalar) {
-    return Vector2<T>(scalar * x, scalar * y);
-}
-
-template<typename T>
-cn::Vector2<T> cn::Vector2<T>::operator+(const Vector2<T> &other) {
-    return Vector2<T>(x + other.x, y + other.y);
-}
-
-template<typename T>
-cn::Vector2<T> cn::Vector2<T>::operator-(const Vector2<T> &other) {
-    return Vector2<T>(x - other.x, y - other.y);
-}
 
 template<typename T>
 template<typename Y>
 cn::Vector2<T> cn::Vector2<T>::operator*(const cn::TMatrix<Y> &tMatrix) {
-    return Vector2<T>(x * tMatrix.a + y * tMatrix.b, x * tMatrix.c + y * tMatrix.d);
+    T a = static_cast<T>(tMatrix.a);
+    T b = static_cast<T>(tMatrix.b);
+    T c = static_cast<T>(tMatrix.c);
+    T d = static_cast<T>(tMatrix.d);
+    return Vector2<T>(
+            x * a + y * b,
+            x * c + y * d
+            );
 }
 
 template<typename T>
 template<typename Y>
-cn::Vector2<T>::Vector2(const Vector2<Y> &other): Vector2<T>((T)other.x, (T)other.y) {}
+cn::Vector2<T>::Vector2(const Vector2<Y> &other):
+    Vector2<T>(
+        static_cast<T>(other.x),
+        static_cast<T>(other.y)
+    ) {}
 
 template<typename T>
-bool cn::Vector2<T>::operator==(const Vector2<T> &other) const {
-    return x == other.x && y == other.y;
-}
+cn::Vector2<T>::Vector2(const Vector2<T> &other):Vector2<T>(other.x, other.y) {}
+
 
 template<typename T>
 cn::JSON cn::Vector2<T>::jsonEncode() const{
@@ -105,6 +79,13 @@ cn::JSON cn::Vector2<T>::jsonEncode() const{
     json["x"] = x;
     json["y"] = y;
     return json;
+}
+
+template<typename T>
+cn::Vector2<T> &cn::Vector2<T>::operator=(const cn::Vector2<T> &other) {
+    x = other.x;
+    y = other.y;
+    return *this;
 }
 
 
