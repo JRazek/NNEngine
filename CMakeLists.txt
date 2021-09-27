@@ -1,4 +1,4 @@
-option(COMPILE_WITH_CUDA "Enable CUDA" OFF)
+option(COMPILE_WITH_CUDA "Enable CUDA" ON)
 
 cmake_minimum_required(VERSION 3.0.2)
 

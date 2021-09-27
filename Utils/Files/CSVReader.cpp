@@ -4,7 +4,7 @@
 
 #include "CSVReader.h"
 
-CSVReader::CSVReader(const std::string &_filePath, char _splitter):filepath(_filePath), splitter(_splitter), file(_filePath, std::ios::in){}
+CSVReader::CSVReader(const std::string &_filePath, char _splitter):filepath(_filePath), file(_filePath, std::ios::in), splitter(_splitter){}
 
 void CSVReader::readContents() {
     if(file.is_open()){
@@ -21,7 +21,7 @@ void CSVReader::readContents() {
 std::vector<std::string> CSVReader::split(const std::string &str, char splitter) {
     std::vector<std::string> result;
     std::string buff = "";
-    for(int i = 0; i < str.size(); i ++){
+    for(u_int i = 0; i < str.size(); i ++){
         if(str[i] == splitter){
             result.push_back(buff);
             buff = "";
