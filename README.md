@@ -9,3 +9,10 @@ interpolations and matrix transformations.
 <br>
 
 CUDA support is in progress as well as parallel convolutions on multiple devices for better performance.
+<br>
+
+Because CUDA if currently unspported - the experimental compile flag COMPILE_WITH_CUDA is set to OFF by default.
+<br>
+<br>
+
+In few days there is going to be added recurrent layers differentiation through time.
