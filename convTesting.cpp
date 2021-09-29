@@ -16,7 +16,7 @@
 #pragma GCC diagnostic ignored "-Wreorder"
 
 int main(){
-    cn::Network network(28, 28, 3, 1);
+    cn::Network network(28, 28, 3, 1, 1);
 
     const int outputSize = 10;
     network.appendMaxPoolingLayer({2,2});
@@ -30,8 +30,6 @@ int main(){
     network.appendSigmoidLayer();
     network.initRandom();
     network.ready();
-
-    cn::JSON json = network.jsonEncode();
 
     cn::MomentumGD momentumGd(network, 0.7, 0.01);
 

@@ -18,10 +18,13 @@ namespace cn {
         OutputLayer(const cn::JSON &json);
         void CPURun(const Tensor<double> &input) override;
         double getChain(const Vector4<int> &input) override;
-        void CUDAAutoGrad() override;
         void setTarget(const Tensor<double> *_target);
         JSON jsonEncode() const override;
         std::unique_ptr<Layer> getCopyAsUniquePtr() const override;
+
+        #ifdef NNL_WITH_CUDA
+        void CUDAAutoGrad() override;
+        #endif
     };
 }
 

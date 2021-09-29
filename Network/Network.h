@@ -17,8 +17,8 @@ namespace cn {
     class InputLayer;
     class Network : public JSONEncodable{
     private:
-        friend class Optimizer;
 
+        friend class Optimizer;
         int seed;
 
         /**
@@ -27,7 +27,7 @@ namespace cn {
         Vector3<int> inputSize;
         std::default_random_engine randomEngine;
         std::vector<std::unique_ptr<Layer>> allocated;
-
+        bool CUDAAccelerate;
     protected:
         std::vector<Learnable *> learnableLayers;
         std::vector<Layer *> layers;
@@ -56,10 +56,10 @@ namespace cn {
          *
          * @param takes _input in 1 format type
          */
-        void feed(const byte *_input, bool CUDAAccelerate = false);
+        void feed(const byte *_input);
 
-        void feed(Tensor<double> bitmap, bool CUDAAccelerate = false);
-        void feed(const Tensor<cn::byte> &bitmap, bool CUDAAccelerate = false);
+        void feed(Tensor<double> bitmap);
+        void feed(const Tensor<cn::byte> &bitmap);
 
         /**
          * when network structure is ready - CPURun this function.
@@ -112,10 +112,10 @@ namespace cn {
          * In case of using only FFLayers - set height and depth to 1.
          */
 
-        Network(int w, int h, int d, int _seed = 1);
+        Network(int w, int h, int d, int _seed = 1, bool _CUDAAccelerate = 0);
 
 
-        Network(cn::Vector3<int> _inputSize, int _seed = 1);
+        Network(cn::Vector3<int> _inputSize, int _seed = 1, bool _CUDAAccelerate = 0);
 
         Network (const Network &network) = delete;
         Network &operator=(const Network &network) = delete;

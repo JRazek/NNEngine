@@ -15,14 +15,19 @@
 #include "layers/RecurrentLayer/RecurrentLayer.h"
 
 [[maybe_unused]]
-void cn::Network::feed(const byte *_input, bool CUDAAccelerate) {
+void cn::Network::feed(const byte *_input) {
     cn::Tensor<byte> bitmap(inputSize, _input, 0);
     if(layers.empty())
         throw std::logic_error("network must have at least one layer in order to feed it!");
-    feed(cn::Utils::normalize(bitmap), CUDAAccelerate);
+    feed(cn::Utils::normalize(bitmap));
 }
 
-void cn::Network::feed(Tensor<double> bitmap, bool CUDAAccelerate) {
+void cn::Network::feed(Tensor<double> bitmap) {
+#ifndef NNL_WITH_CUDA
+    if(CUDAAccelerate){
+        throw std::logic_error("CUDA IS NOT AVAILABLE! set -DCOMPILE_WITH_CUDA=ON during compilation.");
+    }
+#endif
     if(bitmap.size() != inputSize){
         throw std::logic_error("invalid input size!");
     }
@@ -31,6 +36,7 @@ void cn::Network::feed(Tensor<double> bitmap, bool CUDAAccelerate) {
 
     const Tensor<double> *_input = &bitmap;
     for(u_int i = 0; i < layers.size(); i ++){
+
         auto layer = layers[i];
         if(!CUDAAccelerate)
             layer->CPURun(*_input);
@@ -43,8 +49,8 @@ void cn::Network::feed(Tensor<double> bitmap, bool CUDAAccelerate) {
         l->incTime();
 }
 
-void cn::Network::feed(const cn::Tensor<cn::byte> &bitmap, bool CUDAAccelerate) {
-    feed(Utils::normalize(bitmap), CUDAAccelerate);
+void cn::Network::feed(const cn::Tensor<cn::byte> &bitmap) {
+    feed(Utils::normalize(bitmap));
 }
 
 void cn::Network::initRandom() {
@@ -166,18 +172,19 @@ cn::JSON cn::Network::jsonEncode() const {
 }
 
 
-cn::Network::Network(cn::Vector3<int> _inputSize, int _seed):
-        seed(_seed),
-        inputSize(_inputSize),
-        randomEngine(_seed){
+cn::Network::Network(cn::Vector3<int> _inputSize, int _seed, bool _CUDAAccelerate):
+seed(_seed),
+inputSize(_inputSize),
+randomEngine(_seed){
     std::unique_ptr<InputLayer> _inputLayer = std::make_unique<InputLayer>(0, inputSize);
     layers.push_back(_inputLayer.get());
     allocated.push_back(std::move(_inputLayer));
     inputLayer = _inputLayer.get();
+    CUDAAccelerate = _CUDAAccelerate;
 }
 
-cn::Network::Network(int w, int h, int d, int _seed):
-Network(cn::Vector3<int>(w, h, d), _seed)
+cn::Network::Network(int w, int h, int d, int _seed, bool _CUDAAccelerate):
+Network(cn::Vector3<int>(w, h, d), _seed, _CUDAAccelerate)
 {}
 
 cn::Network::Network(const cn::JSON &json): seed(json.at("seed")), inputSize(json.at("input_size")) {

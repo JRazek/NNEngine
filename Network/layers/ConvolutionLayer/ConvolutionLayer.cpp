@@ -1,10 +1,26 @@
 //
 // Created by jrazek on 27.07.2021.
 //
+
 #include "ConvolutionLayer.h"
-#include "CUDAConvolutionLayer.cuh"
 #include "../../Network.h"
 #include <future>
+
+
+#ifdef NNL_WITH_CUDA
+#include "CUDAConvolutionLayer.cuh"
+void cn::ConvolutionLayer::CUDAAutoGrad() {
+    CUDAConvolutionLayer::CUDAAutoGrad(*this);
+}
+
+void cn::ConvolutionLayer::CUDARun(const cn::Tensor<double> &_input) {
+    if(inputSize != _input.size()){
+        throw std::logic_error("CLayer fed with wrong _input size!");
+    }
+    CUDAConvolutionLayer::CUDARun(*this, _input);
+}
+#endif
+
 
 void cn::ConvolutionLayer::CPURun(const Tensor<double> &_input) {
     if(inputSize != _input.size()){
@@ -25,12 +41,6 @@ void cn::ConvolutionLayer::CPURun(const Tensor<double> &_input) {
     addMemoLayer();
 }
 
-void cn::ConvolutionLayer::CUDARun(const cn::Tensor<double> &_input) {
-    if(inputSize != _input.size()){
-        throw std::logic_error("CLayer fed with wrong _input size!");
-    }
-    CUDAConvolutionLayer::CUDARun(*this, _input);
-}
 
 void cn::ConvolutionLayer::randomInit(std::default_random_engine &randomEngine) {
     std::uniform_real_distribution<> dis(0, 1);
@@ -202,8 +212,4 @@ biases(_kernelsCount){
 
 std::unique_ptr<cn::Layer> cn::ConvolutionLayer::getCopyAsUniquePtr() const {
     return std::make_unique<ConvolutionLayer>(*this);
-}
-
-void cn::ConvolutionLayer::CUDAAutoGrad() {
-    CUDAConvolutionLayer::CUDAAutoGrad(*this);
 }

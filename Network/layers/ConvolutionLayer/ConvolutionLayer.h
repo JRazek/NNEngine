@@ -45,14 +45,16 @@ namespace cn {
         void setWeight(int weightID, double value) override;
         double getWeight(int weightID) const override;
 
-        virtual void CUDARun(const Tensor<double> &_input) override;
         void CPURun(const Tensor<double> &_input) override;
-
-        void CUDAAutoGrad() override;
 
         JSON jsonEncode() const override;
 
         std::unique_ptr<Layer> getCopyAsUniquePtr() const override;
+
+        #ifdef NNL_WITH_CUDA
+        void CUDAAutoGrad() override;
+        virtual void CUDARun(const Tensor<double> &_input) override;
+        #endif
     };
 
 }
