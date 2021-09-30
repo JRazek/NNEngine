@@ -50,14 +50,6 @@ namespace cn {
         void appendSigmoidLayer();
 
 
-
-
-        /**
-         *
-         * @param takes _input in 1 format type
-         */
-        void feed(const byte *_input);
-
         void feed(Tensor<double> bitmap);
         void feed(const Tensor<cn::byte> &bitmap);
 
@@ -121,6 +113,8 @@ namespace cn {
         Network &operator=(const Network &network) = delete;
         Network (Network &&network);
         Network &operator=(Network &&network);
+
+        bool isCudaAccelerate() const;
     };
 }
 

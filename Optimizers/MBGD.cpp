@@ -13,7 +13,7 @@ cn::MBGD::MBGD(Network &_network, double _learningRate, int _miniBatchSize) :
     }
 }
 
-void cn::MBGD::propagate(const cn::Tensor<double> &target, bool CUDAAccelerate) {
+void cn::MBGD::propagate(const Tensor<double> &target) {
     const std::vector<cn::Learnable *> &learnables = getLearnables();
     const std::vector<cn::Layer *> &layers = getNetworkLayers();
 
@@ -37,7 +37,7 @@ void cn::MBGD::propagate(const cn::Tensor<double> &target, bool CUDAAccelerate) 
         throw std::logic_error("MBGD, invalid target!");
     }
 
-    if(CUDAAccelerate){
+    if(network.isCudaAccelerate()){
         for(auto it = layers.rbegin(); it != layers.rend(); ++it){
             (*it)->CUDAAutoGrad();
             std::cout<<"";

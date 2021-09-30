@@ -16,7 +16,7 @@
 #pragma GCC diagnostic ignored "-Wreorder"
 
 int main(){
-    cn::Network network(28, 28, 3, 1, 1);
+    cn::Network network(28, 28, 3, 1);
 
     const int outputSize = 10;
     network.appendMaxPoolingLayer({2,2});
@@ -94,7 +94,7 @@ int main(){
             correctCount = 0;
         }
         if(!(i % 1)) {
-            momentumGd.propagate(target, false);
+            momentumGd.propagate(target);
             network.resetState();
         }
         target.setCell(numVal, 0, 0, 0);

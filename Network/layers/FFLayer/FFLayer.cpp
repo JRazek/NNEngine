@@ -76,7 +76,11 @@ double cn::FFLayer::getChain(const Vector4<int> &inputPos) {
 double cn::FFLayer::diffWeight(int weightID) {
     int neuron = weightID / inputSize.x;
     const Tensor<double> &input = getInput(getTime() - 1);
-    return input.getCell(weightID % inputSize.x, 0, 0) * nextLayer->getChain({neuron, 0, 0, getTime() - 1});
+    double result = 0;
+    for(int t = 0; t < output.size(); t++){
+        result += input.getCell(weightID % inputSize.x, 0, 0) * nextLayer->getChain({neuron, 0, 0, t});
+    }
+    return result;
 }
 
 int cn::FFLayer::weightsCount() const {
@@ -108,7 +112,11 @@ std::vector<double> cn::FFLayer::getBiasesGradient() {
 }
 
 double cn::FFLayer::diffBias(int neuronID) {
-    return nextLayer->getChain({neuronID, 0, 0, getTime() - 1});
+    double result = 0;
+    for(int t = 0; t < output.size(); t++){
+        result += nextLayer->getChain({neuronID, 0, 0, t});
+    }
+    return result;
 }
 
 void cn::FFLayer::setBias(int neuronID, double value) {

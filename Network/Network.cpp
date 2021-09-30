@@ -14,14 +14,6 @@
 #include "layers/ActivationLayers/ReLU/ReLU.h"
 #include "layers/RecurrentLayer/RecurrentLayer.h"
 
-[[maybe_unused]]
-void cn::Network::feed(const byte *_input) {
-    cn::Tensor<byte> bitmap(inputSize, _input, 0);
-    if(layers.empty())
-        throw std::logic_error("network must have at least one layer in order to feed it!");
-    feed(cn::Utils::normalize(bitmap));
-}
-
 void cn::Network::feed(Tensor<double> bitmap) {
 #ifndef NNL_WITH_CUDA
     if(CUDAAccelerate){
@@ -248,4 +240,8 @@ void cn::Network::appendRecurrentLayer() {
     std::unique_ptr<RecurrentLayer> r = std::make_unique<RecurrentLayer>(id, getInputSize(id));
     layers.push_back(r.get());
     allocated.push_back(std::move(r));
+}
+
+bool cn::Network::isCudaAccelerate() const {
+    return CUDAAccelerate;
 }

@@ -23,7 +23,7 @@ namespace cn {
         Optimizer &operator=(const Optimizer &optimizer) = delete;
 
     public:
-        virtual void propagate(const Tensor<double> &target, bool CUDAAccelerate = false) = 0;
+        virtual void propagate(const Tensor<double> &target) = 0;
         double getError(const cn::Tensor<double> &target) const;
     };
 }
