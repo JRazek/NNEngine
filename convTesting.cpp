@@ -20,6 +20,7 @@ int main(){
 
     const int outputSize = 10;
     network.appendMaxPoolingLayer({2,2});
+    network.appendRecurrentLayer();
     network.appendFlatteningLayer();
     network.appendFFLayer(outputSize);
     network.appendSigmoidLayer();
