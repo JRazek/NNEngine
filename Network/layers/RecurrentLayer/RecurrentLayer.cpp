@@ -14,7 +14,7 @@ cn::RecurrentLayer::RecurrentLayer(int _id, cn::Vector3<int> _inputSize) : Layer
 }
 
 void cn::RecurrentLayer::CPURun(const cn::Tensor<double> &_input) {
-    Tensor<double> res = Utils::elementWiseSum(_input, time == 0 ? identity : output[getTime() - 1]);
+    Tensor<double> res = Utils::elementWiseSum(_input, _time == 0 ? identity : output[getTime() - 1]);
     output.push_back(res);
 }
 

@@ -26,7 +26,7 @@ void cn::Layer::setMemo(const Vector4<int> &pos, double val) {
 }
 
 void cn::Layer::resetState() {
-    time = 0;
+    _time = 0;
     output.clear();
     memoizationTable.clear();
     memoizationStates.clear();
@@ -154,9 +154,9 @@ void cn::Layer::addMemoLayer() {
 }
 
 void cn::Layer::incTime() {
-    ++time;
+    ++_time;
 }
 
 int cn::Layer::getTime() const{
-    return time;
+    return _time;
 }

@@ -30,7 +30,7 @@ namespace cn {
         Vector3<int> inputSize;
         Vector3<int> outputSize;
 
-        int time;
+        int _time;
         int __id;
 
         void addMemoLayer();
