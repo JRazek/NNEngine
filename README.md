@@ -1,5 +1,5 @@
 # NeuralFlows
-Library for image processing. 
+Library for deep learning. 
 <br>
 Currently convolutional neural networks with auto differentiation are supported.
 <br>
