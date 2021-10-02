@@ -1,4 +1,4 @@
-# ImageProcessingLib
+# NeuralFlows
 Library for image processing. 
 <br>
 Currently convolutional neural networks with auto differentiation are supported.
