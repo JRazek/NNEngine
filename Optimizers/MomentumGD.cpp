@@ -24,7 +24,7 @@ void cn::MomentumGD::propagate(const Tensor<double> &target) {
     OutputLayer &layer = network->getOutputLayer();
     layer.setTarget(&target);
     //todo time set
-    const Tensor<double> &output = network->getOutput(layer.id(), 0);
+    const Tensor<double> &output = network->getOutput(network->layersCount() - 1, layer.getTime() - 1);
     if(output.size() != target.size()){
         throw std::logic_error("MBGD, invalid target!");
     }

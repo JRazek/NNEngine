@@ -246,3 +246,7 @@ void cn::Network::appendRecurrentLayer() {
 bool cn::Network::isCudaAccelerate() const {
     return CUDAAccelerate;
 }
+
+int cn::Network::layersCount() const {
+    return layers.size();
+}

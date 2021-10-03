@@ -113,7 +113,7 @@ namespace cn {
         Network &operator=(const Network &network) = delete;
         Network (Network &&network);
         Network &operator=(Network &&network);
-
+        int layersCount() const;
         bool isCudaAccelerate() const;
     };
 }
