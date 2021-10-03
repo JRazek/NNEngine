@@ -114,6 +114,7 @@ void cn::Network::ready() {
         allocated.push_back(std::move(_outputLayer));
     }
     linkLayers();
+    resetState();
 }
 
 void cn::Network::resetState() {

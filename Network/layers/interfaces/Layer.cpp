@@ -12,9 +12,7 @@
 #include "../ActivationLayers/Sigmoid/Sigmoid.h"
 #include "../InputLayer/InputLayer.h"
 cn::Layer::Layer(int _id, Vector3<int> _inputSize) :
-inputSize(_inputSize), __id(_id){
-    resetState();
-}
+inputSize(_inputSize), __id(_id){}
 
 [[maybe_unused]] int cn::Layer::id() const {
     return __id;
