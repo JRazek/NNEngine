@@ -19,7 +19,7 @@ void cn::RecurrentLayer::CPURun(const cn::Tensor<double> &_input) {
 }
 
 double cn::RecurrentLayer::getChain(const Vector4<int> &inputPos) {
-    //todo testing
+    //todo testing.
     return nextLayer->getChain({inputPos.x, inputPos.y, inputPos.z, getTime() - 1});
 }
 
