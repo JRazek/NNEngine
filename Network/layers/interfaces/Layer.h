@@ -60,8 +60,6 @@ namespace cn {
         double getMemo(const Vector4<int> &pos) const;
         Vector3<int> getOutputSize() const;
 
-        [[maybe_unused]] int id() const;
-
         virtual std::unique_ptr<Layer> getCopyAsUniquePtr() const = 0;
 
         static std::unique_ptr<cn::Layer> fromJSON(const cn::JSON &json);

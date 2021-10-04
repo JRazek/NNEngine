@@ -14,10 +14,6 @@
 cn::Layer::Layer(int _id, Vector3<int> _inputSize) :
 inputSize(_inputSize), __id(_id){}
 
-[[maybe_unused]] int cn::Layer::id() const {
-    return __id;
-}
-
 void cn::Layer::setMemo(const Vector4<int> &pos, double val) {
     memoizationStates[pos.t].setCell({pos.x, pos.y, pos.z}, true);
     memoizationTable[pos.t].setCell({pos.x, pos.y, pos.z}, val);
@@ -124,10 +120,10 @@ void cn::Layer::CUDARun(const cn::Tensor<double> &_input) {
 }
 
 cn::Layer::Layer(const cn::Layer &layer) :
-inputSize(layer.inputSize), __id(layer.id()){}
+inputSize(layer.inputSize){}
 
 cn::Layer::Layer(cn::Layer &&layer) :
-inputSize(layer.inputSize), __id(layer.id()){
+inputSize(layer.inputSize){
     memoizationStates = std::move(layer.memoizationStates);
     memoizationTable = std::move(layer.memoizationTable);
 }
