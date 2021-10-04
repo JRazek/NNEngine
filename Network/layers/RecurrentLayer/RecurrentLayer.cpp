@@ -9,8 +9,11 @@ std::unique_ptr<cn::Layer> cn::RecurrentLayer::getCopyAsUniquePtr() const noexce
 }
 
 cn::RecurrentLayer::RecurrentLayer(cn::Vector3<int> _inputSize, std::vector<std::unique_ptr<Layer>> &&layers) :
-RecurrentLayer(_inputSize){
-    internalLayers = layers;
+Layer(_inputSize),
+internalLayers(std::move(layers)),
+identity(inputSize){
+    outputSize = inputSize;
+    std::fill(identity.data(), identity.data() + identity.size().multiplyContent(), 0);
 }
 
 void cn::RecurrentLayer::CPURun(const cn::Tensor<double> &_input) {

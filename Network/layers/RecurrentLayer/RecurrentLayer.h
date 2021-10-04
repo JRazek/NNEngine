@@ -17,10 +17,10 @@ namespace cn {
 
 
         JSON jsonEncode() const override;
-        RecurrentLayer(cn::Vector3<int> _inputSize);
 
     public:
         RecurrentLayer(const JSON &json);
+        RecurrentLayer(cn::Vector3<int> _inputSize);
         RecurrentLayer(cn::Vector3<int> _inputSize, std::vector<std::unique_ptr<Layer>> &&layers);
         RecurrentLayer(const RecurrentLayer &recurrentLayer);
         RecurrentLayer(RecurrentLayer &&recurrentLayer) = default;
