@@ -25,7 +25,6 @@ double cn::Sigmoid::getChain(const Vector4<int> &inputPos) {
 
 cn::JSON cn::Sigmoid::jsonEncode() const {
     JSON structure;
-    structure["id"] = __id;
     structure["input_size"] = inputSize.jsonEncode();
     structure["type"] = "sig";
     return structure;
@@ -40,13 +39,13 @@ double cn::Sigmoid::diff(double x) {
     return sig * (1.f - sig);
 }
 
-cn::Sigmoid::Sigmoid(int id, Vector3<int> _inputSize) :
-Layer(id, _inputSize) {
+cn::Sigmoid::Sigmoid(Vector3<int> _inputSize) :
+        Layer(_inputSize) {
     outputSize = inputSize;
 }
 
 cn::Sigmoid::Sigmoid(const JSON &json) :
-Sigmoid(json.at("id"), json.at("input_size")) {}
+        Sigmoid(Vector3<int>(json.at("input_size"))) {}
 
 std::unique_ptr<cn::Layer> cn::Sigmoid::getCopyAsUniquePtr() const {
     return std::make_unique<Sigmoid>(*this);

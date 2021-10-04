@@ -23,7 +23,7 @@ namespace cn {
         virtual double getBias(int neuronID) const = 0;
 
         virtual void randomInit(std::default_random_engine &randomEngine) = 0;
-        Learnable(int id, Vector3<int> _inputSize, int neuronsCount);
+        Learnable(Vector3<int> _inputSize, int neuronsCount);
         virtual std::vector<double> getWeightsGradient() = 0;
         virtual std::vector<double> getBiasesGradient() = 0;
     };

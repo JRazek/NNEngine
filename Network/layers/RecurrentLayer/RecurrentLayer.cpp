@@ -8,7 +8,7 @@ std::unique_ptr<cn::Layer> cn::RecurrentLayer::getCopyAsUniquePtr() const {
     return std::make_unique<RecurrentLayer>(*this);
 }
 
-cn::RecurrentLayer::RecurrentLayer(int _id, cn::Vector3<int> _inputSize) : Layer(_id, _inputSize), identity(inputSize) {
+cn::RecurrentLayer::RecurrentLayer(cn::Vector3<int> _inputSize) : Layer(_inputSize), identity(inputSize) {
     outputSize = inputSize;
     std::fill(identity.data(), identity.data() + identity.size().multiplyContent(), 0);
 }
@@ -27,5 +27,6 @@ cn::JSON cn::RecurrentLayer::jsonEncode() const {
     return JSON();
 }
 
-cn::RecurrentLayer::RecurrentLayer(const cn::JSON &json) : RecurrentLayer(json.at("id"), json.at("input_size")) {}
+cn::RecurrentLayer::RecurrentLayer(const cn::JSON &json) :
+RecurrentLayer(Vector3<int>(json.at("input_size"))) {}
 

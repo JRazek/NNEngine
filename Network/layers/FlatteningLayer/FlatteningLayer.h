@@ -11,7 +11,7 @@ namespace cn {
     class Network;
     class FlatteningLayer : public Layer {
     public:
-        FlatteningLayer(int _id, Vector3<int> _inputSize);
+        FlatteningLayer(Vector3<int> _inputSize);
         FlatteningLayer(const JSON &json);
         void CPURun(const Tensor<double> &input) override;
         virtual double getChain(const Vector4<int> &inputPos) override;

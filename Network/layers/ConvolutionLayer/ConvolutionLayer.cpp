@@ -165,7 +165,6 @@ int cn::ConvolutionLayer::biasesCount() const {
 
 cn::JSON cn::ConvolutionLayer::jsonEncode() const{
     JSON structure;
-    structure["id"] = __id;
     structure["type"] = "cl";
     structure["input_size"] = inputSize.jsonEncode();
     structure["kernels"] = std::vector<JSON>();
@@ -183,12 +182,12 @@ cn::JSON cn::ConvolutionLayer::jsonEncode() const{
 }
 
 cn::ConvolutionLayer::ConvolutionLayer(const JSON &json) :
-        ConvolutionLayer(json.at("id"),
-                         json.at("input_size"),
-                         json.at("kernel_size"),
-                         json.at("kernels").size(),
-                         json.at("stride"),
-                         json.at("padding")) {
+        ConvolutionLayer(
+                json.at("input_size"),
+                json.at("kernel_size"),
+                json.at("kernels").size(),
+                json.at("stride"),
+                json.at("padding")) {
 
     for(u_long i = 0; i < json.at("kernels").size(); i ++){
         auto k = json.at("kernels")[i];
@@ -197,9 +196,10 @@ cn::ConvolutionLayer::ConvolutionLayer(const JSON &json) :
     }
 }
 
-cn::ConvolutionLayer::ConvolutionLayer(int _id, Vector3<int> _inputSize, Vector2<int> _kernelSize, int _kernelsCount,
-                                       Vector2<int> _stride, Vector2<int> _padding) :
-Learnable(_id, _inputSize, _kernelsCount),
+cn::ConvolutionLayer::ConvolutionLayer(Vector3<int> _inputSize, Vector2<int> _kernelSize, int _kernelsCount,
+                                       Vector2<int> _stride,
+                                       Vector2<int> _padding) :
+        Learnable(_inputSize, _kernelsCount),
 kernelSize(_kernelSize.x, _kernelSize.y, _inputSize.z),
 kernelsCount(_kernelsCount),
 padding(_padding), stride(_stride),

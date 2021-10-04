@@ -55,7 +55,7 @@ void cn::Network::appendConvolutionLayer(Vector2<int> kernelSize, int kernelsCou
                                          Vector2<int> padding) {
 
     int id = this->layers.size();
-    std::unique_ptr<ConvolutionLayer> c = std::make_unique<ConvolutionLayer>(id, getInputSize(id), kernelSize, kernelsCount, stride, padding);
+    std::unique_ptr<ConvolutionLayer> c = std::make_unique<ConvolutionLayer>(getInputSize(id), kernelSize, kernelsCount, stride, padding);
     learnableLayers.push_back(c.get());
     layers.push_back(c.get());
     allocated.push_back(std::move(c));
@@ -63,7 +63,7 @@ void cn::Network::appendConvolutionLayer(Vector2<int> kernelSize, int kernelsCou
 
 void cn::Network::appendFFLayer(int neuronsCount) {
     int id = this->layers.size();
-    std::unique_ptr<FFLayer> f = std::make_unique<FFLayer>(id, getInputSize(id), neuronsCount);
+    std::unique_ptr<FFLayer> f = std::make_unique<FFLayer>(getInputSize(id), neuronsCount);
     learnableLayers.push_back(f.get());
     layers.push_back(f.get());
     allocated.push_back(std::move(f));
@@ -71,44 +71,50 @@ void cn::Network::appendFFLayer(int neuronsCount) {
 
 void cn::Network::appendFlatteningLayer() {
     int id = this->layers.size();
-    std::unique_ptr<FlatteningLayer> f = std::make_unique<FlatteningLayer>(id, getInputSize(id));
+    std::unique_ptr<FlatteningLayer> f = std::make_unique<FlatteningLayer>(getInputSize(id));
     layers.push_back(f.get());
     allocated.push_back(std::move(f));
 }
 
 void cn::Network::appendBatchNormalizationLayer() {
     int id = this->layers.size();
-    std::unique_ptr<BatchNormalizationLayer> b = std::make_unique<BatchNormalizationLayer>(id, getInputSize(id));
+    std::unique_ptr<BatchNormalizationLayer> b = std::make_unique<BatchNormalizationLayer>(getInputSize(id));
     layers.push_back(b.get());
     allocated.push_back(std::move(b));
 }
 
 void cn::Network::appendMaxPoolingLayer(Vector2<int> kernelSize) {
     int id = this->layers.size();
-    std::unique_ptr<MaxPoolingLayer> m = std::make_unique<MaxPoolingLayer>(id, getInputSize(id), kernelSize);
+    std::unique_ptr<MaxPoolingLayer> m = std::make_unique<MaxPoolingLayer>(getInputSize(id), kernelSize);
     layers.push_back(m.get());
     allocated.push_back(std::move(m));
 }
 
 void cn::Network::appendReLULayer() {
     int id = this->layers.size();
-    std::unique_ptr<ReLU> r = std::make_unique<ReLU>(id, getInputSize(id));
+    std::unique_ptr<ReLU> r = std::make_unique<ReLU>(getInputSize(id));
     layers.push_back(r.get());
     allocated.push_back(std::move(r));
 }
 
 void cn::Network::appendSigmoidLayer() {
     int id = this->layers.size();
-    std::unique_ptr<Sigmoid> s = std::make_unique<Sigmoid>(id, getInputSize(id));
+    std::unique_ptr<Sigmoid> s = std::make_unique<Sigmoid>(getInputSize(id));
     layers.push_back(s.get());
     allocated.push_back(std::move(s));
 }
 
+void cn::Network::appendRecurrentLayer() {
+    int id = this->layers.size();
+    std::unique_ptr<RecurrentLayer> r = std::make_unique<RecurrentLayer>(getInputSize(id));
+    layers.push_back(r.get());
+    allocated.push_back(std::move(r));
+}
 
 void cn::Network::ready() {
     int id = this->layers.size();
     if(!outputLayer) {
-        std::unique_ptr<OutputLayer> _outputLayer = std::make_unique<OutputLayer>(id, getInputSize(id));
+        std::unique_ptr<OutputLayer> _outputLayer = std::make_unique<OutputLayer>(getInputSize(id));
         outputLayer = _outputLayer.get();
         layers.push_back(outputLayer);
         allocated.push_back(std::move(_outputLayer));
@@ -169,7 +175,7 @@ cn::Network::Network(cn::Vector3<int> _inputSize, int _seed, bool _CUDAAccelerat
 seed(_seed),
 inputSize(_inputSize),
 randomEngine(_seed){
-    std::unique_ptr<InputLayer> _inputLayer = std::make_unique<InputLayer>(0, inputSize);
+    std::unique_ptr<InputLayer> _inputLayer = std::make_unique<InputLayer>(inputSize);
     layers.push_back(_inputLayer.get());
     allocated.push_back(std::move(_inputLayer));
     inputLayer = _inputLayer.get();
@@ -234,13 +240,6 @@ void cn::Network::linkLayers() {
             layers[i]->setNextLayer(layers[i + 1]);
         }
     }
-}
-
-void cn::Network::appendRecurrentLayer() {
-    int id = this->layers.size();
-    std::unique_ptr<RecurrentLayer> r = std::make_unique<RecurrentLayer>(id, getInputSize(id));
-    layers.push_back(r.get());
-    allocated.push_back(std::move(r));
 }
 
 bool cn::Network::isCudaAccelerate() const {

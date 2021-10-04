@@ -38,7 +38,7 @@ namespace cn {
     public:
         void incTime();
         int getTime() const;
-        Layer(int _id, Vector3<int> _inputSize);
+        Layer(Vector3<int> _inputSize);
         Layer(const Layer &layer);
         Layer(Layer &&layer);
 

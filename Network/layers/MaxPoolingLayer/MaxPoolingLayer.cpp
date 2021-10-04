@@ -50,7 +50,6 @@ double cn::MaxPoolingLayer::getChain(const Vector4<int> &inputPos) {
 
 cn::JSON cn::MaxPoolingLayer::jsonEncode() const {
     JSON structure;
-    structure["id"] = __id;
     structure["input_size"] = inputSize.jsonEncode();
     structure["type"] = "mpl";
     structure["kernel_size"] = kernelSize.jsonEncode();
@@ -58,10 +57,10 @@ cn::JSON cn::MaxPoolingLayer::jsonEncode() const {
 }
 
 cn::MaxPoolingLayer::MaxPoolingLayer(const cn::JSON &json) :
-MaxPoolingLayer(json.at("id"), json.at("input_size"), json.at("kernel_size")) {}
+        MaxPoolingLayer(json.at("input_size"), json.at("kernel_size")) {}
 
-cn::MaxPoolingLayer::MaxPoolingLayer(int _id, Vector3<int> _inputSize, cn::Vector2<int> _kernelSize) :
-        Layer(_id, _inputSize),
+cn::MaxPoolingLayer::MaxPoolingLayer(Vector3<int> _inputSize, cn::Vector2<int> _kernelSize) :
+        Layer(_inputSize),
 kernelSize(_kernelSize){
     outputSize = Vector3<int>(Utils::afterMaxPoolSize(kernelSize.x, inputSize.x), Utils::afterMaxPoolSize(kernelSize.y, inputSize.y), inputSize.z);
 }

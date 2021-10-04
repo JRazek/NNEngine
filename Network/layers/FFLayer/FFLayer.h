@@ -20,12 +20,11 @@ namespace cn {
         void randomInit(std::default_random_engine &randomEngine) override;
         /**
          *
-         * @param _id __id of layer in network
          * @param _network network to which layer belongs
          * @param _differentiableFunction function with its derivative
          * @param _neuronsCount input size (neuron count)
          */
-        FFLayer(int _id, Vector3<int> _inputSize, int _neuronsCount);
+        FFLayer(Vector3<int> _inputSize, int _neuronsCount);
 
         FFLayer(const JSON &json);
 

@@ -11,8 +11,8 @@
 #include "../ActivationLayers/ReLU/ReLU.h"
 #include "../ActivationLayers/Sigmoid/Sigmoid.h"
 #include "../InputLayer/InputLayer.h"
-cn::Layer::Layer(int _id, Vector3<int> _inputSize) :
-inputSize(_inputSize), __id(_id){}
+cn::Layer::Layer(Vector3<int> _inputSize) :
+inputSize(_inputSize){}
 
 void cn::Layer::setMemo(const Vector4<int> &pos, double val) {
     memoizationStates[pos.t].setCell({pos.x, pos.y, pos.z}, true);

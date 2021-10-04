@@ -4,11 +4,11 @@
 
 #include "InputLayer.h"
 
-cn::InputLayer::InputLayer(int _id, cn::Vector3<int> _inputSize) : Layer(_id, _inputSize) {
+cn::InputLayer::InputLayer(Vector3<int> _inputSize) : Layer(_inputSize) {
     outputSize = inputSize;
 }
 
-cn::InputLayer::InputLayer(const cn::JSON &json):Layer(json.at("id"), json.at("input_size"))
+cn::InputLayer::InputLayer(const cn::JSON &json): Layer(json.at("input_size"))
 {}
 
 void cn::InputLayer::CPURun(const cn::Tensor<double> &_input) {
@@ -23,7 +23,6 @@ double cn::InputLayer::getChain(const Vector4<int> &inputPos) {
 
 cn::JSON cn::InputLayer::jsonEncode() const {
     JSON structure;
-    structure["id"] = __id;
     structure["input_size"] = inputSize.jsonEncode();
     structure["type"] = "il";
     return structure;

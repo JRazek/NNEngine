@@ -10,7 +10,7 @@
 namespace cn {
     class ReLU : public Layer{
     public:
-        ReLU(int id, Vector3<int> _inputSize);
+        ReLU(Vector3<int> _inputSize);
         ReLU(const JSON &json);
         void CPURun(const Tensor<double> &input) override;
         double getChain(const Vector4<int> &inputPos) override;

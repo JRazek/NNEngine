@@ -19,7 +19,7 @@ namespace cn {
         JSON jsonEncode() const override;
 
     public:
-        RecurrentLayer(int _id, Vector3<int> _inputSize);
+        RecurrentLayer(cn::Vector3<int> _inputSize);
     };
 }
 

@@ -5,7 +5,7 @@
 #include "FlatteningLayer.h"
 #include "../../Network.h"
 
-cn::FlatteningLayer::FlatteningLayer(int _id, Vector3<int> _inputSize) : Layer(_id, _inputSize) {
+cn::FlatteningLayer::FlatteningLayer(Vector3<int> _inputSize) : Layer(_inputSize) {
     int size = inputSize.multiplyContent();
     outputSize = Vector3<int>(size, 1, 1);
 }
@@ -31,14 +31,13 @@ double cn::FlatteningLayer::getChain(const Vector4<int> &inputPos) {
 
 cn::JSON cn::FlatteningLayer::jsonEncode() const {
     JSON structure;
-    structure["id"] = __id;
     structure["input_size"] = inputSize.jsonEncode();
     structure["type"] = "fl";
     return structure;
 }
 
 cn::FlatteningLayer::FlatteningLayer(const JSON &json) :
-FlatteningLayer(json.at("id"), json.at("input_size")) {}
+        FlatteningLayer(Vector3<int>(json.at("input_size"))) {}
 
 std::unique_ptr<cn::Layer> cn::FlatteningLayer::getCopyAsUniquePtr() const {
     return std::make_unique<FlatteningLayer>(*this);

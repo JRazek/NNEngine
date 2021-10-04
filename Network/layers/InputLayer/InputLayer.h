@@ -10,7 +10,7 @@ namespace cn {
     class InputLayer : public Layer{
         std::vector<Tensor<double>> input;
     public:
-        InputLayer(int _id, Vector3<int> _inputSize);
+        InputLayer(Vector3<int> _inputSize);
         InputLayer(const JSON &json);
         void CPURun(const Tensor<double> &_input) override;
         virtual double getChain(const Vector4<int> &inputPos) override;

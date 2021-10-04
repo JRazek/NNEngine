@@ -14,7 +14,7 @@ namespace cn {
         friend CUDAOutputLayer;
         const Tensor<double> *target;
     public:
-        OutputLayer(int id, Vector3<int> _inputSize);
+        OutputLayer(Vector3<int> _inputSize);
         OutputLayer(const cn::JSON &json);
         void CPURun(const Tensor<double> &input) override;
         double getChain(const Vector4<int> &input) override;

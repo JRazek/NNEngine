@@ -15,7 +15,7 @@ void cn::OutputLayer::CUDAAutoGrad() {
 
 
 
-cn::OutputLayer::OutputLayer(int id, Vector3<int> _inputSize) : FlatteningLayer(id, _inputSize) {}
+cn::OutputLayer::OutputLayer(Vector3<int> _inputSize) : FlatteningLayer(_inputSize) {}
 
 void cn::OutputLayer::CPURun(const cn::Tensor<double> &input) {
     addMemoLayer();
@@ -35,7 +35,6 @@ void cn::OutputLayer::setTarget(const cn::Tensor<double> *_target) {
 
 cn::JSON cn::OutputLayer::jsonEncode() const {
     JSON structure;
-    structure["id"] = __id;
     structure["input_size"] = inputSize.jsonEncode();
     structure["type"] = "ol";
     return structure;

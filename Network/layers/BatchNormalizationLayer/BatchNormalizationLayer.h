@@ -11,7 +11,7 @@ namespace cn {
 
         double normalizationFactor;
     public:
-        BatchNormalizationLayer(int _id, Vector3<int> _inputSize);
+        BatchNormalizationLayer(Vector3<int> _inputSize);
         BatchNormalizationLayer(const JSON &json);
         void CPURun(const Tensor<double> &input) override;
         double getChain(const Vector4<int> &inputPos) override;

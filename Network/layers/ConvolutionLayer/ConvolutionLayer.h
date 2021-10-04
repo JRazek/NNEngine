@@ -27,8 +27,8 @@ namespace cn {
 
     public:
 
-        ConvolutionLayer(int _id, Vector3<int> _inputSize, Vector2<int> _kernelSize, int _kernelsCount,
-                         Vector2<int> _stride, Vector2<int> _padding);
+        ConvolutionLayer(Vector3<int> _inputSize, Vector2<int> _kernelSize, int _kernelsCount, Vector2<int> _stride,
+                         Vector2<int> _padding);
 
         ConvolutionLayer(const JSON &json);
         void randomInit(std::default_random_engine &randomEngine) override;

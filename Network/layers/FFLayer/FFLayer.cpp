@@ -7,7 +7,7 @@
 
 
 cn::FFLayer::FFLayer(const JSON &json) :
-FFLayer(json.at("id"), json.at("input_size"), json.at("neurons_count")){
+        FFLayer(json.at("input_size"), json.at("neurons_count")) {
     std::vector<double> w = json.at("weights");
     std::vector<double> b = json.at("biases");
     weights = w;
@@ -15,8 +15,8 @@ FFLayer(json.at("id"), json.at("input_size"), json.at("neurons_count")){
 }
 
 
-cn::FFLayer::FFLayer(int _id, Vector3<int> _inputSize, int _neuronsCount) :
-        Learnable(_id, _inputSize, _neuronsCount),
+cn::FFLayer::FFLayer(Vector3<int> _inputSize, int _neuronsCount) :
+        Learnable(_inputSize, _neuronsCount),
         biases(_neuronsCount){
 
     if(inputSize.x < 1 || inputSize.y != 1 || inputSize.z != 1){
@@ -133,7 +133,6 @@ int cn::FFLayer::biasesCount() const {
 
 cn::JSON cn::FFLayer::jsonEncode() const{
     JSON structure;
-    structure["id"] = __id;
     structure["type"] = "ffl";
     structure["weights"] = weights;
     structure["input_size"] = inputSize.jsonEncode();

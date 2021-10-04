@@ -5,7 +5,7 @@
 #include "BatchNormalizationLayer.h"
 #include "../../Network.h"
 
-cn::BatchNormalizationLayer::BatchNormalizationLayer(int _id, Vector3<int> _inputSize) : Layer(_id, _inputSize) {
+cn::BatchNormalizationLayer::BatchNormalizationLayer(Vector3<int> _inputSize) : Layer(_inputSize) {
     outputSize = inputSize;
 }
 
@@ -39,14 +39,13 @@ double cn::BatchNormalizationLayer::getChain(const Vector4<int> &inputPos) {
 
 cn::JSON cn::BatchNormalizationLayer::jsonEncode() const{
     JSON structure;
-    structure["id"] = __id;
     structure["input_size"] = inputSize.jsonEncode();
     structure["type"] = "bnl";
     return structure;
 }
 
 cn::BatchNormalizationLayer::BatchNormalizationLayer(const JSON &json) :
-BatchNormalizationLayer(json.at("id"), json.at("input_size"))
+        BatchNormalizationLayer(Vector3<int>(json.at("input_size")))
 {}
 
 std::unique_ptr<cn::Layer> cn::BatchNormalizationLayer::getCopyAsUniquePtr() const {
