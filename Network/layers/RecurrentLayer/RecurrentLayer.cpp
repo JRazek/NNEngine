@@ -24,7 +24,7 @@ double cn::RecurrentLayer::getChain(const Vector4<int> &inputPos) {
 }
 
 cn::JSON cn::RecurrentLayer::jsonEncode() const {
-    return Layer::jsonEncode();
+    return JSON();
 }
 
 cn::RecurrentLayer::RecurrentLayer(const cn::JSON &json) : RecurrentLayer(json.at("id"), json.at("input_size")) {}

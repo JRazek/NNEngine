@@ -62,8 +62,6 @@ namespace cn {
 
         [[maybe_unused]] int id() const;
 
-        virtual JSON jsonEncode() const override;
-
         virtual std::unique_ptr<Layer> getCopyAsUniquePtr() const = 0;
 
         static std::unique_ptr<cn::Layer> fromJSON(const cn::JSON &json);

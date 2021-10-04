@@ -42,10 +42,6 @@ cn::Vector3<int> cn::Layer::getOutputSize() const {
     return outputSize;
 }
 
-cn::JSON cn::Layer::jsonEncode() const{
-    return JSON();
-}
-
 std::unique_ptr<cn::Layer> cn::Layer::fromJSON(const cn::JSON &json) {
 
     using callback_type = std::function<std::unique_ptr<Layer>(const cn::JSON &json)>;
