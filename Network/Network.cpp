@@ -29,7 +29,7 @@ void cn::Network::feed(Tensor<double> bitmap) {
     const Tensor<double> *_input = &bitmap;
     for(u_int i = 0; i < layers.size(); i ++){
 
-        auto layer = layers[i];
+        auto layer = layers[i].get();
         if(!CUDAAccelerate)
             layer->CPURun(*_input);
         else
@@ -37,7 +37,7 @@ void cn::Network::feed(Tensor<double> bitmap) {
         _input = &getOutput(i, layer->getTime());
     }
 
-    for(auto l : layers)
+    for(auto &l : layers)
         l->incTime();
 }
 
@@ -57,58 +57,50 @@ void cn::Network::appendConvolutionLayer(Vector2<int> kernelSize, int kernelsCou
     int id = this->layers.size();
     std::unique_ptr<ConvolutionLayer> c = std::make_unique<ConvolutionLayer>(getInputSize(id), kernelSize, kernelsCount, stride, padding);
     learnableLayers.push_back(c.get());
-    layers.push_back(c.get());
-    allocated.push_back(std::move(c));
+    layers.push_back(std::move(c));
 }
 
 void cn::Network::appendFFLayer(int neuronsCount) {
     int id = this->layers.size();
     std::unique_ptr<FFLayer> f = std::make_unique<FFLayer>(getInputSize(id), neuronsCount);
     learnableLayers.push_back(f.get());
-    layers.push_back(f.get());
-    allocated.push_back(std::move(f));
+    layers.push_back(std::move(f));
 }
 
 void cn::Network::appendFlatteningLayer() {
     int id = this->layers.size();
     std::unique_ptr<FlatteningLayer> f = std::make_unique<FlatteningLayer>(getInputSize(id));
-    layers.push_back(f.get());
-    allocated.push_back(std::move(f));
+    layers.push_back(std::move(f));
 }
 
 void cn::Network::appendBatchNormalizationLayer() {
     int id = this->layers.size();
     std::unique_ptr<BatchNormalizationLayer> b = std::make_unique<BatchNormalizationLayer>(getInputSize(id));
-    layers.push_back(b.get());
-    allocated.push_back(std::move(b));
+    layers.push_back(std::move(b));
 }
 
 void cn::Network::appendMaxPoolingLayer(Vector2<int> kernelSize) {
     int id = this->layers.size();
     std::unique_ptr<MaxPoolingLayer> m = std::make_unique<MaxPoolingLayer>(getInputSize(id), kernelSize);
-    layers.push_back(m.get());
-    allocated.push_back(std::move(m));
+    layers.push_back(std::move(m));
 }
 
 void cn::Network::appendReLULayer() {
     int id = this->layers.size();
     std::unique_ptr<ReLU> r = std::make_unique<ReLU>(getInputSize(id));
-    layers.push_back(r.get());
-    allocated.push_back(std::move(r));
+    layers.push_back(std::move(r));
 }
 
 void cn::Network::appendSigmoidLayer() {
     int id = this->layers.size();
     std::unique_ptr<Sigmoid> s = std::make_unique<Sigmoid>(getInputSize(id));
-    layers.push_back(s.get());
-    allocated.push_back(std::move(s));
+    layers.push_back(std::move(s));
 }
 
 void cn::Network::appendRecurrentLayer() {
     int id = this->layers.size();
     std::unique_ptr<RecurrentLayer> r = std::make_unique<RecurrentLayer>(getInputSize(id));
-    layers.push_back(r.get());
-    allocated.push_back(std::move(r));
+    layers.push_back(std::move(r));
 }
 
 void cn::Network::ready() {
@@ -116,15 +108,14 @@ void cn::Network::ready() {
     if(!outputLayer) {
         std::unique_ptr<OutputLayer> _outputLayer = std::make_unique<OutputLayer>(getInputSize(id));
         outputLayer = _outputLayer.get();
-        layers.push_back(outputLayer);
-        allocated.push_back(std::move(_outputLayer));
+        layers.push_back(std::move(_outputLayer));
     }
     linkLayers();
     resetState();
 }
 
 void cn::Network::resetState() {
-    for(auto l : layers){
+    for(auto &l : layers){
         l->resetState();
     }
 }
@@ -176,10 +167,9 @@ seed(_seed),
 inputSize(_inputSize),
 randomEngine(_seed){
     std::unique_ptr<InputLayer> _inputLayer = std::make_unique<InputLayer>(inputSize);
-    layers.push_back(_inputLayer.get());
-    allocated.push_back(std::move(_inputLayer));
     inputLayer = _inputLayer.get();
     CUDAAccelerate = _CUDAAccelerate;
+    layers.push_back(std::move(_inputLayer));
 }
 
 cn::Network::Network(int w, int h, int d, int _seed, bool _CUDAAccelerate):
@@ -190,16 +180,15 @@ cn::Network::Network(const cn::JSON &json): seed(json.at("seed")), inputSize(jso
     try {
         JSON _layers = json.at("layers");
         for (auto l : _layers) {
-            allocated.push_back(Layer::fromJSON(l));
-            layers.push_back(allocated.back().get());
+            layers.push_back(Layer::fromJSON(l));
             if (l.contains("learnable") && l.at("learnable")) {
-                learnableLayers.push_back(dynamic_cast<Learnable *>(layers.back()));
+                learnableLayers.push_back(dynamic_cast<Learnable *>(layers.back().get()));
             }
             if(l.at("type") == "il"){
-                inputLayer = dynamic_cast<InputLayer *>(layers.back());
+                inputLayer = dynamic_cast<InputLayer *>(layers.back().get());
             }
             if(l.at("type") == "ol"){
-                outputLayer = dynamic_cast<OutputLayer *>(layers.back());
+                outputLayer = dynamic_cast<OutputLayer *>(layers.back().get());
             }
         }
         linkLayers();
@@ -212,9 +201,8 @@ cn::Network::Network(cn::Network &&network):
 seed(network.seed),
 inputSize(network.inputSize),
 randomEngine(std::move(network.randomEngine)),
-allocated(std::move(network.allocated)),
-learnableLayers(std::move(network.learnableLayers)),
 layers(std::move(network.layers)),
+learnableLayers(std::move(network.learnableLayers)),
 outputLayer(network.outputLayer)
 {}
 
@@ -222,7 +210,6 @@ cn::Network &cn::Network::operator=(cn::Network &&network) {
     seed = network.seed;
     inputSize = network.inputSize;
     randomEngine = std::move(network.randomEngine);
-    allocated = std::move(network.allocated);
     layers = std::move(network.layers);
     learnableLayers = std::move(network.learnableLayers);
     inputLayer = network.inputLayer;
@@ -234,10 +221,10 @@ cn::Network &cn::Network::operator=(cn::Network &&network) {
 void cn::Network::linkLayers() {
     for(u_int i = 0; i < layers.size(); i ++){
         if(i > 0){
-            layers[i]->setPrevLayer(layers[i - 1]);
+            layers[i]->setPrevLayer(layers[i - 1].get());
         }
         if(i < layers.size() - 1){
-            layers[i]->setNextLayer(layers[i + 1]);
+            layers[i]->setNextLayer(layers[i + 1].get());
         }
     }
 }

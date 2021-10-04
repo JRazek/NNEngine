@@ -14,7 +14,7 @@ namespace cn {
         int iteration;
         double learningRate;
         Optimizer(Network &_network, double _learningRate);
-        const std::vector<cn::Layer *> &getNetworkLayers() const;
+        const std::vector<std::unique_ptr<cn::Layer>> & getNetworkLayers() const;
         const std::vector<cn::Learnable *> &getLearnables() const;
 
         Optimizer(const Optimizer &optimizer) = default;

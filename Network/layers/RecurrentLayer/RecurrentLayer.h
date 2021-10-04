@@ -10,6 +10,7 @@
 
 namespace cn {
     class RecurrentLayer : public Layer {
+//        std::vector<std::unique_ptr<Layer *>> internalLayers;
         std::unique_ptr<Layer> getCopyAsUniquePtr() const override;
         void CPURun(const Tensor<double> &_input) override;
         double getChain(const Vector4<int> &inputPos) override;

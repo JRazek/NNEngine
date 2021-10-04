@@ -26,11 +26,10 @@ namespace cn {
          */
         Vector3<int> inputSize;
         std::default_random_engine randomEngine;
-        std::vector<std::unique_ptr<Layer>> allocated;
         bool CUDAAccelerate;
     protected:
         std::vector<Learnable *> learnableLayers;
-        std::vector<Layer *> layers;
+        std::vector<std::unique_ptr<Layer>> layers;
 
         cn::InputLayer *inputLayer = nullptr;
 

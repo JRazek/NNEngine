@@ -19,7 +19,7 @@ double cn::Optimizer::getError(const cn::Tensor<double> &target) const {
     return error;
 }
 
-const std::vector<cn::Layer *> &cn::Optimizer::getNetworkLayers() const {
+const std::vector<std::unique_ptr<cn::Layer>> & cn::Optimizer::getNetworkLayers() const {
     return network->layers;
 }
 

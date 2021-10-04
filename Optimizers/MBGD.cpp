@@ -15,7 +15,7 @@ cn::MBGD::MBGD(Network &_network, double _learningRate, int _miniBatchSize) :
 
 void cn::MBGD::propagate(const Tensor<double> &target) {
     const std::vector<cn::Learnable *> &learnables = getLearnables();
-    const std::vector<cn::Layer *> &layers = getNetworkLayers();
+    const std::vector<std::unique_ptr<Layer>> &layers = getNetworkLayers();
 
     if(!(iteration % miniBatchSize)){
         memorizedWeights.clear();
