@@ -8,9 +8,9 @@ std::unique_ptr<cn::Layer> cn::RecurrentLayer::getCopyAsUniquePtr() const noexce
     return std::make_unique<RecurrentLayer>(*this);
 }
 
-cn::RecurrentLayer::RecurrentLayer(cn::Vector3<int> _inputSize) : Layer(_inputSize), identity(inputSize) {
-    outputSize = inputSize;
-    std::fill(identity.data(), identity.data() + identity.size().multiplyContent(), 0);
+cn::RecurrentLayer::RecurrentLayer(cn::Vector3<int> _inputSize, std::vector<std::unique_ptr<Layer>> &&layers) :
+RecurrentLayer(_inputSize){
+    internalLayers = layers;
 }
 
 void cn::RecurrentLayer::CPURun(const cn::Tensor<double> &_input) {
@@ -46,5 +46,10 @@ cn::RecurrentLayer::RecurrentLayer(const cn::RecurrentLayer &recurrentLayer): La
     for(const std::unique_ptr<Layer> &l : recurrentLayer.internalLayers){
         internalLayers.push_back(l.get()->getCopyAsUniquePtr());
     }
+}
+
+cn::RecurrentLayer::RecurrentLayer(cn::Vector3<int> _inputSize) : Layer(_inputSize), identity(inputSize)  {
+    outputSize = inputSize;
+    std::fill(identity.data(), identity.data() + identity.size().multiplyContent(), 0);
 }
 
