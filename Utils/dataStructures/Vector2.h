@@ -33,6 +33,14 @@ namespace cn {
         Vector2<T> &operator=(const VectorN<2U, T> &other) noexcept;
         cn::JSON jsonEncode() const override;
     };
+
+    template<typename T>
+    [[maybe_unused]]
+    static void to_json(JSON &j, const Vector2<T> &value);
+
+    template<typename T>
+    [[maybe_unused]]
+    static void from_json(const JSON &j, Vector2<T> &value);
 }
 template<typename T>
 cn::Vector2<T>::Vector2(const std::pair<T, T> &p): Vector2() {
@@ -57,10 +65,7 @@ cn::Vector2<T> cn::Vector2<T>::operator*(const cn::TMatrix<Y> &tMatrix) {
     T b = static_cast<T>(tMatrix.b);
     T c = static_cast<T>(tMatrix.c);
     T d = static_cast<T>(tMatrix.d);
-    return Vector2<T>(
-            x * a + y * b,
-            x * c + y * d
-            );
+    return Vector2<T>(x * a + y * b, x * c + y * d);
 }
 
 template<typename T>
@@ -95,5 +100,17 @@ cn::Vector2<T>::Vector2(const cn::VectorN<2U, T> &other):
         x(this->v[0]),
         y(this->v[1])
 {}
+
+template<typename T>
+[[maybe_unused]]
+static void cn::to_json(JSON &json, const Vector2<T> &v){
+    json = v.jsonEncode();
+}
+
+template<typename T>
+[[maybe_unused]]
+static void cn::from_json(const JSON &j, Vector2<T> &value){
+    value = cn::Vector2<int>(j["x"], j["y"]);
+}
 
 #endif //NEURALNETLIBRARY_VECTOR2_H

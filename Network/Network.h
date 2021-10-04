@@ -28,8 +28,8 @@ namespace cn {
         std::default_random_engine randomEngine;
         bool CUDAAccelerate;
     protected:
-        std::vector<Learnable *> learnableLayers;
         std::vector<std::unique_ptr<Layer>> layers;
+        std::vector<Learnable *> learnableLayers;
 
         cn::InputLayer *inputLayer = nullptr;
 

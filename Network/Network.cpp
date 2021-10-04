@@ -46,7 +46,7 @@ void cn::Network::feed(const cn::Tensor<cn::byte> &bitmap) {
 }
 
 void cn::Network::initRandom() {
-    for(auto l : learnableLayers){
+    for(auto &l : learnableLayers){
         l->randomInit(randomEngine);
     }
 }
@@ -177,24 +177,23 @@ Network(cn::Vector3<int>(w, h, d), _seed, _CUDAAccelerate)
 {}
 
 cn::Network::Network(const cn::JSON &json): seed(json.at("seed")), inputSize(json.at("input_size")) {
-    try {
-        JSON _layers = json.at("layers");
-        for (auto l : _layers) {
-            layers.push_back(Layer::fromJSON(l));
-            if (l.contains("learnable") && l.at("learnable")) {
-                learnableLayers.push_back(dynamic_cast<Learnable *>(layers.back().get()));
-            }
-            if(l.at("type") == "il"){
-                inputLayer = dynamic_cast<InputLayer *>(layers.back().get());
-            }
-            if(l.at("type") == "ol"){
-                outputLayer = dynamic_cast<OutputLayer *>(layers.back().get());
-            }
+    JSON _layers = json.at("layers");
+    for (auto &l : _layers) {
+        std::unique_ptr<Layer> layer = Layer::fromJSON(l);
+        if (l.contains("learnable") && l.at("learnable")) {
+            learnableLayers.push_back(dynamic_cast<Learnable *>(layer.get()));
         }
-        linkLayers();
-    }catch(std::exception &e){
-        std::cout<<e.what();
+        if(l.at("type") == "il"){
+            inputLayer = dynamic_cast<InputLayer *>(layer.get());
+        }
+        std::string str = l.at("type");
+        if(l.at("type") == "ol"){
+            outputLayer = dynamic_cast<OutputLayer *>(layer.get());
+        }
+        layer->resetState();
+        layers.push_back(std::move(layer));
     }
+    linkLayers();
 }
 
 cn::Network::Network(cn::Network &&network):

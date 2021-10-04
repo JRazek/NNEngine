@@ -20,11 +20,9 @@ int main(){
 
     const int outputSize = 10;
     network.appendMaxPoolingLayer({2,2});
-    network.appendRecurrentLayer();
     network.appendFlatteningLayer();
     network.appendFFLayer(outputSize);
     network.appendSigmoidLayer();
-    network.appendRecurrentLayer();
     network.appendFFLayer(outputSize);
     network.appendSigmoidLayer();
     network.appendFFLayer(outputSize);
@@ -32,6 +30,7 @@ int main(){
     network.initRandom();
     network.ready();
 
+    cn::JSON json = network.jsonEncode();
     cn::MomentumGD momentumGd(network, 0.7, 0.01);
 
     CSVReader csvReader("/home/user/IdeaProjects/digitRecogniser/dataSet/metadata.csv", ';');
@@ -66,6 +65,7 @@ int main(){
     int correctCount = 0;
 
     std::string filePath = "/home/user/networkBackup.json";
+
 
     constexpr int epochsCount = 100;
     for (u_int i = 0; i < imageRepresentations.size() * epochsCount; i++) {
