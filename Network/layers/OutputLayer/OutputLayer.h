@@ -20,7 +20,7 @@ namespace cn {
         double getChain(const Vector4<int> &input) override;
         void setTarget(const Tensor<double> *_target);
         JSON jsonEncode() const override;
-        std::unique_ptr<Layer> getCopyAsUniquePtr() const override;
+        std::unique_ptr<Layer> getCopyAsUniquePtr() const noexcept override;
 
         #ifdef NNL_WITH_CUDA
         void CUDAAutoGrad() override;

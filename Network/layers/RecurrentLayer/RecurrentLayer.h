@@ -10,17 +10,20 @@
 
 namespace cn {
     class RecurrentLayer : public Layer {
-//        std::vector<std::unique_ptr<Layer *>> internalLayers;
-        std::unique_ptr<Layer> getCopyAsUniquePtr() const override;
+        std::vector<std::unique_ptr<Layer>> internalLayers;
         void CPURun(const Tensor<double> &_input) override;
         double getChain(const Vector4<int> &inputPos) override;
-        RecurrentLayer(const JSON &json);
         Tensor<double> identity;
+
 
         JSON jsonEncode() const override;
 
     public:
+        RecurrentLayer(const JSON &json);
         RecurrentLayer(cn::Vector3<int> _inputSize);
+        RecurrentLayer(const RecurrentLayer &recurrentLayer);
+        RecurrentLayer(RecurrentLayer &&recurrentLayer) = default;
+        std::unique_ptr<Layer> getCopyAsUniquePtr() const noexcept override;
     };
 }
 

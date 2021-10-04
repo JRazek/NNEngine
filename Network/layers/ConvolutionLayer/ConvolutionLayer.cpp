@@ -219,6 +219,6 @@ biases(_kernelsCount){
     outputSize = Vector3<int>(oX, oY, oZ);
 }
 
-std::unique_ptr<cn::Layer> cn::ConvolutionLayer::getCopyAsUniquePtr() const {
+std::unique_ptr<cn::Layer> cn::ConvolutionLayer::getCopyAsUniquePtr() const noexcept{
     return std::make_unique<ConvolutionLayer>(*this);
 }

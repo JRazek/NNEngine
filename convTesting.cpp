@@ -22,6 +22,7 @@ int main(){
     network.appendMaxPoolingLayer({2,2});
     network.appendFlatteningLayer();
     network.appendFFLayer(outputSize);
+    network.appendRecurrentLayer();
     network.appendSigmoidLayer();
     network.appendFFLayer(outputSize);
     network.appendSigmoidLayer();
@@ -31,6 +32,8 @@ int main(){
     network.ready();
 
     cn::JSON json = network.jsonEncode();
+//    std::cout<<json.dump(4);
+    network = cn::Network(json);
     cn::MomentumGD momentumGd(network, 0.7, 0.01);
 
     CSVReader csvReader("/home/user/IdeaProjects/digitRecogniser/dataSet/metadata.csv", ';');

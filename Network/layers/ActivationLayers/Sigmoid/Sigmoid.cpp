@@ -47,6 +47,6 @@ cn::Sigmoid::Sigmoid(Vector3<int> _inputSize) :
 cn::Sigmoid::Sigmoid(const JSON &json) :
         Sigmoid(Vector3<int>(json.at("input_size"))) {}
 
-std::unique_ptr<cn::Layer> cn::Sigmoid::getCopyAsUniquePtr() const {
+std::unique_ptr<cn::Layer> cn::Sigmoid::getCopyAsUniquePtr() const noexcept{
     return std::make_unique<Sigmoid>(*this);
 }

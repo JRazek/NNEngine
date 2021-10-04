@@ -16,7 +16,7 @@ namespace cn {
         virtual double getChain(const Vector4<int> &inputPos) override;
         virtual JSON jsonEncode() const override;
         const Tensor<double> &getInput(int time) const override;
-        std::unique_ptr <Layer> getCopyAsUniquePtr() const override;
+        std::unique_ptr <Layer> getCopyAsUniquePtr() const noexcept override;
 
         InputLayer(const InputLayer &inputLayer);
     };

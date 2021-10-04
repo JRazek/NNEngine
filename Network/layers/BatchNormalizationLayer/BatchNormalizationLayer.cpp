@@ -48,6 +48,6 @@ cn::BatchNormalizationLayer::BatchNormalizationLayer(const JSON &json) :
         BatchNormalizationLayer(Vector3<int>(json.at("input_size")))
 {}
 
-std::unique_ptr<cn::Layer> cn::BatchNormalizationLayer::getCopyAsUniquePtr() const {
+std::unique_ptr<cn::Layer> cn::BatchNormalizationLayer::getCopyAsUniquePtr() const noexcept{
     return std::make_unique<BatchNormalizationLayer>(*this);
 }

@@ -45,6 +45,6 @@ cn::ReLU::ReLU(Vector3<int> _inputSize) : Layer(_inputSize) {
 cn::ReLU::ReLU(const JSON &json) :
         cn::ReLU(Vector3<int>(json.at("input_size"))) {}
 
-std::unique_ptr<cn::Layer> cn::ReLU::getCopyAsUniquePtr() const {
+std::unique_ptr<cn::Layer> cn::ReLU::getCopyAsUniquePtr() const noexcept{
     return std::make_unique<ReLU>(*this);
 }

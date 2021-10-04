@@ -143,6 +143,6 @@ cn::JSON cn::FFLayer::jsonEncode() const{
     return structure;
 }
 
-std::unique_ptr<cn::Layer> cn::FFLayer::getCopyAsUniquePtr() const {
+std::unique_ptr<cn::Layer> cn::FFLayer::getCopyAsUniquePtr() const noexcept{
     return std::make_unique<FFLayer>(*this);
 }

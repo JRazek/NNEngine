@@ -44,6 +44,6 @@ cn::OutputLayer::OutputLayer(const cn::JSON &json) :
 FlatteningLayer(json)
 {}
 
-std::unique_ptr<cn::Layer> cn::OutputLayer::getCopyAsUniquePtr() const {
+std::unique_ptr<cn::Layer> cn::OutputLayer::getCopyAsUniquePtr() const noexcept{
     return std::make_unique<OutputLayer>(*this);
 }

@@ -65,7 +65,7 @@ kernelSize(_kernelSize){
     outputSize = Vector3<int>(Utils::afterMaxPoolSize(kernelSize.x, inputSize.x), Utils::afterMaxPoolSize(kernelSize.y, inputSize.y), inputSize.z);
 }
 
-std::unique_ptr<cn::Layer> cn::MaxPoolingLayer::getCopyAsUniquePtr() const {
+std::unique_ptr<cn::Layer> cn::MaxPoolingLayer::getCopyAsUniquePtr() const noexcept{
     return std::make_unique<MaxPoolingLayer>(*this);
 }
 

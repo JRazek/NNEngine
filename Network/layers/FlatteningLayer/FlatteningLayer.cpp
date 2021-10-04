@@ -39,6 +39,6 @@ cn::JSON cn::FlatteningLayer::jsonEncode() const {
 cn::FlatteningLayer::FlatteningLayer(const JSON &json) :
         FlatteningLayer(Vector3<int>(json.at("input_size"))) {}
 
-std::unique_ptr<cn::Layer> cn::FlatteningLayer::getCopyAsUniquePtr() const {
+std::unique_ptr<cn::Layer> cn::FlatteningLayer::getCopyAsUniquePtr() const noexcept{
     return std::make_unique<FlatteningLayer>(*this);
 }

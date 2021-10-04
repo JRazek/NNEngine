@@ -11,6 +11,8 @@
 #include "../ActivationLayers/ReLU/ReLU.h"
 #include "../ActivationLayers/Sigmoid/Sigmoid.h"
 #include "../InputLayer/InputLayer.h"
+#include "../RecurrentLayer/RecurrentLayer.h"
+
 cn::Layer::Layer(Vector3<int> _inputSize) :
 inputSize(_inputSize){}
 
@@ -87,6 +89,11 @@ std::unique_ptr<cn::Layer> cn::Layer::fromJSON(const cn::JSON &json) {
     deserializerCallbacks["il"] = [&](const cn::JSON &json) {
         std::cout << "creating input layer \n";
         return std::make_unique<InputLayer>(json);
+    };
+
+    deserializerCallbacks["rcl"] = [&](const cn::JSON &json) {
+        std::cout << "creating recurrent layer \n";
+        return std::make_unique<RecurrentLayer>(json);
     };
 
     const auto deserialize = [&](std::string_view type, const cn::JSON &json) {

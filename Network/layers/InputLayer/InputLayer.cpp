@@ -28,7 +28,7 @@ cn::JSON cn::InputLayer::jsonEncode() const {
     return structure;
 }
 
-std::unique_ptr<cn::Layer> cn::InputLayer::getCopyAsUniquePtr() const {
+std::unique_ptr<cn::Layer> cn::InputLayer::getCopyAsUniquePtr() const noexcept{
     return std::make_unique<InputLayer>(*this);
 }
 

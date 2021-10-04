@@ -16,7 +16,7 @@ namespace cn {
         void CPURun(const Tensor<double> &input) override;
         virtual double getChain(const Vector4<int> &inputPos) override;
         virtual JSON jsonEncode() const override;
-        virtual std::unique_ptr<Layer> getCopyAsUniquePtr() const override;
+        virtual std::unique_ptr<Layer> getCopyAsUniquePtr() const noexcept override;
     };
 }
 #endif //NEURALNETLIBRARY_FLATTENINGLAYER_H

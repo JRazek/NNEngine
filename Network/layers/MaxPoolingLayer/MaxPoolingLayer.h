@@ -17,7 +17,7 @@ namespace cn {
         void CPURun(const Tensor<double> &input) override;
         double getChain(const Vector4<int> &inputPos) override;
         JSON jsonEncode() const override;
-        std::unique_ptr<Layer> getCopyAsUniquePtr() const override;
+        std::unique_ptr<Layer> getCopyAsUniquePtr() const noexcept override;
         void resetState() override;
     };
 }

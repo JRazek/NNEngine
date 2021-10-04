@@ -49,7 +49,7 @@ namespace cn {
 
         JSON jsonEncode() const override;
 
-        std::unique_ptr<Layer> getCopyAsUniquePtr() const override;
+        std::unique_ptr<Layer> getCopyAsUniquePtr() const noexcept override;
     };
 }
 
