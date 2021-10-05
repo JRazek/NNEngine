@@ -15,7 +15,6 @@ namespace cn {
         double getChain(const Vector4<int> &inputPos) override;
         Tensor<double> identity;
 
-
         JSON jsonEncode() const override;
 
     public:
