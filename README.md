@@ -11,7 +11,7 @@ interpolations and matrix transformations.
 CUDA support is in progress as well as parallel convolutions on multiple devices for better performance.
 <br>
 
-Because CUDA if currently unspported - the experimental compile flag COMPILE_WITH_CUDA is set to OFF by default.
+Because CUDA is currently unspported - the experimental compile flag COMPILE_WITH_CUDA is set to OFF by default.
 <br>
 <br>
 
