@@ -9,7 +9,7 @@ std::unique_ptr<cn::Layer> cn::RecurrentLayer::getCopyAsUniquePtr() const noexce
 }
 
 cn::RecurrentLayer::RecurrentLayer(cn::Vector3<int> _inputSize, std::vector<std::unique_ptr<Layer>> &&layers) :
-Layer(_inputSize),
+ComplexLayer(_inputSize),
 internalLayers(std::move(layers)),
 identity(inputSize){
     outputSize = inputSize;
@@ -45,14 +45,18 @@ RecurrentLayer(Vector3<int>(json.at("input_size"))) {
     }
 }
 
-cn::RecurrentLayer::RecurrentLayer(const cn::RecurrentLayer &recurrentLayer): Layer(recurrentLayer) {
+cn::RecurrentLayer::RecurrentLayer(const cn::RecurrentLayer &recurrentLayer): ComplexLayer(recurrentLayer) {
     for(const std::unique_ptr<Layer> &l : recurrentLayer.internalLayers){
         internalLayers.push_back(l.get()->getCopyAsUniquePtr());
     }
 }
 
-cn::RecurrentLayer::RecurrentLayer(cn::Vector3<int> _inputSize) : Layer(_inputSize), identity(inputSize)  {
+cn::RecurrentLayer::RecurrentLayer(cn::Vector3<int> _inputSize) : ComplexLayer(_inputSize), identity(inputSize)  {
     outputSize = inputSize;
     std::fill(identity.data(), identity.data() + identity.size().multiplyContent(), 0);
+}
+
+void cn::RecurrentLayer::ready() {
+
 }
 

@@ -24,6 +24,7 @@ namespace cn {
 
         virtual void randomInit(std::default_random_engine &randomEngine) = 0;
         Learnable(Vector3<int> _inputSize, int neuronsCount);
+        Learnable(Vector3<int> _inputSize);
         virtual std::vector<double> getWeightsGradient() = 0;
         virtual std::vector<double> getBiasesGradient() = 0;
     };

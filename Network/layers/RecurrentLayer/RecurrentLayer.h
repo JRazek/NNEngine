@@ -6,17 +6,17 @@
 #define NEURALNETLIBRARY_RECURRENTLAYER_H
 
 #include <stack>
-#include "../interfaces/Layer.h"
+#include "../interfaces/ComplexLayer.h"
 
 namespace cn {
-    class RecurrentLayer : public Layer {
+    class RecurrentLayer : public ComplexLayer {
         std::vector<std::unique_ptr<Layer>> internalLayers;
         void CPURun(const Tensor<double> &_input) override;
         double getChain(const Vector4<int> &inputPos) override;
         Tensor<double> identity;
 
         JSON jsonEncode() const override;
-
+        void ready() override;
     public:
         RecurrentLayer(const JSON &json);
         RecurrentLayer(cn::Vector3<int> _inputSize);

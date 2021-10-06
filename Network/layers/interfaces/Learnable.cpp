@@ -9,3 +9,5 @@ cn::Learnable::Learnable(Vector3<int> _inputSize, int neuronsCount) : Layer(_inp
 int cn::Learnable::getNeuronsCount() const{
     return neuronsCount;
 }
+
+cn::Learnable::Learnable(cn::Vector3<int> _inputSize) : Layer(_inputSize) {}
