@@ -14,9 +14,6 @@ namespace cn {
         void CPURun(const Tensor<double> &_input) override;
         double getChain(const Vector4<int> &inputPos) override;
         Tensor<double> identity;
-
-        JSON jsonEncode() const override;
-        void ready() override;
     public:
         explicit RecurrentLayer(const JSON &json);
         explicit RecurrentLayer(const Vector3<int> &_inputSize);
@@ -24,6 +21,9 @@ namespace cn {
         RecurrentLayer(const RecurrentLayer &recurrentLayer);
         RecurrentLayer(RecurrentLayer &&recurrentLayer) = default;
         std::unique_ptr<Layer> getCopyAsUniquePtr() const noexcept override;
+
+        JSON jsonEncode() const override;
+        void ready() override;
     };
 }
 
