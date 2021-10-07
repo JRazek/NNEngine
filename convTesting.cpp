@@ -18,6 +18,7 @@
 int main(){
     cn::Network network(28, 28, 3, 1);
 
+    std::ios::sync_with_stdio(false);
     const int outputSize = 10;
     network.appendMaxPoolingLayer({2,2});
     network.appendFlatteningLayer();

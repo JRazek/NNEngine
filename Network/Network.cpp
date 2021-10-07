@@ -104,13 +104,13 @@ void cn::Network::appendRecurrentLayer() {
 }
 
 void cn::Network::ready() {
-    int id = this->layers.size();
+    u_int id = layers.size();
     if(!outputLayer) {
         std::unique_ptr<OutputLayer> _outputLayer = std::make_unique<OutputLayer>(getInputSize(id));
         outputLayer = _outputLayer.get();
         layers.push_back(std::move(_outputLayer));
     }
-    linkLayers();
+    linkLayers(layers);
     resetState();
 }
 
@@ -193,7 +193,7 @@ cn::Network::Network(const cn::JSON &json): seed(json.at("seed")), inputSize(jso
         layer->resetState();
         layers.push_back(std::move(layer));
     }
-    linkLayers();
+    linkLayers(layers);
 }
 
 cn::Network::Network(cn::Network &&network):
@@ -217,7 +217,7 @@ cn::Network &cn::Network::operator=(cn::Network &&network) {
     return *this;
 }
 
-void cn::Network::linkLayers() {
+void cn::Network::linkLayers(std::vector<std::unique_ptr<Layer>> &layers) {
     for(u_int i = 0; i < layers.size(); i ++){
         if(i > 0){
             layers[i]->setPrevLayer(layers[i - 1].get());

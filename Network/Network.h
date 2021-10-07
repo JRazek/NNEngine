@@ -35,8 +35,6 @@ namespace cn {
 
         OutputLayer *outputLayer = nullptr;
 
-        void linkLayers();
-
     public:
 
         void appendConvolutionLayer(Vector2<int> kernelSize, int kernelsCount, Vector2<int> stride = {1, 1}, Vector2<int> padding = {0, 0});
@@ -103,10 +101,10 @@ namespace cn {
          * In case of using only FFLayers - set height and depth to 1.
          */
 
-        Network(int w, int h, int d, int _seed = 1, bool _CUDAAccelerate = 0);
+        Network(int w, int h, int d, int _seed = 1, bool CUDAAccelerate = 0);
 
 
-        Network(cn::Vector3<int> _inputSize, int _seed = 1, bool _CUDAAccelerate = 0);
+        explicit Network(cn::Vector3<int> _inputSize, int _seed = 1, bool CUDAAccelerate = 0);
 
         Network (const Network &network) = delete;
         Network &operator=(const Network &network) = delete;
@@ -114,6 +112,8 @@ namespace cn {
         Network &operator=(Network &&network);
         int layersCount() const;
         bool isCudaAccelerate() const;
+
+        static void linkLayers(std::vector<std::unique_ptr<Layer>> &layers);
     };
 }
 
