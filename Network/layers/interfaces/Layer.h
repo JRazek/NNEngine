@@ -37,9 +37,9 @@ namespace cn {
     public:
         void incTime();
         int getTime() const;
-        Layer(Vector3<int> _inputSize);
+        explicit Layer(Vector3<int> _inputSize);
         Layer(const Layer &layer);
-        Layer(Layer &&layer);
+        explicit Layer(Layer &&layer);
 
         virtual double getChain(const Vector4<int> &inputPos) = 0;
 

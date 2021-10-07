@@ -27,7 +27,7 @@ find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 
-add_executable(Main convTesting.cpp)
+add_executable(Main convTesting.cpp Network/layers/RecurrentLayer/RecurrentOutputLayer/RecurrentOutputLayer.cpp Network/layers/RecurrentLayer/RecurrentOutputLayer/RecurrentOutputLayer.h)
 
 
 target_link_libraries(Main NeuralFlows)
