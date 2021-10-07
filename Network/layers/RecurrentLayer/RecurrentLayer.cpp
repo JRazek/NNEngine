@@ -1,7 +1,7 @@
 //
 // Created by jrazek on 24.09.2021.
 //
-
+#include "../../Network.h"
 #include "RecurrentLayer.h"
 
 std::unique_ptr<cn::Layer> cn::RecurrentLayer::getCopyAsUniquePtr() const noexcept{
@@ -17,8 +17,17 @@ identity(inputSize){
 }
 
 void cn::RecurrentLayer::CPURun(const cn::Tensor<double> &_input) {
+    for(auto &l : internalLayers)
+        l->incTime();
     Tensor<double> res = Utils::elementWiseSum(_input, _time == 0 ? identity : output[getTime() - 1]);
-    output.push_back(res);
+    const Tensor<double> *input = &res;
+    for(u_int i = 0; i < internalLayers.size(); i ++){
+        internalLayers[i]->CPURun(*input);
+        input = &internalLayers[i]->getOutput(getTime());
+    }
+    output.push_back(*input);
+
+    //todo check this!!!!!!
 }
 
 double cn::RecurrentLayer::getChain(const Vector4<int> &inputPos) {
@@ -57,6 +66,6 @@ cn::RecurrentLayer::RecurrentLayer(const Vector3<int> &_inputSize) : ComplexLaye
 }
 
 void cn::RecurrentLayer::ready() {
-//    for()
+    Network::linkLayers(internalLayers);
 }
 
