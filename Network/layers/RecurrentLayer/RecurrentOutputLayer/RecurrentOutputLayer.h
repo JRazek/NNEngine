@@ -10,7 +10,14 @@
 namespace cn {
     class RecurrentOutputLayer : public Layer{
         RecurrentLayer *parentLayer;
-        explicit RecurrentOutputLayer(const Vector3<int> &_inputSize, RecurrentLayer &parent);
+
+        void CPURun(const Tensor<double> &_input) override;
+        virtual JSON jsonEncode() const override;
+        virtual double getChain(const Vector4<int> &inputPos) override;
+        std::unique_ptr<Layer> getCopyAsUniquePtr() const noexcept override;
+
+    public:
+        explicit RecurrentOutputLayer(const Vector3<int> &_inputSize, RecurrentLayer &_parentLayer);
     };
 }
 

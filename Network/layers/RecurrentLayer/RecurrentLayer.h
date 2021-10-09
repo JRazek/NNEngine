@@ -9,10 +9,13 @@
 #include "../interfaces/ComplexLayer.h"
 
 namespace cn {
+    class RecurrentOutputLayer;
     class RecurrentLayer : public ComplexLayer {
+        friend RecurrentOutputLayer;
         std::vector<std::unique_ptr<Layer>> internalLayers;
         void CPURun(const Tensor<double> &_input) override;
         double getChain(const Vector4<int> &inputPos) override;
+        double getChainFromChild(const Vector4<int> &inputPos);
         Tensor<double> identity;
     public:
         explicit RecurrentLayer(const JSON &json);

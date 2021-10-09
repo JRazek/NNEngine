@@ -3,6 +3,8 @@
 //
 #include "../../Network.h"
 #include "RecurrentLayer.h"
+#include "../InputLayer/InputLayer.h"
+#include "RecurrentOutputLayer/RecurrentOutputLayer.h"
 
 std::unique_ptr<cn::Layer> cn::RecurrentLayer::getCopyAsUniquePtr() const noexcept{
     return std::make_unique<RecurrentLayer>(*this);
@@ -14,6 +16,7 @@ internalLayers(std::move(layers)),
 identity(inputSize){
     outputSize = inputSize;
     std::fill(identity.data(), identity.data() + identity.size().multiplyContent(), 0);
+    internalLayers.push_back(std::make_unique<InputLayer>(InputLayer(inputSize)));
 }
 
 void cn::RecurrentLayer::CPURun(const cn::Tensor<double> &_input) {
@@ -31,9 +34,7 @@ void cn::RecurrentLayer::CPURun(const cn::Tensor<double> &_input) {
 }
 
 double cn::RecurrentLayer::getChain(const Vector4<int> &inputPos) {
-    //todo testing.
-    //output recurrent layer? has to change parent's internal state
-    return nextLayer->getChain({inputPos.x, inputPos.y, inputPos.z, getTime() - 1});
+//    return internalLayers[0]->getChain(inputPos) * nextLayer->getChain();
 }
 
 cn::JSON cn::RecurrentLayer::jsonEncode() const {
@@ -63,10 +64,16 @@ cn::RecurrentLayer::RecurrentLayer(const cn::RecurrentLayer &recurrentLayer): Co
 
 cn::RecurrentLayer::RecurrentLayer(const Vector3<int> &_inputSize) : ComplexLayer(_inputSize), identity(inputSize)  {
     outputSize = inputSize;
+    //todo should the size be fixed??
     std::fill(identity.data(), identity.data() + identity.size().multiplyContent(), 0);
 }
 
 void cn::RecurrentLayer::ready() {
+    internalLayers.push_back(std::make_unique<RecurrentOutputLayer>(RecurrentOutputLayer(inputSize, *this)));
     Network::linkLayers(internalLayers);
+}
+
+double cn::RecurrentLayer::getChainFromChild(const cn::Vector4<int> &inputPos) {
+    return nextLayer->getChain({inputPos.x, inputPos.y, inputPos.z, getTime() - 1});
 }
 
