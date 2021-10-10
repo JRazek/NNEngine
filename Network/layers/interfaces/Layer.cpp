@@ -157,3 +157,7 @@ void cn::Layer::incTime() {
 int cn::Layer::getTime() const{
     return _time;
 }
+
+cn::Vector3<int> cn::Layer::getInputSize() const {
+    return inputSize;
+}

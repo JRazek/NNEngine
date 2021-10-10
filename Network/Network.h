@@ -15,6 +15,7 @@
 
 namespace cn {
     class InputLayer;
+    class RecurrentLayer;
     class Network : public JSONEncodable{
     private:
 
@@ -45,6 +46,7 @@ namespace cn {
         void appendRecurrentLayer();
         void appendReLULayer();
         void appendSigmoidLayer();
+        void appendRecurrentLayer(std::unique_ptr<RecurrentLayer> &&recurrentLayer);
 
 
         void feed(Tensor<double> bitmap);
@@ -65,6 +67,11 @@ namespace cn {
          */
         void initRandom();
 
+        /**
+         * the recurrentLayer is a complex layer and it has to be built by the user. Despite that it also needs input size in constructor which is known by the network only.
+         * Therefore use this to construct a Recurrent Layer
+         */
+         std::unique_ptr<RecurrentLayer> createRecurrentLayer();
 
         /**
          *

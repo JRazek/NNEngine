@@ -10,7 +10,7 @@ cn::RecurrentOutputLayer::RecurrentOutputLayer(const Vector3<int> &_inputSize, R
 }
 
 void cn::RecurrentOutputLayer::CPURun(const cn::Tensor<double> &_input) {
-
+    output.push_back(_input);
 }
 
 
@@ -22,7 +22,7 @@ cn::JSON cn::RecurrentOutputLayer::jsonEncode() const {
 }
 
 double cn::RecurrentOutputLayer::getChain(const cn::Vector4<int> &inputPos) {
-    return 1;
+    return parentLayer->getChain(inputPos);
 }
 
 std::unique_ptr<cn::Layer> cn::RecurrentOutputLayer::getCopyAsUniquePtr() const noexcept {

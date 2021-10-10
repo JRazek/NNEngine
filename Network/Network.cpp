@@ -235,3 +235,16 @@ bool cn::Network::isCudaAccelerate() const {
 int cn::Network::layersCount() const {
     return layers.size();
 }
+
+void cn::Network::appendRecurrentLayer(std::unique_ptr<RecurrentLayer> &&recurrentLayer) {
+    if(recurrentLayer->getInputSize() != layers.back()->getOutputSize()){
+        throw std::logic_error("this recurrent layers has incorrect input size!");
+    }
+    recurrentLayer->ready();
+
+    layers.push_back(std::move(recurrentLayer));
+}
+
+std::unique_ptr<cn::RecurrentLayer> cn::Network::createRecurrentLayer() {
+    return std::make_unique<RecurrentLayer>(layers.back()->getOutputSize());
+}

@@ -11,6 +11,7 @@
 #include "Utils/Files/CSVReader.h"
 #include "Utils/Files/ImageRepresentation.h"
 #include "Utils/dataStructures/VectorN.h"
+#include "Network/layers/RecurrentLayer/RecurrentLayer.h"
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wreorder"
@@ -26,6 +27,10 @@ int main(){
     network.appendRecurrentLayer();
     network.appendSigmoidLayer();
     network.appendFFLayer(outputSize);
+
+    std::unique_ptr<cn::RecurrentLayer> recurrentLayer = network.createRecurrentLayer();
+    network.appendRecurrentLayer(std::move(recurrentLayer));
+
     network.appendSigmoidLayer();
     network.appendFFLayer(outputSize);
     network.appendSigmoidLayer();

@@ -57,6 +57,7 @@ namespace cn {
         void setMemo(const Vector4<int> &pos, double val);
         bool getMemoState(const Vector4<int> &pos) const;
         double getMemo(const Vector4<int> &pos) const;
+        Vector3<int> getInputSize() const;
         Vector3<int> getOutputSize() const;
 
         virtual std::unique_ptr<Layer> getCopyAsUniquePtr() const noexcept = 0;

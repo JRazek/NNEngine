@@ -17,7 +17,6 @@ namespace cn {
         std::vector<double> weights;
 
     public:
-        void randomInit(std::default_random_engine &randomEngine) override;
         /**
          *
          * @param _network network to which layer belongs
@@ -32,6 +31,7 @@ namespace cn {
 
         virtual double getChain(const Vector4<int> &inputPos) override;
 
+        void randomInit(std::default_random_engine &randomEngine) override;
         double diffWeight(int weightID);
         double diffBias(int neuronID);
         std::vector<double> getWeightsGradient() override;
