@@ -24,12 +24,11 @@ int main(){
     network.appendMaxPoolingLayer({2,2});
     network.appendFlatteningLayer();
     network.appendFFLayer(outputSize);
-    network.appendRecurrentLayer();
     network.appendSigmoidLayer();
     network.appendFFLayer(outputSize);
-
-    std::unique_ptr<cn::RecurrentLayer> recurrentLayer = network.createRecurrentLayer();
-    network.appendRecurrentLayer(std::move(recurrentLayer));
+//
+//    std::unique_ptr<cn::RecurrentLayer> recurrentLayer = network.createRecurrentLayer();
+//    network.appendRecurrentLayer(std::move(recurrentLayer));
 
     network.appendSigmoidLayer();
     network.appendFFLayer(outputSize);

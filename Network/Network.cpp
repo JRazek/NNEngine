@@ -97,12 +97,6 @@ void cn::Network::appendSigmoidLayer() {
     layers.push_back(std::move(s));
 }
 
-void cn::Network::appendRecurrentLayer() {
-    int id = this->layers.size();
-    std::unique_ptr<RecurrentLayer> r = std::make_unique<RecurrentLayer>(getInputSize(id));
-    layers.push_back(std::move(r));
-}
-
 void cn::Network::ready() {
     u_int id = layers.size();
     if(!outputLayer) {

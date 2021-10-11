@@ -43,7 +43,7 @@ namespace cn {
         void appendFlatteningLayer();
         void appendBatchNormalizationLayer();
         void appendMaxPoolingLayer(Vector2<int> kernelSize);
-        void appendRecurrentLayer();
+
         void appendReLULayer();
         void appendSigmoidLayer();
         void appendRecurrentLayer(std::unique_ptr<RecurrentLayer> &&recurrentLayer);
