@@ -26,6 +26,8 @@ namespace cn {
         double diffBias(int biasID);
 
     public:
+        virtual std::vector<double *> getWeightsByRef() override;
+        virtual std::vector<double *> getBiasesByRef() override;
 
         ConvolutionLayer(Vector3<int> _inputSize, Vector2<int> _kernelSize, int _kernelsCount, Vector2<int> _stride,
                          Vector2<int> _padding);

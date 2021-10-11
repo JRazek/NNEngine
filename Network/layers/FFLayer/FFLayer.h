@@ -16,6 +16,9 @@ namespace cn {
         std::vector<double> biases;
         std::vector<double> weights;
 
+    protected:
+
+
     public:
         /**
          *
@@ -25,6 +28,8 @@ namespace cn {
          */
         FFLayer(Vector3<int> _inputSize, int _neuronsCount);
 
+        virtual std::vector<double *> getWeightsByRef() override;
+        virtual std::vector<double *> getBiasesByRef() override;
         FFLayer(const JSON &json);
 
         void CPURun(const Tensor<double> &_input) override;
@@ -36,7 +41,6 @@ namespace cn {
         double diffBias(int neuronID);
         std::vector<double> getWeightsGradient() override;
         std::vector<double> getBiasesGradient() override;
-
 
         void setBias(int neuronID, double value) override;
         double getBias(int neuronID) const override;

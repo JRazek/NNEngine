@@ -22,7 +22,7 @@ cn::JSON cn::RecurrentOutputLayer::jsonEncode() const {
 }
 
 double cn::RecurrentOutputLayer::getChain(const cn::Vector4<int> &inputPos) {
-    return parentLayer->getChain(inputPos);
+    return parentLayer->getChainFromChild(inputPos);
 }
 
 std::unique_ptr<cn::Layer> cn::RecurrentOutputLayer::getCopyAsUniquePtr() const noexcept {

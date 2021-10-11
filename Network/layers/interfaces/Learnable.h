@@ -13,7 +13,11 @@ namespace cn {
     class Learnable : public Layer {
     protected:
         int neuronsCount;
+
+
     public:
+        virtual std::vector<double *> getBiasesByRef() = 0;
+        virtual std::vector<double *> getWeightsByRef() = 0;
         int getNeuronsCount() const;
         virtual int weightsCount() const = 0;
         virtual int biasesCount() const = 0;

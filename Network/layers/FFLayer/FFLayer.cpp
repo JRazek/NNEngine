@@ -146,3 +146,21 @@ cn::JSON cn::FFLayer::jsonEncode() const{
 std::unique_ptr<cn::Layer> cn::FFLayer::getCopyAsUniquePtr() const noexcept{
     return std::make_unique<FFLayer>(*this);
 }
+
+std::vector<double *> cn::FFLayer::getWeightsByRef() {
+    std::vector<double *> res(weights.size());
+    for(u_int i = 0; i < weights.size(); i ++){
+        auto &w = weights[i];
+        res[i] = &w;
+    }
+    return res;
+}
+
+std::vector<double *> cn::FFLayer::getBiasesByRef() {
+    std::vector<double *> res(biases.size());
+    for(u_int i = 0; i < biases.size(); i ++){
+        auto &b = biases[i];
+        res[i] = &b;
+    }
+    return res;
+}

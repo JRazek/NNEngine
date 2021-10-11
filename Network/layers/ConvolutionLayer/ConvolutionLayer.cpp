@@ -222,3 +222,22 @@ biases(_kernelsCount){
 std::unique_ptr<cn::Layer> cn::ConvolutionLayer::getCopyAsUniquePtr() const noexcept{
     return std::make_unique<ConvolutionLayer>(*this);
 }
+
+std::vector<double *> cn::ConvolutionLayer::getWeightsByRef() {
+    std::vector<double *> res(weightsCount());
+    for(u_int i = 0; i < weightsCount(); i ++){
+        Tensor<double> &tensor = kernels[i];
+        for(u_int wID = 0; wID < tensor.size().multiplyContent(); wID ++){
+            res[i * kernelSize.multiplyContent() + wID] = &tensor.data()[wID];
+        }
+    }
+    return res;
+}
+
+std::vector<double *> cn::ConvolutionLayer::getBiasesByRef() {
+    std::vector<double *> res(biases.size());
+    for(u_int i = 0; i < biases.size(); i ++){
+        res[i] = &biases[i];
+    }
+    return res;
+}

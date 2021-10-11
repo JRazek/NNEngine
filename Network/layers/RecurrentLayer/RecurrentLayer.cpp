@@ -6,6 +6,7 @@
 #include "../InputLayer/InputLayer.h"
 #include "RecurrentOutputLayer/RecurrentOutputLayer.h"
 #include "../ActivationLayers/Sigmoid/Sigmoid.h"
+#include "../FFLayer/FFLayer.h"
 
 std::unique_ptr<cn::Layer> cn::RecurrentLayer::getCopyAsUniquePtr() const noexcept{
     return std::make_unique<RecurrentLayer>(*this);
@@ -86,51 +87,82 @@ double cn::RecurrentLayer::getChainFromChild(const cn::Vector4<int> &inputPos) {
 }
 
 void cn::RecurrentLayer::randomInit(std::default_random_engine &randomEngine) {
-
-}
-
-double cn::RecurrentLayer::diffWeight(int weightID) {
-    return 0;
-}
-
-double cn::RecurrentLayer::diffBias(int neuronID) {
-    return 0;
+    for(auto &l : learnableLayers){
+        l->randomInit(randomEngine);
+    }
 }
 
 std::vector<double> cn::RecurrentLayer::getWeightsGradient() {
-    return std::vector<double>();
+    std::vector<double> gradient;
+    gradient.reserve(weights.size());
+
+    for(auto &l : learnableLayers){
+        std::vector<double> layerGradient = l->getWeightsGradient();
+        gradient.insert(gradient.end(), layerGradient.begin(), layerGradient.end());
+    }
+    return gradient;
 }
 
 std::vector<double> cn::RecurrentLayer::getBiasesGradient() {
-    return std::vector<double>();
+    std::vector<double> gradient;
+    gradient.reserve(biases.size());
+
+    for(auto &l : learnableLayers){
+        std::vector<double> layerGradient = l->getBiasesGradient();
+        gradient.insert(gradient.end(), layerGradient.begin(), layerGradient.end());
+    }
+    return gradient;
 }
 
 double cn::RecurrentLayer::getBias(int neuronID) const {
-    return 0;
+    return *biases[neuronID];
 }
 
 void cn::RecurrentLayer::setBias(int neuronID, double value) {
-
+    *biases[neuronID] = value;
 }
 
 int cn::RecurrentLayer::weightsCount() const {
-    return 0;
+    return weights.size();
 }
 
 int cn::RecurrentLayer::biasesCount() const {
-    return 0;
+    return biases.size();
 }
 
 void cn::RecurrentLayer::setWeight(int weightID, double value) {
-
+    *weights[weightID] = value;
 }
 
 double cn::RecurrentLayer::getWeight(int weightID) const {
-    return 0;
+    return *weights[weightID];
 }
 
 void cn::RecurrentLayer::appendSigmoidLayer() {
     std::unique_ptr<Sigmoid> s = std::make_unique<Sigmoid>(internalLayers.back()->getOutputSize());
     internalLayers.push_back(std::move(s));
 }
+
+void cn::RecurrentLayer::appendFFLayer(int neuronsCount) {
+    std::unique_ptr<FFLayer> f = std::make_unique<FFLayer>(internalLayers.back()->getOutputSize(), neuronsCount);
+    appendLearnable(f.get());
+    learnableLayers.push_back(f.get());
+    internalLayers.push_back(std::move(f));
+}
+
+std::vector<double *> cn::RecurrentLayer::getWeightsByRef() {
+    return weights;
+}
+
+std::vector<double *> cn::RecurrentLayer::getBiasesByRef() {
+    return biases;
+}
+
+void cn::RecurrentLayer::appendLearnable(cn::Learnable *learnable) {
+    std::vector<double *> weightsByRef = learnable->getWeightsByRef();
+    weights.insert(weights.end(), weightsByRef.begin(), weightsByRef.end());
+    std::vector<double *> biasesByRef = learnable->getWeightsByRef();
+    biases.insert(biases.end(), biasesByRef.begin(), biasesByRef.end());
+}
+
 
