@@ -16,6 +16,8 @@ namespace cn {
         std::vector<double> biases;
         std::vector<double> weights;
 
+        int neuronsCount;
+
     protected:
 
 

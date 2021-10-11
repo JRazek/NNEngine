@@ -196,10 +196,8 @@ cn::ConvolutionLayer::ConvolutionLayer(const JSON &json) :
     }
 }
 
-cn::ConvolutionLayer::ConvolutionLayer(Vector3<int> _inputSize, Vector2<int> _kernelSize, int _kernelsCount,
-                                       Vector2<int> _stride,
-                                       Vector2<int> _padding) :
-        Learnable(_inputSize, _kernelsCount),
+cn::ConvolutionLayer::ConvolutionLayer(Vector3<int> _inputSize, Vector2<int> _kernelSize, int _kernelsCount, Vector2<int> _stride, Vector2<int> _padding) :
+Learnable(_inputSize),
 kernelSize(_kernelSize.x, _kernelSize.y, _inputSize.z),
 kernelsCount(_kernelsCount),
 padding(_padding), stride(_stride),

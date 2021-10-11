@@ -16,8 +16,9 @@ cn::FFLayer::FFLayer(const JSON &json) :
 
 
 cn::FFLayer::FFLayer(Vector3<int> _inputSize, int _neuronsCount) :
-        Learnable(_inputSize, _neuronsCount),
-        biases(_neuronsCount){
+        Learnable(_inputSize),
+        biases(_neuronsCount),
+        neuronsCount(_neuronsCount){
 
     if(inputSize.x < 1 || inputSize.y != 1 || inputSize.z != 1){
         throw std::logic_error("There must be a vector output layer before FFLayer!");
