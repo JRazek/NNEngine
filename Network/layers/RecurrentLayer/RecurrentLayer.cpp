@@ -12,12 +12,9 @@ std::unique_ptr<cn::Layer> cn::RecurrentLayer::getCopyAsUniquePtr() const noexce
     return std::make_unique<RecurrentLayer>(*this);
 }
 
-cn::RecurrentLayer::RecurrentLayer(const Vector3<int> &_inputSize, std::vector<std::unique_ptr<Layer>> &&layers) :
-Learnable(_inputSize),
-internalLayers(std::move(layers)),
-identity(inputSize){
+cn::RecurrentLayer::RecurrentLayer(const Vector3<int> &_inputSize) : Learnable(_inputSize), identity(inputSize)  {
     std::fill(identity.data(), identity.data() + identity.size().multiplyContent(), 0);
-    internalLayers.push_back(std::make_unique<InputLayer>(InputLayer(inputSize)));
+    internalLayers.push_back(std::make_unique<InputLayer>(inputSize));
 }
 
 void cn::RecurrentLayer::CPURun(const cn::Tensor<double> &_input) {
@@ -69,15 +66,12 @@ cn::RecurrentLayer::RecurrentLayer(const cn::RecurrentLayer &recurrentLayer): Le
     }
 }
 
-cn::RecurrentLayer::RecurrentLayer(const Vector3<int> &_inputSize) : Learnable(_inputSize), identity(inputSize)  {
-    std::fill(identity.data(), identity.data() + identity.size().multiplyContent(), 0);
-}
 
 void cn::RecurrentLayer::ready() {
     if(!_ready) {
         internalLayers.push_back(std::make_unique<RecurrentOutputLayer>(RecurrentOutputLayer(internalLayers.back()->getOutputSize(), *this)));
         Network::linkLayers(internalLayers);
-        outputSize = inputSize;
+        outputSize = internalLayers.back()->getOutputSize();
         _ready = true;
     }
 }

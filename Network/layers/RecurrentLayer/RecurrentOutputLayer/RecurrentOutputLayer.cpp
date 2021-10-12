@@ -4,9 +4,9 @@
 
 #include "RecurrentOutputLayer.h"
 
-cn::RecurrentOutputLayer::RecurrentOutputLayer(const Vector3<int> &_inputSize, RecurrentLayer &_parentLayer)
-        : Layer(_inputSize), parentLayer(&_parentLayer) {
-
+    cn::RecurrentOutputLayer::RecurrentOutputLayer(const Vector3<int> &_inputSize, RecurrentLayer &_parentLayer):
+Layer(_inputSize), parentLayer(&_parentLayer) {
+    outputSize = inputSize;
 }
 
 void cn::RecurrentOutputLayer::CPURun(const cn::Tensor<double> &_input) {

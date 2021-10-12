@@ -27,8 +27,8 @@ int main(){
     network.appendSigmoidLayer();
     network.appendFFLayer(outputSize);
 //
-//    std::unique_ptr<cn::RecurrentLayer> recurrentLayer = network.createRecurrentLayer();
-//    network.appendRecurrentLayer(std::move(recurrentLayer));
+    std::unique_ptr<cn::RecurrentLayer> recurrentLayer = network.createRecurrentLayer();
+    network.appendRecurrentLayer(std::move(recurrentLayer));
 
     network.appendSigmoidLayer();
     network.appendFFLayer(outputSize);
@@ -38,7 +38,7 @@ int main(){
 
     cn::JSON json = network.jsonEncode();
 //    std::cout<<json.dump(4);
-    network = cn::Network(json);
+//    network = cn::Network(json);
     cn::MomentumGD momentumGd(network, 0.7, 0.01);
 
     CSVReader csvReader("/home/user/IdeaProjects/digitRecogniser/dataSet/metadata.csv", ';');
@@ -98,14 +98,12 @@ int main(){
         }
 
         if (!((i + 1) % resetRate)) {
-            std::cout << "LOSS "<< i <<": "<< momentumGd.getError(target) << "\n";
-            std::cout << "ACCURACY: " << (double) correctCount / double(resetRate) * 100 << "%\n";
+            printf("LOSS %d: %f \n", i, momentumGd.getError(target));
+            printf("ACCURACY: %d: %f\n", i, (double) correctCount / double(resetRate) * 100);
             correctCount = 0;
         }
-        if(!(i % 1)) {
-            momentumGd.propagate(target);
-            network.resetState();
-        }
+        momentumGd.propagate(target);
+        network.resetState();
         target.setCell(numVal, 0, 0, 0);
         if((i + 1) % imageRepresentations.size()){
             //save time :)

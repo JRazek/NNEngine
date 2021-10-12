@@ -127,10 +127,12 @@ void cn::Layer::CUDARun(const cn::Tensor<double> &_input) {
 }
 
 cn::Layer::Layer(const cn::Layer &layer) :
-inputSize(layer.inputSize){}
+inputSize(layer.inputSize),
+outputSize(layer.outputSize){}
 
 cn::Layer::Layer(cn::Layer &&layer) :
-inputSize(layer.inputSize){
+inputSize(layer.inputSize),
+outputSize(layer.outputSize){
     memoizationStates = std::move(layer.memoizationStates);
     memoizationTable = std::move(layer.memoizationTable);
 }

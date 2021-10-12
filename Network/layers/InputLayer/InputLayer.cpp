@@ -36,5 +36,3 @@ const cn::Tensor<double> &cn::InputLayer::getInput(int time) const {
     return input[time];
 }
 
-
-cn::InputLayer::InputLayer(const cn::InputLayer &inputLayer):Layer(inputLayer) {}

@@ -30,7 +30,7 @@ namespace cn {
     public:
         explicit RecurrentLayer(const JSON &json);
         explicit RecurrentLayer(const Vector3<int> &_inputSize);
-        RecurrentLayer(const Vector3<int> &_inputSize, std::vector<std::unique_ptr<Layer>> &&layers);
+
         RecurrentLayer(const RecurrentLayer &recurrentLayer);
         RecurrentLayer(RecurrentLayer &&recurrentLayer) = default;
 

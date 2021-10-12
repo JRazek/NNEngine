@@ -18,7 +18,7 @@ namespace cn {
         const Tensor<double> &getInput(int time) const override;
         std::unique_ptr <Layer> getCopyAsUniquePtr() const noexcept override;
 
-        InputLayer(const InputLayer &inputLayer);
+        InputLayer(const InputLayer &inputLayer) = default;
     };
 
 }
