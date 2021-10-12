@@ -235,7 +235,7 @@ void cn::Network::appendRecurrentLayer(std::unique_ptr<RecurrentLayer> &&recurre
         throw std::logic_error("this recurrent layers has incorrect input size!");
     }
     recurrentLayer->ready();
-
+    learnableLayers.push_back(recurrentLayer.get());
     layers.push_back(std::move(recurrentLayer));
 }
 
