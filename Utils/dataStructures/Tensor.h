@@ -44,6 +44,13 @@ namespace cn {
         [[nodiscard]] int getDataIndex(const Vector3<int> &v) const;
         Vector3<int> indexToVector(int index) const;
 
+        /**
+         *
+         * @param other
+         * @return true if they are copies. Function works in O(N) time where N is the size of tensor.
+         */
+        bool operator==(const Tensor<T> &other);
+
         Tensor<T> &operator=(const Tensor<T> &other);
         Tensor<T> &operator=(Tensor<T> &&other);
         bool belongs(const Vector3<int> &point) const;
@@ -235,6 +242,18 @@ template<typename T>
 cn::Tensor<T>::Tensor(const cn::Vector3<int> &s, T *&&data):Tensor(s) {
     dataP = data;
     data = nullptr;
+}
+
+template<typename T>
+bool cn::Tensor<T>::operator==(const cn::Tensor<T> &other) {
+    if(size() == other.size()){
+        for(u_int i = 0; i < size().multiplyContent(); i++){
+            if(dataConst()[i] != other.dataConst()[i])
+                return false;
+        }
+        return true;
+    }
+    return false;
 }
 
 #endif //NEURALNETLIBRARY_BITMAP_H
