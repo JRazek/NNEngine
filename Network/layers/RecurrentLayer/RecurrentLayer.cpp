@@ -18,17 +18,15 @@ cn::RecurrentLayer::RecurrentLayer(const Vector3<int> &_inputSize) : Learnable(_
 }
 
 void cn::RecurrentLayer::CPURun(const cn::Tensor<double> &_input) {
-    for(auto &l : internalLayers)
-        l->incTime();
     Tensor<double> res = Utils::elementWiseSum(_input, _time == 0 ? identity : output[getTime() - 1]);
     const Tensor<double> *input = &res;
     for(u_int i = 0; i < internalLayers.size(); i ++){
         internalLayers[i]->CPURun(*input);
         input = &internalLayers[i]->getOutput(getTime());
+        if((*input) != _input){
+            std::cout<<"";
+        }
     }
-    for(auto &l : internalLayers)
-        l->incTime();
-
     output.push_back(*input);
 
     //todo check this!!!!!!
@@ -157,6 +155,18 @@ void cn::RecurrentLayer::appendLearnable(cn::Learnable *learnable) {
     weights.insert(weights.end(), weightsByRef.begin(), weightsByRef.end());
     std::vector<double *> biasesByRef = learnable->getWeightsByRef();
     biases.insert(biases.end(), biasesByRef.begin(), biasesByRef.end());
+}
+
+void cn::RecurrentLayer::incTime() {
+    Layer::incTime();
+    for(auto &l : internalLayers)
+        l->incTime();
+}
+
+void cn::RecurrentLayer::resetState() {
+    Layer::resetState();
+    for(auto &l : internalLayers)
+        l->resetState();
 }
 
 

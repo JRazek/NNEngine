@@ -35,7 +35,7 @@ namespace cn {
         void addMemoLayer();
 
     public:
-        void incTime();
+        virtual void incTime();
         int getTime() const;
         explicit Layer(Vector3<int> _inputSize);
         Layer(const Layer &layer);

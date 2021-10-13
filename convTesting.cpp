@@ -98,8 +98,8 @@ int main(){
         }
 
         if (!((i + 1) % resetRate)) {
-            printf("LOSS %d: %f \n", i, momentumGd.getError(target));
-            printf("ACCURACY: %d: %f\n", i, (double) correctCount / double(resetRate) * 100);
+            printf("LOSS %d: %f%% \n", i, momentumGd.getError(target));
+            printf("ACCURACY: %d: %f%%\n", i, (double) correctCount / double(resetRate) * 100);
             correctCount = 0;
         }
         momentumGd.propagate(target);

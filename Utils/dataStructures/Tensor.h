@@ -49,7 +49,8 @@ namespace cn {
          * @param other
          * @return true if they are copies. Function works in O(N) time where N is the size of tensor.
          */
-        bool operator==(const Tensor<T> &other);
+        bool operator==(const Tensor<T> &other) const noexcept;
+        bool operator!=(const Tensor<T> &other) const noexcept;
 
         Tensor<T> &operator=(const Tensor<T> &other);
         Tensor<T> &operator=(Tensor<T> &&other);
@@ -245,7 +246,7 @@ cn::Tensor<T>::Tensor(const cn::Vector3<int> &s, T *&&data):Tensor(s) {
 }
 
 template<typename T>
-bool cn::Tensor<T>::operator==(const cn::Tensor<T> &other) {
+bool cn::Tensor<T>::operator==(const cn::Tensor<T> &other) const noexcept{
     if(size() == other.size()){
         for(u_int i = 0; i < size().multiplyContent(); i++){
             if(dataConst()[i] != other.dataConst()[i])
@@ -254,6 +255,11 @@ bool cn::Tensor<T>::operator==(const cn::Tensor<T> &other) {
         return true;
     }
     return false;
+}
+
+template<typename T>
+bool cn::Tensor<T>::operator!=(const cn::Tensor<T> &other) const noexcept{
+    return !(*this == other);
 }
 
 #endif //NEURALNETLIBRARY_BITMAP_H

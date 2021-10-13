@@ -17,7 +17,7 @@ namespace cn {
         virtual JSON jsonEncode() const override;
         const Tensor<double> &getInput(int time) const override;
         std::unique_ptr <Layer> getCopyAsUniquePtr() const noexcept override;
-
+        void resetState() override;
         InputLayer(const InputLayer &inputLayer) = default;
     };
 

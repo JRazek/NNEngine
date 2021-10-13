@@ -21,6 +21,8 @@ namespace cn {
         double getChain(const Vector4<int> &inputPos) override;
         double getChainFromChild(const Vector4<int> &inputPos);
         void appendLearnable(Learnable *learnable);
+        void incTime() override;
+        void resetState() override;
         Tensor<double> identity;
         bool _ready = false;
     protected:

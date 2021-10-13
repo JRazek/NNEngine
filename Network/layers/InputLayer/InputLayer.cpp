@@ -36,3 +36,8 @@ const cn::Tensor<double> &cn::InputLayer::getInput(int time) const {
     return input[time];
 }
 
+void cn::InputLayer::resetState() {
+    Layer::resetState();
+    input.clear();
+}
+
