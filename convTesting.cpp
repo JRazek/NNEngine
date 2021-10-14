@@ -18,18 +18,12 @@
 
 int main(){
     cn::Network network(28, 28, 3, 1);
-
-    std::ios::sync_with_stdio(false);
     const int outputSize = 10;
     network.appendMaxPoolingLayer({2,2});
     network.appendFlatteningLayer();
     network.appendFFLayer(outputSize);
     network.appendSigmoidLayer();
     network.appendFFLayer(outputSize);
-//
-    std::unique_ptr<cn::RecurrentLayer> recurrentLayer = network.createRecurrentLayer();
-    network.appendRecurrentLayer(std::move(recurrentLayer));
-
     network.appendSigmoidLayer();
     network.appendFFLayer(outputSize);
     network.appendSigmoidLayer();
@@ -98,8 +92,8 @@ int main(){
         }
 
         if (!((i + 1) % resetRate)) {
-            printf("LOSS %d: %f%% \n", i, momentumGd.getError(target));
-            printf("ACCURACY: %d: %f%%\n", i, (double) correctCount / double(resetRate) * 100);
+            std::cout << "LOSS "<< i <<": "<< momentumGd.getError(target) << "\n";
+            std::cout << "ACCURACY: " << (double) correctCount / double(resetRate) * 100 << "%\n";
             correctCount = 0;
         }
         momentumGd.propagate(target);
