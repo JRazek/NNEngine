@@ -12,5 +12,9 @@ CUDA support is in progress as well as parallel convolutions on multiple devices
 
 Because CUDA is currently unspported - the experimental compile flag COMPILE_WITH_CUDA is set to OFF by default.
 <br>
+
 <br>
 In few days there is going to be added recurrent layers with differentiation through _time.
+<br>
+<br>
+Depends on nlohmann/json library. https://github.com/nlohmann/json
