@@ -16,6 +16,7 @@ namespace cn {
         /**
          * data should be stored in 0th format described in Utils.h file
          */
+//        std::unique_ptr<T[]> dataP;
         T * dataP;
         int _w, _h, _d;
     public:
