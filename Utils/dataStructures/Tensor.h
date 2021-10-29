@@ -120,11 +120,11 @@ int cn::Tensor<T>::getDataIndex(int col, int row, int depth) const{
 template<typename T>
 cn::Tensor<T> &cn::Tensor<T>::operator=(const cn::Tensor<T> &other) {
     if(&other != this) {
-        delete[] dataP;
+//        delete[] dataP;
         _w = other.w();
         _h = other.h();
         _d = other.d();
-        dataP = new T[_w * _h * _d];
+        dataP = std::make_unique<T[]>(_w * _h * _d);
         std::copy(other.dataConst(), other.dataConst() + _w * _h * _d, dataP);
     }
     return *this;
@@ -133,7 +133,7 @@ cn::Tensor<T> &cn::Tensor<T>::operator=(const cn::Tensor<T> &other) {
 template<typename T>
 cn::Tensor<T> &cn::Tensor<T>::operator=(cn::Tensor<T> &&other){
     if(&other != this) {
-        delete [] dataP;
+//        delete [] dataP;
         _w = other.w();
         _h = other.h();
         _d = other.d();
