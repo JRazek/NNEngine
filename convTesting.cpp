@@ -90,7 +90,6 @@ int main(){
 
         network.feed(cn::Utils::resize(bitmap, inputSize.x, inputSize.y));
 
-
         int best = getBest(network.getNetworkOutput(0));
         if (best == numVal) {
             correctCount++;
