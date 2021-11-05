@@ -31,7 +31,7 @@ cn::JSON cn::Sigmoid::jsonEncode() const {
 }
 
 double cn::Sigmoid::sigmoid(double x) {
-    return 1.f/(1.f + std::pow(Sigmoid::e, -x));
+    return 1.f/(1.f + std::pow(cn::e, -x));
 }
 
 double cn::Sigmoid::diff(double x) {

@@ -11,7 +11,8 @@
 namespace cn {
     class Sigmoid : public Layer{
     public:
-        constexpr static double e = M_E;
+//        constexpr static double e = M_E;
+
         Sigmoid(Vector3<int> _inputSize);
         Sigmoid(const JSON &json);
         void CPURun(const Tensor<double> &input) override;

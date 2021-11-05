@@ -17,6 +17,7 @@
 
 namespace cn {
     using byte = uint8_t;
+    constexpr static double e = M_E;
 
     template<typename T>
     class Tensor;
