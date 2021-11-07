@@ -19,12 +19,6 @@
 int main(){
     cn::Network network(28, 28, 3, 1);
     const int outputSize = 10;
-    network.appendConvolutionLayer({3, 3}, 3);
-    network.appendMaxPoolingLayer({2,2});
-    network.appendConvolutionLayer({3, 3}, 6);
-    network.appendMaxPoolingLayer({2,2});
-    network.appendConvolutionLayer({3, 3}, 12);
-    network.appendConvolutionLayer({3, 3}, 16);
     network.appendFlatteningLayer();
     network.appendFFLayer(outputSize);
     network.appendSigmoidLayer();
@@ -32,6 +26,8 @@ int main(){
     network.appendSigmoidLayer();
     network.appendFFLayer(outputSize);
     network.appendSigmoidLayer();
+    network.appendFFLayer(outputSize);
+    network.appendSoftmaxLayer();
     network.initRandom();
     network.ready();
 

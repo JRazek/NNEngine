@@ -55,6 +55,10 @@ namespace cn {
 
         Tensor<T> &operator=(const Tensor<T> &other);
         Tensor<T> &operator=(Tensor<T> &&other);
+        Tensor<T> operator*(T scalar);
+        Tensor<T> &operator*=(T scalar);
+        Tensor<T> operator/(T scalar);
+        Tensor<T> &operator/=(T scalar);
         bool belongs(const Vector3<int> &point) const;
         const T * dataConst() const;
         T * data();
@@ -261,6 +265,40 @@ bool cn::Tensor<T>::operator==(const cn::Tensor<T> &other) const noexcept{
 template<typename T>
 bool cn::Tensor<T>::operator!=(const cn::Tensor<T> &other) const noexcept{
     return !(*this == other);
+}
+
+template<typename T>
+cn::Tensor<T> cn::Tensor<T>::operator*(T scalar) {
+    Tensor<T> tensor = cn::Tensor<T>(*this);
+    for(auto it = tensor.data(); it != tensor.data()+tensor.size().multiplyContent(); ++it){
+        (*it) *= scalar;
+    }
+    return tensor;
+}
+
+template<typename T>
+cn::Tensor<T> &cn::Tensor<T>::operator*=(T scalar) {
+    for(auto it = data(); it != data()+size().multiplyContent(); ++it){
+        (*it) *= scalar;
+    }
+    return *this;
+}
+
+template<typename T>
+cn::Tensor<T> cn::Tensor<T>::operator/(T scalar) {
+    Tensor<T> tensor = cn::Tensor<T>(*this);
+    for(auto it = tensor.data(); it != tensor.data()+tensor.size().multiplyContent(); ++it){
+        (*it) /= scalar;
+    }
+    return tensor;
+}
+
+template<typename T>
+cn::Tensor<T> &cn::Tensor<T>::operator/=(T scalar) {
+    for(auto it = data(); it != data()+size().multiplyContent(); ++it){
+        (*it) /= scalar;
+    }
+    return *this;
 }
 
 #endif //NEURALNETLIBRARY_BITMAP_H

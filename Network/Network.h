@@ -46,6 +46,7 @@ namespace cn {
 
         void appendReLULayer();
         void appendSigmoidLayer();
+        void appendSoftmaxLayer();
         void appendRecurrentLayer(std::unique_ptr<RecurrentLayer> &&recurrentLayer);
 
 

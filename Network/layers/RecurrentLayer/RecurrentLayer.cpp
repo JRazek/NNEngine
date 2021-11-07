@@ -23,9 +23,6 @@ void cn::RecurrentLayer::CPURun(const cn::Tensor<double> &_input) {
     for(u_int i = 0; i < internalLayers.size(); i ++){
         internalLayers[i]->CPURun(*input);
         input = &internalLayers[i]->getOutput(getTime());
-        if((*input) != _input){
-            std::cout<<"";
-        }
     }
     output.push_back(*input);
 

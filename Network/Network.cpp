@@ -13,6 +13,7 @@
 #include "layers/ActivationLayers/Sigmoid/Sigmoid.h"
 #include "layers/ActivationLayers/ReLU/ReLU.h"
 #include "layers/RecurrentLayer/RecurrentLayer.h"
+#include "layers/ActivationLayers/Softmax/Softmax.h"
 
 void cn::Network::feed(Tensor<double> bitmap) {
 #ifndef NNL_WITH_CUDA
@@ -94,6 +95,11 @@ void cn::Network::appendReLULayer() {
 void cn::Network::appendSigmoidLayer() {
     int id = this->layers.size();
     std::unique_ptr<Sigmoid> s = std::make_unique<Sigmoid>(getInputSize(id));
+    layers.push_back(std::move(s));
+}
+
+void cn::Network::appendSoftmaxLayer() {
+    std::unique_ptr<Softmax> s = std::make_unique<Softmax>(layers.back()->getOutputSize());
     layers.push_back(std::move(s));
 }
 
