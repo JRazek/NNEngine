@@ -19,7 +19,7 @@ namespace cn {
     class Network : public JSONEncodable{
     private:
 
-        friend class Optimizer;
+        friend class GradientOptimizer;
         int seed;
 
         /**

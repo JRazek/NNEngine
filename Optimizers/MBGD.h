@@ -5,13 +5,13 @@
 #ifndef NEURALNETLIBRARY_MBGD_H
 #define NEURALNETLIBRARY_MBGD_H
 #include <vector>
-#include "interfaces/Optimizer.h"
+#include "interfaces/GradientOptimizer.h"
 namespace cn {
     template<typename T>
     class Tensor;
     class Network;
 
-    class MBGD : public Optimizer{
+    class MBGD : public GradientOptimizer{
         int miniBatchSize;
         std::vector<std::vector<double>> memorizedWeights;
         std::vector<std::vector<double>> memorizedBiases;

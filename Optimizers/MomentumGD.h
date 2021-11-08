@@ -5,9 +5,9 @@
 #ifndef NEURALNETLIBRARY_MOMENTUMGD_H
 #define NEURALNETLIBRARY_MOMENTUMGD_H
 
-#include "interfaces/Optimizer.h"
+#include "interfaces/GradientOptimizer.h"
 namespace cn {
-    class MomentumGD : public Optimizer{
+    class MomentumGD : public GradientOptimizer{
         float theta;
         std::vector<std::vector<float>> emaWeightsMemo;
         std::vector<std::vector<float>> emaBiasesMemo;

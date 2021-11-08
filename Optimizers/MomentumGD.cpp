@@ -5,8 +5,8 @@
 #include "MomentumGD.h"
 
 cn::MomentumGD::MomentumGD(cn::Network &_network, float _theta, double _learningRate):
-Optimizer(_network, _learningRate),
-theta(_theta)
+        GradientOptimizer(_network, _learningRate),
+        theta(_theta)
 {}
 
 void cn::MomentumGD::propagate(const Tensor<double> &target) {

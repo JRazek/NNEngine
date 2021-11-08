@@ -6,7 +6,7 @@
 #include "../Utils/dataStructures/Tensor.h"
 
 cn::MBGD::MBGD(Network &_network, double _learningRate, int _miniBatchSize) :
-        Optimizer(_network, _learningRate),
+        GradientOptimizer(_network, _learningRate),
         miniBatchSize(_miniBatchSize){
     if(miniBatchSize <= 0){
         throw std::logic_error("mini-batch size must be a positive integer!");
