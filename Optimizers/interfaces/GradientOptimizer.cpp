@@ -4,7 +4,7 @@
 
 #include "GradientOptimizer.h"
 
-cn::GradientOptimizer::Optimizer(Network &_network, double _learningRate) :
+cn::GradientOptimizer::GradientOptimizer(Network &_network, double _learningRate) :
 network(&_network),
 iteration(0),
 learningRate(_learningRate) {}
