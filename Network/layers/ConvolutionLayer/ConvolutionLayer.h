@@ -57,7 +57,7 @@ namespace cn {
         /**
          * @warning throws error on other type than inheriting class. Uses dynamic_cast<T *> inside.
          */
-        virtual std::unique_ptr<Layer> reproduce(const Layer *netT) const override;
+        virtual std::unique_ptr<Layer> reproduce(const Layer *netT, int seed) const override;
 
         #ifdef NNL_WITH_CUDA
         void CUDAAutoGrad() override;

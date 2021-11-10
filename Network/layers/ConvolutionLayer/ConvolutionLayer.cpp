@@ -240,11 +240,11 @@ std::vector<double *> cn::ConvolutionLayer::getBiasesByRef() {
     return res;
 }
 
-std::unique_ptr<cn::Layer> cn::ConvolutionLayer::reproduce(const Layer* netT) const {
+std::unique_ptr<cn::Layer> cn::ConvolutionLayer::reproduce(const Layer *netT, int seed) const {
     const ConvolutionLayer* net2 = dynamic_cast<const ConvolutionLayer *>(netT);
     std::unique_ptr<ConvolutionLayer> convolutionLayer = std::make_unique<ConvolutionLayer>(*this);
 
-    std::default_random_engine randomEngine;
+    std::default_random_engine randomEngine(seed);
     std::uniform_int_distribution<> dist(0, 1);
     for(auto i = 0; i < kernelsCount; i ++){
         bool rand = dist(randomEngine);

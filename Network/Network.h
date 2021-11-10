@@ -19,6 +19,7 @@ namespace cn {
     class Network : public JSONEncodable{
     private:
         friend class GradientOptimizer;
+        friend class GeneticOptimizer;
 
         int seed;
 
@@ -36,7 +37,6 @@ namespace cn {
         OutputLayer *outputLayer = nullptr;
 
     public:
-
         void appendConvolutionLayer(Vector2<int> kernelSize, int kernelsCount, Vector2<int> stride = {1, 1}, Vector2<int> padding = {0, 0});
         void appendFFLayer(int neuronsCount);
         void appendFlatteningLayer();

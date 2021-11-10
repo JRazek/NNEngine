@@ -164,6 +164,6 @@ cn::Vector3<int> cn::Layer::getInputSize() const {
     return inputSize;
 }
 
-std::unique_ptr<cn::Layer> cn::Layer::reproduce(const Layer *net) const {
+std::unique_ptr<cn::Layer> cn::Layer::reproduce(const Layer *net, int seed) const {
     throw std::logic_error("unimplemented method");
 }

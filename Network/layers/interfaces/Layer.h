@@ -92,7 +92,7 @@ namespace cn {
          * @param net
          * @return
          */
-        virtual std::unique_ptr<Layer> reproduce(const Layer *net) const;
+        virtual std::unique_ptr<Layer> reproduce(const Layer *net, int seed = 1) const;
     };
 }
 

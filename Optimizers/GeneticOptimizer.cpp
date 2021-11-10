@@ -3,7 +3,6 @@
 //
 
 #include "GeneticOptimizer.h"
-#include <algorithm>
 #include <map>
 #include "../Network/Network.h"
 #include <random>
@@ -37,5 +36,7 @@ void cn::GeneticOptimizer::reproducePopulation() {
 }
 
 cn::Network cn::GeneticOptimizer::reproduceIndividuals(const Network &n1, const Network &n2, int seed) {
-//    return cn::Network();
+    for(u_int j = 0; j < n1.layersCount(); j++){
+        n1.layers[j]->reproduce(n2.layers[j].get(), seed);
+    }
 }
