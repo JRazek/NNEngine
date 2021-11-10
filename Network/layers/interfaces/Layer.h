@@ -35,6 +35,9 @@ namespace cn {
         void addMemoLayer();
 
     public:
+        /**
+         * should be incremented after each COMPLETE feed of a network
+         */
         virtual void incTime();
         int getTime() const;
         explicit Layer(Vector3<int> _inputSize);

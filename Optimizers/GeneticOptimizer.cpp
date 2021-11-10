@@ -3,7 +3,35 @@
 //
 
 #include "GeneticOptimizer.h"
+#include <algorithm>
+#include <map>
+#include "../Network/Network.h"
+#include <random>
 
-cn::GeneticOptimizer::GeneticOptimizer(int _populationSize): populationSize(_populationSize) {
+cn::GeneticOptimizer::GeneticOptimizer(int _populationSize, int _seed) : populationSize(_populationSize), seed(_seed) {
 
+}
+
+void cn::GeneticOptimizer::setScore(int netID, double score) {
+    population[netID].second = score;
+}
+
+void cn::GeneticOptimizer::reproducePopulation() {
+    double sum = 0;
+    std::map<double, Network *> populationSet;
+
+    for(auto &p : population){
+        sum += p.second;
+        populationSet[sum] = p.first;
+    }
+    std::uniform_real_distribution<double> dist(0, sum);
+    std::default_random_engine engine(seed);
+    for(auto i = 0; i < populationSize; i ++){
+        Network *n1 = populationSet.lower_bound(dist(engine))->second;
+        Network *n2 = populationSet.lower_bound(dist(engine))->second;
+    }
+}
+
+cn::Network cn::GeneticOptimizer::reproduceIndividuals(const Network &n1, const Network &n2, int seed) {
+//    return cn::Network();
 }
