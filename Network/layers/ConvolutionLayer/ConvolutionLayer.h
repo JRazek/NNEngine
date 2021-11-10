@@ -53,6 +53,12 @@ namespace cn {
 
         std::unique_ptr<Layer> getCopyAsUniquePtr() const noexcept override;
 
+
+        /**
+         * @warning throws error on other type than inheriting class. Uses dynamic_cast<T *> inside.
+         */
+        virtual std::unique_ptr<Layer> reproduce(const Layer *netT) const override;
+
         #ifdef NNL_WITH_CUDA
         void CUDAAutoGrad() override;
         virtual void CUDARun(const Tensor<double> &_input) override;

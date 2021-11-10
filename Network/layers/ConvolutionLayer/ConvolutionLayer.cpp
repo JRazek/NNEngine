@@ -93,7 +93,7 @@ double cn::ConvolutionLayer::diffWeight(int weightID) {
     int kID = weightID / kSize;
 
     double result = 0;
-    for(int t = 0; t < output.size(); t++) {
+    for(u_int t = 0; t < output.size(); t++) {
         double timeResult = 0;
         for (int y = 0; y < outputSize.y - kernelSize.y; y++) {
             for (int x = 0; x < outputSize.x - kernelSize.x; x++) {
@@ -111,7 +111,7 @@ double cn::ConvolutionLayer::diffWeight(int weightID) {
 
 double cn::ConvolutionLayer::diffBias(int biasID) {
     double result = 0;
-    for(int t = 0; t < output.size(); t++) {
+    for(u_int t = 0; t < output.size(); t++) {
         double timeResult = 0;
         for(int y = 0; y < outputSize.y; y++){
             for(int x = 0; x < outputSize.x; x++){
@@ -223,9 +223,9 @@ std::unique_ptr<cn::Layer> cn::ConvolutionLayer::getCopyAsUniquePtr() const noex
 
 std::vector<double *> cn::ConvolutionLayer::getWeightsByRef() {
     std::vector<double *> res(weightsCount());
-    for(u_int i = 0; i < weightsCount(); i ++){
+    for(auto i = 0; i < weightsCount(); i ++){
         Tensor<double> &tensor = kernels[i];
-        for(u_int wID = 0; wID < tensor.size().multiplyContent(); wID ++){
+        for(auto wID = 0; wID < tensor.size().multiplyContent(); wID ++){
             res[i * kernelSize.multiplyContent() + wID] = &tensor.data()[wID];
         }
     }
@@ -238,4 +238,18 @@ std::vector<double *> cn::ConvolutionLayer::getBiasesByRef() {
         res[i] = &biases[i];
     }
     return res;
+}
+
+std::unique_ptr<cn::Layer> cn::ConvolutionLayer::reproduce(const Layer* netT) const {
+    const ConvolutionLayer* net2 = dynamic_cast<const ConvolutionLayer *>(netT);
+    std::unique_ptr<ConvolutionLayer> convolutionLayer = std::make_unique<ConvolutionLayer>(*this);
+
+    std::default_random_engine randomEngine;
+    std::uniform_int_distribution<> dist(0, 1);
+    for(auto i = 0; i < kernelsCount; i ++){
+        bool rand = dist(randomEngine);
+        if(rand)
+            convolutionLayer->kernels[i] = net2->kernels[i];
+    }
+    return convolutionLayer;
 }

@@ -17,6 +17,7 @@
 #pragma GCC diagnostic ignored "-Wreorder"
 
 int main(){
+
     cn::Network network(28, 28, 3, 1);
     const int outputSize = 10;
     network.appendFlatteningLayer();

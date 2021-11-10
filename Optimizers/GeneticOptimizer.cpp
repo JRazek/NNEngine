@@ -24,11 +24,15 @@ void cn::GeneticOptimizer::reproducePopulation() {
         sum += p.second;
         populationSet[sum] = p.first;
     }
+
     std::uniform_real_distribution<double> dist(0, sum);
     std::default_random_engine engine(seed);
     for(auto i = 0; i < populationSize; i ++){
-        Network *n1 = populationSet.lower_bound(dist(engine))->second;
-        Network *n2 = populationSet.lower_bound(dist(engine))->second;
+        const Network &n1 = *populationSet.lower_bound(dist(engine))->second;
+        const Network &n2 = *populationSet.lower_bound(dist(engine))->second;
+        for(auto j = 0; j < n1.layersCount(); j++){
+
+        }
     }
 }
 

@@ -18,8 +18,8 @@ namespace cn {
     class RecurrentLayer;
     class Network : public JSONEncodable{
     private:
-
         friend class GradientOptimizer;
+
         int seed;
 
         /**
@@ -32,8 +32,7 @@ namespace cn {
         std::vector<std::unique_ptr<Layer>> layers;
         std::vector<Learnable *> learnableLayers;
 
-        cn::InputLayer *inputLayer = nullptr;
-
+        InputLayer *inputLayer = nullptr;
         OutputLayer *outputLayer = nullptr;
 
     public:
@@ -57,8 +56,6 @@ namespace cn {
          * when network structure is ready - CPURun this function.
          */
         void ready();
-
-
 
         Network(const cn::JSON &json);
 

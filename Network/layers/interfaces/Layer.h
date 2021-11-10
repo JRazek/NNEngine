@@ -15,6 +15,7 @@
 namespace cn {
 
     class FFLayer;
+    class Network;
 
     class Layer : public JSONEncodable{
     private:
@@ -85,6 +86,13 @@ namespace cn {
          */
         virtual void CUDARun(const Tensor<double> &_input);
 
+
+        /**
+         * TODO TO REMOVE!!
+         * @param net
+         * @return
+         */
+        virtual std::unique_ptr<Layer> reproduce(const Layer *net) const;
     };
 }
 

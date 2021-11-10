@@ -19,6 +19,9 @@ namespace cn {
         std::unique_ptr <Layer> getCopyAsUniquePtr() const noexcept override;
         void resetState() override;
         InputLayer(const InputLayer &inputLayer) = default;
+
+//        virtual std::unique_ptr<Layer> reproduce(const Layer *net) const;
+
     };
 
 }
