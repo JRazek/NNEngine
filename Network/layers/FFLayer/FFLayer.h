@@ -56,6 +56,9 @@ namespace cn {
         JSON jsonEncode() const override;
 
         std::unique_ptr<Layer> getCopyAsUniquePtr() const noexcept override;
+
+        virtual std::unique_ptr<Layer> reproduce(const Layer *net, int seed = 1) const override;
+
     };
 }
 

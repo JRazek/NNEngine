@@ -165,3 +165,17 @@ std::vector<double *> cn::FFLayer::getBiasesByRef() {
     }
     return res;
 }
+
+std::unique_ptr<cn::Layer> cn::FFLayer::reproduce(const cn::Layer *netT, int seed) const {
+    const FFLayer* net2 = dynamic_cast<const FFLayer *>(netT);
+    std::unique_ptr<FFLayer> child = std::make_unique<FFLayer>(*this);
+
+    std::default_random_engine randomEngine(seed);
+    std::uniform_int_distribution<> dist(0, 1);
+    for(auto i = 0; i < weightsCount(); i ++){
+        bool rand = dist(randomEngine);
+        if(rand)
+            child->weights[i] = net2->weights[i];
+    }
+    return child;
+}

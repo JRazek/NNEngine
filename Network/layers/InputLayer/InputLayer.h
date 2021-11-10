@@ -20,7 +20,7 @@ namespace cn {
         void resetState() override;
         InputLayer(const InputLayer &inputLayer) = default;
 
-//        virtual std::unique_ptr<Layer> reproduce(const Layer *net) const;
+        virtual std::unique_ptr<Layer> reproduce(const Layer *net, int seed = 1) const override;
 
     };
 

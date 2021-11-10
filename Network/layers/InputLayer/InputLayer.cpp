@@ -41,3 +41,7 @@ void cn::InputLayer::resetState() {
     input.clear();
 }
 
+std::unique_ptr<cn::Layer> cn::InputLayer::reproduce(const cn::Layer *net, int seed) const {
+    return std::make_unique<InputLayer>(*this);
+}
+
