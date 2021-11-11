@@ -18,6 +18,7 @@ namespace cn {
         static double relu(double x);
         static double diff(double x);
         std::unique_ptr<Layer> getCopyAsUniquePtr() const noexcept override;
+        virtual std::unique_ptr<Layer> reproduce(const Layer *net, int seed = 1) const override;
     };
 }
 

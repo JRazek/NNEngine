@@ -18,8 +18,8 @@ namespace cn {
         double getChain(const Vector4<int> &inputPos) override;
         virtual JSON jsonEncode() const override;
         std::unique_ptr<Layer> getCopyAsUniquePtr() const noexcept override;
-
         void resetState() override;
+        virtual std::unique_ptr<Layer> reproduce(const Layer *net, int seed = 1) const override;
     };
 
 }

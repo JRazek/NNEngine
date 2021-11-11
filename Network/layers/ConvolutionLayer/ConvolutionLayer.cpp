@@ -111,7 +111,7 @@ double cn::ConvolutionLayer::diffWeight(int weightID) {
 
 double cn::ConvolutionLayer::diffBias(int biasID) {
     double result = 0;
-    for(u_int t = 0; t < output.size(); t++) {
+    for(int t = 0; t < output.size(); t++) {
         double timeResult = 0;
         for(int y = 0; y < outputSize.y; y++){
             for(int x = 0; x < outputSize.x; x++){

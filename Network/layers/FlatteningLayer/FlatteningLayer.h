@@ -17,6 +17,8 @@ namespace cn {
         virtual double getChain(const Vector4<int> &inputPos) override;
         virtual JSON jsonEncode() const override;
         virtual std::unique_ptr<Layer> getCopyAsUniquePtr() const noexcept override;
+        virtual std::unique_ptr<Layer> reproduce(const Layer *net, int seed = 1) const override;
+
     };
 }
 #endif //NEURALNETLIBRARY_FLATTENINGLAYER_H

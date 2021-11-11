@@ -73,3 +73,7 @@ void cn::MaxPoolingLayer::resetState() {
     Layer::resetState();
     mapping.clear();
 }
+
+std::unique_ptr<cn::Layer> cn::MaxPoolingLayer::reproduce(const cn::Layer *net, int seed) const {
+    return std::make_unique<MaxPoolingLayer>(*this);
+}

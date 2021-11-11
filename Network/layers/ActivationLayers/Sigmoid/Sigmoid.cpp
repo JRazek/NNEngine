@@ -50,3 +50,7 @@ cn::Sigmoid::Sigmoid(const JSON &json) :
 std::unique_ptr<cn::Layer> cn::Sigmoid::getCopyAsUniquePtr() const noexcept{
     return std::make_unique<Sigmoid>(*this);
 }
+
+std::unique_ptr<cn::Layer> cn::Sigmoid::reproduce(const cn::Layer *net, int seed) const {
+    return std::make_unique<Sigmoid>(*this);
+}

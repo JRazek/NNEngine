@@ -5,17 +5,28 @@
 #ifndef NEURALFLOWS_GENETICOPTIMIZER_H
 #define NEURALFLOWS_GENETICOPTIMIZER_H
 #include <vector>
+#include <zconf.h>
 
 namespace cn {
     class Network;
     class GeneticOptimizer {
         int populationSize;
-        std::vector<std::pair<Network *, double>> population; //net pointer, score
+        std::vector<std::pair<Network, double>> population; //net pointer, score
+        float mutationFactor;
         int seed;
     public:
-        GeneticOptimizer(int _populationSize, int seed = 1);
+        GeneticOptimizer(int _populationSize, float mutationFactor, int seed = 1);
+
+        /**
+         *
+         * @param netID
+         * to use with custom fitness function
+         */
         void setScore(int netID, double score);
         void reproducePopulation();
+
+
+        const std::vector<std::pair<Network, double>>& getPopulation(u_int id);
 
         /**
          *

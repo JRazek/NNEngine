@@ -42,3 +42,7 @@ cn::FlatteningLayer::FlatteningLayer(const JSON &json) :
 std::unique_ptr<cn::Layer> cn::FlatteningLayer::getCopyAsUniquePtr() const noexcept{
     return std::make_unique<FlatteningLayer>(*this);
 }
+
+std::unique_ptr<cn::Layer> cn::FlatteningLayer::reproduce(const cn::Layer *net, int seed) const {
+    return std::make_unique<FlatteningLayer>(*this);
+}

@@ -37,3 +37,7 @@ void cn::Softmax::resetState() {
     Layer::resetState();
     dividers.clear();
 }
+
+std::unique_ptr<cn::Layer> cn::Softmax::reproduce(const cn::Layer *net, int seed) const {
+    return std::make_unique<Softmax>(*this);
+}

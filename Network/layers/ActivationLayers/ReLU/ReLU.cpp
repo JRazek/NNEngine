@@ -48,3 +48,7 @@ cn::ReLU::ReLU(const JSON &json) :
 std::unique_ptr<cn::Layer> cn::ReLU::getCopyAsUniquePtr() const noexcept{
     return std::make_unique<ReLU>(*this);
 }
+
+std::unique_ptr<cn::Layer> cn::ReLU::reproduce(const cn::Layer *net, int seed) const {
+    return std::make_unique<ReLU>(*this);
+}
