@@ -36,3 +36,14 @@ if(COMPILE_TEST_PROGRAM)
     target_link_libraries(Main NeuralFlows)
     target_link_libraries(Main ${OpenCV_LIBS})
 endif()
+
+
+install(TARGETS NeuralFlows)
+install(
+        DIRECTORY "${CMAKE_SOURCE_DIR}"
+        DESTINATION "include"
+        FILES_MATCHING
+        PATTERN "*.h"
+        PATTERN "build" EXCLUDE
+        PATTERN "cmake-build-release" EXCLUDE
+)
