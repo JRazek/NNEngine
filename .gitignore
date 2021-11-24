@@ -3,5 +3,5 @@
 /build
 /dataSets
 /metadata.csv
-/cmake-build-debug-remote
+/cmake-build-*
 lastOK

@@ -45,5 +45,5 @@ install(
         FILES_MATCHING
         PATTERN "*.h"
         PATTERN "build" EXCLUDE
-        PATTERN "cmake-build-release" EXCLUDE
+        PATTERN "cmake-build-*" EXCLUDE
 )
