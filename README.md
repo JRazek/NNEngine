@@ -45,6 +45,20 @@ Then it is time to finally tell the network that it should get ready and to init
 network.ready();
 network.initRandom();
 ```
+Wonderful! We have created a simple `CNN`. The only problem that it does not know very much and it will behave no better than pseudo-random number generator. In order to fix that issue we should learn it. Fot that purpose we'll use minibatch gradient descent optimizer implemented by a `cn::MBGD` class.
+
+```cpp
+cn::MBGD mbgd(network, 0.1, 40);//network ref, learning rate, minibatch size
+```
+
+Once we have an input tensor of type either `cn::Tensor<byte>` or `cn::Tensor<double>` we are ready to feed our network.
+```cpp
+network.feed(tensor);
+```
+After each feed we can call an optimizer method `propagate()`. It will calculate all the gradients in a network and propagate them once the batch size is full.
+```cpp
+mbgd.propagate();
+```
 
 <br>
 Depends on nlohmann/json library. https://github.com/nlohmann/json
