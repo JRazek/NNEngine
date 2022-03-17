@@ -64,9 +64,9 @@ JSON json = json::parse(ifs);
 
 Network network(json);
 ```
-it will already have a ready state, therefore it is unnecessary to call neither ```network.ready();``` nor ```network.initRandom();```.
+it will already have a ready state, therefore it is unnecessary to call either ```network.ready();``` nor ```network.initRandom();```.
 
 
 
 <br>
-Depends on `nlohmann/json` library. https://github.com/nlohmann/json
+Depends on the nlohmann/json library. https://github.com/nlohmann/json
